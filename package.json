@@ -1,0 +1,17 @@
+{
+  "name": "@vilabs/videsign",
+  "version": "1.0.0",
+  "description": "Canonical Source of Truth for the Nocturne Museum theme",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "mcp": "node mcp-server.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-plugin-tailwindcss": "^3.14.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.1.0"
+  }
+}

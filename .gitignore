@@ -1,0 +1,11 @@
+# Assets and Media
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.mp4
+*.mov
+*.webp
+node_modules/
+.DS_Store

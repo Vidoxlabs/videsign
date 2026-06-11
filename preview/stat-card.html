@@ -1,0 +1,21 @@
+<!-- 
+  Nocturne Museum: Stat Card Component
+  Demonstrates status indicators, monospace usage, and structural constraints.
+  Enforces OneDrive asset base if media was used, though here we use pure DOM styling.
+-->
+<div class="bg-surface-background-secondary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-2">
+  <div class="flex justify-between items-center">
+    <span class="font-typography-family-mono-base text-text-content-secondary-base text-sm">Active agents</span>
+    <!-- Trend visualization placeholder -->
+    <div class="w-16 h-4 bg-status-indicator-success-base opacity-20 rounded-layout-radius-control-base"></div>
+  </div>
+  <div class="font-typography-family-sans-base text-text-content-primary-base text-3xl font-bold tracking-tight">
+    12
+  </div>
+  <div class="flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-status-indicator-success-base shadow-sm"></span>
+    <span class="font-typography-family-mono-base text-text-content-secondary-base text-xs uppercase tracking-wide">
+      +2 since 24h
+    </span>
+  </div>
+</div>
