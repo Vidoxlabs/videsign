@@ -7,6 +7,7 @@ This file governs the engineering, operations, and deployment layer for the `vid
 The `videsign` repository serves as the canonical source of truth for the **Nocturne Museum** theme. 
 
 - **DESIGN.md**: The Visual Truth Layer. Read this file to understand the semantic token matrix and negative UI boundaries.
+- **references/**: External site design captures (Grok, Mistral, etc.) for inspiration only — not canonical tokens.
 - **SKILL.md**: The Decision Ledger. Read this file immediately upon initialization to understand architectural constraints (ADRs).
 - **preview/**: Directory containing pure, flat, semantic, state-free HTML fragments. 
 - **mcp-server.js**: The central MCP server that exposes this design system to other product repositories.
