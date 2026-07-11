@@ -31,6 +31,17 @@ spacing:
   layout-padding-small-base: "8px"
   layout-padding-medium-base: "16px"
   layout-padding-large-base: "24px"
+
+size:
+  action-min-default: "2.75rem"
+  action-dense-default: "3rem"
+  action-wide-default: "3.5rem"
+
+space:
+  gap-dense-default: "0.25rem"
+  inset-compact-default: "0.5rem"
+  inset-operator-default: "0.75rem"
+  layout-stack-default: "1rem"
 ---
 
 # Visual Truth Layer: Nocturne Museum
