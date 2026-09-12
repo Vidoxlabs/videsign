@@ -68,4 +68,6 @@ architectural decision records.
 
 ## License
 
-Copyright Vidoxlabs. All rights reserved.
+Copyright (c) 2026 Vidoxlabs LLC. All rights reserved. See [LICENSE](LICENSE)
+for the full terms of use. This repository is proprietary — no copying, cloning,
+modification, distribution, or commercial use without written permission.

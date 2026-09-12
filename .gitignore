@@ -9,6 +9,7 @@
 *.webp
 node_modules/
 .DS_Store
+package-lock.json
 
 # Generated token artifacts (run `npm run tokens` to regenerate)
 dist/

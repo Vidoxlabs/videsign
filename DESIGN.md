@@ -72,41 +72,56 @@ transition:
 This file serves as the canonical source of truth for the **Nocturne Museum** theme. The YAML front-matter contains the deterministic design tokens that must be strictly adhered to by all code generation agents.
 
 ## Semantic Matrix Rules
-All design tokens must strictly adhere to the 4-part matrix: `category-role-variant-state`. 
+
+All design tokens must strictly adhere to the 4-part matrix: `category-role-variant-state`.
 Agents must utilize the Token Reference Syntax when binding component states (e.g., `{colors.surface-background-primary-base}`).
 
 ## Component Rules
+>
 > [!IMPORTANT]
+>
 > ### Sidebar Architecture
+>
 > - Sidebars must use full-height glassmorphism.
 > - Sidebars must be rounded on the **right edge only** (`border-radius: 0 1rem 1rem 0`).
 
 ## Negative Boundaries (Strict AI Guardrails)
+
 To prevent "AI drift" and the generation of generic or hallucinated UI elements, agents MUST abide by the following constraints:
 
 > [!WARNING]
+>
 > ### 1. Typography Guardrails
+>
 > - **Enforce Sentence case**: Use sentence case for all default interactions and labels (e.g., "Submit your form").
 > - **BAN Title Case**: The generation of Title Case text is comprehensively banned across all UI components.
 > - **Family Rules**: Use `{typography.typography-family-mono-base}` for nav, labels, and status. Use `{typography.typography-family-sans-base}` for section titles and descriptions.
 
 > [!CAUTION]
+>
 > ### 2. Imagery & Icons
-> - **BAN Emojis**: Explicitly forbid the use of decorative emojis anywhere in the markup. 
+>
+> - **BAN Emojis**: Explicitly forbid the use of decorative emojis anywhere in the markup.
 > - **Asset Storage Rule**: Absolutely no binary assets (PNG, JPG, SVG, video) may be stored in the repository. All assets must be referenced via the `{ASSET_BASE}` placeholder (e.g. `<img src="{ASSET_BASE}/assets/logos/vidoxlabs/cube.png" />`). Consuming repos resolve `{ASSET_BASE}` at build time to their CDN endpoint.
 
 > [!IMPORTANT]
+>
 > ### 3. Geometry & Elevation
+>
 > - **Strict Radius**: Command the agent to build using a strict flat `14px` layout (`--r-lg`). For small controls/inputs, use `10px` (`layout-radius-control-base`).
 > - **BAN 32px Radii**: Explicitly and aggressively forbid the use of the standard `32px` web radii that LLMs frequently hallucinate.
 
 > [!CAUTION]
+>
 > ### 4. Glassmorphism Application
+>
 > - **Functional Allowed**: Functional glassmorphism is permitted for the Nocturne theme (e.g., sidebars, modals, floating navigational elements).
 > - **BAN Legacy Semi-transparent**: Explicitly ban legacy, semi-transparent glassmorphism layers on standard flat surfaces. Surfaces should be solid colors (e.g., `#0A0A0E`) unless explicitly acting as a functional overlay.
 
 > [!CAUTION]
+>
 > ### 5. Code Validation
+>
 > - **BAN Arbitrary Tailwind Values**: Never generate Tailwind arbitrary values (e.g., `w-[15px]`). Always use semantic tokens mapped in the design system.
 
 ## Permitted Tailwind Utilities
@@ -132,18 +147,25 @@ token equivalents (`gap-gap-compact-default`, `w-layout-width-sidebar-base`,
 ## Accessibility Guardrails
 
 > [!IMPORTANT]
+>
 > ### Minimum touch targets
+>
 > Interactive elements must meet a minimum 44px touch target (`{size.action-min-default}` = 2.75rem).
 > This is non-negotiable for buttons, nav items, toolbar controls, and any click/tap target.
 
 > [!IMPORTANT]
+>
 > ### Image accessibility
+>
 > All `<img>` elements using `{ASSET_BASE}` must include descriptive `alt` text.
 > Decorative images use `alt=""`. Never omit the attribute.
 
 > [!IMPORTANT]
+>
 > ### Color contrast
+>
 > The Nocturne Museum palette is designed for WCAG AA compliance:
+>
 > - `{colors.text-content-primary-base}` (#FFFFFF) on `{colors.surface-background-primary-base}` (#0A0A0E): 19.3:1
 > - `{colors.text-content-secondary-base}` (#A1A1AA) on `{colors.surface-background-primary-base}` (#0A0A0E): 8.6:1
 > - `{colors.text-content-primary-base}` on `{colors.surface-background-secondary-base}` (#12121A): 17.9:1

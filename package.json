@@ -2,7 +2,7 @@
   "name": "@vidoxlabs/videsign",
   "version": "1.0.0",
   "description": "Canonical Nocturne Museum design system for Vidoxlabs",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE",
   "main": "mcp-server.js",
   "scripts": {
     "lint": "eslint .",
