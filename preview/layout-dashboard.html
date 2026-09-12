@@ -1,0 +1,76 @@
+<!--
+  Nocturne Museum: Dashboard Layout
+  Canonical composition: sidebar + toolbar + main content + stat cards.
+  Demonstrates how preview/ fragments compose into a full screen.
+-->
+<div class="flex h-screen w-screen bg-surface-background-primary-base overflow-hidden">
+  <!-- Sidebar -->
+  <aside class="w-layout-width-sidebar-base min-h-screen bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-large-base flex flex-col gap-gap-section-default shrink-0 rounded-r-layout-radius-standard-base effects-glass-functional-overlay-base">
+    <!-- Brand -->
+    <div class="flex items-center gap-gap-comfortable-default">
+      <span class="w-7 h-7 bg-surface-accent-violet-base rounded-layout-radius-control-base"></span>
+      <div class="flex flex-col leading-tight">
+        <span class="font-typography-family-mono-base text-typography-size-sm-base font-bold text-text-content-primary-base tracking-tight">
+          VIDOX<span class="text-surface-accent-violet-base">LABS</span>
+        </span>
+        <span class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Studio</span>
+      </div>
+    </div>
+    <!-- Nav -->
+    <nav class="flex flex-col gap-gap-dense-default">
+      <button type="button" class="flex items-center gap-gap-comfortable-default py-2 px-3 rounded-layout-radius-control-base bg-surface-background-tertiary-base text-text-content-primary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-medium tracking-wide uppercase border-l-2 border-surface-accent-violet-base">
+        Dashboard
+      </button>
+      <button type="button" class="flex items-center gap-gap-comfortable-default py-2 px-3 rounded-layout-radius-control-base bg-transparent text-text-content-secondary-base hover:bg-surface-background-tertiary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-medium tracking-wide uppercase">
+        Monitors
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 flex flex-col overflow-hidden">
+    <!-- Toolbar -->
+    <div class="flex items-center gap-gap-compact-default p-layout-padding-small-base bg-surface-background-tertiary-base border-b border-border-separator-primary-base">
+      <button type="button" class="flex items-center gap-gap-compact-default px-3 py-1.5 bg-transparent hover:bg-surface-background-secondary-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-control-base font-typography-family-sans-base text-typography-size-sm-base font-medium">
+        Filter
+      </button>
+    </div>
+
+    <!-- Content area -->
+    <div class="flex-1 overflow-y-auto p-layout-padding-large-base flex flex-col gap-gap-spacious-default">
+      <!-- Alert banner -->
+      <div class="flex items-center gap-gap-comfortable-default p-layout-padding-medium-base rounded-layout-radius-control-base bg-status-indicator-warning-base/10 border border-status-indicator-warning-base/20">
+        <span class="w-2 h-2 rounded-layout-radius-full-base bg-status-indicator-warning-base shrink-0"></span>
+        <span class="font-typography-family-mono-base text-typography-size-sm-base text-status-indicator-warning-base">
+          1 monitor degraded
+        </span>
+      </div>
+
+      <!-- Stat cards row -->
+      <div class="flex gap-gap-spacious-default">
+        <div class="bg-surface-background-secondary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-compact-default flex-1">
+          <span class="font-typography-family-mono-base text-text-content-secondary-base text-typography-size-sm-base">Active agents</span>
+          <span class="font-typography-family-sans-base text-text-content-primary-base text-typography-size-3xl-base font-bold tracking-tight">12</span>
+        </div>
+        <div class="bg-surface-background-secondary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-compact-default flex-1">
+          <span class="font-typography-family-mono-base text-text-content-secondary-base text-typography-size-sm-base">Requests / min</span>
+          <span class="font-typography-family-sans-base text-text-content-primary-base text-typography-size-3xl-base font-bold tracking-tight">847</span>
+        </div>
+      </div>
+
+      <!-- Monitor rows -->
+      <div class="flex flex-col bg-surface-background-secondary-base rounded-layout-radius-standard-base border border-border-separator-primary-base overflow-hidden">
+        <div class="flex items-center gap-gap-spacious-default py-layout-padding-small-base px-layout-padding-medium-base border-b border-border-separator-primary-base">
+          <span class="w-2 h-2 rounded-layout-radius-full-base bg-status-indicator-success-base shrink-0"></span>
+          <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base font-medium flex-1">v37.router</span>
+          <span class="font-typography-family-mono-base text-typography-size-xs-base font-medium text-status-indicator-success-base tracking-widest uppercase">ok</span>
+        </div>
+        <div class="flex items-center gap-gap-spacious-default py-layout-padding-small-base px-layout-padding-medium-base">
+          <span class="w-2 h-2 rounded-layout-radius-full-base bg-status-indicator-warning-base shrink-0"></span>
+          <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base font-medium flex-1">openwebui.bridge</span>
+          <span class="font-typography-family-mono-base text-typography-size-xs-base font-medium text-status-indicator-warning-base tracking-widest uppercase">degraded</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

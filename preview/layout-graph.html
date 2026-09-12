@@ -1,0 +1,81 @@
+<!--
+  Nocturne Museum: Graph Layout
+  Canonical composition: sidebar + graph canvas + inspector panel.
+  Demonstrates how the graph and inspector fragments compose with the sidebar.
+-->
+<div class="flex h-screen w-screen bg-surface-background-primary-base overflow-hidden">
+  <!-- Sidebar -->
+  <aside class="w-layout-width-sidebar-base min-h-screen bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-large-base flex flex-col gap-gap-section-default shrink-0 rounded-r-layout-radius-standard-base effects-glass-functional-overlay-base">
+    <div class="flex items-center gap-gap-comfortable-default">
+      <span class="w-7 h-7 bg-surface-accent-violet-base rounded-layout-radius-control-base"></span>
+      <div class="flex flex-col leading-tight">
+        <span class="font-typography-family-mono-base text-typography-size-sm-base font-bold text-text-content-primary-base tracking-tight">
+          VIDOX<span class="text-surface-accent-violet-base">LABS</span>
+        </span>
+        <span class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Studio</span>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-gap-dense-default">
+      <button type="button" class="flex items-center gap-gap-comfortable-default py-2 px-3 rounded-layout-radius-control-base bg-transparent text-text-content-secondary-base hover:bg-surface-background-tertiary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-medium tracking-wide uppercase">
+        Dashboard
+      </button>
+      <button type="button" class="flex items-center gap-gap-comfortable-default py-2 px-3 rounded-layout-radius-control-base bg-surface-background-tertiary-base text-text-content-primary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-medium tracking-wide uppercase border-l-2 border-surface-accent-violet-base">
+        Graph
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Graph canvas -->
+  <div class="relative flex-1 bg-surface-background-primary-base overflow-hidden flex items-center justify-center">
+    <!-- Node -->
+    <button type="button" class="absolute flex flex-col items-center gap-gap-compact-default transform -translate-x-1/2 -translate-y-1/2 group" style="top: 40%; left: 35%;">
+      <div class="w-8 h-8 rounded-layout-radius-full-base bg-surface-background-tertiary-base border-2 border-status-indicator-success-base flex items-center justify-center transition-transform group-hover:scale-110">
+        <span class="w-2 h-2 rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+      </div>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base font-medium tracking-wide">v37.router</span>
+    </button>
+
+    <!-- Edge -->
+    <div class="absolute origin-left h-0.5 bg-surface-accent-violet-base opacity-40" style="top: 40%; left: 35%; width: 200px;"></div>
+
+    <!-- Second node -->
+    <button type="button" class="absolute flex flex-col items-center gap-gap-compact-default transform -translate-x-1/2 -translate-y-1/2 group" style="top: 40%; left: 60%;">
+      <div class="w-8 h-8 rounded-layout-radius-full-base bg-surface-background-tertiary-base border-2 border-status-indicator-warning-base flex items-center justify-center transition-transform group-hover:scale-110">
+        <span class="w-2 h-2 rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>
+      </div>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base font-medium tracking-wide">openwebui.bridge</span>
+    </button>
+
+    <!-- Empty state label -->
+    <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-secondary-base tracking-wide">Graph view</span>
+  </div>
+
+  <!-- Inspector panel -->
+  <aside class="w-layout-width-inspector-base h-full bg-surface-background-primary-base border-l border-border-separator-primary-base flex flex-col shrink-0 overflow-y-auto">
+    <header class="flex items-center justify-between p-layout-padding-medium-base border-b border-border-separator-primary-base">
+      <div class="flex flex-col gap-gap-dense-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base uppercase tracking-widest">Inspection</span>
+        <h2 class="font-typography-family-sans-base text-typography-size-lg-base font-bold text-text-content-primary-base leading-none">v37.router</h2>
+      </div>
+      <button type="button" class="p-1 rounded-layout-radius-control-base hover:bg-surface-background-tertiary-base transition-colors">
+        <span class="w-4 h-4 bg-text-content-secondary-base opacity-50 block"></span>
+      </button>
+    </header>
+    <div class="flex flex-col p-layout-padding-medium-base gap-layout-padding-large-base">
+      <!-- Metadata section -->
+      <section class="flex flex-col gap-gap-comfortable-default border-b border-border-separator-primary-base pb-layout-padding-large-base">
+        <h3 class="font-typography-family-mono-base text-typography-size-xs-base font-bold text-text-content-primary-base tracking-widest uppercase">
+          Metadata
+        </h3>
+        <div class="flex flex-col gap-gap-dense-default">
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Status</span>
+          <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Active</span>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default">
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Latency p99</span>
+          <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">12ms</span>
+        </div>
+      </section>
+    </div>
+  </aside>
+</div>

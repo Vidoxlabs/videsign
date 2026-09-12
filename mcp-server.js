@@ -6,6 +6,9 @@
  * Exposes DESIGN.md, SKILL.md, and all preview/ HTML fragments as read-only
  * resources to AI agents in product repositories. Fragments are auto-discovered
  * at startup — no manual resource list to maintain.
+ *
+ * Also provides a `resolve_token` tool so agents can query individual token
+ * values without parsing the entire DESIGN.md.
  */
 
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
@@ -18,6 +21,11 @@ const {
 } = require('@modelcontextprotocol/sdk/types.js');
 const fs = require('fs');
 const path = require('path');
+
+// Load token data at startup for the resolve_token tool
+const { parseFrontMatter } = require('./scripts/generate-tokens');
+const DESIGN_CONTENT = fs.readFileSync(path.join(__dirname, 'DESIGN.md'), 'utf-8');
+const TOKENS = parseFrontMatter(DESIGN_CONTENT);
 
 // --- Resource discovery -------------------------------------------------
 
@@ -122,6 +130,80 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
       mimeType,
       text: content,
     }],
+  };
+});
+
+// --- List Tools ---------------------------------------------------------
+
+server.setRequestHandler(ListToolsRequestSchema, async () => {
+  return {
+    tools: [
+      {
+        name: 'resolve_token',
+        description: 'Resolve a single design token by its full path (e.g., "colors.surface-background-primary-base"). Returns the raw value. Use this instead of reading the entire DESIGN.md when you only need one token.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'The token path in dot notation: category.key (e.g., "colors.surface-background-primary-base")',
+            },
+          },
+          required: ['path'],
+        },
+      },
+    ],
+  };
+});
+
+// --- Call Tool ----------------------------------------------------------
+
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  if (request.name === 'resolve_token') {
+    const tokenPath = request.arguments?.path;
+    if (!tokenPath) {
+      return {
+        content: [{ type: 'text', text: 'Error: "path" argument is required.' }],
+        isError: true,
+      };
+    }
+
+    const parts = tokenPath.split('.');
+    if (parts.length < 2) {
+      return {
+        content: [{ type: 'text', text: `Error: path must be in "category.key" format (got "${tokenPath}").` }],
+        isError: true,
+      };
+    }
+
+    const [category, ...keyParts] = parts;
+    const key = keyParts.join('.');
+    const categoryTokens = TOKENS[category];
+
+    if (!categoryTokens) {
+      return {
+        content: [{ type: 'text', text: `Error: category "${category}" not found. Available: ${Object.keys(TOKENS).join(', ')}.` }],
+        isError: true,
+      };
+    }
+
+    const value = categoryTokens[key];
+    if (value === undefined) {
+      const availableKeys = Object.keys(categoryTokens).join(', ');
+      return {
+        content: [{ type: 'text', text: `Error: token "${key}" not found in "${category}". Available: ${availableKeys}.` }],
+        isError: true,
+      };
+    }
+
+    return {
+      content: [{ type: 'text', text: `${tokenPath} = ${value}` }],
+    };
+  }
+
+  return {
+    content: [{ type: 'text', text: `Error: unknown tool "${request.name}".` }],
+    isError: true,
   };
 });
 

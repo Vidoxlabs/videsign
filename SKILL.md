@@ -1,5 +1,5 @@
 ---
-name: "Nocturne Museum Design System Rules"
+name: "videsign"
 description: "Workflow, architectural decisions, and constraints for the videsign repository"
 ---
 
@@ -18,7 +18,7 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 3.  **Functional Glassmorphism**: Glass effects (e.g., `{effects.glass-functional-overlay-active}`) are reserved exclusively for:
     - Modals and dialogs
     - Floating contextual menus
-    - Fixed navigation bars (when scrolled)
+    - Fixed navigation bars (apply glass effect persistently once the user has scrolled past the page top, until scrolled back to top)
 
 ## ADR-002: Asset & Media Hosting
 
@@ -27,7 +27,7 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 **Decision**:
 1. No binary assets or base64-embedded images may be stored in the repository.
 2. All assets must be hosted on an external CDN.
-3. Agents must reference assets using the `{ONEDRIVE_ASSET_BASE}` placeholder followed by the relative path (e.g., `{ONEDRIVE_ASSET_BASE}/assets/logos/vidoxlabs/cube.png`).
+3. Agents must reference assets using the `{ASSET_BASE}` placeholder followed by the relative path (e.g., `{ASSET_BASE}/assets/logos/vidoxlabs/cube.png`). Consuming repos resolve this at build time via their environment configuration.
 4. The `assets/` directory exists for local development reference only; its contents are gitignored and never committed.
 
 ## Negative Constraints against Boilerplate Generation
