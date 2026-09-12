@@ -1,5 +1,7 @@
 # videsign
 
+![CI](https://github.com/Vidoxlabs/videsign/actions/workflows/ci.yml/badge.svg)
+
 The canonical Nocturne Museum design system for Vidoxlabs. Provides a semantic
 token matrix, pure HTML preview fragments, and an MCP server for cross-repo
 consumption by AI agents and product repositories.
@@ -51,6 +53,18 @@ Example: `{colors.surface-background-primary-base}` resolves to `#0A0A0E`.
 See `DESIGN.md` for the full token definitions and negative boundaries. See
 `SKILL.md` for architectural constraints and `AGENTS.md` for the agent
 initialization protocol.
+
+## Contributing
+
+1. Modify tokens in `DESIGN.md` YAML front-matter (the single source of truth).
+2. Run `npm run tokens` to regenerate `dist/` artifacts.
+3. Run `npm run lint` to validate against the `no-arbitrary-value` rule.
+4. Verify preview fragments: no `shadow-sm` (ADR-001), no arbitrary Tailwind
+   values, no `{ONEDRIVE_ASSET_BASE}` references.
+5. CI runs these checks on every push and pull request.
+
+See `AGENTS.md` for the full agent initialization protocol and `SKILL.md` for
+architectural decision records.
 
 ## License
 
