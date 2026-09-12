@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate tokens
+        run: npm run tokens
+
+      - name: Verify generated artifacts
+        run: |
+          test -f dist/tailwind.config.js
+          test -f dist/tokens.css
+          test -f dist/tokens.json
+          node -e "const t = require('./dist/tokens.json'); const n = Object.values(t).reduce((c,o)=>c+Object.keys(o).length,0); if(n===0) throw new Error('No tokens generated'); console.log(n + ' tokens generated')"
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Verify preview fragments have no shadow-sm
+        run: |
+          if grep -r 'shadow-sm' preview/ --include='*.html'; then
+            echo "ERROR: shadow-sm found in preview fragments (violates ADR-001)"
+            exit 1
+          fi
+
+      - name: Verify no arbitrary Tailwind values
+        run: |
+          if grep -rnE 'class="[^"]*\[' preview/ --include='*.html' | grep -v 'ASSET_BASE'; then
+            echo "ERROR: arbitrary Tailwind values found in preview fragments"
+            exit 1
+          fi
+
+      - name: Verify no {ONEDRIVE_ASSET_BASE} references
+        run: |
+          if grep -r 'ONEDRIVE' . --include='*.md' --include='*.html' --include='*.js' --include='*.json'; then
+            echo "ERROR: ONEDRIVE reference found — use {ASSET_BASE} instead"
+            exit 1
+          fi
