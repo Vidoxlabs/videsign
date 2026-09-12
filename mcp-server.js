@@ -11,7 +11,7 @@
  * values without parsing the entire DESIGN.md.
  */
 
-const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
+const { Server } = require('@modelcontextprotocol/sdk/server');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
 const {
   CallToolRequestSchema,
