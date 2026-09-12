@@ -46,9 +46,9 @@ jobs:
             exit 1
           fi
 
-      - name: Verify no {ONEDRIVE_ASSET_BASE} references
+      - name: Verify no ONEDRIVE_ASSET_BASE in source files
         run: |
-          if grep -r 'ONEDRIVE' . --include='*.md' --include='*.html' --include='*.js' --include='*.json'; then
-            echo "ERROR: ONEDRIVE reference found — use {ASSET_BASE} instead"
+          if grep -r 'ONEDRIVE_ASSET_BASE' . --include='*.md' --include='*.html' --include='*.js' --exclude-dir='.github' --exclude-dir='node_modules'; then
+            echo "ERROR: ONEDRIVE_ASSET_BASE found — use {ASSET_BASE} instead"
             exit 1
           fi

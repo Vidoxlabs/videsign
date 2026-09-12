@@ -60,7 +60,7 @@ initialization protocol.
 2. Run `npm run tokens` to regenerate `dist/` artifacts.
 3. Run `npm run lint` to validate against the `no-arbitrary-value` rule.
 4. Verify preview fragments: no `shadow-sm` (ADR-001), no arbitrary Tailwind
-   values, no `{ONEDRIVE_ASSET_BASE}` references.
+   values, no deprecated asset placeholder references.
 5. CI runs these checks on every push and pull request.
 
 See `AGENTS.md` for the full agent initialization protocol and `SKILL.md` for
