@@ -33,5 +33,5 @@ gitignored — they are never committed to the repository.
 
 Per ADR-002 (see `SKILL.md`), no binary assets may be stored in the repository.
 All assets must be hosted on an external CDN and referenced via the
-`{ONEDRIVE_ASSET_BASE}` placeholder. These files exist locally for development
+`{ASSET_BASE}` placeholder. These files exist locally for development
 reference only.

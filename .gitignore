@@ -9,3 +9,6 @@
 *.webp
 node_modules/
 .DS_Store
+
+# Generated token artifacts (run `npm run tokens` to regenerate)
+dist/

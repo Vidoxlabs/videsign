@@ -11,9 +11,13 @@ videsign/
 ├── DESIGN.md        Semantic token matrix (category-role-variant-state) + negative boundaries
 ├── SKILL.md         Architectural Decision Records (ADRs) and agent guardrails
 ├── AGENTS.md        Engineering governance and agent initialization protocol
-├── preview/         Pure, flat, state-free HTML component fragments
-├── mcp-server.js    Read-only MCP server exposing tokens and fragments to product repos
+├── preview/         Pure, flat, state-free HTML component fragments + layout compositions
+├── preview/index.html  Visual catalog (open in a browser)
+├── scripts/
+│   └── generate-tokens.js  Token pipeline: DESIGN.md YAML → Tailwind config, CSS vars, JSON
+├── mcp-server.js    Read-only MCP server: tokens, fragments, resolve_token tool
 ├── assets/          Local-only design images (gitignored, never committed)
+├── dist/            Generated artifacts (gitignored, run `npm run tokens` to regenerate)
 ├── .eslintrc.js     AST validation: enforces no-arbitrary-value rule
 └── package.json
 ```
@@ -22,9 +26,21 @@ videsign/
 
 ```bash
 npm install
-npm run mcp      # Start the MCP server on stdio
-npm run lint      # Validate against no-arbitrary-value rule
+npm run tokens     # Generate Tailwind config, CSS vars, and JSON from DESIGN.md
+npm run mcp        # Start the MCP server on stdio
+npm run lint       # Validate against no-arbitrary-value rule
 ```
+
+Open `preview/index.html` in a browser for a visual catalog of all components.
+
+## Consuming from a product repo
+
+1. **Tailwind**: Import the generated config — `const videsign = require('@vidoxlabs/videsign/dist/tailwind.config.js')`
+   and spread into your `tailwind.config.js` `theme.extend`.
+2. **CSS custom properties**: Import `dist/tokens.css` for `--vi-*` CSS variables.
+3. **MCP**: Run `npm run mcp` and query resources/tools from your product repo's agent.
+4. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
+   to your CDN endpoint.
 
 ## Token matrix
 

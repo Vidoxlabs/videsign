@@ -1,0 +1,170 @@
+<!--
+  Nocturne Museum: Visual Catalog
+  Renders all preview/ fragments inline for visual verification.
+  Open this file in a browser to see the complete design system.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nocturne Museum — Visual Catalog</title>
+  <style>
+    /* Minimal inline reset — no Tailwind dependency required to view the catalog */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0A0A0E;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+    }
+    .catalog-header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #A1A1AA;
+      margin-bottom: 8px;
+    }
+    .catalog-header h2 {
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .fragment-section { display: flex; flex-direction: column; gap: 16px; }
+    .fragment-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #7C3AED;
+    }
+    .fragment-desc {
+      font-size: 14px;
+      color: #A1A1AA;
+    }
+    .fragment-frame {
+      background: #12121A;
+      border: 1px solid #27272A;
+      border-radius: 14px;
+      padding: 32px;
+      overflow: hidden;
+    }
+    .fragment-frame.layout-frame {
+      padding: 0;
+      border-radius: 14px;
+      height: 600px;
+    }
+    .fragment-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      border-radius: 14px;
+    }
+    /* Apply Nocturne tokens as CSS vars for inline fragments */
+    .fragment-frame > div,
+    .fragment-frame > aside,
+    .fragment-frame > button {
+      position: static;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="catalog-header">
+    <h1>Nocturne Museum design system</h1>
+    <h2>Visual catalog</h2>
+  </div>
+
+  <!-- Layout compositions (iframed because they use full-screen layout) -->
+  <div class="fragment-section">
+    <span class="fragment-label">Layout — Dashboard</span>
+    <span class="fragment-desc">Sidebar + toolbar + stat cards + monitor rows</span>
+    <div class="fragment-frame layout-frame">
+      <iframe src="layout-dashboard.html" title="Dashboard layout"></iframe>
+    </div>
+  </div>
+
+  <div class="fragment-section">
+    <span class="fragment-label">Layout — Graph</span>
+    <span class="fragment-desc">Sidebar + graph canvas + inspector panel</span>
+    <div class="fragment-frame layout-frame">
+      <iframe src="layout-graph.html" title="Graph layout"></iframe>
+    </div>
+  </div>
+
+  <!-- Individual components (rendered inline) -->
+  <div class="fragment-section">
+    <span class="fragment-label">Button</span>
+    <span class="fragment-desc">Primary action button</span>
+    <div class="fragment-frame" id="frag-button"></div>
+  </div>
+
+  <div class="fragment-section">
+    <span class="fragment-label">Alert banner</span>
+    <span class="fragment-desc">Warning status with functional tinted background</span>
+    <div class="fragment-frame" id="frag-alert-banner"></div>
+  </div>
+
+  <div class="fragment-section">
+    <span class="fragment-label">Stat card</span>
+    <span class="fragment-desc">Status indicators, monospace labels, sans-serif data</span>
+    <div class="fragment-frame" id="frag-stat-card"></div>
+  </div>
+
+  <div class="fragment-section">
+    <span class="fragment-label">Monitor row</span>
+    <span class="fragment-desc">Dense list row with status indicator</span>
+    <div class="fragment-frame" id="frag-monitor-row"></div>
+  </div>
+
+  <div class="fragment-section">
+    <span class="fragment-label">Activity feed</span>
+    <span class="fragment-desc">List container with live status indicator</span>
+    <div class="fragment-frame" id="frag-activity-feed"></div>
+  </div>
+
+  <div class="fragment-section">
+    <span class="fragment-label">Activity item</span>
+    <span class="fragment-desc">Dense text layout for feed entries</span>
+    <div class="fragment-frame" id="frag-activity-item"></div>
+  </div>
+
+  <div class="fragment-section">
+    <span class="fragment-label">Data table</span>
+    <span class="fragment-desc">Tabular container with header row</span>
+    <div class="fragment-frame" id="frag-data-table"></div>
+  </div>
+
+  <div class="fragment-section">
+    <span class="fragment-label">Inspector field</span>
+    <span class="fragment-desc">Key-value pair for inspection panels</span>
+    <div class="fragment-frame" id="frag-inspector-field"></div>
+  </div>
+
+  <script>
+    // Inline-load individual fragments via fetch
+    const fragments = [
+      'button.html', 'alert-banner.html', 'stat-card.html',
+      'monitor-row.html', 'activity-feed.html', 'activity-item.html',
+      'data-table.html', 'inspector-field.html'
+    ];
+
+    fragments.forEach(file => {
+      const id = 'frag-' + file.replace('.html', '');
+      const el = document.getElementById(id);
+      if (el) {
+        fetch(file)
+          .then(r => r.text())
+          .then(html => { el.innerHTML = html; })
+          .catch(() => { el.innerHTML = '<p style="color:#A1A1AA;font-family:monospace;font-size:13px;">Could not load ' + file + '</p>'; });
+      }
+    });
+  </script>
+</body>
+</html>

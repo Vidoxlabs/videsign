@@ -14,11 +14,18 @@ design system — the shared visual language for all Vidoxlabs products and appl
   understand architectural constraints (ADRs) and negative generation guardrails.
 - **preview/**: Pure, flat, semantic, state-free HTML fragments for every component.
   Agents inspect these to capture clean structural snippets instead of hallucinating
-  framework-specific state logic.
+  framework-specific state logic. `preview/index.html` renders a visual catalog of
+  all fragments. Layout compositions are in `preview/layout-*.html`.
+- **scripts/generate-tokens.js**: Token generation pipeline. Parses `DESIGN.md` YAML
+  front-matter and emits `dist/tailwind.config.js`, `dist/tokens.css`, and
+  `dist/tokens.json`. Run `npm run tokens` to regenerate.
 - **mcp-server.js**: The MCP server that exposes this design system to product
-  repositories for cross-repo token and fragment fetching.
+  repositories for cross-repo token and fragment fetching. Also provides a
+  `resolve_token` tool for querying individual token values.
 - **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
   naming convention. No binary assets are committed to the repository.
+- **dist/**: Generated artifacts (gitignored). Produced by `npm run tokens`. Consuming
+  repos import `dist/tailwind.config.js` or `dist/tokens.css` from this repo.
 
 ## AI Agent Initialization & Cross-Repo Fetching
 
@@ -38,6 +45,21 @@ Within the `videsign` repository, agents are restricted to the following command
 
 - `npm run lint`: Executes AST validation against the codebase (enforcing `no-arbitrary-value`).
 - `npm run mcp`: Starts the local MCP server for cross-repo communication.
+- `npm run tokens`: Parses `DESIGN.md` and regenerates `dist/tailwind.config.js`,
+  `dist/tokens.css`, and `dist/tokens.json`. Run this after modifying tokens in
+  `DESIGN.md`.
+
+## `{ASSET_BASE}` resolution
+
+The `{ASSET_BASE}` placeholder appears in `DESIGN.md`, `SKILL.md`, and preview fragments.
+It is a build-time variable that consuming repos resolve to their CDN endpoint. This
+repository does not define the value — each product repo sets it in its environment:
+
+- **Vite**: `import.meta.env.VITE_ASSET_BASE` or a define plugin replacement
+- **Next.js**: `next.config.js` env or `process.env.ASSET_BASE`
+- **Static HTML**: string replacement at deploy time
+
+Never hardcode a URL in place of `{ASSET_BASE}`. Always use the placeholder.
 
 ## Token Matrix Format
 

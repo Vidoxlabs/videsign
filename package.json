@@ -6,7 +6,8 @@
   "main": "mcp-server.js",
   "scripts": {
     "lint": "eslint .",
-    "mcp": "node mcp-server.js"
+    "mcp": "node mcp-server.js",
+    "tokens": "node scripts/generate-tokens.js"
   },
   "devDependencies": {
     "eslint": "^8.56.0",
