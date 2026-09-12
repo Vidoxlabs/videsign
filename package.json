@@ -1,8 +1,9 @@
 {
-  "name": "@vilabs/videsign",
+  "name": "@vidoxlabs/videsign",
   "version": "1.0.0",
-  "description": "Canonical Source of Truth for the Nocturne Museum theme",
-  "main": "index.js",
+  "description": "Canonical Nocturne Museum design system for Vidoxlabs",
+  "license": "UNLICENSED",
+  "main": "mcp-server.js",
   "scripts": {
     "lint": "eslint .",
     "mcp": "node mcp-server.js"

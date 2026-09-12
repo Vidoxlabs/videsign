@@ -5,37 +5,54 @@ and interacting agents.
 
 ## Repository Architecture
 
-The `videsign` repository serves as the canonical source of truth for the **Nocturne Museum** theme.
+The `videsign` repository is the canonical source of truth for the **Nocturne Museum**
+design system — the shared visual language for all Vidoxlabs products and applications.
 
-- **DESIGN.md**: The Visual Truth Layer. Read this file to understand the semantic token matrix and
-  negative UI boundaries.
-- **references/**: External site design captures (external design reference A, external design reference B, etc.) for inspiration only — not
-  canonical tokens.
-- **SKILL.md**: The Decision Ledger. Read this file immediately upon initialization to understand
-  architectural constraints (ADRs).
-- **preview/**: Directory containing pure, flat, semantic, state-free HTML fragments.
-- **mcp-server.js**: The central MCP server that exposes this design system to other product
-  repositories.
+- **DESIGN.md**: The Visual Truth Layer. Read this file to understand the semantic token
+  matrix (`category-role-variant-state`) and negative UI boundaries.
+- **SKILL.md**: The Decision Ledger. Read this file immediately upon initialization to
+  understand architectural constraints (ADRs) and negative generation guardrails.
+- **preview/**: Pure, flat, semantic, state-free HTML fragments for every component.
+  Agents inspect these to capture clean structural snippets instead of hallucinating
+  framework-specific state logic.
+- **mcp-server.js**: The MCP server that exposes this design system to product
+  repositories for cross-repo token and fragment fetching.
+- **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
+  naming convention. No binary assets are committed to the repository.
 
 ## AI Agent Initialization & Cross-Repo Fetching
 
-When an AI agent initializes in a _product_ repository (e.g., Playcards, website), it MUST execute
-the following routine:
+When an AI agent initializes in any product repository that consumes this design system,
+it MUST execute the following routine:
 
-1. **Query MCP Server**: Immediately query the `videsign` centralized MCP server to fetch the latest
-   unified specifications.
-2. **Fetch Tokens**: Read the YAML front-matter from `DESIGN.md` via MCP to understand the available
-   `category-role-variant-state` tokens.
-3. **Inspect Fragments**: Use the `preview/` HTML fragments exposed via MCP to capture clean
-   structural snippets instead of hallucinating complex React/Angular state logic.
+1. **Query MCP Server**: Query the `videsign` MCP server (`npm run mcp`) to fetch the
+   latest unified specifications.
+2. **Fetch Tokens**: Read the YAML front-matter from `DESIGN.md` via MCP to understand
+   the available `category-role-variant-state` tokens.
+3. **Inspect Fragments**: Use the `preview/` HTML fragments exposed via MCP to capture
+   clean structural snippets instead of hallucinating framework-specific state logic.
 
 ## Approved CLI Commands
 
-Within the `videsign` repository, agents are restricted to the following commands to prevent
-destructive actions:
+Within the `videsign` repository, agents are restricted to the following commands:
 
 - `npm run lint`: Executes AST validation against the codebase (enforcing `no-arbitrary-value`).
 - `npm run mcp`: Starts the local MCP server for cross-repo communication.
+
+## Token Matrix Format
+
+All design tokens follow the 4-part semantic matrix: `category-role-variant-state`.
+
+| Part       | Examples                                   | Description                         |
+| ---------- | ------------------------------------------ | ----------------------------------- |
+| category   | `colors`, `typography`, `effects`, `spacing` | Token domain                        |
+| role       | `surface-background`, `text-content`, `status-indicator` | Functional role within the category |
+| variant    | `primary`, `secondary`, `violet`, `success` | Specific variant of the role        |
+| state      | `base`, `hover`, `active`                  | Interaction state                   |
+
+Agents bind tokens using the reference syntax: `{colors.surface-background-primary-base}`.
+Never invent tokens outside this matrix. If a needed value is missing, add it to
+`DESIGN.md` first, then reference it.
 
 ## AST Validation Pipeline
 
