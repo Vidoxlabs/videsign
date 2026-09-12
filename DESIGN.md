@@ -26,6 +26,15 @@ typography:
   typography-size-xl-base: "1.25rem"
   typography-size-2xl-base: "1.5rem"
   typography-size-3xl-base: "1.875rem"
+  typography-size-4xl-base: "2.5rem"
+  typography-size-5xl-base: "3.5rem"
+  typography-fluid-display-base: "clamp(2rem, 1.5rem + 2vw, 3.5rem)"
+  typography-fluid-h1-base: "clamp(2rem, 1.5rem + 2vw, 3.5rem)"
+  typography-fluid-h2-base: "clamp(1.5rem, 1.25rem + 1vw, 2.5rem)"
+  typography-fluid-h3-base: "clamp(1.25rem, 1.1rem + 0.6vw, 2rem)"
+  typography-fluid-lede-base: "clamp(1rem, 0.95rem + 0.2vw, 1.25rem)"
+  typography-fluid-body-base: "clamp(1rem, 0.96rem + 0.15vw, 1.0625rem)"
+  typography-fluid-caption-base: "clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem)"
 
 effects:
   glass-functional-overlay-base: "backdrop-blur-sm bg-white/5"
