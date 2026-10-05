@@ -199,16 +199,17 @@ test('glass.css keeps the rim in every fallback ("same rim")', () => {
   assert.ok(fallback.includes(rim), 'fallbacks must keep the rim colour');
 });
 
-test('lens core text clears 4.5:1 over a pure-white backdrop (analytic worst case)', () => {
-  // The shell dims whatever is behind it by the brightness() factor; the core
-  // then paints its own near-opaque scrim. Worst case: a fully white backdrop.
-  const brightness = Number(TOKENS.effects['glass-crystal-backdrop-base'].match(/brightness\(([\d.]+)\)/)[1]);
+test('core text clears 4.5:1 over a pure-white backdrop with NO backdrop filter (analytic worst case)', () => {
+  // Engine-independent bound: the shell normally dims what is behind it (brightness()), but a
+  // headless or older engine may not render the filter, so the core scrim alone must carry the
+  // contrast over a fully white backdrop. (Measured: Playwright WebKit and Firefox did not apply
+  // brightness() to a backdrop in this repo's checks.)
   const [r, g, b, a] = TOKENS.effects['glass-crystal-core-base'].match(/rgba\((\d+), (\d+), (\d+), ([\d.]+)\)/).slice(1).map(Number);
-  const dimmed = 255 * brightness;
-  const mix = (core, behind) => core * a + behind * (1 - a);
+  const behind = 255;
+  const mix = (core) => core * a + behind * (1 - a);
   const lin = (c) => { const s = c / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; };
   const lum = ([R, G, B]) => 0.2126 * lin(R) + 0.7152 * lin(G) + 0.0722 * lin(B);
-  const bg = lum([mix(r, dimmed), mix(g, dimmed), mix(b, dimmed)]);
+  const bg = lum([mix(r), mix(g), mix(b)]);
   const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
   const ratio = (fg) => (lum(hex(fg)) + 0.05) / (bg + 0.05);
   const secondary = TOKENS.colors['text-content-secondary-base'];

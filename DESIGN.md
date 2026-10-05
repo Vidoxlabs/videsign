@@ -56,7 +56,7 @@ effects:
   glass-crystal-sheen-base: "linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 35%)"
   glass-crystal-shadow-base: "0 12px 30px rgba(0, 0, 0, 0.3)"
   glass-crystal-backdrop-base: "blur(14px) brightness(0.5) saturate(150%)"
-  glass-crystal-core-base: "rgba(10, 10, 14, 0.72)"
+  glass-crystal-core-base: "rgba(10, 10, 14, 0.85)"
   glass-crystal-solid-base: "#12121A"
   ambient-glow-violet-base: "rgba(124, 58, 237, 0.30)"
   ambient-glow-teal-base: "rgba(45, 212, 191, 0.16)"
@@ -169,7 +169,7 @@ Crystal glass is the one sanctioned glass material for public product surfaces. 
 - **Limits.** At most three glass layers per viewport. Never glass on glass (the lens core is a scrim, not a second blur). Never backdrop blur on scrolling containers. Never animate or transition the blur.
 - **Double bezel.** Glass shells use the outer radius `{spacing.layout-radius-glass-base}` (20px), `{spacing.layout-padding-bezel-base}` (6px) padding, and an inner core at `{spacing.layout-radius-standard-base}` (14px): 20 = 6 + 14, concentric.
 - **Composition.** Clear glass floats over the field, imagery and ambient glows (`{effects.ambient-glow-violet-base}`, `{effects.ambient-glow-teal-base}`, `{effects.ambient-dots-base}`), never directly over body copy. A headline may pass beneath the island while scrolling.
-- **Legibility floor.** Text on glass reaches 4.5:1 against the worst backdrop it can pass over, verified by pixel-sampling screenshots, not by the prettiest state. Reading text in the lens sits on the core scrim, which clears 4.5:1 even over a fully white backdrop (analytic bound in `test/tokens.test.js`).
+- **Legibility floor.** Text on glass reaches 4.5:1 against the worst backdrop it can pass over, verified by pixel-sampling screenshots, not by the prettiest state. Reading text in the lens sits on the core scrim, which clears 4.5:1 over a fully white backdrop even if the engine does not render the backdrop filter at all (analytic bound in `test/tokens.test.js`).
 - **Text-bearing controls are shell + core.** Any glass control that carries text and can pass over bright imagery (the island navigation, the question bar, the persona switcher) is a `vi-glass-shell` around a `vi-glass-core`, not a single `vi-glass` layer. `brightness(0.5)` turns white into mid grey, so one translucent layer cannot reach 4.5:1 over a white screenshot; the core scrim can. A single `vi-glass` layer is reserved for glass that carries no text.
 - **Ambient field.** The ambient glows and dots sit behind free page text as well as behind glass, so their peak values are bounded by the legibility floor: secondary text clears 4.5:1 over the strongest glow with a dot on top (analytic bound in `test/tokens.test.js`).
 - **Fallbacks.** Under `prefers-reduced-transparency: reduce`, `prefers-contrast: more`, `forced-colors: active`, or when `backdrop-filter` (prefixed or not) is unsupported, the same shapes render as the solid surface with the same rim. Refraction (SVG displacement) is out of scope.
