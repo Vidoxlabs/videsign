@@ -8,8 +8,14 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const ROOT = path.join(__dirname, '..');
+const PKG = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf-8'));
+
+function sha256(text) {
+  return crypto.createHash('sha256').update(text, 'utf8').digest('hex');
+}
 
 /** Parse ADR headings and optional status lines from SKILL.md. */
 function parseAdrIndex(skillMd) {
@@ -37,7 +43,7 @@ function buildStandard(tokens, designMd, skillMd) {
   return {
     meta: {
       designSystem: 'Nocturne Museum',
-      version: '1.0.0',
+      version: PKG.version,
       canonicalProvenance: 'Vidoxlabs/videsign',
       authorityFiles: ['DESIGN.md', 'SKILL.md'],
       generatedBy: 'scripts/generate-standard.js',
@@ -141,8 +147,8 @@ function buildStandard(tokens, designMd, skillMd) {
       },
     },
     adrs,
-    designBodyHashSeed: designMd.length,
-    skillBodyHashSeed: skillMd.length,
+    designBodySha256: sha256(designMd),
+    skillBodySha256: sha256(skillMd),
   };
 }
 

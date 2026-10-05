@@ -214,6 +214,7 @@ To prevent "AI drift" and the generation of generic or hallucinated UI elements,
 > ### 1. Typography Guardrails
 >
 > - **Enforce Sentence case**: Use sentence case for all default interactions and labels (e.g., "Submit your form"). Eyebrows and labels are Geist Mono in sentence case with a tracking token — never `text-transform: uppercase` or the Tailwind `uppercase` utility.
+> - **Ban overclaim copy**: Preview and fixture copy must not use the words `verified`, `signed`, or the phrase `Authorize action` — those are reserved for real evidence claims, not chrome.
 > - **BAN Title Case**: The generation of Title Case text is comprehensively banned across all UI components.
 > - **Family Rules**: Use `{typography.typography-family-mono-base}` (Geist Mono) for nav, labels, and status. Use `{typography.typography-family-sans-base}` (Geist) for section titles and descriptions (ADR-007).
 > - **Weight, tracking, leading**: use only the typography weight/tracking/leading tokens (`font-typography-weight-*`, `tracking-typography-tracking-*`, `leading-typography-leading-*`). Ban raw `font-medium` / `font-bold` / `tracking-*` / `leading-*`.

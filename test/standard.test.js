@@ -72,3 +72,30 @@ test('MCP resource list includes the generated standard when present', () => {
   assert.match(src, /dist\/standard\.json/);
   assert.match(src, /dist\/standard\.md/);
 });
+
+test('standard rules appear in DESIGN.md or SKILL.md (parity guard)', () => {
+  const { standard } = generateStandardArtifacts(TOKENS);
+  const corpus = `${DESIGN}\n${SKILL}`.toLowerCase();
+  for (const entry of standard.rules.glass.scope) {
+    assert.ok(corpus.includes(entry.toLowerCase()), `glass scope missing from prose: ${entry}`);
+  }
+  assert.ok(corpus.includes('three') || corpus.includes('3'), 'layer limit prose');
+  assert.match(corpus, /prefers-reduced-transparency/);
+  assert.match(corpus, /prefers-contrast/);
+  assert.match(corpus, /forced-colors/);
+  assert.match(corpus, /backdrop-filter/);
+  for (const word of standard.rules.copy.noOverclaim) {
+    assert.ok(corpus.includes(word.toLowerCase()), `overclaim word missing from prose: ${word}`);
+  }
+});
+
+test('standard digests DESIGN.md and SKILL.md by SHA-256 and reads version from package.json', () => {
+  const { standard } = generateStandardArtifacts(TOKENS);
+  const crypto = require('crypto');
+  const sha = (t) => crypto.createHash('sha256').update(t, 'utf8').digest('hex');
+  assert.equal(standard.designBodySha256, sha(DESIGN));
+  assert.equal(standard.skillBodySha256, sha(SKILL));
+  assert.equal(standard.meta.version, JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf-8')).version);
+  assert.equal(standard.designBodyHashSeed, undefined);
+  assert.equal(standard.skillBodyHashSeed, undefined);
+});
