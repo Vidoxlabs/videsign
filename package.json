@@ -5,7 +5,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "main": "mcp-server.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . && node scripts/lint-preview.js",
     "mcp": "node mcp-server.js",
     "test": "node --test test/*.test.js",
     "tokens": "node scripts/generate-tokens.js"

@@ -1,0 +1,24 @@
+<!--
+  Nocturne Museum: Persona switcher (ADR-006)
+  A glass tablist of the five seats. 44px tabs with roving focus (tabindex 0 on the
+  selected tab only, arrow keys move). The accent dot uses only the locked persona
+  accent tokens (ADR-004); the selected tab is a solid pill, not a second glass layer.
+  Persona accents are identity markers, never status. Demonstrated with Violet selected.
+-->
+<div role="tablist" aria-label="Persona seats" class="vi-glass inline-flex items-center gap-gap-dense-default rounded-layout-radius-full-base p-layout-padding-bezel-base">
+  <button type="button" role="tab" id="seat-tab-violet" aria-selected="true" aria-controls="seat-panel" tabindex="0" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-layout-padding-medium-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base bg-surface-background-tertiary-base rounded-layout-radius-full-base">
+    <span aria-hidden="true" class="w-2 h-2 rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>Violet
+  </button>
+  <button type="button" role="tab" id="seat-tab-wisteria" aria-selected="false" aria-controls="seat-panel" tabindex="-1" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-layout-padding-medium-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-full-base">
+    <span aria-hidden="true" class="w-2 h-2 rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span>Wisteria
+  </button>
+  <button type="button" role="tab" id="seat-tab-xylia" aria-selected="false" aria-controls="seat-panel" tabindex="-1" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-layout-padding-medium-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-full-base">
+    <span aria-hidden="true" class="w-2 h-2 rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span>Xylia
+  </button>
+  <button type="button" role="tab" id="seat-tab-yarrow" aria-selected="false" aria-controls="seat-panel" tabindex="-1" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-layout-padding-medium-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-full-base">
+    <span aria-hidden="true" class="w-2 h-2 rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span>Yarrow
+  </button>
+  <button type="button" role="tab" id="seat-tab-zinnia" aria-selected="false" aria-controls="seat-panel" tabindex="-1" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-layout-padding-medium-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-full-base">
+    <span aria-hidden="true" class="w-2 h-2 rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span>Zinnia
+  </button>
+</div>

@@ -1,0 +1,23 @@
+<!--
+  Nocturne Museum: Field edge (ADR-006)
+  A link between two records. Three states: rest (hairline), lit (brand stroke), dim (20%).
+  Draw-in obeys the motion budget (transform and opacity only): each edge is a horizontal
+  line of the edge's length inside a group that is translated to the start point and rotated
+  to the end point at build time. The consumer animates the line's transform from scaleX(0)
+  to scaleX(1) with transform-origin at its left end, so the draw follows the edge at any
+  angle. Duration is the 500ms entrance token; reduced motion shows the final state.
+-->
+<svg viewBox="0 0 360 96" role="img" aria-label="Field edge states: rest, lit and dim" class="w-full h-auto">
+  <g transform="translate(20 24) rotate(0)">
+    <line x1="0" y1="0" x2="320" y2="0" class="stroke-border-separator-primary-base" stroke-width="1.5"></line>
+  </g>
+  <text x="20" y="44" class="fill-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base">rest</text>
+  <g transform="translate(20 58) rotate(0)">
+    <line x1="0" y1="0" x2="320" y2="0" class="stroke-surface-accent-violet-base" stroke-width="2"></line>
+  </g>
+  <text x="20" y="78" class="fill-text-content-primary-base font-typography-family-mono-base text-typography-size-xs-base">lit</text>
+  <g transform="translate(200 78) rotate(0)">
+    <line x1="0" y1="0" x2="140" y2="0" class="stroke-border-separator-primary-base opacity-20" stroke-width="1.5"></line>
+  </g>
+  <text x="200" y="92" class="fill-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base">dim</text>
+</svg>

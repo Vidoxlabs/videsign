@@ -1,6 +1,9 @@
-<!-- 
+<!--
   Nocturne Museum: Graph Node Sub-Fragment
-  Demonstrates semantic node styling with status indicators.
+  Demonstrates semantic node styling with status indicators in the dashboard graph.
+  For the evidence/systems field (rest, lit, dim states, build-time SVG layout) see
+  field-node.html. Position dynamic nodes by setting CSS custom properties from an
+  external script (el.style.setProperty), never an inline style attribute.
 -->
 <button type="button" class="absolute flex flex-col items-center gap-gap-compact-default transform -translate-x-1/2 -translate-y-1/2 group">
   <div class="w-8 h-8 rounded-layout-radius-full-base bg-surface-background-tertiary-base border-2 border-status-indicator-success-base flex items-center justify-center transition-transform group-hover:scale-110">
