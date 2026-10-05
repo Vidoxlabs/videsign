@@ -1,0 +1,45 @@
+<!-- 
+  Nocturne Museum: Sovereign Persona Console
+  Standard frame for presenting a sovereign persona: identity status header,
+  primary operational viewport, evidence trail panel, and command bar.
+  Demonstrated with persona Violet — identity accents are locked per DESIGN.md
+  (persona identity only, never a status indicator). See SKILL.md ADR-004.
+-->
+<section class="w-full bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-standard-base flex flex-col overflow-hidden">
+  <!-- Identity status header (mono per typography family rules) -->
+  <header class="flex items-center justify-between p-layout-padding-medium-base border-b border-border-separator-primary-base">
+    <div class="flex flex-col gap-gap-dense-default min-w-0">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base uppercase tracking-widest">Sovereign persona console</span>
+      <h2 class="font-typography-family-sans-base text-typography-size-lg-base font-bold text-text-content-primary-base leading-none">Violet</h2>
+    </div>
+    <!-- Persona micro-badge: identity accent, never a status indicator -->
+    <span class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base text-persona-accent-violet-base border border-border-separator-primary-base rounded-layout-radius-control-base px-layout-padding-small-base py-layout-padding-small-base">persona: violet</span>
+  </header>
+
+  <!-- Primary operational viewport (morphs per persona; frame stays mounted) -->
+  <div class="flex-1 min-w-0 p-layout-padding-medium-base bg-surface-background-secondary-base overflow-y-auto">
+    <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">
+      Operational viewport — the addressed persona's working surface morphs here
+      while the shared console frame stays mounted, with zero layout shift.
+    </p>
+  </div>
+
+  <!-- Evidence trail panel -->
+  <aside class="p-layout-padding-medium-base border-t border-border-separator-primary-base flex flex-col gap-gap-compact-default">
+    <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base uppercase tracking-widest">Evidence trail</span>
+    <ul class="flex flex-col gap-gap-dense-default">
+      <li class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">git revision: verified</li>
+      <li class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">assertion: signed</li>
+    </ul>
+  </aside>
+
+  <!-- Command bar (44px touch targets per action-min-default) -->
+  <footer class="flex items-center gap-gap-compact-default p-layout-padding-medium-base border-t border-border-separator-primary-base">
+    <button type="button" class="h-action-min-default bg-surface-accent-violet-base hover:bg-surface-accent-violet-hover active:bg-surface-accent-violet-active text-text-content-primary-base rounded-layout-radius-control-base px-layout-padding-large-base font-typography-family-sans-base text-typography-size-sm-base transition-colors duration-transition-duration-normal-base">
+      Authorize action
+    </button>
+    <button type="button" class="h-action-min-default bg-surface-background-tertiary-base text-text-content-secondary-base border border-border-separator-primary-base rounded-layout-radius-control-base px-layout-padding-large-base font-typography-family-sans-base text-typography-size-sm-base transition-colors duration-transition-duration-normal-base">
+      Inspect evidence
+    </button>
+  </footer>
+</section>

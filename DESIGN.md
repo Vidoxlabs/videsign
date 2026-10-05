@@ -15,6 +15,11 @@ colors:
   status-indicator-warning-base: "#F59E0B"
   status-indicator-error-base: "#F43F5E"
   status-indicator-info-base: "#06B6D4"
+  persona-accent-violet-base: "#8B5CF6"
+  persona-accent-wisteria-base: "#A78BFA"
+  persona-accent-xylia-base: "#2DD4BF"
+  persona-accent-yarrow-base: "#F59E0B"
+  persona-accent-zinnia-base: "#F43F5E"
 
 typography:
   typography-family-sans-base: "Inter, sans-serif"
@@ -35,6 +40,7 @@ typography:
   typography-fluid-lede-base: "clamp(1rem, 0.95rem + 0.2vw, 1.25rem)"
   typography-fluid-body-base: "clamp(1rem, 0.96rem + 0.15vw, 1.0625rem)"
   typography-fluid-caption-base: "clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem)"
+  typography-fluid-hero-base: "clamp(2.75rem, 6vw + 0.5rem, 5.25rem)"
 
 effects:
   glass-functional-overlay-base: "backdrop-blur-sm bg-white/5"
@@ -55,6 +61,7 @@ size:
   action-wide-default: "3.5rem"
   layout-width-sidebar-base: "16rem"
   layout-width-inspector-base: "20rem"
+  layout-width-content-base: "80rem"
   icon-xs-base: "1rem"
   icon-sm-base: "1.5rem"
   icon-md-base: "2rem"
@@ -93,6 +100,38 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 >
 > - Sidebars must use full-height glassmorphism.
 > - Sidebars must be rounded on the **right edge only** (`border-radius: 0 1rem 1rem 0`).
+
+> [!IMPORTANT]
+>
+> ### Sovereign Persona Console
+>
+> - The console is the standard frame for presenting the five sovereign personas (Violet, Wisteria, Xylia, Yarrow, Zinnia) in any consuming product.
+> - Every persona retains an identical structural grid: an identity status header rendered in `{typography.typography-family-mono-base}`, a primary operational viewport, an evidence trail panel, and a command bar.
+> - The shared console frame stays mounted while switching personas; internal panels morph via named view transitions with zero layout shift. The frame persists; only the addressed persona's panels change.
+> - Persona differentiation uses localized persona accent tokens and micro-badges only — never layout changes, never Title Case, never decorative emoji.
+> - Console controls use `{spacing.layout-radius-control-base}` radii and meet the 44px touch target floor (`{size.action-min-default}`).
+
+> [!IMPORTANT]
+>
+> ### Persona identity accents
+>
+> - Persona identity accents are locked. Violet is always `{colors.persona-accent-violet-base}` (#8B5CF6), Wisteria is always `{colors.persona-accent-wisteria-base}` (#A78BFA), Xylia is always `{colors.persona-accent-xylia-base}` (#2DD4BF), Yarrow is always `{colors.persona-accent-yarrow-base}` (#F59E0B), and Zinnia is always `{colors.persona-accent-zinnia-base}` (#F43F5E).
+> - Persona accents are identity markers only. They never substitute for status indicators: Yarrow amber shares its hex with `{colors.status-indicator-warning-base}` and Zinnia rose with `{colors.status-indicator-error-base}` — a shared hex never makes the roles interchangeable. Status semantics always use status tokens; persona identity always uses persona accent tokens.
+> - Persona Violet (#8B5CF6) is distinct from the brand accent `{colors.surface-accent-violet-base}` (#7C3AED), which stays reserved for key CTAs and focus outlines.
+> - Never invent persona hex values locally. New persona states (hover, active) or any new persona color must be added to the `colors` matrix in this file first, then referenced.
+
+## Continuous Interaction Standards
+
+Consuming products present sovereign personas and evidence inside static-edge constraints (static builds, zero runtime bindings, strict CSP `script-src 'self'`). Continuity therefore comes from browser-native primitives, never client-framework hydration.
+
+- **Motion vocabulary**: durations come only from `{transition.transition-duration-fast-base}`, `{transition.transition-duration-normal-base}`, and `{transition.transition-duration-slow-base}`. Animated properties are `transform` and `opacity` only. Zero bounce physics.
+- **View transitions**: document-level navigation cross-fades via the View Transitions API with a 200ms fade (`cubic-bezier(0.16, 1, 0.3, 1)`). Non-supporting browsers perform an instant swap. Shared shell elements (header, navigation) persist across navigation.
+- **Scroll-driven motion**: editorial surfaces reveal via `animation-timeline: view()` (entry 10% to cover 30%), opacity and `transform` only, zero JavaScript. Unsupported browsers see the completed static layout.
+- **Discrete panel transitions**: drawers, filters, and metadata panels animate entry and exit with `@starting-style` and `transition-behavior: allow-discrete` instead of JavaScript style manipulation. Unsupported browsers snap instantly.
+- **Top-layer navigation**: mobile and contextual menus use the HTML Popover API (`popover` attribute) for native top-layer, light-dismiss, and Escape handling — never z-index stacking hacks.
+- **Reduced motion obedience**: every motion declaration sits under the consuming product's global `prefers-reduced-motion: reduce` override — view-transition animations none, scroll timelines inert, discrete transitions instant.
+- **Fail-closed states**: on network or schema failure, panels never display speculative, simulated, or cached numbers. Affected panels transition to an explicit fail-closed state that locks interactive controls and displays the failure receipt directly. Loading skeletons use `{colors.surface-background-tertiary-base}` geometry matched to the resolved layout so data arrival causes zero layout shift.
+- **Script posture**: continuity motion is pure CSS; behavioral scripts in consuming products are external, CSP-safe, and idempotent (see SKILL.md ADR-003).
 
 ## Negative Boundaries (Strict AI Guardrails)
 
