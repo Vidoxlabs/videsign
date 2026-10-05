@@ -108,9 +108,10 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 **Decision**:
 
 1.  `typography-family-sans-base` is `Geist, ui-sans-serif, system-ui, sans-serif`; `typography-family-mono-base` is `Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace`. The Tailwind `fontFamily` map is derived from these tokens rather than hardcoded.
-2.  Display text is Geist 600 with tight tracking; body is Geist 400; labels and navigation are Geist Mono in sentence case.
-3.  **Licence and hosting.** Geist and Geist Mono are SIL Open Font License 1.1. Per ADR-002 no binary lives in this repository; the consuming site self-hosts subsetted WOFF2 under its own `font-src 'self'` policy, ships the OFL text with the binaries, and measures its own metric-matched fallback faces on its own tree. The preview catalog uses the fonts if installed and otherwise the system stack.
-4.  The ADR-005 hero ceiling is unchanged (5.25rem, hero only; 3.5rem for everything else).
+2.  Display text is Geist 600 (`typography-weight-semibold-base`) with tight tracking (`typography-tracking-tight-base`); body is Geist 400 (`typography-weight-regular-base`); labels and navigation are Geist Mono in sentence case with `typography-tracking-wide-base` (or widest for micro-labels). The Tailwind `uppercase` utility is banned.
+3.  Weight, tracking and leading are tokens (`typography-weight-*`, `typography-tracking-*`, `typography-leading-*`). Fragments and consumers must not use raw `font-medium` / `font-bold` / bare `tracking-*` / `leading-*`.
+4.  **Licence and hosting.** Geist and Geist Mono are SIL Open Font License 1.1. Per ADR-002 no binary lives in this repository; the consuming site self-hosts subsetted WOFF2 under its own `font-src 'self'` policy, ships the OFL text with the binaries, and measures its own metric-matched fallback faces on its own tree. The preview catalog uses the fonts if installed and otherwise the system stack.
+5.  The ADR-005 hero ceiling is unchanged (5.25rem, hero only; 3.5rem for everything else).
 
 **Consequences**: Product repositories swap their font binaries and fallback metrics when they sync tokens. Fallback override numbers must be measured per tree, never copied from research documents.
 
@@ -128,6 +129,21 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 4.  **Reduced motion.** Every entrance sits under the consuming product's `prefers-reduced-motion: reduce` override and renders its final state.
 
 **Consequences**: The generator splits `transition` tokens into `transitionDuration` and `transitionTimingFunction` in the Tailwind config, and a test asserts both easings never overshoot.
+
+## ADR-009: Spacing Rhythm
+
+**Status**: Proposed (awaiting owner ratification).
+
+**Context**: DESIGN.md's gap and inset tokens stopped at 1.25rem. Consuming sites invented dozens of raw rem lengths for section padding, page gutters and macro whitespace, so the design system could not police drift.
+
+**Decision**:
+
+1.  Add a 4px-base rhythm under `space.rhythm-{1,2,3,4,5,6,8,10,12,16,20,24}-base` (0.25rem through 6rem).
+2.  Name the high-end page roles: `rhythm-page-gutter-base` (1.5rem), `rhythm-section-y-base` (4rem), `rhythm-macro-base` (6rem).
+3.  Keep existing `gap-*` / `inset-*` / `layout-stack-default` tokens as the short names for the same scale; new work prefers `rhythm-*` for page composition.
+4.  Indicator geometry uses `size.indicator-{dot,mark,brand}-base` instead of bare `w-2` / `h-2` / `w-7`.
+
+**Consequences**: `npm run tokens` maps rhythm keys into Tailwind `padding`, `margin` and `gap`. Lint and the site raw-value audit treat lengths outside this set as drift.
 
 ## Negative Constraints against Boilerplate Generation
 

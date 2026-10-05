@@ -24,6 +24,17 @@ colors:
 typography:
   typography-family-sans-base: "Geist, ui-sans-serif, system-ui, sans-serif"
   typography-family-mono-base: "Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
+  typography-weight-regular-base: "400"
+  typography-weight-medium-base: "500"
+  typography-weight-semibold-base: "600"
+  typography-weight-bold-base: "700"
+  typography-tracking-tight-base: "-0.02em"
+  typography-tracking-normal-base: "0"
+  typography-tracking-wide-base: "0.04em"
+  typography-tracking-widest-base: "0.08em"
+  typography-leading-none-base: "1"
+  typography-leading-tight-base: "1.25"
+  typography-leading-normal-base: "1.5"
   typography-size-xs-base: "0.75rem"
   typography-size-sm-base: "0.875rem"
   typography-size-md-base: "1rem"
@@ -80,6 +91,9 @@ size:
   icon-sm-base: "1.5rem"
   icon-md-base: "2rem"
   icon-lg-base: "2.75rem"
+  indicator-dot-base: "0.5rem"
+  indicator-mark-base: "0.75rem"
+  indicator-brand-base: "1.75rem"
 
 space:
   gap-dense-default: "0.25rem"
@@ -90,6 +104,21 @@ space:
   inset-compact-default: "0.5rem"
   inset-operator-default: "0.75rem"
   layout-stack-default: "1rem"
+  rhythm-1-base: "0.25rem"
+  rhythm-2-base: "0.5rem"
+  rhythm-3-base: "0.75rem"
+  rhythm-4-base: "1rem"
+  rhythm-5-base: "1.25rem"
+  rhythm-6-base: "1.5rem"
+  rhythm-8-base: "2rem"
+  rhythm-10-base: "2.5rem"
+  rhythm-12-base: "3rem"
+  rhythm-16-base: "4rem"
+  rhythm-20-base: "5rem"
+  rhythm-24-base: "6rem"
+  rhythm-page-gutter-base: "1.5rem"
+  rhythm-section-y-base: "4rem"
+  rhythm-macro-base: "6rem"
 
 transition:
   transition-duration-fast-base: "150ms"
@@ -170,7 +199,11 @@ Crystal glass is the one sanctioned glass material for public product surfaces. 
 - **Text-bearing controls are shell + core.** Any glass control that carries text and can pass over bright imagery (the island navigation, the question bar, the persona switcher) is a `vi-glass-shell` around a `vi-glass-core`, not a single `vi-glass` layer. `brightness(0.5)` turns white into mid grey, so one translucent layer cannot reach 4.5:1 over a white screenshot; the core scrim can. A single `vi-glass` layer is reserved for glass that carries no text.
 - **Ambient field.** The ambient glows and dots sit behind free page text as well as behind glass, so their peak values are bounded by the legibility floor: secondary text clears 4.5:1 over the strongest glow with a dot on top (analytic bound in `test/tokens.test.js`).
 - **Fallbacks.** Under `prefers-reduced-transparency: reduce`, `prefers-contrast: more`, `forced-colors: active`, or when `backdrop-filter` (prefixed or not) is unsupported, the same shapes render as the solid surface with the same rim. Refraction (SVG displacement) is out of scope.
-- **Type.** Eyebrows and labels use `{typography.typography-family-mono-base}` in sentence case.
+- **Type.** Eyebrows and labels use `{typography.typography-family-mono-base}` in sentence case with `{typography.typography-tracking-wide-base}` (or widest for micro-labels). Never the Tailwind `uppercase` utility.
+
+## Spacing rhythm (ADR-009)
+
+All page spacing resolves to the 4px rhythm under `{space.rhythm-*-base}` plus the named page roles `{space.rhythm-page-gutter-base}`, `{space.rhythm-section-y-base}` and `{space.rhythm-macro-base}`. Existing gap/inset tokens remain aliases of the same scale. Consumers must not invent rem lengths outside this set.
 
 ## Negative Boundaries (Strict AI Guardrails)
 
@@ -180,9 +213,10 @@ To prevent "AI drift" and the generation of generic or hallucinated UI elements,
 >
 > ### 1. Typography Guardrails
 >
-> - **Enforce Sentence case**: Use sentence case for all default interactions and labels (e.g., "Submit your form").
+> - **Enforce Sentence case**: Use sentence case for all default interactions and labels (e.g., "Submit your form"). Eyebrows and labels are Geist Mono in sentence case with a tracking token — never `text-transform: uppercase` or the Tailwind `uppercase` utility.
 > - **BAN Title Case**: The generation of Title Case text is comprehensively banned across all UI components.
 > - **Family Rules**: Use `{typography.typography-family-mono-base}` (Geist Mono) for nav, labels, and status. Use `{typography.typography-family-sans-base}` (Geist) for section titles and descriptions (ADR-007).
+> - **Weight, tracking, leading**: use only the typography weight/tracking/leading tokens (`font-typography-weight-*`, `tracking-typography-tracking-*`, `leading-typography-leading-*`). Ban raw `font-medium` / `font-bold` / `tracking-*` / `leading-*`.
 
 > [!CAUTION]
 >
@@ -214,7 +248,7 @@ To prevent "AI drift" and the generation of generic or hallucinated UI elements,
 ## Permitted Tailwind Utilities
 
 The following structural Tailwind utilities are permitted alongside semantic tokens. They are
-part of Tailwind's core scale (4px baseline) and do not require individual tokens:
+layout or interaction primitives and do not require individual tokens:
 
 | Category     | Permitted utilities                          | Notes                                |
 | ------------ | -------------------------------------------- | ------------------------------------ |
@@ -225,11 +259,16 @@ part of Tailwind's core scale (4px baseline) and do not require individual token
 | Z-index      | `z-10`, `z-20`, `z-30`                        | Stacking order                       |
 | Last-child   | `last:border-b-0`, `last:pb-0`               | Structural selectors                 |
 | Group        | `group`, `group-hover:*`                     | Interaction composition              |
+| Stretch      | `w-full`, `h-full`, `h-screen`, `w-screen`, `min-w-0`, `min-h-screen`, `h-auto` | Fill / viewport chrome               |
+| Borders      | `border`, `border-t`, `border-b`, `border-r`, `border-l`, `border-l-2`, `border-l-4`, `border-2`, `border-dashed`, `border-collapse` | Presence only; colour/radius stay tokens |
+| Transforms   | `transform`, `-translate-x-1/2`, `-translate-y-1/2`, `top-*`, `left-*`, `origin-left`, `truncate`, `underline`, `tabular-nums`, `cursor-not-allowed`, `outline-none`, `bg-transparent` | Field canvas and a11y helpers        |
 
-All spacing, sizing, color, typography, radius, and transition values must use semantic tokens.
-Raw utilities like `gap-2`, `w-64`, `text-sm`, `duration-200` must be replaced with their
-token equivalents (`gap-gap-compact-default`, `w-layout-width-sidebar-base`,
-`text-typography-size-sm-base`, `transition-duration-normal-base`).
+All spacing, sizing, color, typography weight/tracking/leading, radius, and transition
+values must use semantic tokens. Raw utilities like `gap-2`, `w-64`, `text-sm`,
+`font-medium`, `tracking-wide`, `leading-tight`, `duration-200`, `uppercase`,
+`backdrop-blur-*` and `bg-white/*` are banned. Use token equivalents
+(`gap-gap-compact-default`, `w-indicator-dot-base`, `font-typography-weight-medium-base`,
+`tracking-typography-tracking-wide-base`, `duration-transition-duration-normal-base`).
 
 ## Accessibility Guardrails
 

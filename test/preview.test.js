@@ -38,12 +38,21 @@ test('every preview fragment lints clean', () => {
 
 test('the linter flags what it claims to flag', () => {
   const bad = lintFragment('x.html', [
-    '<p class="vi-glass shadow-sm w-[15px]" style="top:1px">Authorize action, verified and signed &#128512;</p>',
+    '<p class="vi-glass shadow-sm w-[15px] backdrop-blur-sm bg-white/5 uppercase animate-pulse" style="top:1px">Authorize action, verified and signed &#128512;</p>',
     '<div class="vi-glass"><div class="vi-glass-shell"></div></div>',
     '<script>1</script>',
   ].join('\n'));
-  for (const needle of ['shadow-sm', 'arbitrary', 'inline style', '<script>', 'glass on <p>', 'nested in glass', '"verified"', '"signed"', '"Authorize action"']) {
+  const typed = lintFragment('t.html', '<span class="font-medium tracking-wide leading-tight">x</span>');
+  for (const needle of [
+    'shadow-sm', 'arbitrary', 'inline style', '<script>', 'glass on <p>', 'nested in glass',
+    '"verified"', '"signed"', '"Authorize action"',
+    'legacy glass utility "backdrop-blur-sm"', 'legacy glass utility "bg-white/5"',
+    'uppercase', 'animate-pulse',
+  ]) {
     assert.ok(bad.some((p) => p.includes(needle)), `expected a problem mentioning ${needle}: ${bad.join(' | ')}`);
+  }
+  for (const needle of ['font-medium', 'tracking-wide', 'leading-tight']) {
+    assert.ok(typed.some((p) => p.includes(needle)), `expected raw type flag for ${needle}: ${typed.join(' | ')}`);
   }
   assert.ok(lintFragment('y.html', '<p class="p-4">Proposed &#128512;</p>').length >= 0);
   const four = lintFragment('z.html', '<nav class="vi-glass"></nav><nav class="vi-glass"></nav><nav class="vi-glass"></nav><nav class="vi-glass"></nav>');
@@ -89,12 +98,30 @@ test('the persona console no longer claims authority or verification', () => {
 });
 
 test('Violet accent text never sits on the secondary or tertiary surface (ADR-006 contrast rule)', () => {
+  // Walk every element: if it carries Violet accent text, no ancestor (or the
+  // element itself) may paint a secondary/tertiary background.
   const body = fs.readFileSync(path.join(PREVIEW, 'persona-console.html'), 'utf-8').replace(/<!--[\s\S]*?-->/g, '');
-  for (const m of body.matchAll(/class="([^"]*)"/g)) {
-    const cls = m[1].split(/\s+/);
+  const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
+  const stack = [];
+  for (const m of body.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g)) {
+    const [, closing, rawTag, attrs] = m;
+    const tag = rawTag.toLowerCase();
+    if (closing) {
+      for (let i = stack.length - 1; i >= 0; i -= 1) {
+        if (stack[i].tag === tag) { stack.length = i; break; }
+      }
+      continue;
+    }
+    const classAttr = (attrs.match(/\bclass\s*=\s*"([^"]*)"/) || [])[1] || '';
+    const cls = classAttr.split(/\s+/).filter(Boolean);
+    const selfBg = cls.find((c) => /^bg-surface-background-(secondary|tertiary)-base$/.test(c));
+    const ancestorBg = stack.find((s) => s.bg);
     if (cls.includes('text-persona-accent-violet-base')) {
-      assert.ok(!cls.some((c) => /^bg-surface-background-(secondary|tertiary)-base$/.test(c)), 'accent text on a lighter surface');
+      assert.equal(selfBg, undefined, 'Violet accent text on its own secondary/tertiary background');
+      assert.equal(ancestorBg, undefined, 'Violet accent text inside a secondary/tertiary ancestor');
+    }
+    if (!VOID.has(tag) && !/\/\s*$/.test(attrs)) {
+      stack.push({ tag, bg: selfBg || null });
     }
   }
-  assert.doesNotMatch(body, /bg-surface-background-secondary-base[^"]*"[^>]*>[^<]*<[^>]*text-persona-accent-violet-base/);
 });

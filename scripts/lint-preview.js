@@ -17,6 +17,11 @@
  *     are controls or overlays, never on paragraphs, list items, sections,
  *     articles or table parts; never nested in another glass element; at most
  *     three glass layers per fragment
+ *   - no legacy glass utilities (`backdrop-blur-*`, `bg-white/*`) — crystal only
+ *   - no `uppercase` (ADR-007: eyebrows and labels are sentence case)
+ *   - no `animate-pulse` (decorative loop)
+ *   - no raw type utilities (`font-medium|bold|semibold`, bare `tracking-*` /
+ *     `leading-*`); use typography weight/tracking/leading tokens
  */
 
 const fs = require('fs');
@@ -53,7 +58,21 @@ function lintFragment(name, html) {
 
   for (const m of bare.matchAll(/\bclass\s*=\s*"([^"]*)"/g)) {
     for (const cls of m[1].split(/\s+/)) {
+      if (!cls) continue;
       if (cls.includes('[') && !cls.includes('ASSET_BASE')) problems.push(`arbitrary Tailwind value "${cls}"`);
+      if (/^backdrop-blur(-|$)/.test(cls)) problems.push(`legacy glass utility "${cls}"`);
+      if (/^bg-white(\/|$)/.test(cls)) problems.push(`legacy glass utility "${cls}"`);
+      if (cls === 'uppercase') problems.push('uppercase (use sentence case, ADR-007)');
+      if (cls === 'animate-pulse') problems.push('animate-pulse (decorative loop)');
+      if (/^font-(medium|semibold|bold)$/.test(cls)) {
+        problems.push(`raw type utility "${cls}" (use font-typography-weight-*)`);
+      }
+      if (/^tracking-(tighter|tight|normal|wide|wider|widest)$/.test(cls)) {
+        problems.push(`raw type utility "${cls}" (use tracking-typography-tracking-*)`);
+      }
+      if (/^leading-(none|tight|snug|normal|relaxed|loose)$/.test(cls)) {
+        problems.push(`raw type utility "${cls}" (use leading-typography-leading-*)`);
+      }
     }
   }
 

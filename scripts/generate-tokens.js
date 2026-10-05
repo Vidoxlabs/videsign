@@ -9,6 +9,7 @@
  *   dist/tokens.json         — Machine-readable JSON for MCP and tooling
  *   dist/glass.css           — Crystal glass stylesheet with LITERAL declarations (ADR-006)
  *   dist/catalog.css         — Tailwind utilities compiled from the config, for preview/ only
+ *   dist/standard.json|md    — Agent-readable standard (addendum §2)
  *
  * Usage:
  *   node scripts/generate-tokens.js          # write to dist/
@@ -18,6 +19,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+const { generateStandardArtifacts } = require('./generate-standard');
 
 const ROOT = path.join(__dirname, '..');
 const DESIGN_FILE = path.join(ROOT, 'DESIGN.md');
@@ -94,11 +96,15 @@ function emitTailwindConfig(tokens) {
           'typography-family-mono-base': familyList(typography['typography-family-mono-base']),
         },
         fontSize: withPrefix(typography, 'typography-size-'),
+        fontWeight: withPrefix(typography, 'typography-weight-'),
+        letterSpacing: withPrefix(typography, 'typography-tracking-'),
+        lineHeight: withPrefix(typography, 'typography-leading-'),
         borderRadius: withPrefix(theme.spacing, 'layout-radius-'),
         padding: {
           ...theme.spacing,
           ...theme.space,
         },
+        margin: theme.space || {},
         gap: theme.space || {},
         width: theme.size || {},
         height: theme.size || {},
@@ -308,11 +314,14 @@ function main() {
   const content = fs.readFileSync(DESIGN_FILE, 'utf-8');
   const tokens = parseFrontMatter(content);
 
+  const standardArtifacts = generateStandardArtifacts(tokens);
   const outputs = {
     'tailwind.config.js': emitTailwindConfig(tokens),
     'tokens.css': emitCSS(tokens),
     'tokens.json': emitJSON(tokens),
     'glass.css': emitGlassCSS(tokens),
+    'standard.json': standardArtifacts['standard.json'],
+    'standard.md': standardArtifacts['standard.md'],
   };
 
   if (dryRun) {
