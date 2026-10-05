@@ -22,8 +22,8 @@ colors:
   persona-accent-zinnia-base: "#F43F5E"
 
 typography:
-  typography-family-sans-base: "Inter, sans-serif"
-  typography-family-mono-base: "JetBrains Mono, monospace"
+  typography-family-sans-base: "Geist, ui-sans-serif, system-ui, sans-serif"
+  typography-family-mono-base: "Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
   typography-size-xs-base: "0.75rem"
   typography-size-sm-base: "0.875rem"
   typography-size-md-base: "1rem"
@@ -42,18 +42,35 @@ typography:
   typography-fluid-caption-base: "clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem)"
   typography-fluid-hero-base: "clamp(2.75rem, 6vw + 0.5rem, 5.25rem)"
 
+# effects holds two kinds of value. glass-functional-* are legacy Tailwind class
+# strings. glass-crystal-* and ambient-* (ADR-006) are literal CSS values.
 effects:
   glass-functional-overlay-base: "backdrop-blur-sm bg-white/5"
   glass-functional-overlay-hover: "backdrop-blur-md bg-white/10"
   glass-functional-overlay-active: "backdrop-blur-lg bg-white/15"
+  glass-crystal-surface-base: "rgba(255, 255, 255, 0.035)"
+  glass-crystal-surface-hover: "rgba(255, 255, 255, 0.07)"
+  glass-crystal-rim-base: "rgba(255, 255, 255, 0.26)"
+  glass-crystal-rim-hover: "rgba(255, 255, 255, 0.4)"
+  glass-crystal-highlight-base: "inset 0 1px 0 rgba(255, 255, 255, 0.32), inset 0 0 0 1px rgba(255, 255, 255, 0.03)"
+  glass-crystal-sheen-base: "linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 35%)"
+  glass-crystal-shadow-base: "0 12px 30px rgba(0, 0, 0, 0.3)"
+  glass-crystal-backdrop-base: "blur(14px) brightness(0.5) saturate(150%)"
+  glass-crystal-core-base: "rgba(10, 10, 14, 0.72)"
+  glass-crystal-solid-base: "#12121A"
+  ambient-glow-violet-base: "rgba(124, 58, 237, 0.55)"
+  ambient-glow-teal-base: "rgba(45, 212, 191, 0.28)"
+  ambient-dots-base: "rgba(161, 161, 170, 0.35)"
 
 spacing:
   layout-radius-standard-base: "14px"
   layout-radius-control-base: "10px"
   layout-radius-full-base: "9999px"
+  layout-radius-glass-base: "20px"
   layout-padding-small-base: "8px"
   layout-padding-medium-base: "16px"
   layout-padding-large-base: "24px"
+  layout-padding-bezel-base: "6px"
 
 size:
   action-min-default: "2.75rem"
@@ -81,6 +98,9 @@ transition:
   transition-duration-fast-base: "150ms"
   transition-duration-normal-base: "200ms"
   transition-duration-slow-base: "300ms"
+  transition-duration-entrance-base: "500ms"
+  transition-easing-standard-base: "cubic-bezier(0.16, 1, 0.3, 1)"
+  transition-easing-spring-base: "cubic-bezier(0.32, 0.72, 0, 1)"
 ---
 
 # Visual Truth Layer: Nocturne Museum
