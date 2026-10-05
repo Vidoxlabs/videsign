@@ -32,6 +32,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: MCP server smoke test
+        run: npm test
+
       - name: Verify preview fragments have no shadow-sm
         run: |
           if grep -r 'shadow-sm' preview/ --include='*.html'; then

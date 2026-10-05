@@ -106,7 +106,8 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
 // --- Read Resource ------------------------------------------------------
 
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
-  const resource = RESOURCES.find((r) => r.uri === request.uri);
+  const { uri } = request.params;
+  const resource = RESOURCES.find((r) => r.uri === uri);
   if (!resource) {
     throw new Error('Resource not found');
   }
@@ -126,7 +127,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
 
   return {
     contents: [{
-      uri: request.uri,
+      uri,
       mimeType,
       text: content,
     }],
@@ -159,8 +160,9 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 // --- Call Tool ----------------------------------------------------------
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  if (request.name === 'resolve_token') {
-    const tokenPath = request.arguments?.path;
+  const { name, arguments: args } = request.params;
+  if (name === 'resolve_token') {
+    const tokenPath = args?.path;
     if (!tokenPath) {
       return {
         content: [{ type: 'text', text: 'Error: "path" argument is required.' }],
@@ -202,7 +204,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 
   return {
-    content: [{ type: 'text', text: `Error: unknown tool "${request.name}".` }],
+    content: [{ type: 'text', text: `Error: unknown tool "${name}".` }],
     isError: true,
   };
 });

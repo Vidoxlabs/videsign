@@ -31,6 +31,7 @@ npm install
 npm run tokens     # Generate Tailwind config, CSS vars, and JSON from DESIGN.md
 npm run mcp        # Start the MCP server on stdio
 npm run lint       # Validate against no-arbitrary-value rule
+npm test           # Smoke-test the MCP server over stdio
 ```
 
 Open `preview/index.html` in a browser for a visual catalog of all components.

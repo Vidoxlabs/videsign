@@ -48,6 +48,8 @@ Within the `videsign` repository, agents are restricted to the following command
 - `npm run tokens`: Parses `DESIGN.md` and regenerates `dist/tailwind.config.js`,
   `dist/tokens.css`, and `dist/tokens.json`. Run this after modifying tokens in
   `DESIGN.md`.
+- `npm test`: Starts the MCP server over stdio and verifies `resolve_token` and
+  resource reads end to end. Run this after changing `mcp-server.js`.
 
 ## `{ASSET_BASE}` resolution
 

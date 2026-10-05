@@ -7,6 +7,7 @@
   "scripts": {
     "lint": "eslint .",
     "mcp": "node mcp-server.js",
+    "test": "node --test test/*.test.js",
     "tokens": "node scripts/generate-tokens.js"
   },
   "devDependencies": {
