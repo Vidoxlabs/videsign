@@ -120,6 +120,13 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > - Persona Violet (#8B5CF6) is distinct from the brand accent `{colors.surface-accent-violet-base}` (#7C3AED), which stays reserved for key CTAs and focus outlines.
 > - Never invent persona hex values locally. New persona states (hover, active) or any new persona color must be added to the `colors` matrix in this file first, then referenced.
 
+> [!IMPORTANT]
+>
+> ### Hero billboard scale (ADR-005)
+>
+> - `typography-fluid-hero-base` (max 5.25rem, emitted `--vi-typography-typography-fluid-hero-base`) is the sanctioned primary-landing-hero scale — one usage per page, page title only.
+> - The 3.5rem ceiling stays binding for `fluid-display`, `fluid-h1`–`fluid-h3` and static `4xl`/`5xl`. Section headings, cards, and prose never consume the hero token.
+
 ## Continuous Interaction Standards
 
 Consuming products present sovereign personas and evidence inside static-edge constraints (static builds, zero runtime bindings, strict CSP `script-src 'self'`). Continuity therefore comes from browser-native primitives, never client-framework hydration.
