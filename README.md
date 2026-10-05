@@ -16,7 +16,8 @@ videsign/
 ├── preview/         Pure, flat, state-free HTML component fragments + layout compositions
 ├── preview/index.html  Visual catalog (open in a browser)
 ├── scripts/
-│   └── generate-tokens.js  Token pipeline: DESIGN.md YAML → Tailwind config, CSS vars, JSON
+│   ├── generate-tokens.js  Token pipeline: DESIGN.md YAML → Tailwind config, CSS vars, JSON, glass.css, catalog.css
+│   └── lint-preview.js     Static checks for preview/ fragments
 ├── mcp-server.js    Read-only MCP server: tokens, fragments, resolve_token tool
 ├── assets/          Local-only design images (gitignored, never committed)
 ├── dist/            Generated artifacts (gitignored, run `npm run tokens` to regenerate)
@@ -34,7 +35,9 @@ npm run lint       # Validate against no-arbitrary-value rule
 npm test           # Smoke-test the MCP server over stdio
 ```
 
-Open `preview/index.html` in a browser for a visual catalog of all components.
+Run `npm run tokens`, then serve the repository root over HTTP and open `/preview/` for a
+styled visual catalog of every component (`python3 -m http.server 8000`). The catalog loads
+`dist/tokens.css`, `dist/glass.css` and `dist/catalog.css`, so `dist/` must exist.
 
 ## Consuming from a product repo
 
