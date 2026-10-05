@@ -216,6 +216,25 @@ test('lens core text clears 4.5:1 over a pure-white backdrop (analytic worst cas
   assert.ok(ratio(TOKENS.colors['text-content-primary-base']) >= 4.5);
 });
 
+test('free text clears 4.5:1 over the strongest ambient glow with a dot on top (analytic worst case)', () => {
+  // The ambient layer sits behind free page text. Peak glow alpha is at the gradient centre; a dot
+  // can land under a glyph, so composite glow, then dot, over the page surface.
+  const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const rgba = (v) => v.match(/rgba\((\d+), (\d+), (\d+), ([\d.]+)\)/).slice(1).map(Number);
+  const over = ([r, g, b, a], under) => [r * a + under[0] * (1 - a), g * a + under[1] * (1 - a), b * a + under[2] * (1 - a)];
+  const lin = (c) => { const s = c / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; };
+  const lum = ([R, G, B]) => 0.2126 * lin(R) + 0.7152 * lin(G) + 0.0722 * lin(B);
+  const surface = hex(TOKENS.colors['surface-background-primary-base']);
+  const dots = rgba(TOKENS.effects['ambient-dots-base']);
+  for (const glow of ['ambient-glow-violet-base', 'ambient-glow-teal-base']) {
+    const bg = lum(over(dots, over(rgba(TOKENS.effects[glow]), surface)));
+    for (const text of ['text-content-primary-base', 'text-content-secondary-base']) {
+      const ratio = (lum(hex(TOKENS.colors[text])) + 0.05) / (bg + 0.05);
+      assert.ok(ratio >= 4.5, `${text} over ${glow} + dot is ${ratio.toFixed(2)}:1`);
+    }
+  }
+});
+
 // --- Determinism ---------------------------------------------------------
 
 test('generators are deterministic', () => {

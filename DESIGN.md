@@ -58,9 +58,9 @@ effects:
   glass-crystal-backdrop-base: "blur(14px) brightness(0.5) saturate(150%)"
   glass-crystal-core-base: "rgba(10, 10, 14, 0.72)"
   glass-crystal-solid-base: "#12121A"
-  ambient-glow-violet-base: "rgba(124, 58, 237, 0.55)"
-  ambient-glow-teal-base: "rgba(45, 212, 191, 0.28)"
-  ambient-dots-base: "rgba(161, 161, 170, 0.35)"
+  ambient-glow-violet-base: "rgba(124, 58, 237, 0.30)"
+  ambient-glow-teal-base: "rgba(45, 212, 191, 0.16)"
+  ambient-dots-base: "rgba(161, 161, 170, 0.14)"
 
 spacing:
   layout-radius-standard-base: "14px"
@@ -170,6 +170,8 @@ Crystal glass is the one sanctioned glass material for public product surfaces. 
 - **Double bezel.** Glass shells use the outer radius `{spacing.layout-radius-glass-base}` (20px), `{spacing.layout-padding-bezel-base}` (6px) padding, and an inner core at `{spacing.layout-radius-standard-base}` (14px): 20 = 6 + 14, concentric.
 - **Composition.** Clear glass floats over the field, imagery and ambient glows (`{effects.ambient-glow-violet-base}`, `{effects.ambient-glow-teal-base}`, `{effects.ambient-dots-base}`), never directly over body copy. A headline may pass beneath the island while scrolling.
 - **Legibility floor.** Text on glass reaches 4.5:1 against the worst backdrop it can pass over, verified by pixel-sampling screenshots, not by the prettiest state. Reading text in the lens sits on the core scrim, which clears 4.5:1 even over a fully white backdrop (analytic bound in `test/tokens.test.js`).
+- **Text-bearing controls are shell + core.** Any glass control that carries text and can pass over bright imagery (the island navigation, the question bar, the persona switcher) is a `vi-glass-shell` around a `vi-glass-core`, not a single `vi-glass` layer. `brightness(0.5)` turns white into mid grey, so one translucent layer cannot reach 4.5:1 over a white screenshot; the core scrim can. A single `vi-glass` layer is reserved for glass that carries no text.
+- **Ambient field.** The ambient glows and dots sit behind free page text as well as behind glass, so their peak values are bounded by the legibility floor: secondary text clears 4.5:1 over the strongest glow with a dot on top (analytic bound in `test/tokens.test.js`).
 - **Fallbacks.** Under `prefers-reduced-transparency: reduce`, `prefers-contrast: more`, `forced-colors: active`, or when `backdrop-filter` (prefixed or not) is unsupported, the same shapes render as the solid surface with the same rim. Refraction (SVG displacement) is out of scope.
 - **Type.** Eyebrows and labels use `{typography.typography-family-mono-base}` in sentence case.
 
