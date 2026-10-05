@@ -1,0 +1,36 @@
+<!--
+  Nocturne Museum: Coverage grid
+  Optional toggle on /ask: question terms (rows) against the public corpus's real
+  record kinds (columns). A filled dot means at least one record of that kind
+  matched the term; an empty cell means none did. Matches are also written as
+  text for screen readers, so colour is never the only signal. Solid surface;
+  not glass. Kind names match askSourceKindLabels on the consuming site.
+-->
+<table class="w-full border-collapse font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+  <caption class="pb-gap-comfortable-default text-left text-text-content-secondary-base">Coverage: question terms by record kind</caption>
+  <thead>
+    <tr>
+      <th scope="col" class="p-inset-operator-default text-left font-typography-weight-medium-base text-text-content-primary-base">Term</th>
+      <th scope="col" class="p-inset-operator-default text-left font-typography-weight-medium-base text-text-content-primary-base">Case-study claim</th>
+      <th scope="col" class="p-inset-operator-default text-left font-typography-weight-medium-base text-text-content-primary-base">Interactive proof</th>
+      <th scope="col" class="p-inset-operator-default text-left font-typography-weight-medium-base text-text-content-primary-base">Engineering work</th>
+      <th scope="col" class="p-inset-operator-default text-left font-typography-weight-medium-base text-text-content-primary-base">Live system</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="border-t border-border-separator-primary-base">
+      <th scope="row" class="p-inset-operator-default text-left font-typography-weight-medium-base text-text-content-primary-base">confirmation</th>
+      <td class="p-inset-operator-default"><span aria-hidden="true" class="inline-block w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base bg-surface-accent-violet-base"></span><span class="sr-only">matched</span></td>
+      <td class="p-inset-operator-default"><span aria-hidden="true" class="inline-block w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base bg-surface-accent-violet-base"></span><span class="sr-only">matched</span></td>
+      <td class="p-inset-operator-default"><span aria-hidden="true" class="inline-block w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base bg-surface-accent-violet-base"></span><span class="sr-only">matched</span></td>
+      <td class="p-inset-operator-default"><span aria-hidden="true" class="inline-block w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base border border-border-separator-primary-base"></span><span class="sr-only">no match</span></td>
+    </tr>
+    <tr class="border-t border-border-separator-primary-base">
+      <th scope="row" class="p-inset-operator-default text-left font-typography-weight-medium-base text-text-content-primary-base">forget</th>
+      <td class="p-inset-operator-default"><span aria-hidden="true" class="inline-block w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base border border-border-separator-primary-base"></span><span class="sr-only">no match</span></td>
+      <td class="p-inset-operator-default"><span aria-hidden="true" class="inline-block w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base bg-surface-accent-violet-base"></span><span class="sr-only">matched</span></td>
+      <td class="p-inset-operator-default"><span aria-hidden="true" class="inline-block w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base border border-border-separator-primary-base"></span><span class="sr-only">no match</span></td>
+      <td class="p-inset-operator-default"><span aria-hidden="true" class="inline-block w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base bg-surface-accent-violet-base"></span><span class="sr-only">matched</span></td>
+    </tr>
+  </tbody>
+</table>

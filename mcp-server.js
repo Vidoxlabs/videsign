@@ -35,6 +35,22 @@ const MD_RESOURCES = [
   { file: 'SKILL.md', name: 'Decision Ledger and ADRs', description: 'Architectural decision records and agent generation guardrails.' },
 ];
 
+/** Generated agent standard (addendum §2). Served from dist/ after `npm run tokens`. */
+const STANDARD_RESOURCES = [
+  {
+    file: 'dist/standard.json',
+    name: 'Agent Standard (JSON)',
+    mimeType: 'application/json',
+    description: 'Deterministic digest of tokens, visual rules and ADR index for consuming agents.',
+  },
+  {
+    file: 'dist/standard.md',
+    name: 'Agent Standard (Markdown)',
+    mimeType: 'text/markdown',
+    description: 'Human-readable agent standard generated alongside standard.json.',
+  },
+];
+
 /** Title-case a kebab-case filename into a human-readable resource name. */
 function kebabToTitle(name) {
   return name
@@ -61,7 +77,7 @@ function discoverPreviewFragments() {
   }));
 }
 
-/** Build the complete resource list: markdown docs + preview fragments. */
+/** Build the complete resource list: markdown docs + standard + preview fragments. */
 function buildResourceList() {
   const mdResources = MD_RESOURCES.map((r) => ({
     uri: `file://${r.file}`,
@@ -71,9 +87,19 @@ function buildResourceList() {
     file: r.file,
   }));
 
+  const standardResources = STANDARD_RESOURCES
+    .filter((r) => fs.existsSync(path.join(__dirname, r.file)))
+    .map((r) => ({
+      uri: `file://${r.file}`,
+      name: r.name,
+      mimeType: r.mimeType,
+      description: r.description,
+      file: r.file,
+    }));
+
   const previewResources = discoverPreviewFragments();
 
-  return [...mdResources, ...previewResources];
+  return [...mdResources, ...standardResources, ...previewResources];
 }
 
 // --- Server setup -------------------------------------------------------
@@ -120,7 +146,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
     mimeType = 'text/html';
   } else {
     filePath = path.join(__dirname, resource.file);
-    mimeType = 'text/markdown';
+    mimeType = resource.mimeType || 'text/markdown';
   }
 
   const content = fs.readFileSync(filePath, 'utf-8');

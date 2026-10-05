@@ -1,13 +1,15 @@
-<!-- 
-  Nocturne Museum: Sidebar Navigation Fragment
-  Demonstrates full-height glass and right-edge rounding rules.
+<!--
+  Nocturne Museum: Sidebar navigation
+  Opaque secondary surface for product-dashboard layouts. Not glass (ADR-006:
+  glass is limited to controls and lenses). Right-edge rounding uses the
+  standard radius token.
 -->
-<aside class="w-layout-width-sidebar-base min-h-screen bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-large-base flex flex-col gap-gap-section-default shrink-0 rounded-r-layout-radius-standard-base effects-glass-functional-overlay-base">
+<aside class="w-layout-width-sidebar-base min-h-screen bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-large-base flex flex-col gap-gap-section-default shrink-0 rounded-r-layout-radius-standard-base">
   <!-- Brand -->
   <div class="flex items-center gap-gap-comfortable-default px-1">
-    <img src="{ASSET_BASE}/assets/logos/vidoxlabs/cube.png" alt="Vidoxlabs" class="w-7 h-7" />
-    <div class="flex flex-col leading-tight">
-      <span class="font-typography-family-mono-base text-typography-size-sm-base font-bold text-text-content-primary-base tracking-tight">
+    <img src="{ASSET_BASE}/assets/logos/vidoxlabs/cube.png" alt="Vidoxlabs" class="w-indicator-brand-base h-indicator-brand-base" />
+    <div class="flex flex-col leading-typography-leading-tight-base">
+      <span class="font-typography-family-mono-base text-typography-size-sm-base font-typography-weight-bold-base text-text-content-primary-base tracking-typography-tracking-tight-base">
         VIDOX<span class="text-surface-accent-violet-base">LABS</span>
       </span>
       <span class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Studio</span>
@@ -15,15 +17,15 @@
   </div>
 
   <!-- Nav Item (Active) -->
-  <nav class="flex flex-col gap-gap-dense-default mt-4">
-    <button type="button" class="flex items-center gap-gap-comfortable-default py-2 px-3 rounded-layout-radius-control-base bg-surface-background-tertiary-base text-text-content-primary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-medium tracking-wide uppercase transition-all duration-200 border-l-2 border-surface-accent-violet-base">
+  <nav class="flex flex-col gap-gap-dense-default mt-rhythm-4-base">
+    <button type="button" class="flex items-center gap-gap-comfortable-default py-inset-compact-default px-inset-operator-default rounded-layout-radius-control-base bg-surface-background-tertiary-base text-text-content-primary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-typography-weight-medium-base tracking-typography-tracking-wide-base transition-all duration-transition-duration-normal-base border-l-2 border-surface-accent-violet-base">
       <!-- Icon Placeholder -->
       <span class="w-4 h-4 bg-surface-accent-violet-base rounded-sm bg-opacity-80"></span>
       Dashboard
     </button>
-    
+
     <!-- Nav Item (Inactive) -->
-    <button type="button" class="flex items-center gap-gap-comfortable-default py-2 px-3 rounded-layout-radius-control-base bg-transparent text-text-content-secondary-base hover:bg-surface-background-tertiary-base hover:text-text-content-primary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-medium tracking-wide uppercase transition-all duration-200">
+    <button type="button" class="flex items-center gap-gap-comfortable-default py-inset-compact-default px-inset-operator-default rounded-layout-radius-control-base bg-transparent text-text-content-secondary-base hover:bg-surface-background-tertiary-base hover:text-text-content-primary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-typography-weight-medium-base tracking-typography-tracking-wide-base transition-all duration-transition-duration-normal-base">
       <!-- Icon Placeholder -->
       <span class="w-4 h-4 bg-text-content-secondary-base rounded-sm bg-opacity-50"></span>
       Monitors

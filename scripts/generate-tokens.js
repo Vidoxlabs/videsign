@@ -7,6 +7,9 @@
  *   dist/tailwind.config.js  — Tailwind theme mapping (semantic token classes)
  *   dist/tokens.css          — CSS custom properties (--vi-*)
  *   dist/tokens.json         — Machine-readable JSON for MCP and tooling
+ *   dist/glass.css           — Crystal glass stylesheet with LITERAL declarations (ADR-006)
+ *   dist/catalog.css         — Tailwind utilities compiled from the config, for preview/ only
+ *   dist/standard.json|md    — Agent-readable standard (addendum §2)
  *
  * Usage:
  *   node scripts/generate-tokens.js          # write to dist/
@@ -15,6 +18,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
+const { generateStandardArtifacts } = require('./generate-standard');
 
 const ROOT = path.join(__dirname, '..');
 const DESIGN_FILE = path.join(ROOT, 'DESIGN.md');
@@ -52,6 +57,18 @@ function parseFrontMatter(content) {
   return tokens;
 }
 
+// --- Helpers ---
+
+/** Split a CSS font-family token into the array form Tailwind expects. */
+function familyList(value) {
+  return value.split(',').map((part) => part.trim());
+}
+
+/** Pick the entries of a category whose key starts with `prefix`. */
+function withPrefix(entries, prefix) {
+  return Object.fromEntries(Object.entries(entries || {}).filter(([k]) => k.startsWith(prefix)));
+}
+
 // --- Emitters ---
 
 function emitTailwindConfig(tokens) {
@@ -66,6 +83,8 @@ function emitTailwindConfig(tokens) {
     }
   }
 
+  const typography = theme.typography || {};
+
   // Build the config object with special Tailwind mappings
   const config = {
     content: ['./preview/**/*.html', './src/**/*.{js,jsx,ts,tsx,html}'],
@@ -73,34 +92,24 @@ function emitTailwindConfig(tokens) {
       extend: {
         colors: theme.colors || {},
         fontFamily: {
-          'typography-family-sans-base': ['Inter', 'sans-serif'],
-          'typography-family-mono-base': ['JetBrains Mono', 'monospace'],
+          'typography-family-sans-base': familyList(typography['typography-family-sans-base']),
+          'typography-family-mono-base': familyList(typography['typography-family-mono-base']),
         },
-        fontSize: theme.typography && Object.fromEntries(
-          Object.entries(theme.typography)
-            .filter(([k]) => k.startsWith('typography-size-'))
-            .map(([k, v]) => [k, v])
-        ),
-        backdropBlur: {
-          sm: '4px',
-          md: '8px',
-          lg: '16px',
-        },
-        borderRadius: theme.spacing
-          ? Object.fromEntries(
-              Object.entries(theme.spacing)
-                .filter(([k]) => k.startsWith('layout-radius-'))
-                .map(([k, v]) => [k, v])
-            )
-          : {},
+        fontSize: withPrefix(typography, 'typography-size-'),
+        fontWeight: withPrefix(typography, 'typography-weight-'),
+        letterSpacing: withPrefix(typography, 'typography-tracking-'),
+        lineHeight: withPrefix(typography, 'typography-leading-'),
+        borderRadius: withPrefix(theme.spacing, 'layout-radius-'),
         padding: {
           ...theme.spacing,
           ...theme.space,
         },
+        margin: theme.space || {},
         gap: theme.space || {},
         width: theme.size || {},
         height: theme.size || {},
-        transitionDuration: theme.transition || {},
+        transitionDuration: withPrefix(theme.transition, 'transition-duration-'),
+        transitionTimingFunction: withPrefix(theme.transition, 'transition-easing-'),
       },
     },
     plugins: [],
@@ -131,6 +140,167 @@ function emitCSS(tokens) {
   return lines.join('\n') + '\n';
 }
 
+/**
+ * dist/glass.css — the crystal material as plain CSS with literal values.
+ *
+ * Safari does not resolve custom properties inside `-webkit-backdrop-filter`,
+ * so every backdrop declaration is written out with both the prefixed and the
+ * unprefixed property (ADR-006). Class names are consumer API.
+ */
+function emitGlassCSS(tokens) {
+  const fx = tokens.effects;
+  const sp = tokens.spacing;
+  const need = (key) => {
+    if (fx[key] === undefined) throw new Error(`effects.${key} is required by emitGlassCSS`);
+    return fx[key];
+  };
+  const surface = need('glass-crystal-surface-base');
+  const surfaceHover = need('glass-crystal-surface-hover');
+  const rim = need('glass-crystal-rim-base');
+  const rimHover = need('glass-crystal-rim-hover');
+  const highlight = need('glass-crystal-highlight-base');
+  const sheen = need('glass-crystal-sheen-base');
+  const shadow = need('glass-crystal-shadow-base');
+  const backdrop = need('glass-crystal-backdrop-base');
+  const core = need('glass-crystal-core-base');
+  const solid = need('glass-crystal-solid-base');
+  const focusAccent = tokens.colors['surface-accent-violet-base'];
+  const shellRadius = sp['layout-radius-glass-base'];
+  const bezel = sp['layout-padding-bezel-base'];
+  const coreRadius = sp['layout-radius-standard-base'];
+  const pillRadius = sp['layout-radius-full-base'];
+  // Rim is an inset box-shadow, not a border box, so shell/bezel/core stay
+  // concentric: 20px = 6px + 14px with no 1px border eating into the core.
+  const rimShadow = (color) => `inset 0 0 0 1px ${color}`;
+
+  const solidFallback = (indent) => [
+    `${indent}background-color: ${solid};`,
+    `${indent}background-image: none;`,
+    `${indent}-webkit-backdrop-filter: none;`,
+    `${indent}backdrop-filter: none;`,
+    `${indent}box-shadow: ${rimShadow(rim)}, ${shadow};`,
+  ].join('\n');
+
+  // The hover rule must be restated: its specificity beats `.vi-glass`, so a
+  // translucent hover fill would otherwise leak into the solid fallback.
+  const fallbackRule = (indent) => [
+    `${indent}.vi-glass,`,
+    `${indent}.vi-glass-shell {`,
+    solidFallback(`${indent}  `),
+    `${indent}}`,
+    `${indent}.vi-glass--control:hover,`,
+    `${indent}.vi-glass--control:focus-within {`,
+    `${indent}  background-color: ${solid};`,
+    `${indent}  box-shadow: ${rimShadow(rimHover)}, ${shadow};`,
+    `${indent}}`,
+  ].join('\n');
+
+  return [
+    '/* GENERATED BY scripts/generate-tokens.js — DO NOT EDIT. */',
+    '/* Source: DESIGN.md effects/spacing tokens (ADR-006). Run `npm run tokens` to regenerate. */',
+    '/* Literal declarations on purpose: Safari ignores custom properties in -webkit-backdrop-filter. */',
+    '',
+    '.vi-glass,',
+    '.vi-glass-shell {',
+    `  background-color: ${surface};`,
+    `  background-image: ${sheen};`,
+    '  border: 0;',
+    `  box-shadow: ${rimShadow(rim)}, ${highlight}, ${shadow};`,
+    `  -webkit-backdrop-filter: ${backdrop};`,
+    `  backdrop-filter: ${backdrop};`,
+    '}',
+    '',
+    '.vi-glass--control:hover,',
+    '.vi-glass--control:focus-within {',
+    `  background-color: ${surfaceHover};`,
+    `  box-shadow: ${rimShadow(rimHover)}, ${highlight}, ${shadow};`,
+    '}',
+    '',
+    '/* Brand accent is reserved for key CTAs and focus outlines (DESIGN.md). */',
+    '.vi-glass--control:focus-within {',
+    `  outline: 2px solid ${focusAccent};`,
+    '  outline-offset: 2px;',
+    '}',
+    '',
+    '/* Double bezel: outer shell 20px, 6px padding, inner core 14px (concentric). */',
+    '.vi-glass-shell {',
+    `  border-radius: ${shellRadius};`,
+    `  padding: ${bezel};`,
+    '}',
+    '',
+    '.vi-glass-core {',
+    `  border-radius: ${coreRadius};`,
+    `  background-color: ${core};`,
+    '}',
+    '',
+    '/* Pill shapes for island nav, question bar and persona switcher. */',
+    '.vi-glass-shell--pill {',
+    `  border-radius: ${pillRadius};`,
+    '}',
+    '',
+    '.vi-glass-core--pill {',
+    `  border-radius: ${pillRadius};`,
+    '}',
+    '',
+    '/* Solid surface with the same rim wherever the blur cannot or must not render. */',
+    '@media (prefers-reduced-transparency: reduce) {',
+    fallbackRule('  '),
+    '}',
+    '',
+    '@media (prefers-contrast: more) {',
+    fallbackRule('  '),
+    '}',
+    '',
+    '@media (forced-colors: active) {',
+    '  .vi-glass,',
+    '  .vi-glass-shell {',
+    '    background-color: Canvas;',
+    '    background-image: none;',
+    '    -webkit-backdrop-filter: none;',
+    '    backdrop-filter: none;',
+    `    box-shadow: ${rimShadow('CanvasText')};`,
+    '  }',
+    '  .vi-glass--control:hover,',
+    '  .vi-glass--control:focus-within {',
+    '    background-color: Canvas;',
+    `    box-shadow: ${rimShadow('Highlight')};`,
+    '  }',
+    '  .vi-glass--control:focus-within {',
+    '    outline-color: Highlight;',
+    '  }',
+    '  .vi-glass-core {',
+    '    background-color: Canvas;',
+    '  }',
+    '}',
+    '',
+    '@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {',
+    fallbackRule('  '),
+    '}',
+    '',
+  ].join('\n');
+}
+
+/**
+ * dist/catalog.css — Tailwind utilities for preview/ fragments only.
+ * Not shipped to consumers; the catalog needs it so fragments render styled.
+ */
+function emitCatalogCSS() {
+  const cli = require.resolve('tailwindcss/lib/cli.js');
+  const input = path.join(DIST_DIR, '.catalog-input.css');
+  const output = path.join(DIST_DIR, 'catalog.css');
+  fs.writeFileSync(input, '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n', 'utf-8');
+  try {
+    execFileSync(
+      process.execPath,
+      [cli, '-c', path.join(DIST_DIR, 'tailwind.config.js'), '-i', input, '-o', output],
+      { cwd: ROOT, stdio: ['ignore', 'ignore', 'pipe'] },
+    );
+  } finally {
+    fs.rmSync(input, { force: true });
+  }
+  return output;
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -144,10 +314,14 @@ function main() {
   const content = fs.readFileSync(DESIGN_FILE, 'utf-8');
   const tokens = parseFrontMatter(content);
 
+  const standardArtifacts = generateStandardArtifacts(tokens);
   const outputs = {
     'tailwind.config.js': emitTailwindConfig(tokens),
     'tokens.css': emitCSS(tokens),
     'tokens.json': emitJSON(tokens),
+    'glass.css': emitGlassCSS(tokens),
+    'standard.json': standardArtifacts['standard.json'],
+    'standard.md': standardArtifacts['standard.md'],
   };
 
   if (dryRun) {
@@ -167,10 +341,20 @@ function main() {
     fs.writeFileSync(filePath, content, 'utf-8');
     process.stdout.write(`wrote dist/${file}\n`);
   }
+
+  emitCatalogCSS();
+  process.stdout.write('wrote dist/catalog.css\n');
 }
 
 if (require.main === module) {
   main();
 }
 
-module.exports = { parseFrontMatter, emitTailwindConfig, emitCSS, emitJSON };
+module.exports = {
+  parseFrontMatter,
+  emitTailwindConfig,
+  emitCSS,
+  emitJSON,
+  emitGlassCSS,
+  emitCatalogCSS,
+};

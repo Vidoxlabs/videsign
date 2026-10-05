@@ -1,78 +1,111 @@
 <!--
   Nocturne Museum: Visual Catalog
-  Renders all preview/ fragments inline for visual verification.
-  Open this file in a browser to see the complete design system.
+  Renders every preview/ fragment with the generated stylesheets so each one is styled for real.
+
+  Run `npm run tokens` first (it writes dist/), then serve the repository root over HTTP and
+  open /preview/ — fragments load with fetch(), which browsers block on file://:
+    python3 -m http.server 8000
+  Geist and Geist Mono are not bundled here (ADR-007: binaries live in the consuming site).
+  The catalog uses them if installed and otherwise falls back to the system stack.
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nocturne Museum — Visual Catalog</title>
+  <title>Nocturne Museum: visual catalog</title>
+  <link rel="stylesheet" href="../dist/tokens.css" />
+  <link rel="stylesheet" href="../dist/catalog.css" />
+  <link rel="stylesheet" href="../dist/glass.css" />
   <style>
-    /* Minimal inline reset — no Tailwind dependency required to view the catalog */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #0A0A0E;
-      color: #FFFFFF;
-      font-family: 'Inter', sans-serif;
+      margin: 0;
       padding: 48px;
       display: flex;
       flex-direction: column;
       gap: 64px;
+      background: var(--vi-colors-surface-background-primary-base);
+      color: var(--vi-colors-text-content-primary-base);
+      font-family: var(--vi-typography-typography-family-sans-base);
     }
     .catalog-header h1 {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #A1A1AA;
-      margin-bottom: 8px;
+      margin: 0 0 8px;
+      font-family: var(--vi-typography-typography-family-mono-base);
+      font-size: var(--vi-typography-typography-size-xs-base);
+      font-weight: 500;
+      color: var(--vi-colors-text-content-secondary-base);
     }
     .catalog-header h2 {
-      font-size: 30px;
+      margin: 0;
+      font-size: var(--vi-typography-typography-size-3xl-base);
       font-weight: 600;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
     }
-    .fragment-section { display: flex; flex-direction: column; gap: 16px; }
+    #catalog-sections { display: flex; flex-direction: column; gap: 64px; }
+    .fragment-section { display: flex; flex-direction: column; gap: 12px; }
     .fragment-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #7C3AED;
+      font-family: var(--vi-typography-typography-family-mono-base);
+      font-size: var(--vi-typography-typography-size-xs-base);
+      font-weight: 500;
+      color: var(--vi-colors-text-content-primary-base);
     }
     .fragment-desc {
-      font-size: 14px;
-      color: #A1A1AA;
+      font-size: var(--vi-typography-typography-size-sm-base);
+      color: var(--vi-colors-text-content-secondary-base);
+      max-width: 72ch;
     }
     .fragment-frame {
-      background: #12121A;
-      border: 1px solid #27272A;
-      border-radius: 14px;
+      background: var(--vi-colors-surface-background-secondary-base);
+      border: 1px solid var(--vi-colors-border-separator-primary-base);
+      border-radius: var(--vi-spacing-layout-radius-standard-base);
       padding: 32px;
       overflow: hidden;
     }
-    .fragment-frame.layout-frame {
-      padding: 0;
-      border-radius: 14px;
-      height: 600px;
-    }
-    .fragment-frame iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      border-radius: 14px;
-    }
-    /* Apply Nocturne tokens as CSS vars for inline fragments */
+    .fragment-frame.layout-frame { padding: 0; height: 600px; }
+    .fragment-frame iframe { width: 100%; height: 100%; border: 0; }
     .fragment-frame > div,
     .fragment-frame > aside,
-    .fragment-frame > button {
-      position: static;
-      transform: none;
+    .fragment-frame > button { position: static; transform: none; }
+
+    /* Backdrop stage: the field of glow and dots that glass floats over, plus a headline
+       that passes beneath the glass so the worst legitimate backdrop is on screen. */
+    .fragment-frame.stage {
+      position: relative;
+      isolation: isolate;
+      min-height: 240px;
+      padding: 0;
+      background: var(--vi-colors-surface-background-primary-base);
     }
+    .stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 12% 70%, var(--vi-effects-ambient-glow-violet-base), transparent 42%),
+        radial-gradient(circle at 92% 100%, var(--vi-effects-ambient-glow-teal-base), transparent 40%);
+    }
+    .stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background-image: radial-gradient(var(--vi-effects-ambient-dots-base) 1.2px, transparent 1.3px);
+      background-size: var(--vi-spacing-layout-padding-large-base) var(--vi-spacing-layout-padding-large-base);
+    }
+    .stage .behind {
+      position: relative;
+      margin: 0;
+      padding: 28px 28px 0;
+      z-index: -1;
+      font-size: var(--vi-typography-typography-size-5xl-base);
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      color: var(--vi-colors-text-content-primary-base);
+    }
+    .stage .on-top { position: relative; display: flex; justify-content: center; padding: 0 28px 28px; margin-top: -28px; }
+    .stage .on-top > * { max-width: 100%; }
   </style>
 </head>
 <body>
@@ -81,95 +114,96 @@
     <h2>Visual catalog</h2>
   </div>
 
-  <!-- Layout compositions (iframed because they use full-screen layout) -->
-  <div class="fragment-section">
-    <span class="fragment-label">Layout — Dashboard</span>
-    <span class="fragment-desc">Sidebar + toolbar + stat cards + monitor rows</span>
-    <div class="fragment-frame layout-frame">
-      <iframe src="layout-dashboard.html" title="Dashboard layout"></iframe>
-    </div>
-  </div>
-
-  <div class="fragment-section">
-    <span class="fragment-label">Layout — Graph</span>
-    <span class="fragment-desc">Sidebar + graph canvas + inspector panel</span>
-    <div class="fragment-frame layout-frame">
-      <iframe src="layout-graph.html" title="Graph layout"></iframe>
-    </div>
-  </div>
-
-  <!-- Individual components (rendered inline) -->
-  <div class="fragment-section">
-    <span class="fragment-label">Button</span>
-    <span class="fragment-desc">Primary action button</span>
-    <div class="fragment-frame" id="frag-button"></div>
-  </div>
-
-  <div class="fragment-section">
-    <span class="fragment-label">Alert banner</span>
-    <span class="fragment-desc">Warning status with functional tinted background</span>
-    <div class="fragment-frame" id="frag-alert-banner"></div>
-  </div>
-
-  <div class="fragment-section">
-    <span class="fragment-label">Stat card</span>
-    <span class="fragment-desc">Status indicators, monospace labels, sans-serif data</span>
-    <div class="fragment-frame" id="frag-stat-card"></div>
-  </div>
-
-  <div class="fragment-section">
-    <span class="fragment-label">Monitor row</span>
-    <span class="fragment-desc">Dense list row with status indicator</span>
-    <div class="fragment-frame" id="frag-monitor-row"></div>
-  </div>
-
-  <div class="fragment-section">
-    <span class="fragment-label">Activity feed</span>
-    <span class="fragment-desc">List container with live status indicator</span>
-    <div class="fragment-frame" id="frag-activity-feed"></div>
-  </div>
-
-  <div class="fragment-section">
-    <span class="fragment-label">Activity item</span>
-    <span class="fragment-desc">Dense text layout for feed entries</span>
-    <div class="fragment-frame" id="frag-activity-item"></div>
-  </div>
-
-  <div class="fragment-section">
-    <span class="fragment-label">Data table</span>
-    <span class="fragment-desc">Tabular container with header row</span>
-    <div class="fragment-frame" id="frag-data-table"></div>
-  </div>
-
-  <div class="fragment-section">
-    <span class="fragment-label">Inspector field</span>
-    <span class="fragment-desc">Key-value pair for inspection panels</span>
-    <div class="fragment-frame" id="frag-inspector-field"></div>
-  </div>
-
-  <div class="fragment-section">
-    <span class="fragment-label">Sovereign persona console</span>
-    <span class="fragment-desc">Identity status header, operational viewport, evidence trail, and command bar (persona Violet demo)</span>
-    <div class="fragment-frame" id="frag-persona-console"></div>
-  </div>
+  <div id="catalog-sections"></div>
 
   <script>
-    // Inline-load individual fragments via fetch
-    const fragments = [
-      'button.html', 'alert-banner.html', 'stat-card.html',
-      'monitor-row.html', 'activity-feed.html', 'activity-item.html',
-      'data-table.html', 'inspector-field.html', 'persona-console.html'
+    // Each entry: file, label, description, and whether it sits on the backdrop stage.
+    var FRAGMENTS = [
+      { file: 'island-nav.html', label: 'Island navigation', desc: 'Crystal pill, six bounded links and a compact Ask trigger. One glass layer over the stage.', stage: true },
+      { file: 'question-bar.html', label: 'Question bar', desc: 'The /ask input as one glass pill; focus draws the brand outline.', stage: true },
+      { file: 'evidence-lens.html', label: 'Evidence lens', desc: 'Glass shell with a near-opaque core: statement-to-source rows and a not-established row.', stage: true },
+      { file: 'persona-switcher.html', label: 'Persona switcher', desc: 'Glass tablist of five seats; accent dots use only the locked persona tokens.', stage: true },
+      { file: 'field-node.html', label: 'Field node', desc: 'Build-time SVG node in rest, lit and dim states.' },
+      { file: 'field-edge.html', label: 'Field edge', desc: 'Edge in rest, lit and dim states; draw-in uses transform only.' },
+      { file: 'statement-proof-row.html', label: 'Statement-to-proof row', desc: 'Numbered statement beside its proof record. Solid, never glass.' },
+      { file: 'coverage-grid.html', label: 'Coverage grid', desc: 'Question terms against record kinds, with a text alternative for every cell.' },
+      { file: 'skeleton-row.html', label: 'Skeleton row', desc: 'Static loading geometry matched to the resolved row.' },
+      { file: 'locked-panel.html', label: 'Locked panel', desc: 'Fail-closed panel: disabled composer with listed unlock conditions.' },
+      { file: 'layout-dashboard.html', label: 'Layout: dashboard', desc: 'Sidebar, toolbar, stat cards and monitor rows.', frame: true },
+      { file: 'layout-graph.html', label: 'Layout: graph', desc: 'Sidebar, graph canvas and inspector panel.', frame: true },
+      { file: 'persona-console.html', label: 'Sovereign persona console', desc: 'Identity header, viewport, evidence trail with unavailable slots, command bar (Violet demo).' },
+      { file: 'button.html', label: 'Button', desc: 'Primary action button.' },
+      { file: 'alert-banner.html', label: 'Alert banner', desc: 'Warning status with functional tinted background.' },
+      { file: 'stat-card.html', label: 'Stat card', desc: 'Status indicators, mono labels, sans data.' },
+      { file: 'monitor-row.html', label: 'Monitor row', desc: 'Dense list row with status indicator.' },
+      { file: 'activity-feed.html', label: 'Activity feed', desc: 'List container with live status indicator.' },
+      { file: 'activity-item.html', label: 'Activity item', desc: 'Dense text layout for feed entries.' },
+      { file: 'data-table.html', label: 'Data table', desc: 'Tabular container with header row.' },
+      { file: 'inspector-field.html', label: 'Inspector field', desc: 'Key-value pair for inspection panels.' },
+      { file: 'graph-node.html', label: 'Graph node', desc: 'Dashboard graph node with status indicator.' },
+      { file: 'graph-edge.html', label: 'Graph edge', desc: 'Dashboard graph edge.' },
+      { file: 'graph-canvas.html', label: 'Graph canvas', desc: 'Container for node and edge visualisations.', frame: true },
+      { file: 'sidebar-nav.html', label: 'Sidebar navigation', desc: 'Full-height functional glass with right-edge rounding.', frame: true },
+      { file: 'inspector-panel.html', label: 'Inspector panel', desc: 'Right-hand inspection panel.', frame: true },
+      { file: 'inspector-section.html', label: 'Inspector section', desc: 'Titled group of inspector fields.' },
+      { file: 'toolbar.html', label: 'Toolbar', desc: 'Horizontal control bar.' },
+      { file: 'toolbar-button.html', label: 'Toolbar button', desc: 'Compact toolbar control.' },
+      { file: 'data-table-row.html', label: 'Data table row', desc: 'Single table row.' },
+      { file: 'data-table-cell.html', label: 'Data table cell', desc: 'Single table cell.' }
     ];
 
-    fragments.forEach(file => {
-      const id = 'frag-' + file.replace('.html', '');
-      const el = document.getElementById(id);
-      if (el) {
-        fetch(file)
-          .then(r => r.text())
-          .then(html => { el.innerHTML = html; })
-          .catch(() => { el.innerHTML = '<p style="color:#A1A1AA;font-family:monospace;font-size:13px;">Could not load ' + file + '</p>'; });
-      }
+    // Full-height fragments render in an iframe whose srcdoc loads the same generated sheets.
+    function framed(html) {
+      var base = document.baseURI;
+      return '<!DOCTYPE html><html><head><base href="' + base + '">' +
+        '<link rel="stylesheet" href="../dist/tokens.css">' +
+        '<link rel="stylesheet" href="../dist/catalog.css">' +
+        '<link rel="stylesheet" href="../dist/glass.css">' +
+        '<style>body{margin:0;background:var(--vi-colors-surface-background-primary-base);font-family:var(--vi-typography-typography-family-sans-base)}</style>' +
+        '</head><body>' + html + '</body></html>';
+    }
+
+    var host = document.getElementById('catalog-sections');
+    FRAGMENTS.forEach(function (f) {
+      var section = document.createElement('div');
+      section.className = 'fragment-section';
+
+      var label = document.createElement('span');
+      label.className = 'fragment-label';
+      label.textContent = f.label + ' (' + f.file + ')';
+
+      var desc = document.createElement('span');
+      desc.className = 'fragment-desc';
+      desc.textContent = f.desc;
+
+      var frame = document.createElement('div');
+      frame.className = 'fragment-frame' + (f.stage ? ' stage' : '') + (f.frame ? ' layout-frame' : '');
+      frame.id = 'frag-' + f.file.replace('.html', '');
+
+      section.append(label, desc, frame);
+      host.append(section);
+
+      fetch(f.file)
+        .then(function (r) { return r.text(); })
+        .then(function (html) {
+          if (f.frame) {
+            var iframe = document.createElement('iframe');
+            iframe.title = f.label;
+            iframe.srcdoc = framed(html);
+            frame.append(iframe);
+          } else if (f.stage) {
+            var behind = document.createElement('p');
+            behind.className = 'behind';
+            behind.textContent = 'Applied AI systems, built with evidence.';
+            var onTop = document.createElement('div');
+            onTop.className = 'on-top';
+            onTop.innerHTML = html;
+            frame.append(behind, onTop);
+          } else {
+            frame.innerHTML = html;
+          }
+        })
+        .catch(function () { frame.textContent = 'Could not load ' + f.file; });
     });
   </script>
 </body>

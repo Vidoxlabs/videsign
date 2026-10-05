@@ -17,8 +17,13 @@ design system — the shared visual language for all Vidoxlabs products and appl
   framework-specific state logic. `preview/index.html` renders a visual catalog of
   all fragments. Layout compositions are in `preview/layout-*.html`.
 - **scripts/generate-tokens.js**: Token generation pipeline. Parses `DESIGN.md` YAML
-  front-matter and emits `dist/tailwind.config.js`, `dist/tokens.css`, and
-  `dist/tokens.json`. Run `npm run tokens` to regenerate.
+  front-matter and emits `dist/tailwind.config.js`, `dist/tokens.css`,
+  `dist/tokens.json`, `dist/glass.css` (crystal glass with literal Safari-safe
+  declarations, ADR-006) and `dist/catalog.css` (Tailwind utilities for the preview
+  catalog only). Run `npm run tokens` to regenerate.
+- **scripts/lint-preview.js**: Static checks for `preview/*.html` (arbitrary values,
+  `shadow-sm`, inline style or script, emoji, overclaiming text, glass scope, nesting and
+  layer limit). `npm run lint` runs ESLint and then this script.
 - **mcp-server.js**: The MCP server that exposes this design system to product
   repositories for cross-repo token and fragment fetching. Also provides a
   `resolve_token` tool for querying individual token values.
@@ -43,13 +48,15 @@ it MUST execute the following routine:
 
 Within the `videsign` repository, agents are restricted to the following commands:
 
-- `npm run lint`: Executes AST validation against the codebase (enforcing `no-arbitrary-value`).
+- `npm run lint`: Executes ESLint and then `scripts/lint-preview.js`, which checks the
+  preview fragments (ESLint alone never saw them).
 - `npm run mcp`: Starts the local MCP server for cross-repo communication.
 - `npm run tokens`: Parses `DESIGN.md` and regenerates `dist/tailwind.config.js`,
   `dist/tokens.css`, and `dist/tokens.json`. Run this after modifying tokens in
   `DESIGN.md`.
-- `npm test`: Starts the MCP server over stdio and verifies `resolve_token` and
-  resource reads end to end. Run this after changing `mcp-server.js`.
+- `npm test`: Runs the MCP stdio smoke test, the token contract tests
+  (`test/tokens.test.js`) and the preview fragment contract (`test/preview.test.js`).
+  Run this after changing `mcp-server.js`, `DESIGN.md` tokens or any fragment.
 
 ## `{ASSET_BASE}` resolution
 

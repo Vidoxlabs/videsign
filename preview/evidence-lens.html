@@ -1,0 +1,36 @@
+<!--
+  Nocturne Museum: Evidence lens (ADR-006)
+  A glass shell (20px radius, 6px bezel) around a near-opaque core (14px radius).
+  The shell is the only glass layer; all reading text sits on the core, whose scrim
+  keeps text at 4.5:1 even over a fully white backdrop. Rows pair a statement with
+  its source; a "Not established" row states what the evidence does not cover.
+  Example statements describe the component, not the product.
+-->
+<aside aria-label="Evidence lens" class="vi-glass-shell w-layout-width-inspector-base">
+  <div class="vi-glass-core flex flex-col gap-gap-spacious-default p-layout-padding-medium-base">
+    <header class="flex items-center justify-between gap-gap-compact-default">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Evidence lens</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base px-inset-compact-default">Coverage: partial</span>
+    </header>
+    <ol class="flex flex-col gap-gap-comfortable-default">
+      <li class="flex flex-col gap-gap-dense-default">
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Each statement is paired with the record it came from.</p>
+        <a href="#record-1" class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">
+          <span class="border border-border-separator-primary-base rounded-layout-radius-control-base px-inset-compact-default text-text-content-primary-base">1</span>
+          Proof record, observed 2026-10-05
+        </a>
+      </li>
+      <li class="flex flex-col gap-gap-dense-default">
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">A source opens at the exact record, not a summary of it.</p>
+        <a href="#record-2" class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">
+          <span class="border border-border-separator-primary-base rounded-layout-radius-control-base px-inset-compact-default text-text-content-primary-base">2</span>
+          Research record
+        </a>
+      </li>
+      <li class="flex flex-col gap-gap-dense-default border border-dashed border-border-separator-primary-base rounded-layout-radius-control-base p-inset-operator-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Not established</span>
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">No published record covers the rest of the question.</p>
+      </li>
+    </ol>
+  </div>
+</aside>

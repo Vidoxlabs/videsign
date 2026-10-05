@@ -1,0 +1,27 @@
+<!--
+  Nocturne Museum: Crystal island navigation (ADR-006)
+  A detached, centred pill of clear-crystal glass. Six bounded links plus a compact
+  Ask trigger that links to /ask; Ask is not a seventh nav item. The island is one
+  glass layer built as shell + core (vi-glass-shell around vi-glass-core): its text
+  must stay at 4.5:1 over bright imagery, which a single translucent layer cannot do.
+  Active link uses aria-current and a solid brand-tinted pill.
+  The brand accent fills the Ask trigger, which is solid, not glass.
+-->
+<div class="vi-glass-shell vi-glass-shell--pill inline-flex">
+<nav aria-label="Primary" class="vi-glass-core vi-glass-core--pill inline-flex items-center gap-gap-dense-default">
+  <a href="/" class="inline-flex items-center h-action-min-default px-layout-padding-medium-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base rounded-layout-radius-full-base">Vidoxlabs</a>
+  <ul class="flex items-center gap-gap-dense-default">
+    <li><a href="/work" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-full-base">Work</a></li>
+    <li><a href="/experience" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-full-base">Experience</a></li>
+    <li><a href="/research" aria-current="page" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base bg-surface-accent-violet-base/30 rounded-layout-radius-full-base">Research</a></li>
+    <li><a href="/vitools" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-full-base">ViTools</a></li>
+    <li><a href="/about" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-full-base">About</a></li>
+    <li><a href="https://github.com/Vidoxlabs" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-full-base">GitHub</a></li>
+  </ul>
+  <!-- Button-in-button trailing icon, pill radius -->
+  <a href="/ask" class="inline-flex items-center gap-gap-compact-default h-action-min-default pl-layout-padding-medium-base pr-layout-padding-bezel-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base bg-surface-accent-violet-base hover:bg-surface-accent-violet-hover active:bg-surface-accent-violet-active rounded-layout-radius-full-base">
+    Ask
+    <span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base bg-surface-background-primary-base/30">&#8594;</span>
+  </a>
+</nav>
+</div>

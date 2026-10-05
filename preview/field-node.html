@@ -1,0 +1,24 @@
+<!--
+  Nocturne Museum: Field node (ADR-006)
+  A node in a field of real things (systems on the home page, evidence records on /ask).
+  SVG, rendered at build time from data with a deterministic layout; no runtime physics.
+  Three states: rest, lit (retrieved or selected: brand ring), dim (not retrieved: 40%).
+  Each node is a link to its proof and carries a text label, so state never relies on
+  colour alone. Hover or focus opens the evidence lens (script-added in the consumer).
+-->
+<svg viewBox="0 0 360 96" role="group" aria-label="Field node states: rest, lit and dim" class="w-full h-auto">
+  <a href="#rest" aria-label="Rest node">
+    <circle cx="60" cy="38" r="14" class="fill-surface-background-tertiary-base stroke-border-separator-primary-base" stroke-width="1.5"></circle>
+    <text x="60" y="78" text-anchor="middle" class="fill-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base">rest</text>
+  </a>
+  <a href="#lit" aria-label="Lit node">
+    <circle cx="180" cy="38" r="18" class="fill-surface-accent-violet-base/20 stroke-surface-accent-violet-base" stroke-width="2"></circle>
+    <circle cx="180" cy="38" r="5" class="fill-text-content-primary-base"></circle>
+    <text x="180" y="78" text-anchor="middle" class="fill-text-content-primary-base font-typography-family-mono-base text-typography-size-xs-base">lit</text>
+  </a>
+  <a href="#dim" aria-label="Dim node">
+    <!-- Dim the mark only; the label stays at full secondary contrast. -->
+    <circle cx="300" cy="38" r="14" class="fill-surface-background-tertiary-base stroke-border-separator-primary-base opacity-40" stroke-width="1.5"></circle>
+    <text x="300" y="78" text-anchor="middle" class="fill-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base">dim</text>
+  </a>
+</svg>

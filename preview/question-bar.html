@@ -1,0 +1,17 @@
+<!--
+  Nocturne Museum: Question bar (ADR-006)
+  The /ask input as a clear-crystal pill. Text-bearing glass is shell + core
+  (vi-glass-shell--pill around vi-glass-core--pill) so labels clear 4.5:1 over
+  bright imagery. Control hover/focus-within come from vi-glass--control.
+  The submit button is a solid brand pill with a button-in-button trailing arrow.
+-->
+<form role="search" class="vi-glass-shell vi-glass-shell--pill vi-glass--control w-full">
+  <div class="vi-glass-core vi-glass-core--pill flex items-center gap-gap-comfortable-default w-full h-action-wide-default pl-layout-padding-large-base pr-layout-padding-bezel-base">
+    <label for="question-bar-input" class="sr-only">Ask the published evidence</label>
+    <input id="question-bar-input" name="q" type="text" autocomplete="off" placeholder="Ask what the evidence shows" class="flex-1 min-w-0 h-action-min-default bg-transparent outline-none font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base placeholder:text-text-content-secondary-base" />
+    <button type="submit" class="inline-flex items-center gap-gap-compact-default h-action-min-default pl-layout-padding-medium-base pr-layout-padding-bezel-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base bg-surface-accent-violet-base hover:bg-surface-accent-violet-hover active:bg-surface-accent-violet-active rounded-layout-radius-full-base">
+      Ask
+      <span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base bg-surface-background-primary-base/30">&#8594;</span>
+    </button>
+  </div>
+</form>
