@@ -12,7 +12,6 @@ const path = require('path');
 
 const {
   parseFrontMatter,
-  isTailwindClassString,
   emitCSS,
   emitTailwindConfig,
   emitGlassCSS,
@@ -65,17 +64,22 @@ test('32px radii stay banned: no radius token reaches 32px', () => {
   }
 });
 
-test('isTailwindClassString separates legacy class strings from CSS values', () => {
-  assert.equal(isTailwindClassString('backdrop-blur-sm bg-white/5'), true);
-  assert.equal(isTailwindClassString('backdrop-blur-lg bg-white/15'), true);
-  for (const [key, value] of Object.entries(TOKENS.effects)) {
-    if (key.startsWith('glass-crystal-') || key.startsWith('ambient-')) {
-      assert.equal(isTailwindClassString(value), false, `${key} is a CSS value`);
-    }
+test('effects hold only crystal and ambient CSS values (no legacy class strings)', () => {
+  for (const key of Object.keys(TOKENS.effects)) {
+    assert.ok(
+      key.startsWith('glass-crystal-') || key.startsWith('ambient-'),
+      `unexpected effects.${key}`,
+    );
   }
+  assert.equal(Object.keys(TOKENS.effects).some((k) => k.startsWith('glass-functional-')), false);
 });
 
-test('tokens.css emits every effect, including CSS-valued ones, under canonical names', () => {
+test('Tailwind config has no hardcoded backdropBlur scale', () => {
+  const { theme } = loadTailwindConfig();
+  assert.equal(theme.extend.backdropBlur, undefined);
+});
+
+test('tokens.css emits every effect under canonical names', () => {
   const css = emitCSS(TOKENS);
   for (const key of Object.keys(TOKENS.effects)) {
     assert.ok(css.includes(`--vi-effects-${key}:`), `missing --vi-effects-${key}`);
@@ -192,9 +196,15 @@ test('glass shell and core use the radius and bezel tokens', () => {
   assert.match(GLASS, /\.vi-glass-core \{[^}]*border-radius: 14px;/s);
 });
 
-test('glass.css keeps the rim in every fallback ("same rim")', () => {
+test('glass.css ships pill radius variants for plain-CSS consumers', () => {
+  assert.match(GLASS, /\.vi-glass-shell--pill \{[^}]*border-radius: 9999px;/s);
+  assert.match(GLASS, /\.vi-glass-core--pill \{[^}]*border-radius: 9999px;/s);
+});
+
+test('glass.css draws the rim as an inset shadow (no border box) so radii stay concentric', () => {
   const rim = TOKENS.effects['glass-crystal-rim-base'];
-  assert.ok(GLASS.includes(`border: 1px solid ${rim};`));
+  assert.ok(GLASS.includes('border: 0;'));
+  assert.ok(GLASS.includes(`inset 0 0 0 1px ${rim}`));
   const fallback = GLASS.slice(GLASS.indexOf('@media (prefers-reduced-transparency: reduce)'));
   assert.ok(fallback.includes(rim), 'fallbacks must keep the rim colour');
 });

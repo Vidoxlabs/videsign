@@ -1,8 +1,10 @@
-<!-- 
-  Nocturne Museum: Sidebar Navigation Fragment
-  Demonstrates full-height glass and right-edge rounding rules.
+<!--
+  Nocturne Museum: Sidebar navigation
+  Opaque secondary surface for product-dashboard layouts. Not glass (ADR-006:
+  glass is limited to controls and lenses). Right-edge rounding uses the
+  standard radius token.
 -->
-<aside class="w-layout-width-sidebar-base min-h-screen bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-large-base flex flex-col gap-gap-section-default shrink-0 rounded-r-layout-radius-standard-base backdrop-blur-sm">
+<aside class="w-layout-width-sidebar-base min-h-screen bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-large-base flex flex-col gap-gap-section-default shrink-0 rounded-r-layout-radius-standard-base">
   <!-- Brand -->
   <div class="flex items-center gap-gap-comfortable-default px-1">
     <img src="{ASSET_BASE}/assets/logos/vidoxlabs/cube.png" alt="Vidoxlabs" class="w-7 h-7" />
@@ -21,7 +23,7 @@
       <span class="w-4 h-4 bg-surface-accent-violet-base rounded-sm bg-opacity-80"></span>
       Dashboard
     </button>
-    
+
     <!-- Nav Item (Inactive) -->
     <button type="button" class="flex items-center gap-gap-comfortable-default py-2 px-3 rounded-layout-radius-control-base bg-transparent text-text-content-secondary-base hover:bg-surface-background-tertiary-base hover:text-text-content-primary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-medium tracking-wide uppercase transition-all duration-200">
       <!-- Icon Placeholder -->

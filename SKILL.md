@@ -13,14 +13,11 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 **Context**: In complex multi-repo architectures, LLMs frequently hallucinate surface elevations, adding unwanted drop shadows or nested glassmorphism that degrades visual determinism.
 
-**Decision**: The Nocturne Museum design system strictly enforces a flat surface architecture with functional glass overlays only.
+**Decision**: The Nocturne Museum design system strictly enforces a flat surface architecture. Crystal glass (ADR-006) is the only glass material.
 
 1.  **Base Surfaces**: All core surfaces must use a solid color token (e.g., `{colors.surface-background-primary-base}`).
 2.  **No Extraneous Shadows**: Standard components (cards, standard buttons, layout panels) must NOT use drop shadows.
-3.  **Functional Glassmorphism**: Glass effects (e.g., `{effects.glass-functional-overlay-active}`) are reserved exclusively for:
-    - Modals and dialogs
-    - Floating contextual menus
-    - Fixed navigation bars (apply glass effect persistently once the user has scrolled past the page top, until scrolled back to top)
+3.  **Crystal glass only (ADR-006)**: Glass appears only on controls and lenses — island navigation, overlays and popovers, the question bar, the persona switcher, and the evidence lens. Never on paragraphs, cards, section containers or sidebars.
 
 ## ADR-002: Asset & Media Hosting
 
@@ -85,20 +82,20 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 **Decision**:
 
 1.  **Material.** Clear crystal, legible: a near-clear surface, a bright rim, a top highlight and a 160-degree sheen that fades by 35%; the glass dims and softens what is behind it instead of tinting it milky. Tokens in the `effects` category, `category-role-variant-state` grammar: `glass-crystal-surface-base|hover`, `glass-crystal-rim-base|hover`, `glass-crystal-highlight-base`, `glass-crystal-sheen-base`, `glass-crystal-shadow-base`, `glass-crystal-backdrop-base`, `glass-crystal-core-base`, `glass-crystal-solid-base`, plus the backdrop-field tokens `ambient-glow-violet-base`, `ambient-glow-teal-base`, `ambient-dots-base`. Starting values come from the approved "legible" mockup: surface `rgba(255,255,255,.035)`, rim `rgba(255,255,255,.26)`, highlight `inset 0 1px 0 rgba(255,255,255,.32)`, backdrop `blur(14px) brightness(.5) saturate(150%)`.
-2.  **Two kinds of effect value.** The legacy `glass-functional-*` entries are Tailwind class strings; the new entries are literal CSS values. The generator distinguishes them (`isTailwindClassString`), emits every effect as `--vi-effects-*`, and never feeds CSS values to Tailwind.
-3.  **Literal stylesheet.** The pipeline emits `dist/glass.css` with literal, prefixed and unprefixed `backdrop-filter` declarations (classes `vi-glass`, `vi-glass--control`, `vi-glass-shell`, `vi-glass-core`). A custom property is never used inside a backdrop-filter declaration.
-4.  **Scope.** Glass appears only on: the floating island navigation, overlays and popovers, the question bar, the persona switcher, and the evidence lens over a field. Never on paragraphs, cards or section containers.
+2.  **One effects category of CSS values.** Every `effects` entry is a literal CSS value (`rgba(...)`, `blur(...)`, `#12121A`, gradients, shadows). Legacy `glass-functional-*` Tailwind class strings are removed. The generator emits every effect as `--vi-effects-*` and never invents a `backdropBlur` scale.
+3.  **Literal stylesheet.** The pipeline emits `dist/glass.css` with literal, prefixed and unprefixed `backdrop-filter` declarations (classes `vi-glass`, `vi-glass--control`, `vi-glass-shell`, `vi-glass-core`, plus `--pill` variants). A custom property is never used inside a backdrop-filter declaration. The rim is an inset box-shadow (not a border box) so shell 20px, bezel 6px and core 14px stay concentric.
+4.  **Scope.** Glass appears only on: the floating island navigation, overlays and popovers, the question bar, the persona switcher, and the evidence lens over a field. Never on paragraphs, cards, section containers or sidebars.
 5.  **Limits.** At most three glass layers per viewport; never glass on glass; never backdrop blur on scrolling containers; the blur is never animated or transitioned. The evidence lens is a glass shell around a near-opaque core (`glass-crystal-core-base`), so reading text sits on a scrim rather than on a second blur.
 6.  **Legibility floor.** Text on glass reaches 4.5:1 against the worst backdrop it can pass over, verified by pixel-sampling screenshots over the busiest legitimate backdrop, not by the prettiest state. Where the guarantee is analytic (the lens core over a fully white backdrop) it is asserted in `test/tokens.test.js`. If a measurement fails, the tokens change, not the threshold.
 7.  **Fallback.** Under `prefers-reduced-transparency: reduce`, `prefers-contrast: more`, `forced-colors: active`, or `@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)))`, the same shapes render as the solid surface (`glass-crystal-solid-base`, or `Canvas` under forced colours) with the same rim. The support query tests both properties because Safari before 18 ships only the prefixed one; testing the unprefixed property alone would wrongly strip glass there. Refraction (SVG displacement) is out of scope.
-8.  **Untouched.** The legacy `glass-functional-overlay` tokens and the dashboard sidebar rule keep their meaning; this ADR does not retrofit them.
+8.  **Text-bearing glass is shell + core.** The island navigation, question bar and persona switcher are `vi-glass-shell` (+ `--pill` where needed) around `vi-glass-core`. A single `vi-glass` layer is reserved for glass that carries no text.
 
 **Consequences**: Consumers import `dist/glass.css` and use the `vi-glass*` classes; they never write their own backdrop declarations. `eslint` cannot see fragments, so `scripts/lint-preview.js` enforces the scope, nesting and layer limits on the preview catalog. Contrast of single-layer glass depends on the backdrop, so each consuming site re-runs worst-backdrop sampling.
 
 **Measured amendment (2026-10-05, from the vidoxlabs.dev foundation PR)**: the first site measurements, taken with real pages instead of the catalog stage, changed four things. The 4.5:1 floor was not moved; the tokens and the fragment were.
 
 1.  **Ambient values lowered.** Free secondary text (`text-content-secondary-base`) sitting over the first ambient values (violet `0.55`, teal `0.28`, dots `0.35`) measured 3.62:1 to 4.54:1 on real routes. The values are now violet `0.30`, teal `0.16`, dots `0.14`, with an analytic bound in `test/tokens.test.js` (secondary text over the strongest glow with a dot on top).
-2.  **Text-bearing controls are shell + core.** A single `vi-glass` layer cannot reach 4.5:1 over white imagery: `brightness(0.5)` makes white 128 grey, which is about 3.9:1 for white text and near 1:1 for grey text. The catalog stage had no large light areas, so the PR 1 sweep did not expose this. `island-nav` is now a shell + core pill (radius full, so the bezel stays concentric). A single `vi-glass` layer is reserved for glass without text.
+2.  **Text-bearing controls are shell + core.** A single `vi-glass` layer cannot reach 4.5:1 over white imagery: `brightness(0.5)` makes white 128 grey, which is about 3.9:1 for white text and near 1:1 for grey text. The catalog stage had no large light areas, so the PR 1 sweep did not expose this. `island-nav`, `question-bar` and `persona-switcher` are shell + core pills (`vi-glass-shell--pill` / `vi-glass-core--pill`). A single `vi-glass` layer is reserved for glass without text.
 3.  **Core scrim carries the contrast alone.** The core alpha is `0.85` (was `0.72`). With `brightness(0.5)` working, `0.72` cleared 4.5:1 in Chromium, but Playwright's WebKit and Firefox did not render `brightness()` on a backdrop, where a fully white backdrop under `0.72` gives about 3.2:1 for secondary text. The analytic test now assumes no backdrop filter at all, so the guarantee holds in any engine.
 4.  **A named ancestor is a backdrop root.** A `backdrop-filter` inside an element with a `view-transition-name` (Astro assigns one to `transition:persist` elements), a `filter`, `opacity < 1`, `mask`, `clip-path`, `mix-blend-mode` or `will-change` sees only that ancestor's own box. A consumer must keep glass out of such ancestors or opt them out; the site's persisted header sets `view-transition-name: none`.
 

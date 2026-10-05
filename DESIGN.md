@@ -42,12 +42,9 @@ typography:
   typography-fluid-caption-base: "clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem)"
   typography-fluid-hero-base: "clamp(2.75rem, 6vw + 0.5rem, 5.25rem)"
 
-# effects holds two kinds of value. glass-functional-* are legacy Tailwind class
-# strings. glass-crystal-* and ambient-* (ADR-006) are literal CSS values.
+# effects: crystal glass and ambient values only (ADR-006). All values are
+# literal CSS. Legacy glass-functional-* Tailwind class strings are removed.
 effects:
-  glass-functional-overlay-base: "backdrop-blur-sm bg-white/5"
-  glass-functional-overlay-hover: "backdrop-blur-md bg-white/10"
-  glass-functional-overlay-active: "backdrop-blur-lg bg-white/15"
   glass-crystal-surface-base: "rgba(255, 255, 255, 0.035)"
   glass-crystal-surface-hover: "rgba(255, 255, 255, 0.07)"
   glass-crystal-rim-base: "rgba(255, 255, 255, 0.26)"
@@ -118,8 +115,8 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 >
 > ### Sidebar Architecture
 >
-> - Sidebars must use full-height glassmorphism.
-> - Sidebars must be rounded on the **right edge only** (`border-radius: 0 1rem 1rem 0`).
+> - Sidebars are opaque secondary surfaces, not glass (ADR-006).
+> - Sidebars must be rounded on the **right edge only** (`rounded-r-layout-radius-standard-base`).
 
 > [!IMPORTANT]
 >
@@ -167,7 +164,7 @@ Crystal glass is the one sanctioned glass material for public product surfaces. 
 
 - **Scope.** Glass marks controls and lenses: the floating island navigation, overlays and popovers, the question bar, the persona switcher, and the evidence lens over a field. Never on paragraphs, cards or section containers. Content stays solid and readable.
 - **Limits.** At most three glass layers per viewport. Never glass on glass (the lens core is a scrim, not a second blur). Never backdrop blur on scrolling containers. Never animate or transition the blur.
-- **Double bezel.** Glass shells use the outer radius `{spacing.layout-radius-glass-base}` (20px), `{spacing.layout-padding-bezel-base}` (6px) padding, and an inner core at `{spacing.layout-radius-standard-base}` (14px): 20 = 6 + 14, concentric.
+- **Double bezel.** Glass shells use the outer radius `{spacing.layout-radius-glass-base}` (20px), `{spacing.layout-padding-bezel-base}` (6px) padding, and an inner core at `{spacing.layout-radius-standard-base}` (14px): 20 = 6 + 14, concentric. The rim is an inset box-shadow (not a border box) so the arithmetic holds. Pill shapes use `vi-glass-shell--pill` / `vi-glass-core--pill` so plain-CSS consumers get the full radius without relying on a later Tailwind utility.
 - **Composition.** Clear glass floats over the field, imagery and ambient glows (`{effects.ambient-glow-violet-base}`, `{effects.ambient-glow-teal-base}`, `{effects.ambient-dots-base}`), never directly over body copy. A headline may pass beneath the island while scrolling.
 - **Legibility floor.** Text on glass reaches 4.5:1 against the worst backdrop it can pass over, verified by pixel-sampling screenshots, not by the prettiest state. Reading text in the lens sits on the core scrim, which clears 4.5:1 over a fully white backdrop even if the engine does not render the backdrop filter at all (analytic bound in `test/tokens.test.js`).
 - **Text-bearing controls are shell + core.** Any glass control that carries text and can pass over bright imagery (the island navigation, the question bar, the persona switcher) is a `vi-glass-shell` around a `vi-glass-core`, not a single `vi-glass` layer. `brightness(0.5)` turns white into mid grey, so one translucent layer cannot reach 4.5:1 over a white screenshot; the core scrim can. A single `vi-glass` layer is reserved for glass that carries no text.
@@ -205,8 +202,8 @@ To prevent "AI drift" and the generation of generic or hallucinated UI elements,
 >
 > ### 4. Glassmorphism Application
 >
-> - **Functional Allowed**: Functional glassmorphism is permitted for the Nocturne theme (e.g., sidebars, modals, floating navigational elements). Public product surfaces use the crystal material (ADR-006) and only for controls and lenses: island navigation, overlays and popovers, the question bar, the persona switcher and the evidence lens. The legacy `glass-functional-overlay` class strings remain for the product-dashboard sidebar, which ADR-006 does not change.
-> - **BAN Legacy Semi-transparent**: Explicitly ban legacy, semi-transparent glassmorphism layers on standard flat surfaces. Surfaces should be solid colors (e.g., `#0A0A0E`) unless explicitly acting as a functional overlay. Never glass on paragraphs, cards or section containers; never glass on glass; at most three glass layers per viewport.
+> - **One material.** Crystal glass (ADR-006) is the only glass. It appears only on controls and lenses: island navigation, overlays and popovers, the question bar, the persona switcher and the evidence lens. Sidebars, cards, section containers and paragraphs stay solid opaque surfaces.
+> - **BAN Legacy Semi-transparent**: Ban legacy `backdrop-blur-*` / `bg-white/*` glass class strings and any other milky overlay. Never glass on glass; at most three glass layers per viewport; never backdrop blur on scrolling containers.
 
 > [!CAUTION]
 >

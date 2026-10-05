@@ -57,17 +57,6 @@ function parseFrontMatter(content) {
 
 // --- Helpers ---
 
-/**
- * `effects` carries two kinds of value: legacy Tailwind class strings
- * (`backdrop-blur-sm bg-white/5`) and literal CSS values (`rgba(...)`,
- * `blur(14px) ...`, `#12121A`). Class strings are bare words with optional
- * `:`/`-`/`/` segments; every CSS value contains a parenthesis, `#`, a digit
- * unit or similar and therefore fails this test.
- */
-function isTailwindClassString(value) {
-  return /^[a-z][a-z0-9:-]*(\/\d+)?(\s+[a-z][a-z0-9:-]*(\/\d+)?)*$/.test(value);
-}
-
 /** Split a CSS font-family token into the array form Tailwind expects. */
 function familyList(value) {
   return value.split(',').map((part) => part.trim());
@@ -105,11 +94,6 @@ function emitTailwindConfig(tokens) {
           'typography-family-mono-base': familyList(typography['typography-family-mono-base']),
         },
         fontSize: withPrefix(typography, 'typography-size-'),
-        backdropBlur: {
-          sm: '4px',
-          md: '8px',
-          lg: '16px',
-        },
         borderRadius: withPrefix(theme.spacing, 'layout-radius-'),
         padding: {
           ...theme.spacing,
@@ -178,13 +162,17 @@ function emitGlassCSS(tokens) {
   const shellRadius = sp['layout-radius-glass-base'];
   const bezel = sp['layout-padding-bezel-base'];
   const coreRadius = sp['layout-radius-standard-base'];
+  const pillRadius = sp['layout-radius-full-base'];
+  // Rim is an inset box-shadow, not a border box, so shell/bezel/core stay
+  // concentric: 20px = 6px + 14px with no 1px border eating into the core.
+  const rimShadow = (color) => `inset 0 0 0 1px ${color}`;
 
   const solidFallback = (indent) => [
     `${indent}background-color: ${solid};`,
     `${indent}background-image: none;`,
     `${indent}-webkit-backdrop-filter: none;`,
     `${indent}backdrop-filter: none;`,
-    `${indent}border-color: ${rim};`,
+    `${indent}box-shadow: ${rimShadow(rim)}, ${shadow};`,
   ].join('\n');
 
   // The hover rule must be restated: its specificity beats `.vi-glass`, so a
@@ -197,7 +185,7 @@ function emitGlassCSS(tokens) {
     `${indent}.vi-glass--control:hover,`,
     `${indent}.vi-glass--control:focus-within {`,
     `${indent}  background-color: ${solid};`,
-    `${indent}  border-color: ${rimHover};`,
+    `${indent}  box-shadow: ${rimShadow(rimHover)}, ${shadow};`,
     `${indent}}`,
   ].join('\n');
 
@@ -210,8 +198,8 @@ function emitGlassCSS(tokens) {
     '.vi-glass-shell {',
     `  background-color: ${surface};`,
     `  background-image: ${sheen};`,
-    `  border: 1px solid ${rim};`,
-    `  box-shadow: ${highlight}, ${shadow};`,
+    '  border: 0;',
+    `  box-shadow: ${rimShadow(rim)}, ${highlight}, ${shadow};`,
     `  -webkit-backdrop-filter: ${backdrop};`,
     `  backdrop-filter: ${backdrop};`,
     '}',
@@ -219,7 +207,7 @@ function emitGlassCSS(tokens) {
     '.vi-glass--control:hover,',
     '.vi-glass--control:focus-within {',
     `  background-color: ${surfaceHover};`,
-    `  border-color: ${rimHover};`,
+    `  box-shadow: ${rimShadow(rimHover)}, ${highlight}, ${shadow};`,
     '}',
     '',
     '/* Brand accent is reserved for key CTAs and focus outlines (DESIGN.md). */',
@@ -239,6 +227,15 @@ function emitGlassCSS(tokens) {
     `  background-color: ${core};`,
     '}',
     '',
+    '/* Pill shapes for island nav, question bar and persona switcher. */',
+    '.vi-glass-shell--pill {',
+    `  border-radius: ${pillRadius};`,
+    '}',
+    '',
+    '.vi-glass-core--pill {',
+    `  border-radius: ${pillRadius};`,
+    '}',
+    '',
     '/* Solid surface with the same rim wherever the blur cannot or must not render. */',
     '@media (prefers-reduced-transparency: reduce) {',
     fallbackRule('  '),
@@ -255,13 +252,12 @@ function emitGlassCSS(tokens) {
     '    background-image: none;',
     '    -webkit-backdrop-filter: none;',
     '    backdrop-filter: none;',
-    '    border-color: CanvasText;',
-    '    box-shadow: none;',
+    `    box-shadow: ${rimShadow('CanvasText')};`,
     '  }',
     '  .vi-glass--control:hover,',
     '  .vi-glass--control:focus-within {',
     '    background-color: Canvas;',
-    '    border-color: Highlight;',
+    `    box-shadow: ${rimShadow('Highlight')};`,
     '  }',
     '  .vi-glass--control:focus-within {',
     '    outline-color: Highlight;',
@@ -347,7 +343,6 @@ if (require.main === module) {
 
 module.exports = {
   parseFrontMatter,
-  isTailwindClassString,
   emitTailwindConfig,
   emitCSS,
   emitJSON,
