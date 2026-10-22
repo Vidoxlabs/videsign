@@ -1,0 +1,264 @@
+/* Violet Streamlabs Alert Box — Custom CSS (shared across every layout profile) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: transparent !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Container */
+.violet-alert-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  perspective: 1000px;
+}
+
+/* Rhythm Wrapper & Animation */
+.alert-rhythm-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: violet-alert-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Approach Ring ripples — count per alert type is controlled below via [data-type] */
+.approach-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  border: 2px solid rgba(200, 173, 255, 0.6);
+  transform: translate(-50%, -50%) scale(1.3);
+  pointer-events: none;
+  opacity: 0;
+  animation: approach-pulse 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.approach-ring.delay-1 {
+  animation-delay: 0.5s;
+  border-color: rgba(140, 99, 216, 0.4);
+}
+
+.approach-ring.delay-2 {
+  animation-delay: 0.9s;
+  border-color: rgba(242, 237, 255, 0.35);
+}
+
+@keyframes approach-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1.25);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 0;
+  }
+}
+
+/* Amount-scaled glow (Tip/Cheer only) — JS sets --amount-glow 0.15-0.55 by donation size, 0 otherwise */
+.amount-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140%;
+  height: 140%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(242, 237, 255, var(--amount-glow, 0)) 0%, rgba(242, 237, 255, 0) 70%);
+}
+
+/* Per-type accents — same palette tokens throughout (#8c63d8 / #c8adff / #f2edff), only ring count/color and category glow vary */
+.violet-alert-container[data-type="follow"] .approach-ring.delay-1,
+.violet-alert-container[data-type="follow"] .approach-ring.delay-2 {
+  display: none;
+}
+
+.violet-alert-container[data-type="sub"] .approach-ring.delay-2 {
+  display: none;
+}
+
+.violet-alert-container[data-type="sub"] .approach-ring,
+.violet-alert-container[data-type="sub"] .approach-ring.delay-1 {
+  border-color: rgba(200, 173, 255, 0.7);
+}
+
+.violet-alert-container[data-type="tip"] .alert-category,
+.violet-alert-container[data-type="cheer"] .alert-category {
+  color: #f2edff;
+  text-shadow: 0 0 12px rgba(242, 237, 255, 0.7);
+}
+
+.violet-alert-container[data-type="tip"] .alert-card,
+.violet-alert-container[data-type="cheer"] .alert-card {
+  border-color: rgba(242, 237, 255, 0.55);
+}
+
+.violet-alert-container[data-type="raid"] .approach-ring {
+  border-color: rgba(140, 99, 216, 0.7);
+}
+
+.violet-alert-container[data-type="raid"] .approach-ring.delay-1 {
+  border-color: rgba(200, 173, 255, 0.5);
+}
+
+.violet-alert-container[data-type="raid"] .approach-ring.delay-2 {
+  border-color: rgba(242, 237, 255, 0.4);
+}
+
+/* Alert Card */
+.alert-card {
+  position: relative;
+  min-width: 380px;
+  max-width: 580px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, rgba(21, 23, 42, 0.95) 0%, rgba(43, 30, 69, 0.92) 100%);
+  border: 1px solid rgba(140, 99, 216, 0.6);
+  border-radius: 12px;
+  box-shadow: 
+    0 8px 32px rgba(9, 8, 18, 0.6),
+    0 0 20px rgba(140, 99, 216, 0.25),
+    inset 0 1px 1px rgba(242, 237, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Header */
+.alert-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.alert-category {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: #c8adff;
+  text-shadow: 0 0 10px rgba(200, 173, 255, 0.6);
+}
+
+.rhythm-circle {
+  font-size: 8px;
+  color: #8c63d8;
+  animation: rhythm-blink 1s ease-in-out infinite alternate;
+}
+
+@keyframes rhythm-blink {
+  from { opacity: 0.4; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1.2); }
+}
+
+/* Body */
+.alert-body {
+  margin: 6px 0 12px;
+}
+
+.alert-title-wrap {
+  font-size: 20px;
+  line-height: 1.3;
+  color: #f2edff;
+}
+
+.highlight-name {
+  font-weight: 800;
+  color: #f2edff;
+  background: linear-gradient(90deg, #f2edff, #c8adff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(200, 173, 255, 0.3);
+  margin-right: 4px;
+}
+
+.action-text {
+  font-weight: 500;
+  color: rgba(242, 237, 255, 0.85);
+}
+
+/* Message Wrapper */
+.alert-message-wrap {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: rgba(9, 8, 18, 0.55);
+  border-left: 3px solid #8c63d8;
+  border-radius: 6px;
+}
+
+.alert-user-message {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #e5dcff;
+  font-style: italic;
+  word-break: break-word;
+}
+
+/* Timing Bar */
+.alert-timing-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(140, 99, 216, 0.2);
+}
+
+.timing-fill {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #8c63d8, #c8adff);
+  transform-origin: left;
+  animation: timing-drain 6s linear forwards;
+}
+
+/* Entrance & Exit Animations */
+@keyframes violet-alert-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes timing-drain {
+  0% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alert-rhythm-wrapper,
+  .approach-ring,
+  .rhythm-circle,
+  .timing-fill {
+    animation: none !important;
+  }
+}

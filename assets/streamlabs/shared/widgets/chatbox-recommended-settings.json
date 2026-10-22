@@ -1,0 +1,13 @@
+{
+  "sourceWidth": 432,
+  "sourceHeight": 360,
+  "fontSizePx": 18,
+  "messageFadeSeconds": 45,
+  "chatDelaySeconds": 0,
+  "showBadges": true,
+  "showEmotes": true,
+  "background": "transparent",
+  "theme": "custom CSS",
+  "note": "These values are a human-readable setup reference; Streamlabs does not import this JSON directly."
+}
+

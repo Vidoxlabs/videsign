@@ -1,0 +1,102 @@
+/* Violet chatbox — sized for a 432×360 Streamlabs Chat Box source. */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: transparent !important;
+  color: #f2edff;
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 18px;
+  line-height: 1.32;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.72);
+}
+
+#log {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  padding: 18px 16px 16px;
+}
+
+#log > div {
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px 11px;
+  overflow-wrap: anywhere;
+  background: linear-gradient(110deg, rgba(12, 12, 25, 0.88), rgba(30, 20, 48, 0.72));
+  border-left: 2px solid rgba(178, 137, 255, 0.78);
+  border-radius: 3px 10px 10px 3px;
+  box-shadow: 0 5px 14px rgba(2, 2, 8, 0.22);
+  animation: violet-message-in 220ms ease-out both;
+}
+
+#log > div.deleted {
+  visibility: hidden;
+}
+
+.meta,
+.message {
+  display: inline;
+  vertical-align: baseline;
+}
+
+.meta {
+  margin-right: 7px;
+  white-space: nowrap;
+}
+
+.name {
+  color: #c8adff !important;
+  font-weight: 700;
+}
+
+.message {
+  color: #f2edff;
+  font-weight: 450;
+}
+
+.badges,
+.badge {
+  vertical-align: -2px;
+}
+
+.badge {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+.emote {
+  display: inline-block;
+  height: 1.25em;
+  vertical-align: -0.28em;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+@keyframes violet-message-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #log > div {
+    animation: none;
+  }
+}
+

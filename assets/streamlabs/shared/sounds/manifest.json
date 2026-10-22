@@ -1,0 +1,98 @@
+[
+  {
+    "name": "01_follow",
+    "duration_s": 0.85,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -4.28
+  },
+  {
+    "name": "02_subscriber",
+    "duration_s": 1.25,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -6.78
+  },
+  {
+    "name": "03_gifted_sub",
+    "duration_s": 1.5,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -6.23
+  },
+  {
+    "name": "04_donation_tip",
+    "duration_s": 1.1,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -4.12
+  },
+  {
+    "name": "05_bits_cheer",
+    "duration_s": 0.95,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -5.71
+  },
+  {
+    "name": "06_raid",
+    "duration_s": 1.85,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -5.99
+  },
+  {
+    "name": "07_channel_reward",
+    "duration_s": 0.72,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -2.48
+  },
+  {
+    "name": "08_chat_highlight",
+    "duration_s": 0.46,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -17.15,
+    "peak_dbfs": -2.0
+  },
+  {
+    "name": "09_achievement",
+    "duration_s": 1.18,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -5.91
+  },
+  {
+    "name": "10_error_failed_action",
+    "duration_s": 0.64,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -2.79
+  },
+  {
+    "name": "11_stream_starting",
+    "duration_s": 2.05,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -6.22
+  },
+  {
+    "name": "12_stream_ending",
+    "duration_s": 2.05,
+    "sample_rate": 48000,
+    "wav_subtype": "PCM_24",
+    "measured_lufs": -16.0,
+    "peak_dbfs": -5.71
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "pack": "Vioxniv / Violet Spotify Artist Asset Pack",
+  "source": "Generated in ChatGPT from the supplied Violet reference artwork",
+  "files": [
+    "01_logo_main.png",
+    "02_logo_icon.png",
+    "03_violet_signature.png",
+    "04_cat_icon.png",
+    "05_profile_main.png",
+    "06_profile_alt_smile.png",
+    "07_profile_alt_headphones.png",
+    "08_profile_alt_sleepy.png",
+    "09_spotify_header.png",
+    "10_banner_alt.png",
+    "11_cover_art.png",
+    "12_release_template.png",
+    "13_post_tile.png",
+    "14_character_poses_sheet.png",
+    "15_emotes_sheet.png",
+    "16_decorative_elements.png",
+    "17_color_palette.png",
+    "18_cinematic_studio_banner.png",
+    "00_full_brand_sheet.png"
+  ],
+  "notes": [
+    "Individual files were extracted from the generated brand sheet.",
+    "Use profile assets for avatars, header/banner assets for Spotify/social headers, and cover/post assets as release starting points.",
+    "Character pose and emote sheets are grouped because they contain several reusable poses/reactions."
+  ]
+}

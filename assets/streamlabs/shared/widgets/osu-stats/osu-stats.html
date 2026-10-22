@@ -1,0 +1,59 @@
+<!--
+  Violet Streamlabs Osu! Stats Widget — Custom HTML Template
+  This widget connects to a local gosumemory WebSocket server (ws://127.0.0.1:24050/ws).
+  Paste this into a Custom Widget or Browser Source in Streamlabs.
+-->
+<div id="violet-osu-container" class="violet-osu-container">
+  <!-- Main Stats Card -->
+  <div class="osu-card">
+    
+    <!-- Left side: Beatmap Background -->
+    <div class="osu-bg-wrapper">
+      <div id="osu-bg" class="osu-bg"></div>
+      <div class="osu-bg-overlay"></div>
+    </div>
+
+    <!-- Right side: Data -->
+    <div class="osu-data">
+      
+      <!-- Top header bar with rhythm indicator -->
+      <div class="osu-header">
+        <span class="rhythm-circle">●</span>
+        <span class="osu-category" id="osu-state-label">WAITING FOR BEATMAP</span>
+        <span class="rhythm-circle">●</span>
+      </div>
+
+      <!-- Song Info -->
+      <div class="osu-song-info">
+        <div class="osu-title-wrap">
+          <span class="highlight-name" id="osu-title">No Song Playing</span>
+        </div>
+        <div class="osu-artist" id="osu-artist">-</div>
+      </div>
+
+      <!-- Live Metrics -->
+      <div class="osu-metrics-wrap">
+        <div class="metric">
+          <div class="metric-label">PP</div>
+          <div class="metric-value" id="osu-pp">0</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric">
+          <div class="metric-label">ACC</div>
+          <div class="metric-value" id="osu-acc">100.00%</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric">
+          <div class="metric-label">COMBO</div>
+          <div class="metric-value" id="osu-combo">0x</div>
+        </div>
+      </div>
+
+      <!-- Bottom decorative timing tick bar -->
+      <div class="osu-timing-bar">
+        <div class="timing-fill" id="osu-progress-fill"></div>
+      </div>
+    </div>
+
+  </div>
+</div>

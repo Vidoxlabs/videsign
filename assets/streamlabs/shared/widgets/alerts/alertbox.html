@@ -1,0 +1,45 @@
+<!--
+  Violet Streamlabs Alert Box — Custom HTML Template
+  Shared across every layout profile (generic copy). See presets/osu/alert-copy-overrides.md
+  for the osu!-flavored text swap.
+  Paste this into Streamlabs Dashboard -> Alert Box -> [Alert Type] -> Enable Custom Code -> HTML
+-->
+<div id="violet-alert-container" class="violet-alert-container" data-type="follow">
+  <!-- Outer glow wrapper -->
+  <div class="alert-rhythm-wrapper">
+    <!-- Amount-scaled glow for Tip/Cheer, set via --amount-glow custom property in JS; no-op for other types -->
+    <div class="amount-ring"></div>
+    <!-- Approach ring ripple effect: ring count per alert type is controlled by CSS via [data-type] -->
+    <div class="approach-ring"></div>
+    <div class="approach-ring delay-1"></div>
+    <div class="approach-ring delay-2"></div>
+
+    <!-- Central Alert Card -->
+    <div class="alert-card">
+      <!-- Top header bar with rhythm indicator -->
+      <div class="alert-header">
+        <span class="rhythm-circle">●</span>
+        <span class="alert-category" id="alert-category">NEW FOLLOWER</span>
+        <span class="rhythm-circle">●</span>
+      </div>
+
+      <!-- Main alert content -->
+      <div class="alert-body">
+        <div class="alert-title-wrap">
+          <span class="highlight-name" id="alert-user-name">{name}</span>
+          <span class="action-text" id="alert-action-text">just joined!</span>
+        </div>
+        
+        <!-- Optional sub-text / donation message / tier detail -->
+        <div class="alert-message-wrap" id="alert-message-wrap">
+          <p class="alert-user-message" id="alert-user-message">{message}</p>
+        </div>
+      </div>
+
+      <!-- Bottom decorative timing tick bar -->
+      <div class="alert-timing-bar">
+        <div class="timing-fill"></div>
+      </div>
+    </div>
+  </div>
+</div>
