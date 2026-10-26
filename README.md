@@ -21,7 +21,7 @@ videsign/
 ├── mcp-server.js    Read-only MCP server: tokens, fragments, resolve_token tool
 ├── assets/          Local-only design images (gitignored, never committed)
 ├── dist/            Generated artifacts (gitignored, run `npm run tokens` to regenerate)
-├── .eslintrc.js     AST validation: enforces no-arbitrary-value rule
+├── eslint.config.js AST validation: enforces no-arbitrary-value rule
 └── package.json
 ```
 
