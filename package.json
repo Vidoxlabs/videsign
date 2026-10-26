@@ -11,8 +11,8 @@
     "tokens": "node scripts/generate-tokens.js"
   },
   "devDependencies": {
-    "eslint": "^10.11.0",
-    "eslint-plugin-tailwindcss": "^3.14.0",
+    "eslint": "10.13.0",
+    "eslint-plugin-tailwindcss": "3.18.3",
     "tailwindcss": "^3.4.19"
   },
   "dependencies": {
