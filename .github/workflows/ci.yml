@@ -55,3 +55,17 @@ jobs:
             echo "ERROR: ONEDRIVE_ASSET_BASE found — use {ASSET_BASE} instead"
             exit 1
           fi
+
+      - name: Verify canon and root docs have no Drive links
+        run: |
+          if grep -RInE 'drive\.google\.com|docs\.google\.com' \
+            canon \
+            DESIGN.md \
+            SKILL.md \
+            README.md \
+            AGENTS.md \
+            CLAUDE.md \
+            assets/README.md; then
+            echo "ERROR: Drive or Docs link found in canon or root docs"
+            exit 1
+          fi

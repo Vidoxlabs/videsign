@@ -29,6 +29,7 @@ design system — the shared visual language for all Vidoxlabs products and appl
   `resolve_token` tool for querying individual token values.
 - **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
   naming convention. No binary assets are committed to the repository.
+- **canon/vwxyz/**: Persona character canon. Never invent character colors; images via the asset service only.
 - **dist/**: Generated artifacts (gitignored). Produced by `npm run tokens`. Consuming
   repos import `dist/tailwind.config.js` or `dist/tokens.css` from this repo.
 
@@ -55,8 +56,10 @@ Within the `videsign` repository, agents are restricted to the following command
   `dist/tokens.css`, and `dist/tokens.json`. Run this after modifying tokens in
   `DESIGN.md`.
 - `npm test`: Runs the MCP stdio smoke test, the token contract tests
-  (`test/tokens.test.js`) and the preview fragment contract (`test/preview.test.js`).
-  Run this after changing `mcp-server.js`, `DESIGN.md` tokens or any fragment.
+  (`test/tokens.test.js`), the preview fragment contract (`test/preview.test.js`)
+  and the persona canon contract (`test/persona-canon.test.js`).
+  Run this after changing `mcp-server.js`, `DESIGN.md` tokens, `canon/vwxyz/` or any fragment.
+- `npm run canon:check`: Runs the persona canon contract on its own.
 
 ## `{ASSET_BASE}` resolution
 

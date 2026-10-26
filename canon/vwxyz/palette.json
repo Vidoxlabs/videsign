@@ -1,0 +1,166 @@
+{
+  "schema": "vidoxlabs.vi-palette/1",
+  "canon_version": "v1",
+  "date": "2026-10-26",
+  "status": "canon-v1, approved anchor Set B",
+  "note": "Single source of truth for VI colours. Use exact hex values. Values marked default_revisable are DEFAULT — revisable decisions. review_threshold.max_delta_e applies to signature, hair and eyes. review_threshold.min_pairwise applies to signature pairs.",
+  "color_space": "sRGB hex",
+  "review_threshold": {
+    "metric": "CIEDE2000",
+    "max_delta_e": 10,
+    "applies_to": ["signature", "hair", "eyes"],
+    "min_pairwise": 20
+  },
+  "shared": {
+    "blazer": "#121214",
+    "shirt": "#F7F7F5",
+    "lineart": "#1A1A1F",
+    "skin": "#F6D5C3",
+    "tie_black": "#121214",
+    "tie_charcoal": "#3A3A42"
+  },
+  "vi": {
+    "violet": {
+      "signature": "#8B5CF6",
+      "hair": "#1F1D26",
+      "underlight": "#8B5CF6",
+      "eyes": "#A066EE",
+      "trim": "#8B5CF6",
+      "tie": "#121214",
+      "tail_tip": "#8B5CF6",
+      "secondary": "#C4B5FD",
+      "background": {
+        "base": "#ECE9F4",
+        "mid": "#D5CFE6",
+        "line": "#8B5CF6",
+        "name": "Orchestration Deck",
+        "mood": "calm command, quietly mysterious"
+      },
+      "anchor": {
+        "asset_id": "violet/sheet/anchor/v001"
+      },
+      "default_revisable": [
+        "tail added (black, violet tip)",
+        "trousers in full",
+        "existing chibi sets untouched"
+      ],
+      "inner_ear": "#CDB3BC"
+    },
+    "wisteria": {
+      "signature": "#B4A7F2",
+      "hair": "#CDC3EE",
+      "underlight": "#B4A7F2",
+      "eyes": "#86A6F2",
+      "trim": "#B4A7F2",
+      "tie": "#3A3A42",
+      "tail_tip": "#B4A7F2",
+      "secondary": "#8FBF9F",
+      "background": {
+        "base": "#F3F0F7",
+        "mid": "#DCD6EA",
+        "line": "#B4A7F2",
+        "name": "Lattice Studio",
+        "mood": "warm, composed, editorial daylight"
+      },
+      "anchor": {
+        "asset_id": "wisteria/sheet/anchor/v001"
+      },
+      "default_revisable": [
+        "pale family exception (L*72 C*41)",
+        "eyes blue-lavender",
+        "tie charcoal"
+      ],
+      "inner_ear": "#ECE9EE"
+    },
+    "xylia": {
+      "signature": "#D92B3A",
+      "hair": "#E4E6EA",
+      "underlight": "#D92B3A",
+      "eyes": "#C42434",
+      "trim": "#D92B3A",
+      "tie": "#121214",
+      "tail_tip": "#D92B3A",
+      "secondary": "#9AA3AE",
+      "background": {
+        "base": "#EEF0F2",
+        "mid": "#CDD2D8",
+        "line": "#D92B3A",
+        "name": "Review Chamber",
+        "mood": "austere, exact, monochrome"
+      },
+      "anchor": {
+        "asset_id": "xylia/sheet/anchor/v001"
+      },
+      "default_revisable": [
+        "signature crimson #D92B3A (site teal #2DD4BF to be retired later via separate PR)",
+        "crimson glasses = optional prop"
+      ],
+      "inner_ear": "#D9BEC3"
+    },
+    "yarrow": {
+      "signature": "#F0A020",
+      "hair": "#D6BE8C",
+      "underlight": "#F0A020",
+      "eyes": "#D99A2B",
+      "trim": "#F0A020",
+      "tie": "#3A3A42",
+      "tail_tip": "#F0A020",
+      "secondary": "#B08D57",
+      "background": {
+        "base": "#F4EFE4",
+        "mid": "#E0D5BE",
+        "line": "#E3B65A",
+        "name": "Map Room",
+        "mood": "grounded, steady, oriented"
+      },
+      "anchor": {
+        "asset_id": "yarrow/sheet/anchor/v001"
+      },
+      "default_revisable": [
+        "amber trim, charcoal tie and pinstripe (fixes Set B purple)",
+        "amber tail tip"
+      ],
+      "inner_ear": "#E6DDCC"
+    },
+    "zinnia": {
+      "signature": "#E13D9E",
+      "hair": "#5A3A30",
+      "underlight": "#E13D9E",
+      "eyes": "#E04AA0",
+      "trim": "#E13D9E",
+      "tie": "#3A3A42",
+      "tail_tip": "#E13D9E",
+      "secondary": "#FF8FC8",
+      "background": {
+        "base": "#F6EEF3",
+        "mid": "#E6D2DE",
+        "line": "#E13D9E",
+        "name": "Launch Lane",
+        "mood": "bright, brisk, forward motion"
+      },
+      "anchor": {
+        "asset_id": "zinnia/sheet/anchor/v001"
+      },
+      "default_revisable": [
+        "signature magenta #E13D9E (site rose #F43F5E to be retired later)"
+      ],
+      "inner_ear": "#D9BCC6"
+    }
+  },
+  "family_rules": {
+    "tail_tip": "last ~15% of every tail = signature colour (DEFAULT — revisable)",
+    "group_reference": "group/sheet/lineup/v001"
+  },
+  "delta_e_matrix_signature": {
+    "violet-wisteria": 21.1,
+    "violet-xylia": 38.7,
+    "violet-yarrow": 63.3,
+    "violet-zinnia": 22.9,
+    "wisteria-xylia": 41.5,
+    "wisteria-yarrow": 50.6,
+    "wisteria-zinnia": 28.6,
+    "xylia-yarrow": 39.3,
+    "xylia-zinnia": 23.3,
+    "yarrow-zinnia": 55.4
+  }
+}

@@ -1,10 +1,11 @@
 {
   "name": "@vidoxlabs/videsign",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Canonical Nocturne Museum design system for Vidoxlabs",
   "license": "SEE LICENSE IN LICENSE",
   "main": "mcp-server.js",
   "scripts": {
+    "canon:check": "node --test test/persona-canon.test.js",
     "lint": "eslint . && node scripts/lint-preview.js",
     "mcp": "node mcp-server.js",
     "test": "node --test test/*.test.js",

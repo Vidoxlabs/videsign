@@ -3,9 +3,9 @@
 /**
  * videsign MCP Server (Read-Only)
  *
- * Exposes DESIGN.md, SKILL.md, and all preview/ HTML fragments as read-only
- * resources to AI agents in product repositories. Fragments are auto-discovered
- * at startup — no manual resource list to maintain.
+ * Exposes DESIGN.md, SKILL.md, the VWXYZ canon files, and all preview/ HTML
+ * fragments as read-only resources to AI agents in product repositories.
+ * Fragments are auto-discovered at startup — no manual resource list to maintain.
  *
  * Also provides a `resolve_token` tool so agents can query individual token
  * values without parsing the entire DESIGN.md.
@@ -33,6 +33,40 @@ const TOKENS = parseFrontMatter(DESIGN_CONTENT);
 const MD_RESOURCES = [
   { file: 'DESIGN.md', name: 'Design System Source of Truth', description: 'Semantic token matrix (category-role-variant-state) and negative UI boundaries.' },
   { file: 'SKILL.md', name: 'Decision Ledger and ADRs', description: 'Architectural decision records and agent generation guardrails.' },
+];
+
+/** VWXYZ character canon. JSON resources use application/json. */
+const CANON_RESOURCES = [
+  {
+    file: 'canon/vwxyz/README.md',
+    name: 'VWXYZ character canon',
+    mimeType: 'text/markdown',
+    description: 'Public summary of the VWXYZ character canon v1.',
+  },
+  {
+    file: 'canon/vwxyz/palette.json',
+    name: 'VWXYZ character palette',
+    mimeType: 'application/json',
+    description: 'Machine source for VWXYZ character colors.',
+  },
+  {
+    file: 'canon/vwxyz/vocabulary.json',
+    name: 'VWXYZ asset vocabulary',
+    mimeType: 'application/json',
+    description: 'Controlled slugs for VI, type, expression, pose, viseme, state and background.',
+  },
+  {
+    file: 'canon/vwxyz/asset-manifest.schema.json',
+    name: 'VWXYZ asset manifest schema',
+    mimeType: 'application/json',
+    description: 'JSON Schema for the palette, a manifest entry, a generation sidecar and a request.',
+  },
+  {
+    file: 'canon/vwxyz/reviewer-checklist.md',
+    name: 'VWXYZ reviewer checklist',
+    mimeType: 'text/markdown',
+    description: 'Objective C1 to C13 checks for persona image review.',
+  },
 ];
 
 /** Generated agent standard (addendum §2). Served from dist/ after `npm run tokens`. */
@@ -77,12 +111,20 @@ function discoverPreviewFragments() {
   }));
 }
 
-/** Build the complete resource list: markdown docs + standard + preview fragments. */
+/** Build the complete resource list: markdown docs + canon + standard + preview fragments. */
 function buildResourceList() {
   const mdResources = MD_RESOURCES.map((r) => ({
     uri: `file://${r.file}`,
     name: r.name,
     mimeType: 'text/markdown',
+    description: r.description,
+    file: r.file,
+  }));
+
+  const canonResources = CANON_RESOURCES.map((r) => ({
+    uri: `file://${r.file}`,
+    name: r.name,
+    mimeType: r.mimeType,
     description: r.description,
     file: r.file,
   }));
@@ -99,7 +141,7 @@ function buildResourceList() {
 
   const previewResources = discoverPreviewFragments();
 
-  return [...mdResources, ...standardResources, ...previewResources];
+  return [...mdResources, ...canonResources, ...standardResources, ...previewResources];
 }
 
 // --- Server setup -------------------------------------------------------

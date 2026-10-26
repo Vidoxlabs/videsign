@@ -13,6 +13,8 @@ videsign/
 ├── DESIGN.md        Semantic token matrix (category-role-variant-state) + negative boundaries
 ├── SKILL.md         Architectural Decision Records (ADRs) and agent guardrails
 ├── AGENTS.md        Engineering governance and agent initialization protocol
+├── canon/
+│   └── vwxyz/       VWXYZ character canon v1: palette, vocabulary, schema, checklist
 ├── preview/         Pure, flat, state-free HTML component fragments + layout compositions
 ├── preview/index.html  Visual catalog (open in a browser)
 ├── scripts/
@@ -21,9 +23,14 @@ videsign/
 ├── mcp-server.js    Read-only MCP server: tokens, fragments, resolve_token tool
 ├── assets/          Local-only design images (gitignored, never committed)
 ├── dist/            Generated artifacts (gitignored, run `npm run tokens` to regenerate)
-├── .eslintrc.js     AST validation: enforces no-arbitrary-value rule
+├── eslint.config.js AST validation: enforces no-arbitrary-value (ESLint 10)
+├── .eslintrc.js     Same rule set, for ESLint versions that still read it
 └── package.json
 ```
+
+Character colors, slugs and the asset contract live in `canon/vwxyz/`. UI accent
+tokens stay in `DESIGN.md`. Persona images are served from `{ASSET_BASE}/vi/…`
+and are never committed (ADR-002, ADR-010).
 
 ## Quick start
 
@@ -32,7 +39,8 @@ npm install
 npm run tokens     # Generate Tailwind config, CSS vars, and JSON from DESIGN.md
 npm run mcp        # Start the MCP server on stdio
 npm run lint       # Validate against no-arbitrary-value rule
-npm test           # Smoke-test the MCP server over stdio
+npm test           # Smoke-test the MCP server, tokens, previews and canon
+npm run canon:check  # Persona canon contract on its own
 ```
 
 Run `npm run tokens`, then serve the repository root over HTTP and open `/preview/` for a
