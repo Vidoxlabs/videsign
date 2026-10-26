@@ -1,0 +1,55 @@
+{
+  "mark": "C",
+  "naming": "brand_{asset}_{variant}_v{NNN}.{ext}",
+  "source_tree": "design_system/brand/",
+  "full_colour_on": "dark-tile",
+  "signature_gradients": false,
+  "text_safe_xylia": "pending",
+  "text_safe_zinnia": "pending",
+  "facets": {
+    "top": ["wisteria", "yarrow"],
+    "side": ["xylia", "zinnia"],
+    "band": "violet"
+  },
+  "vi": {
+    "violet": {
+      "facet": "band",
+      "hex": "#8B5CF6",
+      "token": "brand-signature-violet-base"
+    },
+    "wisteria": {
+      "facet": "top",
+      "hex": "#B4A7F2",
+      "token": "brand-signature-wisteria-base"
+    },
+    "yarrow": {
+      "facet": "top",
+      "hex": "#F0A020",
+      "token": "brand-signature-yarrow-base"
+    },
+    "xylia": {
+      "facet": "side",
+      "hex": "#D92B3A",
+      "token": "brand-signature-xylia-base",
+      "as_text": false,
+      "alone": false
+    },
+    "zinnia": {
+      "facet": "side",
+      "hex": "#E13D9E",
+      "token": "brand-signature-zinnia-base"
+    }
+  },
+  "min_sizes_px": {
+    "favicon": 16,
+    "mark_header": 38,
+    "mark_tile": 81.778
+  },
+  "clear_space": "Do not crop the master viewBox. The tile padding inside that viewBox is the clear space.",
+  "card_sizes_px": {
+    "lockup_horizontal": { "width": 226, "height": 82 },
+    "lockup_stacked": { "width": 146, "height": 110 },
+    "wordmark": { "width": 641, "height": 104 },
+    "social_og": { "width": 1200, "height": 630 }
+  }
+}

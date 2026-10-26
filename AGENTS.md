@@ -31,6 +31,8 @@ design system — the shared visual language for all Vidoxlabs products and appl
   naming convention. No binary assets are committed to the repository.
 - **dist/**: Generated artifacts (gitignored). Produced by `npm run tokens`. Consuming
   repos import `dist/tailwind.config.js` or `dist/tokens.css` from this repo.
+- **brand/**: VWXYZ mark C masters (text-only SVG, ADR-011). See `brand/README.md`
+  and `brand/MANIFEST.json`. Do not redraw the mark.
 
 ## AI Agent Initialization & Cross-Repo Fetching
 
@@ -90,3 +92,15 @@ Never invent tokens outside this matrix. If a needed value is missing, add it to
 Agents must never introduce arbitrary UI values (e.g., `w-[15px]`, `text-[#FF0000]`). The
 `tailwindcss/no-arbitrary-value` ESLint rule strictly enforces the use of explicitly defined design
 tokens from the semantic matrix. Any generated code must pass `npm run lint`.
+
+## Brand rules for agents
+
+Use signature colours from `canon/vwxyz/palette.json` when that file is present. Otherwise use only these hexes: Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`. Field tiles are `#121214` and `#F7F7F5`. The same values are recorded in `brand/tokens.json`.
+
+Do not draw or approximate the mark. Reference a file in `brand/` by family and version (`brand_{asset}_{variant}_v{NNN}.{ext}`).
+
+Xylia is never text and never appears alone. Do not build a gradient between the five signature colours. Text-safe Xylia and text-safe Zinnia are pending. Do not define them.
+
+Retired: teal `#2DD4BF`, rose `#F43F5E` as a persona colour, `#7226FA`, `#A78BFA`, the V-shield mark, the chevron favicon, `cube.png` paths, and Inter. Status error `#F43F5E` and status warning `#F59E0B` stay status tokens.
+
+Promoted masters live at the path `design_system/brand/`. Cite that path by name only.

@@ -21,6 +21,8 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 ## ADR-002: Asset & Media Hosting
 
+> **Amended by ADR-011:** binary rasters stay banned. The only exception is text-only `brand/**/*.svg` at or under 8 KB, checked in test.
+
 **Context**: Storing binary assets (PNG, JPG, SVG, video) directly within the repository leads to unacceptable repo bloat and slows down CI/CD pipelines.
 
 **Decision**:
@@ -158,3 +160,20 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 1.  **Read First**: This file (`SKILL.md`) is your starting point.
 2.  **Consult DESIGN.md**: For specific color codes and strict negative boundaries.
 3.  **Inspect previews**: Look at the `preview/` directory for pure HTML implementations.
+
+## ADR-011: Brand identity (VWXYZ)
+
+**Status**: Proposed (awaiting owner ratification). Amends ADR-002.
+
+**Context**: The VWXYZ mark (mark C) needs masters in this repository. ADR-002 bans SVG along with other binaries, so a mark file could not be committed. Raster exports of the mark still do not belong in git.
+
+**Decision**:
+
+1. Binary rasters stay banned. PNG, JPG, GIF, WebP, and video are not committed, including under `brand/`.
+2. Narrow exception: `brand/**/*.svg` may be committed when each file is at most 8 KB, is SVG text, and contains no `<image>`, no `data:` URI, and no `<metadata>`, RDF, or XMP. `npm test` checks every file under `brand/`. An empty SVG is denied. A tree with zero SVGs passes that size check.
+3. Mark C facets are Wisteria and Yarrow on the top face, Xylia and Zinnia on the side faces, and Violet on the V band. Full colour is used on the dark tile `#121214`. Mono variants are light `#F7F7F5`, dark `#121214`, and violet `#8B5CF6`. Signature hexes are Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`. There is no gradient between those colours.
+4. Xylia is never text and never appears alone. Text-safe Xylia and text-safe Zinnia are pending and are not defined here.
+5. Names follow `brand_{asset}_{variant}_v{NNN}.{ext}`. Agents reference a family and version. They do not draw or approximate the mark.
+6. Promoted masters are kept at the path `design_system/brand/`. That path is a name, not a link.
+
+**Consequences**: `.gitignore` re-includes `brand/**/*.svg` and leaves every raster ignored. `brand/tokens.json` records the signature, field, and `ambient-glow-wisteria-base` values. Persona accent rows in `DESIGN.md` are unchanged by this record.

@@ -70,6 +70,10 @@ initialization protocol.
 See `AGENTS.md` for the full agent initialization protocol and `SKILL.md` for
 architectural decision records.
 
+## Brand
+
+Mark C (VWXYZ), the favicon, lockups, and wordmarks are documented in [brand/README.md](brand/README.md). Full colour is for the dark tile. File digests are in `brand/MANIFEST.json`. Promoted masters use the path `design_system/brand/`.
+
 ## License
 
 Copyright (c) 2026 Vidoxlabs LLC. All rights reserved. See [LICENSE](LICENSE)

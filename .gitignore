@@ -4,6 +4,7 @@
 *.jpeg
 *.gif
 *.svg
+!brand/**/*.svg
 *.mp4
 *.mov
 *.webp
