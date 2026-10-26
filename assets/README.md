@@ -38,4 +38,4 @@ reference only.
 
 ## Persona and character images
 
-Persona/character images do not use this convention or folder. See `canon/vwxyz/README.md` (naming `{vi}_{type}_{slot}_v{NNN}.png`, served via `{ASSET_BASE}/vi/…`).
+Persona/character images do not use this convention or folder. See `canon/vwxyz/README.md` (naming `{vi}_{type}_{slot}_v{NNN}.png`; images will be served via `{ASSET_BASE}/vi/…`, planned, ADR-010).

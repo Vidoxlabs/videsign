@@ -172,7 +172,7 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > ### Persona character assets
 >
 > - Character art for Violet, Wisteria, Xylia, Yarrow and Zinnia follows ADR-010. Character colors come from `canon/vwxyz/palette.json`. The `colors` matrix in this file is unchanged.
-> - Persona images are never stored in the repository (ADR-002). They are served at `{ASSET_BASE}/vi/{vi}/{type}/{file}`.
+> - Persona images are never stored in the repository (ADR-002). They will be served at `{ASSET_BASE}/vi/{vi}/{type}/{file}` (planned, ADR-010).
 > - Every persona image has alt text naming the persona and the expression or pose, for example `alt="Violet, confused"`.
 
 > [!IMPORTANT]

@@ -23,14 +23,13 @@ videsign/
 ├── mcp-server.js    Read-only MCP server: tokens, fragments, resolve_token tool
 ├── assets/          Local-only design images (gitignored, never committed)
 ├── dist/            Generated artifacts (gitignored, run `npm run tokens` to regenerate)
-├── eslint.config.js AST validation: enforces no-arbitrary-value (ESLint 10)
-├── .eslintrc.js     Same rule set, for ESLint versions that still read it
+├── .eslintrc.js     AST validation: enforces no-arbitrary-value rule
 └── package.json
 ```
 
 Character colors, slugs and the asset contract live in `canon/vwxyz/`. UI accent
-tokens stay in `DESIGN.md`. Persona images are served from `{ASSET_BASE}/vi/…`
-and are never committed (ADR-002, ADR-010).
+tokens stay in `DESIGN.md`. Persona images will be served from `{ASSET_BASE}/vi/…`
+(planned, ADR-010) and are never committed (ADR-002).
 
 ## Quick start
 

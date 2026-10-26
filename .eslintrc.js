@@ -1,4 +1,3 @@
-// ESLint 10 reads eslint.config.js. Keep this file in sync with that rule set.
 module.exports = {
   env: {
     browser: true,

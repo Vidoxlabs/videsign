@@ -29,7 +29,7 @@ design system — the shared visual language for all Vidoxlabs products and appl
   `resolve_token` tool for querying individual token values.
 - **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
   naming convention. No binary assets are committed to the repository.
-- **canon/vwxyz/**: Persona character canon. Never invent character colors; images via the asset service only.
+- **canon/vwxyz/**: Persona character canon. Never invent character colors. Images will be served from the asset service (planned, ADR-010).
 - **dist/**: Generated artifacts (gitignored). Produced by `npm run tokens`. Consuming
   repos import `dist/tailwind.config.js` or `dist/tokens.css` from this repo.
 

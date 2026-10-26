@@ -1,6 +1,6 @@
 # VWXYZ character canon v1
 
-- **Status:** canon-v1. Approved anchor is the Set B sheets dated 2026-06-24. Decisions marked *DEFAULT — revisable* may change in a later canon version.
+- **Status:** Accepted (owner-approved 2026-10-26). Canon v1. Approved anchor is the Set B sheets dated 2026-06-24. Decisions marked *DEFAULT — revisable* may change in a later canon version.
 - **Date:** 2026-10-26.
 - **Machine source:** `palette.json`. If this document and `palette.json` disagree, `palette.json` wins.
 - **Companion files:** `vocabulary.json` (controlled slugs), `asset-manifest.schema.json` (palette, manifest entry, generation sidecar, request), `reviewer-checklist.md` (C1–C13).
@@ -180,13 +180,13 @@ Character color and UI accent color are different layers.
 
 Do not paint character art with the UI teal or the UI rose. Xylia's character signature is crimson `#D92B3A`. Zinnia's is magenta `#E13D9E`. Both of those UI retirements are *DEFAULT — revisable* and land with the token change.
 
-Persona images follow ADR-002. They are never committed to this repository. No binary masters, sheets or boards belong here. Consumers reference `{ASSET_BASE}/vi/{vi}/{type}/{file}` and resolve `{ASSET_BASE}` in their own build.
+Persona images follow ADR-002. They are never committed to this repository. No binary masters, sheets or boards belong here. The public path will be `{ASSET_BASE}/vi/{vi}/{type}/{file}` (planned, ADR-010). Consumers resolve `{ASSET_BASE}` in their own build.
 
 Every persona image needs alt text that names the persona and the expression or pose, for example `alt="Violet, confused"`.
 
 ## 9. How to get assets
 
 1. Read `palette.json`, `vocabulary.json` and `reviewer-checklist.md` from this directory, or from the videsign MCP resources that serve the same files.
-2. Build the public URL `{ASSET_BASE}/vi/{vi}/{type}/{vi}_{type}_{slot}_v{NNN}.png`. Example: `{ASSET_BASE}/vi/violet/chibi/violet_chibi_neutral_v001.png`.
+2. The public URL will be `{ASSET_BASE}/vi/{vi}/{type}/{vi}_{type}_{slot}_v{NNN}.png` (planned, ADR-010). Example: `{ASSET_BASE}/vi/violet/chibi/violet_chibi_neutral_v001.png`.
 3. Use only assets that have passed review. A generation sidecar validates against the sidecar subschema. It records tool, model, seed, the final prompt, the negative prompt, the anchor `asset_id`, hashes, canvas and the checklist result. Prompt text is not published in this repository.
 4. Fetch tools on the MCP server are not part of this version. Until they exist, consumers use the URL pattern above. Do not hotlink an external file host, and do not commit the PNG.

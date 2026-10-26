@@ -147,7 +147,7 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 ## ADR-010: VWXYZ Character Canon and Persona Assets
 
-**Status**: Proposed (awaiting owner ratification).
+**Status**: Accepted (owner-approved 2026-10-26).
 
 **Context**: Character art and UI accents had diverged (teal and rose versus crimson and magenta). The two layers were being treated as one palette.
 
@@ -155,9 +155,9 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 1.  `canon/vwxyz/palette.json` is the source of truth for character colors.
 2.  UI persona accents in `DESIGN.md` must equal the canon signature, or be an explicitly listed text-safe variant. CI enforces this in the token-alignment change that follows this record. This record does not change token values.
-3.  Persona images follow ADR-002: served from the asset service under `{ASSET_BASE}/vi/{vi}/{type}/{file}`, immutable versioned keys, never committed.
+3.  Persona images follow ADR-002: they will be served from the asset service under `{ASSET_BASE}/vi/{vi}/{type}/{file}` (planned, ADR-010), with immutable versioned keys, and are never committed.
 4.  The naming standard and the vocabulary are controlled lists. New expressions are added to `canon/vwxyz/vocabulary.json` first.
-5.  Only ViCanon-approved assets are published.
+5.  Only assets that pass ViCanon review and Gavin's approval are published.
 
 **Negative guardrails**: Never generate persona art without the anchor reference. Never invent persona hex values. Never hotlink Drive.
 

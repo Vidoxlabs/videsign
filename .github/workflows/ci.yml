@@ -29,6 +29,25 @@ jobs:
           test -f dist/tokens.json
           node -e "const t = require('./dist/tokens.json'); const n = Object.values(t).reduce((c,o)=>c+Object.keys(o).length,0); if(n===0) throw new Error('No tokens generated'); console.log(n + ' tokens generated')"
 
+      - name: Public safety scan
+        run: |
+          set -euo pipefail
+          for path in \
+            canon \
+            DESIGN.md \
+            SKILL.md \
+            README.md \
+            AGENTS.md \
+            CLAUDE.md \
+            assets/README.md \
+            mcp-server.js \
+            scripts \
+            test
+          do
+            test -e "$path"
+          done
+          node scripts/check-public-safety.js
+
       - name: Lint
         run: npm run lint
 
@@ -53,19 +72,5 @@ jobs:
         run: |
           if grep -r 'ONEDRIVE_ASSET_BASE' . --include='*.md' --include='*.html' --include='*.js' --exclude-dir='.github' --exclude-dir='node_modules'; then
             echo "ERROR: ONEDRIVE_ASSET_BASE found — use {ASSET_BASE} instead"
-            exit 1
-          fi
-
-      - name: Verify canon and root docs have no Drive links
-        run: |
-          if grep -RInE 'drive\.google\.com|docs\.google\.com' \
-            canon \
-            DESIGN.md \
-            SKILL.md \
-            README.md \
-            AGENTS.md \
-            CLAUDE.md \
-            assets/README.md; then
-            echo "ERROR: Drive or Docs link found in canon or root docs"
             exit 1
           fi

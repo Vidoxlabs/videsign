@@ -222,8 +222,14 @@
           "type": "string",
           "enum": ["published", "superseded", "needs-regen", "legacy"]
         },
-        "url": { "type": "string", "minLength": 1 },
-        "key": { "type": "string", "minLength": 1 },
+        "url": {
+          "type": "string",
+          "pattern": "^https://assets\\.vidoxlabs\\.dev/vi/(violet|wisteria|xylia|yarrow|zinnia)/(full|chibi|bg|sheet)/(violet|wisteria|xylia|yarrow|zinnia)_(full|chibi|bg|sheet)_[a-z0-9-]+_v[0-9]{3}\\.png$"
+        },
+        "key": {
+          "type": "string",
+          "pattern": "^vi/(violet|wisteria|xylia|yarrow|zinnia)/(full|chibi|bg|sheet)/(violet|wisteria|xylia|yarrow|zinnia)_(full|chibi|bg|sheet)_[a-z0-9-]+_v[0-9]{3}\\.png$"
+        },
         "sha256": { "$ref": "#/$defs/sha256" },
         "bytes": { "type": "integer", "minimum": 1 },
         "width": { "type": "integer", "minimum": 1 },
@@ -259,8 +265,7 @@
         "created_at",
         "created_by",
         "review",
-        "supersedes",
-        "drive_file_id"
+        "supersedes"
       ],
       "properties": {
         "file": {
@@ -283,8 +288,7 @@
         "created_at": { "type": "string", "minLength": 1 },
         "created_by": { "type": "string", "minLength": 1 },
         "review": { "$ref": "#/$defs/review" },
-        "supersedes": { "type": ["string", "null"] },
-        "drive_file_id": { "type": ["string", "null"] }
+        "supersedes": { "type": ["string", "null"] }
       }
     },
     "generator": {
@@ -310,8 +314,7 @@
       "required": ["asset_id", "role"],
       "properties": {
         "asset_id": { "$ref": "#/$defs/assetId" },
-        "role": { "type": "string", "minLength": 1 },
-        "drive_id": { "type": ["string", "null"] }
+        "role": { "type": "string", "minLength": 1 }
       }
     },
     "review": {

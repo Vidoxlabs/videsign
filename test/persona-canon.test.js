@@ -5,9 +5,18 @@
 
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const crypto = require('crypto');
+const { spawnSync } = require('child_process');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { deltaE00, deltaE00Hex } = require('../scripts/lib/ciede2000');
+const {
+  DEFAULT_TARGETS,
+  OPERATOR_ENV,
+  scanPaths,
+  scanText,
+} = require('../scripts/check-public-safety');
 
 const ROOT = path.join(__dirname, '..');
 const CANON = path.join(ROOT, 'canon');
@@ -146,32 +155,141 @@ function walk(dir) {
   return out;
 }
 
-function unsafePattern() {
-  const parts = [
-    ['drive', 'google', 'com'].join('\\.'),
-    ['docs', 'google', 'com'].join('\\.'),
-    `/${'Users'}/`,
-    `/${'home'}/`,
-    '\\b\\d{1,3}(\\.\\d{1,3}){3}\\b',
-    '[A-Za-z0-9_-]{28,}',
-  ];
-  return new RegExp(parts.join('|'), 'g');
+const SHARMA = `
+50.0000 2.6772 -79.7751 50.0000 0.0000 -82.7485 2.0425
+50.0000 3.1571 -77.2803 50.0000 0.0000 -82.7485 2.8615
+50.0000 2.8361 -74.0200 50.0000 0.0000 -82.7485 3.4412
+50.0000 -1.3802 -84.2814 50.0000 0.0000 -82.7485 1.0000
+50.0000 -1.1848 -84.8006 50.0000 0.0000 -82.7485 1.0000
+50.0000 -0.9009 -85.5211 50.0000 0.0000 -82.7485 1.0000
+50.0000 0.0000 0.0000 50.0000 -1.0000 2.0000 2.3669
+50.0000 -1.0000 2.0000 50.0000 0.0000 0.0000 2.3669
+50.0000 2.4900 -0.0010 50.0000 -2.4900 0.0009 7.1792
+50.0000 2.4900 -0.0010 50.0000 -2.4900 0.0010 7.1792
+50.0000 2.4900 -0.0010 50.0000 -2.4900 0.0011 7.2195
+50.0000 2.4900 -0.0010 50.0000 -2.4900 0.0012 7.2195
+50.0000 -0.0010 2.4900 50.0000 0.0009 -2.4900 4.8045
+50.0000 -0.0010 2.4900 50.0000 0.0010 -2.4900 4.8045
+50.0000 -0.0010 2.4900 50.0000 0.0011 -2.4900 4.7461
+50.0000 2.5000 0.0000 50.0000 0.0000 -2.5000 4.3065
+50.0000 2.5000 0.0000 73.0000 25.0000 -18.0000 27.1492
+50.0000 2.5000 0.0000 61.0000 -5.0000 29.0000 22.8977
+50.0000 2.5000 0.0000 56.0000 -27.0000 -3.0000 31.9030
+50.0000 2.5000 0.0000 58.0000 24.0000 15.0000 19.4535
+50.0000 2.5000 0.0000 50.0000 3.1736 0.5854 1.0000
+50.0000 2.5000 0.0000 50.0000 3.2972 0.0000 1.0000
+50.0000 2.5000 0.0000 50.0000 1.8634 0.5757 1.0000
+50.0000 2.5000 0.0000 50.0000 3.2592 0.3350 1.0000
+60.2574 -34.0099 36.2677 60.4626 -34.1751 39.4387 1.2644
+63.0109 -31.0961 -5.8663 62.8187 -29.7946 -4.0864 1.2630
+61.2901 3.7196 -5.3901 61.4292 2.2480 -4.9620 1.8731
+35.0831 -44.1164 3.7933 35.0232 -40.0716 1.5901 1.8645
+22.7233 20.0904 -46.6940 23.0331 14.9730 -42.5619 2.0373
+36.4612 47.8580 18.3852 36.2715 50.5065 21.2231 1.4146
+90.8027 -2.0831 1.4410 91.1528 -1.6435 0.0447 1.4441
+90.9257 -0.5406 -0.9208 88.6381 -0.8985 -0.7239 1.5381
+6.7747 -0.2908 -2.4247 5.8714 -0.0985 -2.2286 0.6377
+2.0776 0.0795 -1.1350 0.9033 -0.0636 -0.5514 0.9082
+`.trim().split('\n').map((line) => line.trim().split(/\s+/).map(Number));
+
+function hash64(seed) {
+  return seed.repeat(32);
 }
 
-function redactSha256(text) {
-  return text.replace(/"([^"]*sha256)"\s*:\s*"[^"]*"/gi, '"$1":""');
+function sampleEntry(over = {}) {
+  const hash = hash64('ab');
+  return {
+    asset_id: 'violet/chibi/neutral/v001',
+    vi: 'violet',
+    type: 'chibi',
+    slot: 'neutral',
+    version: 1,
+    status: 'published',
+    url: 'https://assets.vidoxlabs.dev/vi/violet/chibi/violet_chibi_neutral_v001.png',
+    key: 'vi/violet/chibi/violet_chibi_neutral_v001.png',
+    sha256: hash,
+    bytes: 10,
+    width: 926,
+    height: 1596,
+    mode: 'RGBA',
+    canon_version: 'v1',
+    palette_sha256: hash,
+    alt: 'Violet, neutral',
+    created_at: '2026-10-26',
+    approved_at: null,
+    supersedes: null,
+    legacy_alias: null,
+    ...over,
+  };
 }
 
-function scanText(text) {
-  const hits = [];
-  const pattern = unsafePattern();
-  let match = pattern.exec(redactSha256(text));
-  while (match) {
-    hits.push(match[0]);
-    match = pattern.exec(redactSha256(text));
+function sampleSidecar(over = {}) {
+  const hash = hash64('cd');
+  return {
+    file: 'violet_chibi_neutral_v001.png',
+    vi: 'violet',
+    type: 'chibi',
+    slot: 'neutral',
+    version: 1,
+    canon_version: 'v1',
+    palette_sha256: hash,
+    sha256: hash,
+    width: 926,
+    height: 1596,
+    mode: 'RGBA',
+    matted: false,
+    generator: {
+      tool: 'fixture',
+      model: 'fixture',
+      seed: 1,
+      prompt: 'fixture',
+      negative_prompt: 'fixture',
+      reference_images: [{ asset_id: 'violet/sheet/anchor/v001', role: 'anchor' }],
+    },
+    run_id: 'run',
+    created_at: '2026-10-26',
+    created_by: 'fixture',
+    review: {
+      status: 'approved',
+      reviewer: null,
+      reviewed_at: null,
+      checklist_version: 'v1',
+      failed_items: [],
+      swatches: {},
+      notes: '',
+    },
+    supersedes: null,
+    ...over,
+  };
+}
+
+function withOperatorEnv(value, fn) {
+  const previous = process.env[OPERATOR_ENV];
+  if (value === undefined) delete process.env[OPERATOR_ENV];
+  else process.env[OPERATOR_ENV] = value;
+  try {
+    return fn();
+  } finally {
+    if (previous === undefined) delete process.env[OPERATOR_ENV];
+    else process.env[OPERATOR_ENV] = previous;
   }
-  return hits;
 }
+
+test('CIEDE2000 matches the Sharma 34-pair table and is symmetric', () => {
+  assert.equal(SHARMA.length, 34);
+  SHARMA.forEach((row, index) => {
+    const lab1 = [row[0], row[1], row[2]];
+    const lab2 = [row[3], row[4], row[5]];
+    const expected = row[6];
+    const forward = deltaE00(lab1, lab2);
+    const reverse = deltaE00(lab2, lab1);
+    const pair = index + 1;
+    assert.ok(Math.abs(forward - expected) <= 1e-4, `pair ${pair} ${forward}`);
+    assert.ok(Math.abs(reverse - expected) <= 1e-4, `pair ${pair} reverse`);
+  });
+  // Pair 14 is the hue-difference boundary (expected 4.8045).
+  assert.equal(SHARMA[13][6], 4.8045);
+});
 
 test('CIEDE2000 matches the Sharma pair 2.0425', () => {
   const got = deltaE00([50, 2.6772, -79.7751], [50, 0, -82.7485]);
@@ -227,17 +345,28 @@ test('every VI has the eight channel hexes and the canon signature', () => {
   }
 });
 
-test('pairwise CIEDE2000 of signatures is at least 20', () => {
-  const names = Object.keys(SIGNATURES);
+test('stored signature matrix matches CIEDE2000 within 0.05', () => {
+  const palette = readJson('palette.json');
+  const floor = palette.review_threshold.min_pairwise;
+  const names = Object.keys(palette.vi);
+  const matrix = palette.delta_e_matrix_signature;
+  const seen = new Set();
   for (let i = 0; i < names.length; i += 1) {
     for (let j = i + 1; j < names.length; j += 1) {
-      const delta = deltaE00Hex(SIGNATURES[names[i]], SIGNATURES[names[j]]);
+      const key = `${names[i]}-${names[j]}`;
+      seen.add(key);
+      const delta = deltaE00Hex(
+        palette.vi[names[i]].signature,
+        palette.vi[names[j]].signature,
+      );
+      assert.ok(delta >= floor, `${key} ${delta} floor ${floor}`);
       assert.ok(
-        delta >= 20,
-        `${names[i]}-${names[j]} ΔE00 ${delta.toFixed(2)}`,
+        Math.abs(matrix[key] - delta) <= 0.05,
+        `${key} stored ${matrix[key]} computed ${delta}`,
       );
     }
   }
+  assert.deepEqual(Object.keys(matrix).sort(), [...seen].sort());
 });
 
 test('vocabulary slugs are kebab-case and unique', () => {
@@ -289,26 +418,101 @@ test('canon files pass the public-safety scan', () => {
     path.join('vwxyz', 'vocabulary.json'),
   ]);
 
-  const hits = [];
-  for (const file of files) {
-    const text = fs.readFileSync(path.join(CANON, file), 'utf8');
-    for (const hit of scanText(text)) hits.push(`${file}: ${hit}`);
-  }
-  assert.deepEqual(hits, []);
+  const result = withOperatorEnv(undefined, () => scanPaths(['canon'], ROOT));
+  assert.equal(result.operatorCheck, 'skipped');
+  assert.deepEqual(result.hits, []);
 });
 
-test('sha256 fields are allowlisted and other long ids are not', () => {
-  const hash = 'ab'.repeat(32);
-  const safe = `{"sha256":"${hash}","palette_sha256":"${hash}"}`;
-  assert.deepEqual(scanText(safe), []);
+test('public-safety self-checks hosts, long ids and sha256 values', () => {
+  const field = 'sha' + '256';
+  const pair = (key, value) => `"${key}":"${value}"`;
+  const hash = hash64('ab');
+  const clean = withOperatorEnv(undefined, () => scanText(
+    `{${pair(field, hash)},${pair('palette_' + field, hash)}}`,
+  ));
+  assert.equal(clean.operatorCheck, 'skipped');
+  assert.deepEqual(clean.hits, []);
 
-  const longId = 'A'.repeat(33);
-  assert.ok(scanText(`{"note":"${longId}"}`).length >= 1);
-  assert.ok(scanText(['https://', ['drive', 'google', 'com'].join('.'), '/x'].join('')).length >= 1);
-  assert.ok(scanText(['https://', ['docs', 'google', 'com'].join('.'), '/x'].join('')).length >= 1);
-  assert.ok(scanText(`/${'Users'}/x`).length >= 1);
-  assert.ok(scanText(`/${'home'}/x`).length >= 1);
-  assert.ok(scanText(['10', '0', '0', '1'].join('.')).length >= 1);
+  const longId = `A1${'b'.repeat(31)}`;
+  assert.ok(scanText(`{${pair('note', longId)}}`).hits.includes('long-id'));
+  assert.ok(scanText(`{${pair('ref_' + field, longId)}}`).hits.includes('sha256-value'));
+  assert.ok(scanText(`{${pair(field, 'zz' + 'zz')}}`).hits.includes('sha256-value'));
+  assert.ok(scanText(`{${pair(field, 'ab'.repeat(16))}}`).hits.includes('sha256-value'));
+  assert.ok(scanText(`{${pair(field + '_note', longId)}}`).hits.includes('long-id'));
+
+  const host = (parts, suffix) => ['https://', parts.join('.'), suffix].join('');
+  assert.ok(scanText(host(['drive', 'google', 'com'], '/x')).hits.includes('google-host'));
+  assert.ok(scanText(host(['docs', 'google', 'com'], '/x')).hits.includes('google-host'));
+  assert.ok(scanText(host(['sheets', 'google', 'com'], '/x')).hits.includes('google-host'));
+  assert.ok(scanText(host(['lh3', 'googleusercontent', 'com'], '/x')).hits.includes('google-host'));
+  assert.ok(scanText(host(['drive', 'usercontent', 'google', 'com'], '/x')).hits.includes('google-host'));
+  assert.ok(scanText(host(['goo', 'gl'], '/x')).hits.includes('google-host'));
+  assert.ok(scanText(`https://assets.example/?id=${'a'.repeat(10)}`).hits.includes('query-id'));
+  assert.ok(scanText(`/${'Users'}/x`).hits.includes('home-path'));
+  assert.ok(scanText(`/${'home'}/x`).hits.includes('home-path'));
+  assert.ok(scanText(['10', '0', '0', '1'].join('.')).hits.includes('ipv4'));
+  assert.deepEqual(scanText('surface-background-primary-base').hits, []);
+});
+
+test('missing, empty and invalid paths fail closed', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-safety-'));
+  const missing = path.join(dir, 'absent.json');
+  const empty = path.join(dir, 'empty.json');
+  const broken = path.join(dir, 'broken.json');
+  fs.writeFileSync(empty, '');
+  fs.writeFileSync(broken, '{');
+  try {
+    assert.equal(scanPaths([missing]).ok, false);
+    assert.equal(scanPaths([empty]).ok, false);
+    assert.equal(scanPaths([broken]).ok, false);
+    assert.ok(scanPaths([missing]).hits.some((hit) => hit.startsWith('missing ')));
+    assert.ok(scanPaths([empty]).hits.some((hit) => hit.startsWith('empty ')));
+    assert.ok(scanPaths([broken]).hits.some((hit) => hit.startsWith('invalid-json ')));
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('operator-handle hashes are optional and fail when supplied', () => {
+  const token = ['fixture', 'handle'].join('-');
+  const digest = crypto.createHash('sha256').update(token).digest('hex');
+  const text = `hello ${token}`;
+  const skipped = withOperatorEnv(undefined, () => scanText(text));
+  assert.equal(skipped.operatorCheck, 'skipped');
+  assert.equal(skipped.hits.includes('operator-handle'), false);
+
+  const hit = withOperatorEnv(digest, () => scanText(text));
+  assert.equal(hit.operatorCheck, 'checked');
+  assert.ok(hit.hits.includes('operator-handle'));
+  assert.equal(JSON.stringify(hit).includes(token), false);
+
+  const invalid = withOperatorEnv('zz', () => scanText('hello'));
+  assert.equal(invalid.ok, false);
+  assert.ok(invalid.hits.includes('operator-hash-list'));
+});
+
+test('manifest url and key reject external hosts and the sidecar has no drive fields', () => {
+  const schema = readJson('asset-manifest.schema.json');
+  const entry = sampleEntry();
+  assert.deepEqual(validate(schema, schema.$defs.manifestEntry, entry, 'entry'), []);
+
+  const driveUrl = ['https://', ['drive', 'google', 'com'].join('.'), '/file/d/x/view'].join('');
+  const rejectedUrl = sampleEntry({ url: driveUrl });
+  assert.ok(validate(schema, schema.$defs.manifestEntry, rejectedUrl, 'entry').length > 0);
+
+  const rejectedKey = sampleEntry({ key: 'vi/violet/chibi/not-a-file.png' });
+  assert.ok(validate(schema, schema.$defs.manifestEntry, rejectedKey, 'entry').length > 0);
+
+  const sidecar = sampleSidecar();
+  assert.deepEqual(validate(schema, schema.$defs.sidecar, sidecar, 'sidecar'), []);
+  assert.equal(Object.hasOwn(schema.$defs.sidecar.properties, 'drive_file_id'), false);
+  assert.equal(Object.hasOwn(schema.$defs.refImage.properties, 'drive_id'), false);
+
+  const withDrive = sampleSidecar({ drive_file_id: null });
+  assert.ok(validate(schema, schema.$defs.sidecar, withDrive, 'sidecar').length > 0);
+  const withRef = sampleSidecar();
+  withRef.generator.reference_images[0].drive_id = null;
+  assert.ok(validate(schema, schema.$defs.sidecar, withRef, 'sidecar').length > 0);
 });
 
 test('reviewer checklist covers C1 through C13', () => {
@@ -336,4 +540,30 @@ test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {
 
   const skill = fs.readFileSync(path.join(ROOT, 'SKILL.md'), 'utf8');
   assert.match(skill, /## ADR-010: VWXYZ Character Canon and Persona Assets/);
+  assert.match(skill, /Accepted \(owner-approved 2026-10-26\)/);
+  assert.match(skill, /Only assets that pass ViCanon review and Gavin's approval are published/);
+  assert.match(skill, /will be served from the asset service/);
+
+  const canonReadme = fs.readFileSync(path.join(VWXYZ, 'README.md'), 'utf8');
+  assert.match(canonReadme, /Accepted \(owner-approved 2026-10-26\)/);
+  assert.match(canonReadme, /planned, ADR-010/);
+  for (const file of ['README.md', 'DESIGN.md', 'AGENTS.md']) {
+    const text = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    assert.match(text, /planned, ADR-010/);
+  }
+});
+
+test('the public-safety CLI scans the default targets', () => {
+  assert.ok(DEFAULT_TARGETS.includes('canon'));
+  assert.ok(DEFAULT_TARGETS.includes('scripts'));
+  assert.ok(DEFAULT_TARGETS.includes('test'));
+  const env = { ...process.env };
+  delete env[OPERATOR_ENV];
+  const result = spawnSync(process.execPath, ['scripts/check-public-safety.js'], {
+    cwd: ROOT,
+    env,
+    encoding: 'utf8',
+  });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /operator-handle check skipped/);
 });
