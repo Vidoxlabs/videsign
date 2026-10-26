@@ -1,20 +1,30 @@
 'use strict';
 
 /**
- * Fail-closed public-safety scan for canon, docs, the MCP server,
- * scripts and tests. Exit 0 only when every target exists, every file
- * is non-empty, every JSON file parses, and no pattern hits.
+ * Fail-closed public-safety scan for canon, docs, previews, workflows,
+ * the MCP server, scripts and tests. Exit 0 only when every target exists,
+ * every file is non-empty, every JSON file parses, and no pattern hits.
  *
- * Operator handles are an optional SHA-256 list in VIDESIGN_OPERATOR_SHA256
- * (comma-separated, lowercase hex of lowercase tokens). Unset skips the
- * check and logs that skip from the CLI. The list is never written here.
+ * Operator handles are SHA-256 hashes in SAFETY_SCAN_SHA256_LIST
+ * (comma-separated lowercase hex of lowercase tokens). The list is never
+ * written here. Outside CI, an unset or empty list skips and the CLI logs
+ * that skip. When CI=true, an unset, empty, or whitespace-only list exits 1.
+ * A malformed entry exits 1 in either environment. Messages name the
+ * variable and never print a value.
+ *
+ * Long ids are runs of length >= 25 that mix letters and digits. Two shapes
+ * are excluded so the public tree stays clean: kebab-case design tokens
+ * (lowercase hyphen segments, with a short scale such as 3xl) and persona
+ * asset slugs vi_type_slot_vNNN. Those slugs are the published naming
+ * standard, not host file ids. A 64-hex value of a key ending in sha256
+ * stays allowlisted.
  */
 
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const OPERATOR_ENV = 'VIDESIGN_OPERATOR_SHA256';
+const OPERATOR_ENV = 'SAFETY_SCAN_SHA256_LIST';
 
 const DEFAULT_TARGETS = [
   'canon',
@@ -25,6 +35,8 @@ const DEFAULT_TARGETS = [
   'CLAUDE.md',
   'assets/README.md',
   'mcp-server.js',
+  'preview',
+  '.github',
   'scripts',
   'test',
 ];
@@ -33,44 +45,72 @@ function joinDot(parts) {
   return parts.join('.');
 }
 
+function pathSource() {
+  const users = 'Users';
+  const home = 'home';
+  const slash = '[/\\\\]';
+  const unixUsers = slash + users + slash;
+  const unixHome = slash + home + slash;
+  const winUsers = `[A-Za-z]:${slash}${users}${slash}`;
+  const tilde = ('~' + '/').replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+  return [unixUsers, unixHome, winUsers, tilde].join('|');
+}
+
 function patternSource() {
   const googleSlash = joinDot(['google', 'com/']);
   const userContent = joinDot(['googleusercontent', 'com']);
   const driveUser = joinDot(['drive', 'usercontent']);
   const shortLink = joinDot(['goo', 'gl']);
-  const escaped = [googleSlash, userContent, driveUser, shortLink]
+  const driveBare = joinDot(['drive', 'google', 'com']);
+  const docsBare = joinDot(['docs', 'google', 'com']);
+  const escaped = [googleSlash, userContent, driveUser, shortLink, driveBare, docsBare]
     .map((host) => host.replace(/\./g, '\\.'))
     .join('|');
   const queryId = '[?&]id=[A-Za-z0-9_-]{10,}';
-  const homeUsers = '/' + 'Users' + '/';
-  const homeDir = '/' + 'home' + '/';
   const ipv4 = '\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b';
   return {
     hosts: escaped,
     queryId,
-    home: homeUsers.replace(/\//g, '\\/') + '|' + homeDir.replace(/\//g, '\\/'),
+    home: pathSource(),
     ipv4,
   };
 }
 
+function isKebabToken(token) {
+  const body = token.replace(/^-+/, '');
+  if (!body.includes('-') || !/^[a-z0-9-]+$/.test(body)) return false;
+  const parts = body.split('-');
+  if (parts.some((part) => part.length === 0)) return false;
+  return parts.every((part) => /^[a-z]+$/.test(part) || /^[0-9]+[a-z]{1,3}$/.test(part));
+}
+
+function isAssetSlug(token) {
+  const vi = '(violet|wisteria|xylia|yarrow|zinnia)';
+  const type = '(full|chibi|bg|sheet)';
+  return new RegExp(`^${vi}_${type}_[a-z0-9-]+_v[0-9]{3}$`).test(token);
+}
+
 function isLongId(token) {
-  if (token.length < 28) return false;
+  if (token.length < 25) return false;
   if (!/^[A-Za-z0-9_-]+$/.test(token)) return false;
-  if (!/[A-Z]/.test(token) || !/[0-9]/.test(token)) return false;
+  if (!/[A-Za-z]/.test(token) || !/[0-9]/.test(token)) return false;
+  if (isKebabToken(token) || isAssetSlug(token)) return false;
   return true;
 }
 
 function loadOperatorHashes() {
   const raw = process.env[OPERATOR_ENV];
-  if (raw === undefined || raw === '') {
-    return { skipped: true, hashes: null, error: null };
+  const inCi = process.env.CI === 'true';
+  if (raw === undefined || String(raw).trim() === '') {
+    if (inCi) return { skipped: false, missing: true, hashes: null, error: null };
+    return { skipped: true, missing: false, hashes: null, error: null };
   }
-  const hashes = raw.split(',').map((item) => item.trim()).filter(Boolean);
+  const hashes = String(raw).split(',').map((item) => item.trim()).filter(Boolean);
   const hex = /^[0-9a-f]{64}$/;
   if (hashes.length === 0 || hashes.some((item) => !hex.test(item))) {
-    return { skipped: false, hashes: null, error: 'operator-hash-list' };
+    return { skipped: false, missing: false, hashes: null, error: 'malformed' };
   }
-  return { skipped: false, hashes: new Set(hashes), error: null };
+  return { skipped: false, missing: false, hashes: new Set(hashes), error: null };
 }
 
 function operatorHits(text, hashes) {
@@ -115,25 +155,32 @@ function patternHits(text) {
   const source = patternSource();
   if (new RegExp(source.hosts).test(text)) hits.push('google-host');
   if (new RegExp(source.queryId).test(text)) hits.push('query-id');
-  if (new RegExp(source.home).test(text)) hits.push('home-path');
+  if (new RegExp(source.home, 'i').test(text)) hits.push('home-path');
   if (new RegExp(source.ipv4).test(text)) hits.push('ipv4');
-  const tokens = text.match(/[A-Za-z0-9_-]{28,}/g) || [];
+  const tokens = text.match(/[A-Za-z0-9_-]{25,}/g) || [];
   if (tokens.some(isLongId)) hits.push('long-id');
   return hits;
 }
 
+function operatorFailure(operator) {
+  if (operator.missing) return `${OPERATOR_ENV} is unset or empty`;
+  if (operator.error) return `${OPERATOR_ENV} has a malformed entry`;
+  return null;
+}
+
 /**
  * @param {string} text
+ * @param {object} [operatorState]
  * @returns {{ ok: boolean, hits: string[], operatorCheck: string }}
  */
-function scanText(text) {
-  const operator = loadOperatorHashes();
+function scanText(text, operatorState) {
+  const operator = operatorState || loadOperatorHashes();
   const hits = [];
   let operatorCheck = 'checked';
   if (operator.skipped) operatorCheck = 'skipped';
-  else if (operator.error) {
-    operatorCheck = 'invalid';
-    hits.push(operator.error);
+  else if (operator.missing || operator.error) {
+    operatorCheck = operator.missing ? 'missing' : 'invalid';
+    hits.push(operatorFailure(operator));
   } else {
     hits.push(...operatorHits(text, operator.hashes));
   }
@@ -167,9 +214,25 @@ function listFiles(target) {
  * @param {string} [root]
  * @returns {{ ok: boolean, hits: string[], operatorCheck: string }}
  */
+function contentOperator(operator) {
+  if (operator.skipped) return operator;
+  if (operator.missing || operator.error) {
+    return { skipped: true, missing: false, hashes: null, error: null };
+  }
+  return operator;
+}
+
 function scanPaths(targets, root = process.cwd()) {
+  const operator = loadOperatorHashes();
   const hits = [];
-  let operatorCheck = 'skipped';
+  let operatorCheck = 'checked';
+  const failure = operatorFailure(operator);
+  if (operator.skipped) operatorCheck = 'skipped';
+  else if (failure) {
+    operatorCheck = operator.missing ? 'missing' : 'invalid';
+    hits.push(failure);
+  }
+  const perFile = contentOperator(operator);
   for (const rel of targets) {
     const full = path.resolve(root, rel);
     if (!fs.existsSync(full)) {
@@ -210,8 +273,7 @@ function scanPaths(targets, root = process.cwd()) {
           continue;
         }
       }
-      const result = scanText(text);
-      operatorCheck = result.operatorCheck;
+      const result = scanText(text, perFile);
       for (const hit of result.hits) hits.push(`${display}: ${hit}`);
     }
   }

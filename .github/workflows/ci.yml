@@ -30,6 +30,8 @@ jobs:
           node -e "const t = require('./dist/tokens.json'); const n = Object.values(t).reduce((c,o)=>c+Object.keys(o).length,0); if(n===0) throw new Error('No tokens generated'); console.log(n + ' tokens generated')"
 
       - name: Public safety scan
+        env:
+          SAFETY_SCAN_SHA256_LIST: ${{ secrets.SAFETY_SCAN_SHA256_LIST }}
         run: |
           set -euo pipefail
           for path in \
@@ -41,6 +43,8 @@ jobs:
             CLAUDE.md \
             assets/README.md \
             mcp-server.js \
+            preview \
+            .github \
             scripts \
             test
           do

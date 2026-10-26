@@ -263,16 +263,34 @@ function sampleSidecar(over = {}) {
   };
 }
 
-function withOperatorEnv(value, fn) {
-  const previous = process.env[OPERATOR_ENV];
+function withOperatorEnv(value, fn, ci) {
+  const previousHash = process.env[OPERATOR_ENV];
+  const previousCi = process.env.CI;
   if (value === undefined) delete process.env[OPERATOR_ENV];
   else process.env[OPERATOR_ENV] = value;
+  if (ci === undefined) delete process.env.CI;
+  else process.env.CI = ci;
   try {
     return fn();
   } finally {
-    if (previous === undefined) delete process.env[OPERATOR_ENV];
-    else process.env[OPERATOR_ENV] = previous;
+    if (previousHash === undefined) delete process.env[OPERATOR_ENV];
+    else process.env[OPERATOR_ENV] = previousHash;
+    if (previousCi === undefined) delete process.env.CI;
+    else process.env.CI = previousCi;
   }
+}
+
+function runSafety(args, { hash, ci } = {}) {
+  const env = { ...process.env };
+  if (hash === undefined) delete env[OPERATOR_ENV];
+  else env[OPERATOR_ENV] = hash;
+  if (ci === undefined) delete env.CI;
+  else env.CI = ci;
+  return spawnSync(process.execPath, ['scripts/check-public-safety.js', ...args], {
+    cwd: ROOT,
+    env,
+    encoding: 'utf8',
+  });
 }
 
 test('CIEDE2000 matches the Sharma 34-pair table and is symmetric', () => {
@@ -440,18 +458,54 @@ test('public-safety self-checks hosts, long ids and sha256 values', () => {
   assert.ok(scanText(`{${pair(field, 'ab'.repeat(16))}}`).hits.includes('sha256-value'));
   assert.ok(scanText(`{${pair(field + '_note', longId)}}`).hits.includes('long-id'));
 
+  const digitHash = crypto.createHash('sha256').update('palette-fixture').digest('hex');
+  assert.match(digitHash, /[0-9]/);
+  assert.deepEqual(scanText(`{${pair(field, digitHash)}}`).hits, []);
+
   const host = (parts, suffix) => ['https://', parts.join('.'), suffix].join('');
+  const bare = (parts) => parts.join('.');
   assert.ok(scanText(host(['drive', 'google', 'com'], '/x')).hits.includes('google-host'));
   assert.ok(scanText(host(['docs', 'google', 'com'], '/x')).hits.includes('google-host'));
+  assert.ok(scanText(bare(['drive', 'google', 'com'])).hits.includes('google-host'));
+  assert.ok(scanText(bare(['docs', 'google', 'com'])).hits.includes('google-host'));
   assert.ok(scanText(host(['sheets', 'google', 'com'], '/x')).hits.includes('google-host'));
   assert.ok(scanText(host(['lh3', 'googleusercontent', 'com'], '/x')).hits.includes('google-host'));
   assert.ok(scanText(host(['drive', 'usercontent', 'google', 'com'], '/x')).hits.includes('google-host'));
   assert.ok(scanText(host(['goo', 'gl'], '/x')).hits.includes('google-host'));
+  assert.deepEqual(scanText(bare(['assets', 'vidoxlabs', 'dev'])).hits, []);
   assert.ok(scanText(`https://assets.example/?id=${'a'.repeat(10)}`).hits.includes('query-id'));
   assert.ok(scanText(`/${'Users'}/x`).hits.includes('home-path'));
   assert.ok(scanText(`/${'home'}/x`).hits.includes('home-path'));
+  assert.ok(scanText(`${'C'}:\\${'Users'}\\x`).hits.includes('home-path'));
+  assert.ok(scanText(`${'d'}:/${'users'}/x`).hits.includes('home-path'));
+  assert.ok(scanText(`${'~'}/x`).hits.includes('home-path'));
+  assert.deepEqual(scanText('Users').hits, []);
+  assert.deepEqual(scanText(`${'~'}name`).hits, []);
   assert.ok(scanText(['10', '0', '0', '1'].join('.')).hits.includes('ipv4'));
   assert.deepEqual(scanText('surface-background-primary-base').hits, []);
+});
+
+test('long ids cover case and separator shapes and spare token names', () => {
+  const lower = `a1${'b'.repeat(23)}`;
+  const upper = `A1${'B'.repeat(23)}`;
+  const hyphen = `a1b2c3d4e5f-${'g6h7i8j9k0abc'}`;
+  const under = `a1b2c3d4e5f_${'g6h7i8j9k0abc'}`;
+  const short = `a1${'b'.repeat(22)}`;
+  assert.equal(lower.length, 25);
+  assert.equal(upper.length, 25);
+  assert.ok(hyphen.length >= 25);
+  assert.ok(under.length >= 25);
+  assert.equal(short.length, 24);
+  assert.ok(scanText(lower).hits.includes('long-id'));
+  assert.ok(scanText(upper).hits.includes('long-id'));
+  assert.ok(scanText(hyphen).hits.includes('long-id'));
+  assert.ok(scanText(under).hits.includes('long-id'));
+  assert.deepEqual(scanText(short).hits, []);
+  assert.deepEqual(scanText('a'.repeat(40)).hits, []);
+  assert.deepEqual(scanText('A'.repeat(40)).hits, []);
+  assert.deepEqual(scanText('surface-background-primary-base').hits, []);
+  assert.deepEqual(scanText('text-typography-size-3xl-base').hits, []);
+  assert.deepEqual(scanText('violet_chibi_neutral_v001').hits, []);
 });
 
 test('missing, empty and invalid paths fail closed', () => {
@@ -473,22 +527,70 @@ test('missing, empty and invalid paths fail closed', () => {
   }
 });
 
-test('operator-handle hashes are optional and fail when supplied', () => {
+test('operator-handle hashes fail closed in CI and skip outside it', () => {
   const token = ['fixture', 'handle'].join('-');
-  const digest = crypto.createHash('sha256').update(token).digest('hex');
+  const digest = crypto.createHash('sha256').update(token.toLowerCase()).digest('hex');
   const text = `hello ${token}`;
+  const badEntry = ['not', 'a', 'hash', 'entry'].join('-');
+
   const skipped = withOperatorEnv(undefined, () => scanText(text));
   assert.equal(skipped.operatorCheck, 'skipped');
   assert.equal(skipped.hits.includes('operator-handle'), false);
 
-  const hit = withOperatorEnv(digest, () => scanText(text));
+  const missing = withOperatorEnv(undefined, () => scanText('hello'), 'true');
+  assert.equal(missing.ok, false);
+  assert.ok(missing.hits.some((hit) => hit.includes(OPERATOR_ENV) && hit.includes('unset or empty')));
+  assert.equal(missing.hits.join(' ').includes(badEntry), false);
+
+  const blank = withOperatorEnv('   ', () => scanText('hello'), 'true');
+  assert.equal(blank.ok, false);
+  assert.ok(blank.hits.some((hit) => hit.includes('unset or empty')));
+
+  const invalid = withOperatorEnv(badEntry, () => scanText('hello'), 'true');
+  assert.equal(invalid.ok, false);
+  assert.ok(invalid.hits.some((hit) => hit.includes(OPERATOR_ENV) && hit.includes('malformed')));
+  assert.equal(invalid.hits.join(' ').includes(badEntry), false);
+
+  const hit = withOperatorEnv(digest, () => scanText(text), 'true');
   assert.equal(hit.operatorCheck, 'checked');
   assert.ok(hit.hits.includes('operator-handle'));
   assert.equal(JSON.stringify(hit).includes(token), false);
 
-  const invalid = withOperatorEnv('zz', () => scanText('hello'));
-  assert.equal(invalid.ok, false);
-  assert.ok(invalid.hits.includes('operator-hash-list'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-safety-'));
+  const clean = path.join(dir, 'clean.txt');
+  const dirty = path.join(dir, 'dirty.txt');
+  fs.writeFileSync(clean, 'hello canon\n');
+  fs.writeFileSync(dirty, `${text}\n`);
+  try {
+    const unsetCi = runSafety([clean], { ci: 'true' });
+    assert.equal(unsetCi.status, 1);
+    assert.match(unsetCi.stderr, new RegExp(OPERATOR_ENV));
+    assert.match(unsetCi.stderr, /unset or empty/);
+    assert.equal(unsetCi.stderr.includes(badEntry), false);
+
+    const emptyCi = runSafety([clean], { hash: '', ci: 'true' });
+    assert.equal(emptyCi.status, 1);
+    assert.match(emptyCi.stderr, /unset or empty/);
+
+    const malformed = runSafety([clean], { hash: badEntry, ci: 'true' });
+    assert.equal(malformed.status, 1);
+    assert.match(malformed.stderr, /malformed/);
+    assert.equal(malformed.stderr.includes(badEntry), false);
+
+    const cleanCi = runSafety([clean], { hash: digest, ci: 'true' });
+    assert.equal(cleanCi.status, 0, cleanCi.stderr);
+
+    const dirtyCi = runSafety([dirty], { hash: digest, ci: 'true' });
+    assert.equal(dirtyCi.status, 1);
+    assert.match(dirtyCi.stderr, /operator-handle/);
+    assert.equal(dirtyCi.stderr.includes(token), false);
+
+    const outside = runSafety([clean], {});
+    assert.equal(outside.status, 0, outside.stderr);
+    assert.match(outside.stderr, /operator-handle check skipped/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('manifest url and key reject external hosts and the sidecar has no drive fields', () => {
@@ -555,15 +657,11 @@ test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {
 
 test('the public-safety CLI scans the default targets', () => {
   assert.ok(DEFAULT_TARGETS.includes('canon'));
+  assert.ok(DEFAULT_TARGETS.includes('preview'));
+  assert.ok(DEFAULT_TARGETS.includes('.github'));
   assert.ok(DEFAULT_TARGETS.includes('scripts'));
   assert.ok(DEFAULT_TARGETS.includes('test'));
-  const env = { ...process.env };
-  delete env[OPERATOR_ENV];
-  const result = spawnSync(process.execPath, ['scripts/check-public-safety.js'], {
-    cwd: ROOT,
-    env,
-    encoding: 'utf8',
-  });
+  const result = runSafety([], {});
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stderr, /operator-handle check skipped/);
 });
