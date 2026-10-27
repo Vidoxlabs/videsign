@@ -199,3 +199,12 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 10. #7C3AED is to be retired once ADR-011 is ratified. Until then new CTA fills and focus rings stay on `{colors.surface-accent-violet-base}` (`#7C3AED`). `#8B5CF6` is the target for those fills and rings after ratification. The matrix value stays until a follow-up changes it.
 
 **Consequences**: `.gitignore` re-includes `brand/**/*.svg`; rasters stay ignored. Those SVGs are `-text`. Stays Proposed until the owner ratifies it.
+
+
+## ADR-012: Product light theme and semantic foregrounds
+
+**Status**: Accepted for the owner-approved ViWeb redesign (2026-10-27).
+
+**Decision**: Keep the existing default dark matrix and persona/brand values. Light counterparts remain flat matrix entries with the light state suffix. Generated `dist/themes.css` maps those counterparts onto the existing base semantic variables under `[data-theme="light"]`; consumers import the generated mapping rather than authoring overrides. The normal-text foreground clears 4.5:1 on every reading surface. The border candidate was strengthened from the old consumer override to improve control delineation. `text-content-on-accent-base` stays white across themes for readable brand CTA labels. Status and persona colors remain identity/indicator roles; colored text must be independently measured.
+
+Light glass uses the canonical solid light surface and rim, with blur disabled. Forced colors uses Canvas/CanvasText and the same geometry. Dark crystal defaults remain unchanged. Existing consumers importing only tokens/glass keep their current behavior; themes.css is an explicit opt-in. This decision does not ratify ADR-010/011 or alter character/brand artwork.
