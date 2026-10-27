@@ -62,6 +62,18 @@ test('reading DESIGN.md returns the token matrix', async () => {
   assert.match(result.contents[0].text, /persona-accent-violet-base: "#8B5CF6"/);
 });
 
+test('reading the character palette returns canon JSON', async () => {
+  const result = await client.readResource({ uri: 'file://canon/vwxyz/palette.json' });
+
+  assert.equal(result.contents[0].uri, 'file://canon/vwxyz/palette.json');
+  assert.equal(result.contents[0].mimeType, 'application/json');
+  const palette = JSON.parse(result.contents[0].text);
+  assert.equal(palette.canon_version, 'v1');
+  assert.equal(palette.vi.violet.signature, '#8B5CF6');
+  assert.equal(palette.vi.violet.anchor.asset_id, 'violet/sheet/anchor/v001');
+  assert.equal(result.contents[0].text.includes(['drive', 'google', 'com'].join('.')), false);
+});
+
 test('reading an unknown resource is rejected', async () => {
   await assert.rejects(
     client.readResource({ uri: 'file://preview/does-not-exist.html' }),

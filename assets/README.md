@@ -35,3 +35,7 @@ Per ADR-002 (see `SKILL.md`), no binary assets may be stored in the repository.
 All assets must be hosted on an external CDN and referenced via the
 `{ASSET_BASE}` placeholder. These files exist locally for development
 reference only.
+
+## Persona and character images
+
+Persona/character images do not use this convention or folder. See `canon/vwxyz/README.md` (naming `{vi}_{type}_{slot}_v{NNN}.png`; images will be served via `{ASSET_BASE}/vi/…`, planned, ADR-010).

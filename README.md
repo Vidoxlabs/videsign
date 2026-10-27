@@ -13,6 +13,8 @@ videsign/
 ├── DESIGN.md        Semantic token matrix (category-role-variant-state) + negative boundaries
 ├── SKILL.md         Architectural Decision Records (ADRs) and agent guardrails
 ├── AGENTS.md        Engineering governance and agent initialization protocol
+├── canon/
+│   └── vwxyz/       VWXYZ character canon v1: palette, vocabulary, schema, checklist
 ├── preview/         Pure, flat, state-free HTML component fragments + layout compositions
 ├── preview/index.html  Visual catalog (open in a browser)
 ├── scripts/
@@ -25,6 +27,10 @@ videsign/
 └── package.json
 ```
 
+Character colors, slugs and the asset contract live in `canon/vwxyz/`. UI accent
+tokens stay in `DESIGN.md`. Persona images will be served from `{ASSET_BASE}/vi/…`
+(planned, ADR-010) and are never committed (ADR-002).
+
 ## Quick start
 
 ```bash
@@ -32,7 +38,8 @@ npm install
 npm run tokens     # Generate Tailwind config, CSS vars, and JSON from DESIGN.md
 npm run mcp        # Start the MCP server on stdio
 npm run lint       # Validate against no-arbitrary-value rule
-npm test           # Smoke-test the MCP server over stdio
+npm test           # Smoke-test the MCP server, tokens, previews and canon
+npm run canon:check  # Persona canon contract on its own
 ```
 
 Run `npm run tokens`, then serve the repository root over HTTP and open `/preview/` for a
