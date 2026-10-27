@@ -921,6 +921,7 @@ test('duplicate and look-alike brand folders fail closed', () => {
     const both = scanBrandLayout({
       'brand/a.txt': 'palette note',
       'Brand/n.txt': driveId,
+      'brand./b.txt': 'palette note',
     });
     assert.equal(both.ok, false);
     assert.ok(both.hits.some((hit) => hit.includes('long-id')));

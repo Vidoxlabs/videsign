@@ -201,6 +201,19 @@ test('glass.css ships pill radius variants for plain-CSS consumers', () => {
   assert.match(GLASS, /\.vi-glass-core--pill \{[^}]*border-radius: 9999px;/s);
 });
 
+test('focus outline pinned to surface-accent-violet until ADR-011 is ratified', () => {
+  const css = emitGlassCSS(TOKENS);
+  const accent = TOKENS.colors['surface-accent-violet-base'];
+  assert.equal(accent, '#7C3AED');
+  assert.match(css, new RegExp(`outline: 2px solid ${accent};`));
+});
+
+test('ambient violet glow stays the measured main value', () => {
+  assert.equal(TOKENS.effects['ambient-glow-violet-base'], 'rgba(124, 58, 237, 0.30)');
+  assert.equal(TOKENS.effects['ambient-glow-teal-base'], 'rgba(45, 212, 191, 0.16)');
+  assert.equal(Object.hasOwn(TOKENS.effects, 'ambient-glow-wisteria-base'), false);
+});
+
 test('glass.css draws the rim as an inset shadow (no border box) so radii stay concentric', () => {
   const rim = TOKENS.effects['glass-crystal-rim-base'];
   assert.ok(GLASS.includes('border: 0;'));

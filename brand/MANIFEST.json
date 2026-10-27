@@ -1,0 +1,81 @@
+{
+  "files": [
+    {
+      "path": "brand/brand_favicon_px16_v008.svg",
+      "family": "favicon",
+      "asset": "brand_favicon_px16_v008.svg",
+      "version": "v008",
+      "sha256": "07bc0643d17364d1d5f69bf84b524e4f15272e52a3b2679e054886188ac23765"
+    },
+    {
+      "path": "brand/brand_lockup_horizontal-dark_v004.svg",
+      "family": "lockup",
+      "asset": "brand_lockup_horizontal-dark_v004.svg",
+      "version": "v004",
+      "sha256": "73cebfdb4bf82f78925f1c9cd1b795575fa26ab342e06587e55342870cd3f0bd"
+    },
+    {
+      "path": "brand/brand_lockup_horizontal-light_v005.svg",
+      "family": "lockup",
+      "asset": "brand_lockup_horizontal-light_v005.svg",
+      "version": "v005",
+      "sha256": "1a4cd9e52eeb789c29ed7732a8bc442dcbc0742dc5ebae5f2e1a5b37c9d8357d"
+    },
+    {
+      "path": "brand/brand_lockup_stacked-dark_v004.svg",
+      "family": "lockup",
+      "asset": "brand_lockup_stacked-dark_v004.svg",
+      "version": "v004",
+      "sha256": "235f7ab998ffb1b3cbac5a9b60f92d1e821788b12b7d4fe2dc31b899ede0cf4e"
+    },
+    {
+      "path": "brand/brand_mark_full-color_v008.svg",
+      "family": "mark",
+      "asset": "brand_mark_full-color_v008.svg",
+      "version": "v008",
+      "sha256": "a992e18cc4b3bd7991f90efb0f51b3fa4e9fda13f64469e816b0b9a546c52a21"
+    },
+    {
+      "path": "brand/brand_mark_header_v008.svg",
+      "family": "mark",
+      "asset": "brand_mark_header_v008.svg",
+      "version": "v008",
+      "sha256": "da0447f696b6dfd7512ff66d1a82b0aa366d30faa3e812f95af1b7f1f72b3cfc"
+    },
+    {
+      "path": "brand/brand_mark_mono-dark_v008.svg",
+      "family": "mark",
+      "asset": "brand_mark_mono-dark_v008.svg",
+      "version": "v008",
+      "sha256": "98d9764f8abb1536bcb2b4b7f7e5bd7d6c3402291f12579b1c7df7154d63ea7f"
+    },
+    {
+      "path": "brand/brand_mark_mono-light_v008.svg",
+      "family": "mark",
+      "asset": "brand_mark_mono-light_v008.svg",
+      "version": "v008",
+      "sha256": "755618f5b1509ccb15431f77a458e4dcc08ac887716ffed899b4a0aae70e097c"
+    },
+    {
+      "path": "brand/brand_mark_mono-violet_v008.svg",
+      "family": "mark",
+      "asset": "brand_mark_mono-violet_v008.svg",
+      "version": "v008",
+      "sha256": "e20fe974e89907324eeeb5cf4fa4f3f80750c720ef948f8f792f2807feacc134"
+    },
+    {
+      "path": "brand/brand_wordmark_dark_v002.svg",
+      "family": "wordmark",
+      "asset": "brand_wordmark_dark_v002.svg",
+      "version": "v002",
+      "sha256": "8c052b8ac4f7009624c97580f7d6398e7f3cbd171be8cb55a55d82ea215956ca"
+    },
+    {
+      "path": "brand/brand_wordmark_light_v002.svg",
+      "family": "wordmark",
+      "asset": "brand_wordmark_light_v002.svg",
+      "version": "v002",
+      "sha256": "20f22cd49154a1a2fef6b333dfc0f6035a5da1723dc47c6585b7b06509aec3f4"
+    }
+  ]
+}

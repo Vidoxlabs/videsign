@@ -217,7 +217,7 @@ function emitGlassCSS(tokens) {
     `  box-shadow: ${rimShadow(rimHover)}, ${highlight}, ${shadow};`,
     '}',
     '',
-    '/* Brand accent is reserved for key CTAs and focus outlines (DESIGN.md). */',
+    '/* Focus outlines stay on surface-accent-violet until ADR-011 is ratified. */',
     '.vi-glass--control:focus-within {',
     `  outline: 2px solid ${focusAccent};`,
     '  outline-offset: 2px;',

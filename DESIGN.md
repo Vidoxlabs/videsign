@@ -8,6 +8,7 @@ colors:
   surface-accent-violet-base: "#7C3AED"
   surface-accent-violet-hover: "#6B46C1"
   surface-accent-violet-active: "#5B21B6"
+# surface-accent-violet-base is pending ADR-011. Until that record is ratified it stays the live CTA fill and focus outline.
   text-content-primary-base: "#FFFFFF"
   text-content-secondary-base: "#A1A1AA"
   border-separator-primary-base: "#27272A"
@@ -162,8 +163,9 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > ### Persona identity accents
 >
 > - Persona identity accents are locked. Violet is always `{colors.persona-accent-violet-base}` (#8B5CF6), Wisteria is always `{colors.persona-accent-wisteria-base}` (#A78BFA), Xylia is always `{colors.persona-accent-xylia-base}` (#2DD4BF), Yarrow is always `{colors.persona-accent-yarrow-base}` (#F59E0B), and Zinnia is always `{colors.persona-accent-zinnia-base}` (#F43F5E).
+> - Those matrix values stay in force. For brand artwork, Wisteria `#A78BFA`, Xylia teal `#2DD4BF`, Zinnia rose `#F43F5E`, and `cube.png` paths are being retired. The target signatures are in `brand/tokens.json` and become the persona accents in a follow-up after the canon record lands. Status error `#F43F5E` and status warning `#F59E0B` stay status tokens.
 > - Persona accents are identity markers only. They never substitute for status indicators: Yarrow amber shares its hex with `{colors.status-indicator-warning-base}` and Zinnia rose with `{colors.status-indicator-error-base}` — a shared hex never makes the roles interchangeable. Status semantics always use status tokens; persona identity always uses persona accent tokens.
-> - Persona Violet (#8B5CF6) is distinct from the brand accent `{colors.surface-accent-violet-base}` (#7C3AED), which stays reserved for key CTAs and focus outlines.
+> - #7C3AED is to be retired once ADR-011 is ratified. Until then `{colors.surface-accent-violet-base}` stays `#7C3AED` and is the live CTA fill and focus outline. Persona Violet (#8B5CF6) is the target after that ratification. Labels on `#8B5CF6` follow the interim contrast rule in ADR-011 (pending the owner): no normal-size label of any colour. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`.
 > - **Accent text lives on the primary surface only.** Measured: Violet `{colors.persona-accent-violet-base}` is 4.67:1 on `{colors.surface-background-primary-base}` but 4.40:1 on secondary and 4.00:1 on tertiary, so it fails AA as small text on both. On secondary and tertiary surfaces a persona accent appears only as a non-text indicator (dot, bar, ring, 3:1). Wisteria, Xylia, Yarrow and Zinnia pass 4.5:1 on all three surfaces (Zinnia on tertiary is marginal at 4.61:1).
 > - Never invent persona hex values locally. New persona states (hover, active) or any new persona color must be added to the `colors` matrix in this file first, then referenced.
 
@@ -232,7 +234,7 @@ To prevent "AI drift" and the generation of generic or hallucinated UI elements,
 > ### 2. Imagery & Icons
 >
 > - **BAN Emojis**: Explicitly forbid the use of decorative emojis anywhere in the markup.
-> - **Asset Storage Rule**: Absolutely no binary assets (PNG, JPG, SVG, video) may be stored in the repository. All assets must be referenced via the `{ASSET_BASE}` placeholder (e.g. `<img src="{ASSET_BASE}/assets/logos/vidoxlabs/cube.png" />`). Consuming repos resolve `{ASSET_BASE}` at build time to their CDN endpoint.
+> - **Asset Storage Rule**: Absolutely no binary assets (PNG, JPG, SVG, video) may be stored in the repository, with one proposed exception: text-only `brand/**/*.svg` masters at or under 8 KB (ADR-011, awaiting ratification). All other assets must be referenced via the `{ASSET_BASE}` placeholder (e.g. `<img src="{ASSET_BASE}/brand/brand_mark_header_v008.svg" />`). `cube.png` paths are deprecated. Consuming repos resolve `{ASSET_BASE}` at build time to their CDN endpoint.
 
 > [!IMPORTANT]
 >

@@ -28,10 +28,13 @@ design system — the shared visual language for all Vidoxlabs products and appl
   repositories for cross-repo token and fragment fetching. Also provides a
   `resolve_token` tool for querying individual token values.
 - **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
-  naming convention. No binary assets are committed to the repository.
+  naming convention. Raster binaries are not committed. Text-only SVG under `brand/`
+  is a proposed exception (ADR-011, awaiting ratification).
 - **canon/vwxyz/**: Persona character canon. Never invent character colors. Images will be served from the asset service (planned, ADR-010).
 - **dist/**: Generated artifacts (gitignored). Produced by `npm run tokens`. Consuming
   repos import `dist/tailwind.config.js` or `dist/tokens.css` from this repo.
+- **brand/**: Brand v1 mark C masters (text-only SVG, ADR-011). See `brand/README.md`
+  and `brand/MANIFEST.json`. Do not redraw the mark.
 
 ## AI Agent Initialization & Cross-Repo Fetching
 
@@ -93,3 +96,21 @@ Never invent tokens outside this matrix. If a needed value is missing, add it to
 Agents must never introduce arbitrary UI values (e.g., `w-[15px]`, `text-[#FF0000]`). The
 `tailwindcss/no-arbitrary-value` ESLint rule strictly enforces the use of explicitly defined design
 tokens from the semantic matrix. Any generated code must pass `npm run lint`.
+
+## Brand rules for agents
+
+The live persona accents are the `DESIGN.md` matrix. Those older persona hexes are being retired. `brand/tokens.json` holds the target signatures, and they become the persona accents in a follow-up after the canon record lands. Until that follow-up, do not treat the brand file as the live matrix, and do not invent a replacement hex.
+
+The canon palette file lands with that canon record. It is not a dependency of this branch. Brand artwork uses the target signatures in `brand/tokens.json`: Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`. Field tiles are `#121214` and `#F7F7F5`.
+
+Do not draw or approximate the mark. Reference a file in `brand/` by family and version (`brand_{asset}_{variant}_v{NNN}.{ext}`). On a lockup, `horizontal-dark`, `horizontal-light`, and `stacked-dark` name the field. On a mark, `mono-dark` and `mono-light` name the ink. On a wordmark, `dark` and `light` name the ink. `on-dark` and `on-light` would name the field. Shipped masters keep the brand-index filenames. Versions are not reused.
+
+Full colour is for the dark field. Do not place the full-colour mark on the light field `#F7F7F5`.
+
+#7C3AED is to be retired once ADR-011 is ratified. Until then `{colors.surface-accent-violet-base}` stays `#7C3AED` and is the live value for new CTA fills and focus rings. Persona Violet `#8B5CF6` is the target for those fills and rings after that ratification. Follow the interim contrast rule in `brand/README.md` (pending the owner): no normal-size label of any colour on that violet. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`. `{effects.ambient-glow-teal-base}` stays the default glow.
+
+Xylia is never text and never appears alone. Do not build a gradient between the five signature colours. Text-safe Xylia and text-safe Zinnia are pending. Do not define them.
+
+Being retired for brand artwork: teal `#2DD4BF` and rose `#F43F5E` as persona colours, `#7226FA`, `#A78BFA`, the V-shield mark, the chevron favicon, `cube.png` paths, and Inter. They remain the `DESIGN.md` persona values until the follow-up. Status error `#F43F5E` and status warning `#F59E0B` stay status tokens.
+
+Promoted masters live at the path `design_system/brand/`. Cite that path by name only.
