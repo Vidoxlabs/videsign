@@ -201,10 +201,17 @@ test('glass.css ships pill radius variants for plain-CSS consumers', () => {
   assert.match(GLASS, /\.vi-glass-core--pill \{[^}]*border-radius: 9999px;/s);
 });
 
-test('glass focus outline uses Persona Violet and contains no matrix accent hex', () => {
+test('focus outline pinned to surface-accent-violet until ADR-011 is ratified', () => {
   const css = emitGlassCSS(TOKENS);
-  assert.equal(/#7C3AED/i.test(css), false);
-  assert.match(css, /outline: 2px solid #8B5CF6;/);
+  const accent = TOKENS.colors['surface-accent-violet-base'];
+  assert.equal(accent, '#7C3AED');
+  assert.match(css, new RegExp(`outline: 2px solid ${accent};`));
+});
+
+test('ambient violet glow stays the measured main value', () => {
+  assert.equal(TOKENS.effects['ambient-glow-violet-base'], 'rgba(124, 58, 237, 0.30)');
+  assert.equal(TOKENS.effects['ambient-glow-teal-base'], 'rgba(45, 212, 191, 0.16)');
+  assert.equal(Object.hasOwn(TOKENS.effects, 'ambient-glow-wisteria-base'), false);
 });
 
 test('glass.css draws the rim as an inset shadow (no border box) so radii stay concentric', () => {

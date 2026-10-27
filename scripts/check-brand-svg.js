@@ -169,6 +169,7 @@ function checkSvg(bytes) {
       }
       const attrName = attrMatch[0];
       index += attrName.length;
+      if (closing) add(hits, 'attribute');
       skipSpace();
       if (text[index] !== '=') {
         add(hits, 'attribute');

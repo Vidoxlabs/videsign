@@ -72,7 +72,7 @@ architectural decision records.
 
 ## Brand
 
-The brand v1 set (mark C), the favicon, lockups, and wordmarks are documented in [brand/README.md](brand/README.md). Full colour is for the dark field. File digests are in `brand/MANIFEST.json`. Promoted masters use the path `design_system/brand/`.
+The brand v1 set (mark C), the favicon, lockups, and wordmarks are documented in [brand/README.md](brand/README.md). Full colour is for the dark field. On a lockup, `-dark` and `-light` name the field. On a mark or a wordmark, they name the ink. File digests are in `brand/MANIFEST.json`. Promoted masters use the path `design_system/brand/`.
 
 ## License
 

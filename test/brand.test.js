@@ -469,6 +469,14 @@ test('the SVG gate rejects synthetic editor ids', () => {
   }
 });
 
+test('the SVG gate rejects an attribute on a closing tag', () => {
+  const spaced = checkSvg(shell('<g></g >'));
+  assert.equal(spaced.ok, true, spaced.hits.join(','));
+  const tagged = checkSvg(shell('<g></g x="1">'));
+  assert.equal(tagged.ok, false);
+  assert.ok(tagged.hits.includes('attribute'));
+});
+
 test('the SVG gate rejects a leading byte-order mark', () => {
   const result = checkSvg(`\uFEFF<svg xmlns="${SVG_NS}" viewBox="0 0 1 1"></svg>`);
   assert.equal(result.ok, false);

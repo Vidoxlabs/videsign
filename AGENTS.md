@@ -100,11 +100,11 @@ The live persona accents are the `DESIGN.md` matrix. Those older persona hexes a
 
 The canon palette file lands with that canon record. It is not a dependency of this branch. Brand artwork uses the target signatures in `brand/tokens.json`: Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`. Field tiles are `#121214` and `#F7F7F5`.
 
-Do not draw or approximate the mark. Reference a file in `brand/` by family and version (`brand_{asset}_{variant}_v{NNN}.{ext}`). `on-dark` and `on-light` would name the field, not the ink. Shipped masters keep the brand-index filenames. Versions are not reused.
+Do not draw or approximate the mark. Reference a file in `brand/` by family and version (`brand_{asset}_{variant}_v{NNN}.{ext}`). On a lockup, `horizontal-dark`, `horizontal-light`, and `stacked-dark` name the field. On a mark, `mono-dark` and `mono-light` name the ink. On a wordmark, `dark` and `light` name the ink. `on-dark` and `on-light` would name the field. Shipped masters keep the brand-index filenames. Versions are not reused.
 
 Full colour is for the dark field. Do not place the full-colour mark on the light field `#F7F7F5`.
 
-#7C3AED is to be retired once ADR-011 is ratified. Use Persona Violet `#8B5CF6` for those fills and rings, and follow the interim contrast rule in `brand/README.md` (pending the owner): no normal-size label of any colour on that violet. The `DESIGN.md` value of `{colors.surface-accent-violet-base}` stays `#7C3AED` until a follow-up changes it.
+#7C3AED is to be retired once ADR-011 is ratified. Until then `{colors.surface-accent-violet-base}` stays `#7C3AED` and is the live value for new CTA fills and focus rings. Persona Violet `#8B5CF6` is the target for those fills and rings after that ratification. Follow the interim contrast rule in `brand/README.md` (pending the owner): no normal-size label of any colour on that violet. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`. `{effects.ambient-glow-teal-base}` stays the default glow.
 
 Xylia is never text and never appears alone. Do not build a gradient between the five signature colours. Text-safe Xylia and text-safe Zinnia are pending. Do not define them.
 
