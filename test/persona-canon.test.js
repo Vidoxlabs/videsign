@@ -711,6 +711,21 @@ test('reviewer checklist covers C1 through C13', () => {
   assert.match(text, /watermark/i);
   assert.match(text, /Family constants/);
   assert.match(text, /villain-coded/);
+  assert.match(text, /that VI's reference anchor/);
+  assert.match(text, /similarity to the reference anchor/);
+});
+
+test('a background plate is not gated on character anatomy', () => {
+  const text = fs.readFileSync(path.join(VWXYZ, 'reviewer-checklist.md'), 'utf8');
+  const section = (start, end) => text.slice(text.indexOf(start), text.indexOf(end));
+  const c6 = section('### C6.', '### C7.');
+  const c7 = section('### C7.', '### C8.');
+  assert.match(c6, /`full`, `chibi` and `sheet`/);
+  assert.match(c6, /does not apply to `bg`/);
+  assert.match(c7, /does not apply to `bg`/);
+  const verdict = text.slice(text.indexOf('## Verdict'));
+  assert.match(verdict, /C6 and C7 do not apply to `bg`/);
+  assert.match(verdict, /`bg`: C1–C3, C8–C11 and C13 pass/);
 });
 
 test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {

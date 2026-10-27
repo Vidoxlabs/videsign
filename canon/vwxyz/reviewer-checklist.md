@@ -1,6 +1,6 @@
 # VWXYZ reviewer checklist v1
 
-Compare every candidate with that VI's approved anchor and with `palette.json`. If this checklist and `palette.json` disagree on a hex, `palette.json` wins.
+Compare every candidate with that VI's reference anchor and with `palette.json`. If this checklist and `palette.json` disagree on a hex, `palette.json` wins.
 
 Sample each channel from a flat region: the median of a patch of at least 200 px, avoiding line art and highlights. Channels: hair, under-light, eyes (iris), trim, tie and tail tip. Compare with CIEDE2000.
 
@@ -49,9 +49,13 @@ Full and chibi masters have alpha 0 at all four corners and across a border of a
 
 ### C6. Anatomy
 
+Applies to `full`, `chibi` and `sheet`. A `bg` plate has no figure, so C6 does not apply to `bg`.
+
 Exactly one character. Two cat ears, zero human ears, one tail, two arms, and five fingers on each visible hand.
 
 ### C7. Family constants
+
+Applies to `full`, `chibi` and `sheet`. A `bg` plate has no figure, so C7 does not apply to `bg`.
 
 All of these are present:
 
@@ -80,7 +84,7 @@ None of the drift negatives in the table below are present.
 
 ### C12. Similarity
 
-Record perceptual similarity to the approved anchor. The numeric gate is not calibrated, so C12 does not reject on its own. Do not invent a cutoff.
+Record perceptual similarity to the reference anchor. The numeric gate is not calibrated, so C12 does not reject on its own. Do not invent a cutoff.
 
 ### C13. Background plate
 
@@ -98,6 +102,7 @@ Applies to `bg` only. No people. Accent pixels are at most 10% of the frame and 
 
 ## Verdict
 
-- C1–C11 pass, and C13 passes when the type is `bg`: `approved`.
-- Any of those fails: `rejected`, with `failed_items` and swatch ΔE00 values.
+- `full`, `chibi` and `sheet`: C1–C11 pass. C13 does not apply. Outcome: `approved`.
+- `bg`: C1–C3, C8–C11 and C13 pass. C6 and C7 do not apply to `bg`. Outcome: `approved`.
+- Any applicable check fails: `rejected`, with `failed_items` and swatch ΔE00 values.
 - C12 is recorded and is not a gate until a cutoff is calibrated in a later canon version.
