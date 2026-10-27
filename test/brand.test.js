@@ -457,7 +457,8 @@ test('ADR-011 is proposed and amends the raster ban', () => {
   assert.match(agents, /being retired/i);
   assert.match(read('README.md'), /brand\/README\.md/);
   const sidebar = read('preview/sidebar-nav.html');
-  assert.match(sidebar, /brand\/brand_mark_header_v008\.svg/);
+  assert.match(sidebar, /brand\/brand_favicon_px16_v008\.svg/);
+  assert.doesNotMatch(sidebar, /brand_mark_header_v008\.svg/);
   assert.doesNotMatch(sidebar, /cube\.png/);
   assert.match(sidebar, /border-persona-accent-violet-base/);
   assert.match(sidebar, /bg-persona-accent-violet-base/);
