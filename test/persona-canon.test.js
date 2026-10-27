@@ -872,6 +872,35 @@ test('a non-directory brand entry fails closed', () => {
   }, false);
 });
 
+test('accent, format, and extra confusable brand names fail closed', () => {
+  withOperatorEnv(undefined, () => {
+    const expectLookalike = (name) => {
+      const result = scanBrandLayout({ [`${name}/n.txt`]: 'palette note' });
+      assert.equal(result.ok, false);
+      assert.ok(
+        result.hits.some((hit) => hit.includes('look-alike-brand')),
+        `expected look-alike-brand for ${JSON.stringify(name)}`,
+      );
+    };
+    expectLookalike(`br${String.fromCharCode(0x00E1)}nd`);
+    expectLookalike(`bra${String.fromCharCode(0x0301)}nd`);
+    expectLookalike(`${String.fromCharCode(0x1E03)}rand`);
+    for (const mark of [0x200B, 0x200C, 0x200D, 0x2060, 0xFEFF, 0x00AD]) {
+      expectLookalike(`br${String.fromCharCode(mark)}and`);
+    }
+    expectLookalike(`bra${String.fromCharCode(0x0578)}d`);
+    expectLookalike(`${String.fromCharCode(0x0185)}rand`);
+
+    const beside = scanBrandLayout({
+      'brand/a.txt': 'palette note',
+      [`br${String.fromCharCode(0x200B)}and/n.txt`]: 'palette note',
+    });
+    assert.equal(beside.ok, false);
+    const besideFail = beside.hits.some((hit) => hit.includes('look-alike-brand') || hit.includes('duplicate-brand'));
+    assert.equal(besideFail, true);
+  }, false);
+});
+
 test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {
   const design = fs.readFileSync(path.join(ROOT, 'DESIGN.md'), 'utf8');
   const end = design.indexOf('\n---\n', 4);

@@ -20,8 +20,11 @@
  * avatar, banner, icon or stripe, and the variant is 1 to 27 characters of
  * lowercase letters, digits and hyphens. Every top-level folder whose name
  * skeletons to brand is scanned. More than one such folder fails closed, and
- * so does a look-alike (a confusable letter, a small capital, or a trailing
- * dot or space). A brand-skeleton name that is not a real directory (a file,
+ * so does a look-alike (a confusable letter, a small capital, a trailing
+ * dot or space, an accent, or a format character inside the name). Format
+ * characters, including ZWSP, ZWNJ, ZWJ, word joiner, BOM and soft hyphen,
+ * are stripped before the name is compared, and combining marks are stripped
+ * after NFKC and NFKD. A brand-skeleton name that is not a real directory (a file,
  * a symlink, or anything else) fails closed and is not followed. A split id,
  * a longer slot or variant, or the same filename
  * outside brand/ remains a long id. A trailing extension is not part of the
@@ -115,6 +118,7 @@ const BRAND_CONFUSABLES = {
   '\u0251': 'a',
   '\u03b1': 'a',
   '\u1d00': 'a',
+  '\u0185': 'b',
   '\u0432': 'b',
   '\u044c': 'b',
   '\u0299': 'b',
@@ -124,9 +128,12 @@ const BRAND_CONFUSABLES = {
   '\u043f': 'n',
   '\u0274': 'n',
   '\u03b7': 'n',
+  '\u0578': 'n',
   '\u0501': 'd',
   '\u1d05': 'd',
 };
+
+const BRAND_FORMAT = /[\u00AD\u200B\u200C\u200D\u2060\uFEFF\p{Cf}]/gu;
 
 function trimBrandDecorations(value) {
   let text = String(value).trim();
@@ -139,7 +146,10 @@ function trimBrandDecorations(value) {
 }
 
 function brandSkeleton(name) {
-  const trimmed = trimBrandDecorations(String(name).normalize('NFKC'));
+  const stripped = String(name).replace(BRAND_FORMAT, '');
+  const decomposed = stripped.normalize('NFKC').normalize('NFKD');
+  const withoutMarks = decomposed.replace(/\p{M}/gu, '');
+  const trimmed = trimBrandDecorations(withoutMarks);
   let skeleton = '';
   for (const ch of trimmed) {
     const lower = ch.toLowerCase();
