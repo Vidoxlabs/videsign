@@ -16,11 +16,14 @@
  * shapes: kebab-case design tokens (lowercase hyphen segments, with a short
  * scale such as 3xl), and persona asset slugs vi_type_slot_vNNN whose slot
  * is 1 to 27 characters. Brand filenames are excluded only in files under
- * brand/, matched without regard to case. The asset is one of mark, favicon, lockup, wordmark, social,
+ * brand/. The asset is one of mark, favicon, lockup, wordmark, social,
  * avatar, banner, icon or stripe, and the variant is 1 to 27 characters of
- * lowercase letters, digits and hyphens. A split id, a longer slot or
- * variant, or the same filename outside brand/ remains a long id. A trailing
- * extension is not part of the id run.
+ * lowercase letters, digits and hyphens. Every top-level folder whose name
+ * skeletons to brand is scanned. More than one such folder fails closed, and
+ * so does a look-alike (a confusable letter, a small capital, or a trailing
+ * dot or space). A split id, a longer slot or variant, or the same filename
+ * outside brand/ remains a long id. A trailing extension is not part of the
+ * id run.
  * A 64-hex value of a key ending in sha256 stays allowlisted. The brand
  * directory is optional: a missing brand target is skipped.
  */
@@ -105,24 +108,70 @@ function isBrandFile(token) {
   return new RegExp(`^brand_${asset}_${variant}_v[0-9]{3}$`).test(token);
 }
 
+const BRAND_CONFUSABLES = {
+  '\u0430': 'a',
+  '\u0251': 'a',
+  '\u03b1': 'a',
+  '\u1d00': 'a',
+  '\u0432': 'b',
+  '\u044c': 'b',
+  '\u0299': 'b',
+  '\u03b2': 'b',
+  '\u0433': 'r',
+  '\u0280': 'r',
+  '\u043f': 'n',
+  '\u0274': 'n',
+  '\u03b7': 'n',
+  '\u0501': 'd',
+  '\u1d05': 'd',
+};
+
+function trimBrandDecorations(value) {
+  let text = String(value).trim();
+  let previous;
+  do {
+    previous = text;
+    text = text.replace(/[.\s]+$/u, '').trim();
+  } while (text !== previous);
+  return text;
+}
+
+function brandSkeleton(name) {
+  const trimmed = trimBrandDecorations(String(name).normalize('NFKC'));
+  let skeleton = '';
+  for (const ch of trimmed) {
+    const lower = ch.toLowerCase();
+    skeleton += BRAND_CONFUSABLES[lower] || lower;
+  }
+  return skeleton;
+}
+
+function isPlainBrandName(name) {
+  return /^brand$/i.test(name);
+}
+
 function isUnderBrand(display) {
   const normalized = String(display).split(path.sep).join('/');
   const head = normalized.split('/')[0];
-  return head.toLowerCase() === 'brand';
+  return brandSkeleton(head) === 'brand';
 }
 
-function resolveBrandDir(root) {
-  const exact = path.resolve(root, 'brand');
-  if (fs.existsSync(exact)) return exact;
+function collectBrandDirs(root) {
   let entries;
   try {
     entries = fs.readdirSync(root, { withFileTypes: true });
   } catch (err) {
-    return exact;
+    return { dirs: [], lookalike: false };
   }
-  const match = entries.find((entry) => entry.name.toLowerCase() === 'brand');
-  if (!match) return exact;
-  return path.join(root, match.name);
+  const dirs = [];
+  let lookalike = false;
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    if (brandSkeleton(entry.name) !== 'brand') continue;
+    dirs.push(path.join(root, entry.name));
+    if (!isPlainBrandName(entry.name)) lookalike = true;
+  }
+  return { dirs, lookalike };
 }
 
 function isLongId(token, options = {}) {
@@ -269,24 +318,18 @@ function scanPaths(targets, root = process.cwd()) {
     hits.push(failure);
   }
   const perFile = contentOperator(operator);
-  for (const rel of targets) {
-    const full = rel === 'brand' ? resolveBrandDir(root) : path.resolve(root, rel);
-    if (!fs.existsSync(full)) {
-      if (OPTIONAL_TARGETS.has(rel)) continue;
-      hits.push(`missing ${rel}`);
-      continue;
-    }
+  const scanDirectory = (full, relLabel) => {
     let files;
     try {
       const stat = fs.statSync(full);
       if (stat.isFile() && stat.size === 0) {
-        hits.push(`empty ${rel}`);
-        continue;
+        hits.push(`empty ${relLabel}`);
+        return;
       }
       files = listFiles(full);
     } catch (err) {
-      hits.push(`unreadable ${rel}`);
-      continue;
+      hits.push(`unreadable ${relLabel}`);
+      return;
     }
     for (const file of files) {
       const display = path.relative(root, file);
@@ -313,6 +356,26 @@ function scanPaths(targets, root = process.cwd()) {
       const result = scanText(text, perFile, { inBrand: isUnderBrand(display) });
       for (const hit of result.hits) hits.push(`${display}: ${hit}`);
     }
+  };
+  for (const rel of targets) {
+    if (rel === 'brand') {
+      const found = collectBrandDirs(root);
+      if (found.dirs.length === 0) {
+        if (OPTIONAL_TARGETS.has(rel)) continue;
+        hits.push(`missing ${rel}`);
+        continue;
+      }
+      if (found.dirs.length > 1) hits.push('duplicate-brand');
+      if (found.lookalike) hits.push('look-alike-brand');
+      for (const full of found.dirs) scanDirectory(full, rel);
+      continue;
+    }
+    const full = path.resolve(root, rel);
+    if (!fs.existsSync(full)) {
+      hits.push(`missing ${rel}`);
+      continue;
+    }
+    scanDirectory(full, rel);
   }
   return { ok: hits.length === 0, hits, operatorCheck };
 }

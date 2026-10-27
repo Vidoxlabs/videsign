@@ -73,7 +73,7 @@ Applies to `full`, `chibi` and `sheet`. C7a does not apply to `bg`.
 
 Applies to `full`, `chibi`, `sheet` and `bg`.
 
-Flat cel shading: one shadow tone and at most one highlight. Uniform line `#1A1A1F`. No photoreal texture, no 3D gradient, no painterly strands. On a `bg` plate this is flat fill and the same line family, `#1A1A1F`.
+Flat cel shading: one shadow tone and at most one highlight. Uniform line `#1A1A1F`. No photoreal texture, no 3D gradient, no painterly strands. On a `bg` plate this is flat fill and the same line family, slightly lighter than `#1A1A1F`, with no cast shadows on the wall.
 
 ### C8. Color
 
@@ -110,6 +110,8 @@ Applies to `bg` only. No people. Accent pixels are at most 10% of the frame and 
 | Zinnia | Hair `#5A3A30`. Magenta under-light and eyes. Trim and tail tip `#E13D9E`. Tie charcoal. Plain pencil skirt. | Orange or ginger hair. Trim closer to `#F43F5E` than to `#E13D9E`. Red or orange blazer. Baked-in text. |
 
 ## Verdict
+
+C7 inside C1–C11 means C7a plus C7b.
 
 - `full` and `chibi`: C1–C11 pass. C13 does not apply. Outcome: `approved`.
 - `sheet`: C1–C3 and C6–C11 pass. C4 and C5 do not apply to `sheet`. C13 does not apply. Outcome: `approved`.

@@ -307,6 +307,27 @@ function scanNamedBrand(dirName, body) {
   }
 }
 
+function scanBrandLayout(files) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-brand-layout-'));
+  try {
+    for (const [rel, body] of Object.entries(files)) {
+      const full = path.join(dir, rel);
+      fs.mkdirSync(path.dirname(full), { recursive: true });
+      fs.writeFileSync(full, `${body}\n`);
+    }
+    return scanPaths(['brand'], dir);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+function driveToken() {
+  const alphabet = 'Aa0Bb1Cc2Dd3' + 'Ee4Ff5Gg6Hh7Ii8' + 'Jj9Kk';
+  let driveId = '';
+  for (let i = 0; i < 33; i += 1) driveId += alphabet[i % alphabet.length];
+  return driveId;
+}
+
 function runSafety(args, { hash, ci } = {}) {
   const env = { ...process.env };
   if (hash === undefined) delete env[OPERATOR_ENV];
@@ -749,12 +770,17 @@ test('a background plate is not gated on character anatomy', () => {
   assert.match(c7b, /#1A1A1F/);
   assert.match(c7b, /photoreal/);
   assert.match(c7b, /3D gradient/);
+  assert.match(c7b, /slightly lighter/);
+  assert.match(c7b, /no cast shadows on the wall/);
   const verdict = text.slice(text.indexOf('## Verdict'));
   assert.match(verdict, /`full` and `chibi`: C1–C11 pass/);
   assert.match(verdict, /`sheet`: C1–C3 and C6–C11 pass/);
   assert.match(verdict, /C4 and C5 do not apply to `sheet`/);
-  assert.match(verdict, /C7b/);
+  assert.match(verdict, /C7 inside C1–C11 means C7a plus C7b/);
+  assert.match(verdict, /`bg`: C1–C3, C7b, C8–C11 and C13 pass/);
   assert.match(verdict, /C4, C5, C6 and C7a do not apply to `bg`/);
+  const c13 = section('### C13.', '## Per-VI');
+  assert.match(c13, /No people/);
 });
 
 test('a case-variant brand directory is still scanned', () => {
@@ -771,6 +797,37 @@ test('a case-variant brand directory is still scanned', () => {
     const allowed = scanNamedBrand('BRAND', `${legit}\n${host}`);
     assert.ok(allowed.hits.some((hit) => hit.includes('google-host')));
     assert.equal(allowed.hits.some((hit) => hit.includes('long-id')), false);
+  }, false);
+});
+
+test('duplicate and look-alike brand folders fail closed', () => {
+  withOperatorEnv(undefined, () => {
+    const driveId = driveToken();
+    assert.equal(driveId.length, 33);
+    const both = scanBrandLayout({
+      'brand/a.txt': 'palette note',
+      'Brand/n.txt': driveId,
+    });
+    assert.equal(both.ok, false);
+    assert.ok(both.hits.some((hit) => hit.includes('long-id')));
+    assert.ok(both.hits.some((hit) => hit.includes('duplicate-brand')));
+
+    const fullWidth = 'brand'.replace(/[a-z]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) + 0xFEE0));
+    const wide = scanBrandLayout({ [`${fullWidth}/n.txt`]: driveId });
+    assert.equal(wide.ok, false);
+    assert.ok(wide.hits.some((hit) => hit.includes('look-alike-brand')));
+
+    const cyrillic = scanBrandLayout({ [`br${'\u0430'}nd/n.txt`]: driveId });
+    assert.equal(cyrillic.ok, false);
+    assert.ok(cyrillic.hits.some((hit) => hit.includes('look-alike-brand')));
+
+    const dotted = scanBrandLayout({ 'brand./n.txt': driveId });
+    assert.equal(dotted.ok, false);
+    assert.ok(dotted.hits.some((hit) => hit.includes('look-alike-brand')));
+
+    const unrelated = scanBrandLayout({ 'branding/n.txt': driveId });
+    assert.equal(unrelated.hits.some((hit) => hit.includes('look-alike-brand')), false);
+    assert.equal(unrelated.hits.some((hit) => hit.includes('long-id')), false);
   }, false);
 });
 
