@@ -164,7 +164,7 @@ function emitGlassCSS(tokens) {
   const backdrop = need('glass-crystal-backdrop-base');
   const core = need('glass-crystal-core-base');
   const solid = need('glass-crystal-solid-base');
-  const focusAccent = tokens.colors['surface-accent-violet-base'];
+  const focusAccent = tokens.colors['persona-accent-violet-base'];
   const shellRadius = sp['layout-radius-glass-base'];
   const bezel = sp['layout-padding-bezel-base'];
   const coreRadius = sp['layout-radius-standard-base'];
@@ -216,7 +216,7 @@ function emitGlassCSS(tokens) {
     `  box-shadow: ${rimShadow(rimHover)}, ${highlight}, ${shadow};`,
     '}',
     '',
-    '/* Brand accent is reserved for key CTAs and focus outlines (DESIGN.md). */',
+    '/* Focus outlines use Persona Violet (ADR-004 §4, ADR-011 §10). */',
     '.vi-glass--control:focus-within {',
     `  outline: 2px solid ${focusAccent};`,
     '  outline-offset: 2px;',

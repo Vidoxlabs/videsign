@@ -11,12 +11,10 @@ const path = require('path');
 
 const MAX_SVG_BYTES = 8192;
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const XLINK_NS = 'http://www.w3.org/1999/xlink';
 
-const ELEMENTS = new Set(['svg', 'g', 'path', 'rect', 'use']);
+const ELEMENTS = new Set(['svg', 'g', 'path', 'rect']);
 const ATTRIBUTES = new Set([
   'xmlns',
-  'xmlns:xlink',
   'viewBox',
   'd',
   'fill',
@@ -29,8 +27,6 @@ const ATTRIBUTES = new Set([
   'transform',
   'data-role',
   'data-part',
-  'href',
-  'xlink:href',
 ]);
 
 /** Canon signatures plus the two field neutrals. none and currentColor are not used. */
@@ -66,20 +62,16 @@ function add(hits, hit) {
   if (!hits.includes(hit)) hits.push(hit);
 }
 
-function isFragment(value) {
-  return /^#[A-Za-z_][\w.-]*$/.test(value);
-}
-
 function isPaletteColour(value) {
   return PALETTE.has(value.trim().toUpperCase());
 }
 
 function validateAttribute(element, name, value, hits) {
-  if (/^on/i.test(name)) {
+  if (/^on/i.test(name) || /:on/i.test(name)) {
     add(hits, 'handler');
     return;
   }
-  if (name.includes(':') && name !== 'xmlns:xlink' && name !== 'xlink:href') {
+  if (name.includes(':')) {
     add(hits, 'namespace');
     return;
   }
@@ -87,11 +79,10 @@ function validateAttribute(element, name, value, hits) {
     add(hits, 'attribute');
     return;
   }
-  if ((name === 'xmlns' || name === 'xmlns:xlink') && element !== 'svg') {
+  if (name === 'xmlns' && element !== 'svg') {
     add(hits, 'attribute');
   }
   if (name === 'xmlns' && value !== SVG_NS) add(hits, 'namespace');
-  if (name === 'xmlns:xlink' && value !== XLINK_NS) add(hits, 'namespace');
   if (name === 'viewBox' && !new RegExp(`^${NUMBER} ${NUMBER} ${NUMBER} ${NUMBER}$`).test(value)) {
     add(hits, 'attribute');
   }
@@ -103,7 +94,6 @@ function validateAttribute(element, name, value, hits) {
   if (name === 'transform' && !TRANSFORM.test(value)) add(hits, 'attribute');
   if (name === 'data-role' && value !== 'text') add(hits, 'attribute');
   if (name === 'data-part' && value !== 'wordmark') add(hits, 'attribute');
-  if ((name === 'href' || name === 'xlink:href') && !isFragment(value)) add(hits, 'external-ref');
 }
 
 function checkSvg(bytes) {
@@ -115,6 +105,7 @@ function checkSvg(bytes) {
   const hits = [];
   if (buf.length > MAX_SVG_BYTES) add(hits, 'oversize');
   const text = buf.toString('utf8');
+  if (text.includes('\uFEFF')) add(hits, 'bom');
   if (text.trim() === '') {
     add(hits, 'unset or empty');
     return { ok: false, hits };

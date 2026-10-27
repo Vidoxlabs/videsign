@@ -1,6 +1,6 @@
 /**
  * Brand v1 contract: signature tokens, mark C spec, SVG allow-list (ADR-011),
- * and the interim contrast rule (D5 pending Gavin).
+ * and the interim contrast rule (D5 pending the owner).
  */
 
 const { test } = require('node:test');
@@ -22,7 +22,6 @@ const { MAX_SVG_BYTES, PALETTE, checkSvg, listSvgFiles } = require('../scripts/c
 const ROOT = path.join(__dirname, '..');
 const BRAND = path.join(ROOT, 'brand');
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const XLINK_NS = 'http://www.w3.org/1999/xlink';
 
 const SIGNATURES = {
   violet: '#8B5CF6',
@@ -57,6 +56,13 @@ function contrast(foreground, background) {
 
 function shell(inner, extra) {
   return `<svg xmlns="${SVG_NS}" viewBox="0 0 1 1"${extra || ''}>${inner}</svg>`;
+}
+
+function pathFor(family, needle) {
+  const manifest = loadBrandManifest(read('brand/MANIFEST.json'));
+  const rows = manifest.files.filter((entry) => entry.family === family && entry.asset.includes(needle));
+  assert.equal(rows.length, 1, `${family} ${needle}`);
+  return rows[0].path;
 }
 
 function rememberDigest(seen, digest) {
@@ -116,7 +122,7 @@ test('brand signature tokens use the canon hexes and the wisteria glow', () => {
   assert.equal(Object.hasOwn(tokens, 'ambient-glow-teal-base'), false);
 });
 
-test('brand signatures match persona accents', { skip: 'pending until the persona move lands after the canon record' }, () => {
+test('brand signatures match persona accents', { skip: 'skipped until the colours match: https://github.com/Vidoxlabs/videsign/issues/15' }, () => {
   const tokens = loadBrandTokens(read('brand/tokens.json'));
   const design = read('DESIGN.md');
   const pairs = [
@@ -155,7 +161,7 @@ test('brand spec maps facets to the five VIs and records sizes', () => {
   }
   assert.equal(spec.min_sizes_px.favicon, 16);
   assert.equal(spec.min_sizes_px.mark_header, 38);
-  assert.equal(spec.min_sizes_px.header_below_38_favicon_grade, 24);
+  assert.equal(spec.min_sizes_px.favicon_grade_floor, 24);
   assert.equal(spec.min_sizes_px.mark_tile, 81.778);
   assert.deepEqual(spec.card_sizes_px.lockup_horizontal, { width: 226, height: 82 });
   assert.deepEqual(spec.card_sizes_px.lockup_stacked, { width: 146, height: 110 });
@@ -164,7 +170,26 @@ test('brand spec maps facets to the five VIs and records sizes', () => {
   assert.ok(spec.clear_space.trim().length > 0);
 });
 
-test('interim contrast rule (D5 pending Gavin)', () => {
+test('brand signatures currently differ from persona accents', () => {
+  const tokens = loadBrandTokens(read('brand/tokens.json'));
+  const design = read('DESIGN.md');
+  const pairs = [
+    ['brand-signature-violet-base', 'persona-accent-violet-base'],
+    ['brand-signature-wisteria-base', 'persona-accent-wisteria-base'],
+    ['brand-signature-xylia-base', 'persona-accent-xylia-base'],
+    ['brand-signature-yarrow-base', 'persona-accent-yarrow-base'],
+    ['brand-signature-zinnia-base', 'persona-accent-zinnia-base'],
+  ];
+  let differ = 0;
+  for (const [brandKey, personaKey] of pairs) {
+    const match = design.match(new RegExp(`${personaKey}: "(#[0-9A-Fa-f]{6})"`));
+    assert.ok(match, personaKey);
+    if (tokens[brandKey] !== match[1]) differ += 1;
+  }
+  assert.ok(differ > 0);
+});
+
+test('interim contrast rule (D5 pending the owner)', () => {
   const tokens = loadBrandTokens(read('brand/tokens.json'));
   const fill = tokens['brand-signature-violet-base'];
   const pairs = [
@@ -178,9 +203,15 @@ test('interim contrast rule (D5 pending Gavin)', () => {
     assert.ok(ratio < 4.5, ratio);
     assert.ok(ratio >= 3, ratio);
   }
+  for (const rel of ['brand/README.md', 'SKILL.md', 'AGENTS.md', 'DESIGN.md']) {
+    const doc = read(rel);
+    assert.match(doc, /pending the owner/);
+    assert.equal(doc.includes(['pending', 'Gavin'].join(' ')), false);
+    assert.match(doc, /#7C3AED is to be retired once ADR-011 is ratified/);
+    assert.equal(doc.includes(['#7C3AED', 'is retired'].join(' ')), false);
+  }
   for (const rel of ['brand/README.md', 'SKILL.md']) {
     const doc = read(rel);
-    assert.match(doc, /pending Gavin/);
     assert.match(doc, /18\.66px/);
     assert.match(doc, /24px/);
     assert.match(doc, /4\.42:1/);
@@ -262,14 +293,19 @@ test('the SVG gate rejects foreignObject', () => {
 
 test('the SVG gate rejects an external use reference', () => {
   const result = checkSvg(shell('<use href="https://example.com/mark.svg"/>'));
-  assert.ok(result.hits.includes('external-ref'), result.hits.join(','));
+  assert.equal(result.ok, false);
+  assert.ok(result.hits.includes('element'), result.hits.join(','));
+  assert.ok(result.hits.includes('attribute'), result.hits.join(','));
 });
 
 test('the SVG gate rejects an external xlink reference', () => {
   const host = ['https://', 'canva', '.', 'com', '/file.svg'].join('');
-  const svg = `<svg xmlns="${SVG_NS}" xmlns:xlink="${XLINK_NS}" viewBox="0 0 1 1"><use xlink:href="${host}"/></svg>`;
+  const link = ['http://www.w3.org/', '1999', '/', 'xlink'].join('');
+  const svg = `<svg xmlns="${SVG_NS}" xmlns:xlink="${link}" viewBox="0 0 1 1"><use xlink:href="${host}"/></svg>`;
   const result = checkSvg(svg);
-  assert.ok(result.hits.includes('external-ref'), result.hits.join(','));
+  assert.equal(result.ok, false);
+  assert.ok(result.hits.includes('pattern'), result.hits.join(','));
+  assert.ok(result.hits.includes('namespace'), result.hits.join(','));
 });
 
 test('the SVG gate rejects an external url import', () => {
@@ -327,9 +363,117 @@ test('literal path and host patterns are rejected', () => {
   }
 });
 
-test('a same-document fragment reference is allowed', () => {
+test('a same-document fragment reference is denied', () => {
   const result = checkSvg(shell('<use href="#mark"/>'));
-  assert.equal(result.ok, true, result.hits.join(','));
+  assert.equal(result.ok, false, result.hits.join(','));
+  assert.ok(result.hits.includes('element'));
+  assert.ok(result.hits.includes('attribute'));
+});
+
+test('the SVG gate rejects CDATA', () => {
+  const result = checkSvg(shell('<path d="M0 0"><![CDATA[mark]]></path>'));
+  assert.equal(result.ok, false, result.hits.join(','));
+});
+
+test('the SVG gate rejects a doctype and an entity', () => {
+  const result = checkSvg(`<!DOCTYPE svg [<!ENTITY m "mark">]><svg xmlns="${SVG_NS}" viewBox="0 0 1 1"></svg>`);
+  assert.equal(result.ok, false, result.hits.join(','));
+  assert.ok(result.hits.includes('doctype'));
+});
+
+test('the SVG gate rejects a processing instruction and an XML declaration', () => {
+  const result = checkSvg(`<?xml version="1.0"?><?xml-stylesheet type="text/css" href="a.css"?><svg xmlns="${SVG_NS}" viewBox="0 0 1 1"></svg>`);
+  assert.equal(result.ok, false, result.hits.join(','));
+  assert.ok(result.hits.includes('processing-instruction'));
+});
+
+test('the SVG gate rejects a style element and a style attribute', () => {
+  const result = checkSvg(shell('<style>circle{}</style>', ' style="fill:#8B5CF6"'));
+  assert.equal(result.ok, false, result.hits.join(','));
+  assert.ok(result.hits.includes('element'));
+  assert.ok(result.hits.includes('attribute'));
+});
+
+test('the SVG gate rejects xml:base', () => {
+  const result = checkSvg(shell('', ' xml:base="mark"'));
+  assert.equal(result.ok, false);
+  assert.ok(result.hits.includes('namespace'));
+});
+
+test('the SVG gate rejects href case and whitespace variants', () => {
+  const samples = [
+    shell('', ' HREF="#mark"'),
+    shell('', ' href = "#mark"'),
+    shell('<use Xlink:Href="#mark"/>'),
+  ];
+  for (const sample of samples) {
+    const result = checkSvg(sample);
+    assert.equal(result.ok, false, result.hits.join(','));
+  }
+});
+
+test('the SVG gate rejects mixed-case javascript', () => {
+  const result = checkSvg(shell('<path d="M0 0" fill="JaVaScRiPt:alert(1)"/>'));
+  assert.equal(result.ok, false);
+  assert.ok(result.hits.includes('javascript'));
+});
+
+test('the SVG gate rejects url with spaces or quotes', () => {
+  const samples = [
+    shell('<path d="M0 0" fill="url( #x )"/>'),
+    shell('<path d="M0 0" fill="url(\'#x\')"/>'),
+    `<svg xmlns="${SVG_NS}" viewBox="0 0 1 1"><path d="M0 0" fill="url("#x")"/></svg>`,
+  ];
+  for (const sample of samples) {
+    const result = checkSvg(sample);
+    assert.equal(result.ok, false, sample);
+    assert.ok(result.hits.includes('external-url'), result.hits.join(','));
+  }
+});
+
+test('the SVG gate rejects set and animate', () => {
+  const result = checkSvg(shell('<set attributeName="fill" to="#8B5CF6"/><animate attributeName="fill" to="#8B5CF6"/>'));
+  assert.equal(result.ok, false);
+  assert.ok(result.hits.includes('element'));
+});
+
+test('the SVG gate rejects namespaced and upper-case handlers', () => {
+  const namespaced = checkSvg(shell('', ' svg:onload="alert(1)"'));
+  assert.equal(namespaced.ok, false);
+  assert.ok(namespaced.hits.includes('handler'));
+  const upper = checkSvg(shell('', ' ONLOAD="alert(1)"'));
+  assert.equal(upper.ok, false);
+  assert.ok(upper.hits.includes('handler'));
+});
+
+test('the SVG gate rejects image, anchor, and metadata', () => {
+  const result = checkSvg(shell('<image width="1" height="1"/><a></a><metadata></metadata>'));
+  assert.equal(result.ok, false);
+  assert.ok(result.hits.includes('element'));
+});
+
+test('the SVG gate rejects unclosed and unparseable documents', () => {
+  const unclosed = checkSvg(`<svg xmlns="${SVG_NS}" viewBox="0 0 1 1"><path d="M0 0"`);
+  assert.equal(unclosed.ok, false);
+  const garbage = checkSvg('<<<<');
+  assert.equal(garbage.ok, false);
+});
+
+test('the SVG gate rejects synthetic editor ids', () => {
+  const drive = shell('', ` id="${'D'.repeat(33)}"`);
+  const canva = shell('', ` id="${'C'.repeat(11)}"`);
+  for (const sample of [drive, canva]) {
+    const result = checkSvg(sample);
+    assert.equal(result.ok, false, result.hits.join(','));
+    assert.ok(result.hits.includes('attribute'));
+  }
+});
+
+test('the SVG gate rejects a leading byte-order mark', () => {
+  const result = checkSvg(`\uFEFF<svg xmlns="${SVG_NS}" viewBox="0 0 1 1"></svg>`);
+  assert.equal(result.ok, false);
+  assert.ok(result.hits.includes('bom'));
+  assert.equal(result.hits.includes('unset or empty'), false);
 });
 
 test('data-role is not treated as a data URI', () => {
@@ -392,22 +536,22 @@ test('shipped master viewBoxes match the recorded minimums and card sizes', () =
   const header = viewBoxSize('brand/brand_mark_header_v008.svg');
   assert.equal(header.width, spec.min_sizes_px.mark_header);
   assert.equal(header.height, spec.min_sizes_px.mark_header);
-  const tile = viewBoxSize('brand/brand_mark_full-color_v008.svg');
+  const tile = viewBoxSize(pathFor('mark', 'full-color'));
   assert.equal(tile.width, spec.min_sizes_px.mark_tile);
   assert.equal(tile.height, spec.min_sizes_px.mark_tile);
-  const horizontal = viewBoxSize('brand/brand_lockup_horizontal-on-dark_v006.svg');
+  const horizontal = viewBoxSize(pathFor('lockup', 'horizontal-dark'));
   assert.equal(horizontal.width, spec.card_sizes_px.lockup_horizontal.width);
   assert.equal(horizontal.height, spec.card_sizes_px.lockup_horizontal.height);
-  const stacked = viewBoxSize('brand/brand_lockup_stacked-on-dark_v005.svg');
+  const stacked = viewBoxSize(pathFor('lockup', 'stacked-dark'));
   assert.equal(stacked.width, spec.card_sizes_px.lockup_stacked.width);
   assert.equal(stacked.height, spec.card_sizes_px.lockup_stacked.height);
-  const wordmark = viewBoxSize('brand/brand_wordmark_on-light_v003.svg');
+  const wordmark = viewBoxSize(pathFor('wordmark', 'dark'));
   assert.equal(wordmark.width, spec.card_sizes_px.wordmark.width);
   assert.equal(wordmark.height, spec.card_sizes_px.wordmark.height);
 });
 
 test('full-colour mark uses the dark tile and the five signature fills', () => {
-  const text = read('brand/brand_mark_full-color_v008.svg');
+  const text = read(pathFor('mark', 'full-color'));
   assert.match(text, /fill="#121214"/);
   for (const hex of Object.values(SIGNATURES)) {
     assert.ok(text.includes(`fill="${hex}"`), hex);
@@ -416,7 +560,7 @@ test('full-colour mark uses the dark tile and the five signature fills', () => {
 });
 
 test('brand svgs are not ignored, and rasters under brand still are', () => {
-  const svg = 'brand/brand_mark_full-color_v008.svg';
+  const svg = pathFor('mark', 'full-color');
   const allowed = spawnSync('git', ['check-ignore', '--no-index', '-q', '--', svg], {
     cwd: ROOT,
     encoding: 'utf8',
@@ -441,7 +585,10 @@ test('ADR-011 is proposed and amends the raster ban', () => {
   assert.match(skill, /Proposed \(awaiting owner ratification\)/);
   assert.match(skill, /Amends ADR-002/);
   assert.match(skill, /Proposed amendment \(ADR-011, awaiting ratification\)/);
-  assert.match(skill, /Proposed amendment \(ADR-006, awaiting ratification\)/);
+  assert.match(skill, /\*\*Amended by ADR-006 \(2026-10-05\):\*\* crystal glass is the sanctioned material/);
+  assert.match(skill, /Crystal glass \(ADR-006\) is the only glass material\./);
+  assert.match(skill, /Crystal glass only \(ADR-006\)\*\*: Glass appears only on controls and lenses/);
+  assert.doesNotMatch(skill, /Proposed amendment \(ADR-006/);
   assert.doesNotMatch(skill, /Amended by ADR-011/);
   assert.match(read('.gitattributes'), /brand\/\*\*\/\*\.svg -text/);
   assert.doesNotMatch(read('.gitattributes'), /brand\/\*\*\/\*\.svg binary/);

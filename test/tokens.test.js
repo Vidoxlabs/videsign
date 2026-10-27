@@ -201,6 +201,12 @@ test('glass.css ships pill radius variants for plain-CSS consumers', () => {
   assert.match(GLASS, /\.vi-glass-core--pill \{[^}]*border-radius: 9999px;/s);
 });
 
+test('glass focus outline uses Persona Violet and contains no matrix accent hex', () => {
+  const css = emitGlassCSS(TOKENS);
+  assert.equal(/#7C3AED/i.test(css), false);
+  assert.match(css, /outline: 2px solid #8B5CF6;/);
+});
+
 test('glass.css draws the rim as an inset shadow (no border box) so radii stay concentric', () => {
   const rim = TOKENS.effects['glass-crystal-rim-base'];
   assert.ok(GLASS.includes('border: 0;'));

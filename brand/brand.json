@@ -44,7 +44,7 @@
   "min_sizes_px": {
     "favicon": 16,
     "mark_header": 38,
-    "header_below_38_favicon_grade": 24,
+    "favicon_grade_floor": 24,
     "mark_tile": 81.778
   },
   "clear_space": "Do not crop the master viewBox. The tile padding inside that viewBox is the clear space.",
