@@ -24,7 +24,9 @@
  * dot or space, an accent, or a format character inside the name). Format
  * characters, including ZWSP, ZWNJ, ZWJ, word joiner, BOM and soft hyphen,
  * are stripped before the name is compared, and combining marks are stripped
- * after NFKC and NFKD. A brand-skeleton name that is not a real directory (a file,
+ * after NFKC and NFKD. Any top-level file or folder whose name is not plain
+ * ASCII (`A-Z`, `a-z`, digits, `.`, `_`, `-`) fails closed, whatever it
+ * resembles. A brand-skeleton name that is not a real directory (a file,
  * a symlink, or anything else) fails closed and is not followed. A split id,
  * a longer slot or variant, or the same filename
  * outside brand/ remains a long id. A trailing extension is not part of the
@@ -160,6 +162,22 @@ function brandSkeleton(name) {
 
 function isPlainBrandName(name) {
   return /^brand$/i.test(name);
+}
+
+const PLAIN_ASCII_NAME = /^[A-Za-z0-9._-]+$/;
+
+function nonAsciiNameHits(root) {
+  let entries;
+  try {
+    entries = fs.readdirSync(root, { withFileTypes: true });
+  } catch (err) {
+    return [];
+  }
+  const hits = [];
+  for (const entry of entries) {
+    if (!PLAIN_ASCII_NAME.test(entry.name)) hits.push('non-ascii-name');
+  }
+  return hits;
 }
 
 function isUnderBrand(display) {
@@ -345,6 +363,7 @@ function scanPaths(targets, root = process.cwd()) {
     hits.push(failure);
   }
   const perFile = contentOperator(operator);
+  hits.push(...nonAsciiNameHits(root));
   const scanDirectory = (full, relLabel) => {
     let files;
     try {

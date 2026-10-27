@@ -321,6 +321,33 @@ function scanBrandLayout(files) {
   }
 }
 
+function scanTopLevelName(name, { symlink = false } = {}) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-top-'));
+  const extra = [];
+  try {
+    if (symlink) {
+      const target = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-top-target-'));
+      extra.push(target);
+      fs.writeFileSync(path.join(target, 'n.txt'), 'palette note\n');
+      fs.symlinkSync(target, path.join(root, name));
+    } else {
+      const full = path.join(root, name, 'n.txt');
+      fs.mkdirSync(path.dirname(full), { recursive: true });
+      fs.writeFileSync(full, 'palette note\n');
+    }
+    return scanPaths(['brand'], root);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+    for (const dir of extra) fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+function expectNonAscii(name) {
+  const result = scanTopLevelName(name);
+  assert.equal(result.ok, false);
+  assert.ok(result.hits.some((hit) => hit.includes('non-ascii-name')));
+}
+
 function driveToken() {
   const alphabet = 'Aa0Bb1Cc2Dd3' + 'Ee4Ff5Gg6Hh7Ii8' + 'Jj9Kk';
   let driveId = '';
@@ -898,6 +925,83 @@ test('accent, format, and extra confusable brand names fail closed', () => {
     assert.equal(beside.ok, false);
     const besideFail = beside.hits.some((hit) => hit.includes('look-alike-brand') || hit.includes('duplicate-brand'));
     assert.equal(besideFail, true);
+  }, false);
+});
+
+test('a ZWSP inside a top-level brand name fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    expectNonAscii(`br${String.fromCharCode(0x200B)}and`);
+  }, false);
+});
+
+test('a ZWJ inside a top-level brand name fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    expectNonAscii(`bra${String.fromCharCode(0x200D)}nd`);
+  }, false);
+});
+
+test('a ZWNJ inside a top-level brand name fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    expectNonAscii(`br${String.fromCharCode(0x200C)}and`);
+  }, false);
+});
+
+test('a soft hyphen inside a top-level brand name fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    expectNonAscii(`br${String.fromCharCode(0x00AD)}and`);
+  }, false);
+});
+
+test('a word joiner inside a top-level brand name fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    expectNonAscii(`br${String.fromCharCode(0x2060)}and`);
+  }, false);
+});
+
+test('a Greek capital brand look-alike fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    const beta = String.fromCharCode(0x0392);
+    const alpha = String.fromCharCode(0x0391);
+    const nu = String.fromCharCode(0x039D);
+    expectNonAscii(`${beta}R${alpha}${nu}D`);
+  }, false);
+});
+
+test('a Cherokee brand look-alike fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    expectNonAscii(`${String.fromCharCode(0x13F4)}${String.fromCharCode(0x13A1)}and`);
+  }, false);
+});
+
+test('a Lisu brand look-alike fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    expectNonAscii(`${String.fromCharCode(0xA4D0)}ran${String.fromCharCode(0xA4D3)}`);
+  }, false);
+});
+
+test('an Armenian brand look-alike fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    expectNonAscii(`bra${String.fromCharCode(0x0578)}d`);
+  }, false);
+});
+
+test('a brand-like symlink to a folder fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    const result = scanTopLevelName('Brand', { symlink: true });
+    assert.equal(result.ok, false);
+    assert.ok(result.hits.some((hit) => hit.includes('non-directory-brand')));
+  }, false);
+});
+
+test('a plain brand directory and the repo top level stay ASCII-clean', () => {
+  withOperatorEnv(undefined, () => {
+    const plain = /^[A-Za-z0-9._-]+$/;
+    for (const name of fs.readdirSync(ROOT)) assert.match(name, plain, name);
+    const clean = scanBrandLayout({ 'brand/a.txt': 'palette note' });
+    assert.equal(clean.ok, true);
+    assert.equal(clean.hits.some((hit) => hit.includes('non-ascii-name')), false);
+    const repo = scanPaths(['brand'], ROOT);
+    assert.equal(repo.hits.some((hit) => hit.includes('non-ascii-name')), false);
   }, false);
 });
 
