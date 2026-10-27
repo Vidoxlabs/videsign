@@ -153,6 +153,9 @@ A slot is one of:
 - a viseme (`viseme-` plus `a`, `e`, `i`, `o` or `u`)
 - a Violet chibi runtime state (`alert`, `loading`, `searching`, `success`, `planning`, `keyboard`, `snack`)
 - a background slug
+- a sheet anchor (`anchor`)
+- the group lineup (`lineup`). Its asset id uses vi `group`, which is not a character
+- a scene slot (`scene-` plus a kebab slug) for a full composite
 
 Examples: `xylia_full_neutral_v001.png`, `zinnia_chibi_viseme-a_v003.png`, `yarrow_bg_map-room_v001.png`, `violet_sheet_anchor_v001.png`.
 

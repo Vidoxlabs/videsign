@@ -13,7 +13,12 @@
     },
     "assetId": {
       "type": "string",
-      "pattern": "^[a-z0-9]+(/[a-z0-9-]+){3}$"
+      "pattern": "^[a-z0-9]+(/[a-z0-9-]+){3}$",
+      "examples": [
+        "violet/sheet/anchor/v001",
+        "group/sheet/lineup/v001",
+        "violet/full/scene-neutral/v001"
+      ]
     },
     "viName": {
       "type": "string",

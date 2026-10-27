@@ -84,5 +84,8 @@
     "yarrow": ["map-room"],
     "zinnia": ["launch-lane"]
   },
-  "slot_rule": "A slot is an expression, a pose, a pose-expression pair, a viseme prefixed as viseme-a, a state, or a bg slug. Unknown slugs are rejected. New slugs are added to this file first."
+  "reserved_slot": ["anchor", "lineup"],
+  "slot_prefix": ["viseme-", "scene-"],
+  "vi_alias": ["group"],
+  "slot_rule": "A slot is an expression, a pose, a pose-expression pair, a viseme prefixed as viseme-, a scene prefixed as scene-, a reserved sheet slot (anchor or lineup), a state, or a bg slug. An asset id may use a character vi, or the group alias for the lineup. Unknown slugs are rejected. New slugs are added to this file first."
 }

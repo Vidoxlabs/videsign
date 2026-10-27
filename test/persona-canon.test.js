@@ -501,6 +501,85 @@ test('vocabulary slugs are kebab-case and unique', () => {
   assert.match(vocab.expression_notes.xylia.angry, /cold disapproval, not villain-coded/i);
 });
 
+function slotAllowed(vocab, slot, vi) {
+  if (vocab.expression.includes(slot)) return true;
+  if (vocab.pose.includes(slot)) return true;
+  if (vocab.state.includes(slot)) return true;
+  if ((vocab.reserved_slot || []).includes(slot)) return true;
+  for (const prefix of vocab.slot_prefix || []) {
+    if (!slot.startsWith(prefix)) continue;
+    const rest = slot.slice(prefix.length);
+    if (!KEBAB.test(rest)) return false;
+    if (prefix === 'viseme-') return vocab.viseme.includes(rest);
+    return true;
+  }
+  for (const pose of vocab.pose) {
+    const head = `${pose}-`;
+    if (slot.startsWith(head) && vocab.expression.includes(slot.slice(head.length))) return true;
+  }
+  const lists = vi && Array.isArray(vocab.bg[vi]) ? [vocab.bg[vi]] : Object.values(vocab.bg);
+  return lists.some((list) => Array.isArray(list) && list.includes(slot));
+}
+
+function canonIdAllowed(vocab, id) {
+  const parts = String(id).split('/');
+  if (parts.length !== 4) return false;
+  const [vi, type, slot, version] = parts;
+  if (!/^v[0-9]{3}$/.test(version)) return false;
+  const names = new Set([...vocab.vi, ...(vocab.vi_alias || [])]);
+  if (!names.has(vi) || !vocab.type.includes(type)) return false;
+  return slotAllowed(vocab, slot, vi);
+}
+
+function collectCanonIds(files) {
+  const ids = new Set();
+  const pathRe = /[a-z0-9]+\/[a-z]+\/[a-z0-9]+(?:-[a-z0-9]+)*\/v[0-9]{3}/g;
+  const fileRe = /(violet|wisteria|xylia|yarrow|zinnia|group)_(full|chibi|bg|sheet)_([a-z0-9]+(?:-[a-z0-9]+)*)_v([0-9]{3})/g;
+  const sceneRe = /\bscene-[a-z0-9]+(?:-[a-z0-9]+)*/g;
+  const scenes = new Set();
+  const walk = (node) => {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node.examples)) {
+      for (const item of node.examples) {
+        if (typeof item === 'string' && item.includes('/')) ids.add(item);
+      }
+    }
+    for (const value of Object.values(node)) walk(value);
+  };
+  for (const file of files) {
+    const text = fs.readFileSync(file, 'utf8');
+    for (const match of text.matchAll(pathRe)) ids.add(match[0]);
+    for (const match of text.matchAll(fileRe)) {
+      ids.add(`${match[1]}/${match[2]}/${match[3]}/v${match[4]}`);
+    }
+    for (const match of text.matchAll(sceneRe)) scenes.add(match[0]);
+    if (file.endsWith('.json')) walk(JSON.parse(text));
+  }
+  return { ids: [...ids], scenes: [...scenes] };
+}
+
+test('every canon id in the palette, schema examples and docs is a vocabulary slot', () => {
+  const vocab = readJson('vocabulary.json');
+  const files = [
+    path.join(VWXYZ, 'palette.json'),
+    path.join(VWXYZ, 'asset-manifest.schema.json'),
+    path.join(VWXYZ, 'README.md'),
+    path.join(VWXYZ, 'reviewer-checklist.md'),
+  ];
+  const { ids, scenes } = collectCanonIds(files);
+  assert.ok(ids.includes('violet/sheet/anchor/v001'));
+  assert.ok(ids.includes('group/sheet/lineup/v001'));
+  assert.ok(scenes.includes('scene-neutral'));
+  const examples = readJson('asset-manifest.schema.json').$defs.assetId.examples;
+  assert.ok(Array.isArray(examples) && examples.length >= 3);
+  for (const id of examples) ids.push(id);
+  for (const id of ids) assert.equal(canonIdAllowed(vocab, id), true, id);
+  for (const slot of scenes) assert.equal(slotAllowed(vocab, slot), true, slot);
+  assert.equal(slotAllowed(vocab, 'scene-launch'), true);
+  assert.equal(canonIdAllowed(vocab, 'violet/full/not-a-real-slot/v001'), false);
+  assert.equal(canonIdAllowed(vocab, 'violet/chibi/neutral/v001'), true);
+});
+
 test('canon files pass the public-safety scan', () => {
   const files = walk(CANON).map((file) => path.relative(CANON, file)).sort();
   assert.deepEqual(files, [
@@ -808,6 +887,14 @@ test('a background plate is not gated on character anatomy', () => {
   assert.match(verdict, /C4, C5, C6 and C7a do not apply to `bg`/);
   const c13 = section('### C13.', '## Per-VI');
   assert.match(c13, /No people/);
+  assert.match(c13, /10%/);
+  assert.match(c13, /L\* 88–95/);
+  assert.match(c13, /three planes/);
+  const c9 = section('### C9.', '### C10.');
+  const c12 = section('### C12.', '### C13.');
+  assert.match(c9, /OCR finds zero words/);
+  assert.match(c12, /Do not invent a cutoff/);
+  assert.match(verdict, /Any applicable check fails: `rejected`/);
 });
 
 test('a case-variant brand directory is still scanned', () => {
