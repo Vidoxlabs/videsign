@@ -40,9 +40,13 @@ A JSON sidecar sits next to the PNG. It validates against the sidecar subschema 
 
 ### C4. Alpha
 
+Applies to `full` and `chibi` only. C4 does not apply to `sheet` or `bg`. A sheet is RGB, and a bg plate has no alpha channel.
+
 Full and chibi masters have alpha 0 at all four corners and across a border of at least 3% of the canvas. There is no white fringe.
 
 ### C5. Framing
+
+Applies to `full` and `chibi` only. C5 does not apply to `sheet` or `bg`. Sheet framing is the four-view layout in the canon README, not figure placement.
 
 - Full: ear tips at 4–6% from the top, soles at 95–97% of the height, body midline within 3% of center. The tail stays inside a 4% side margin.
 - Chibi: the figure sits inside the 3% padding, feet on the bottom padding line, horizontally centered.
@@ -55,16 +59,21 @@ Exactly one character. Two cat ears, zero human ears, one tail, two arms, and fi
 
 ### C7. Family constants
 
-Applies to `full`, `chibi` and `sheet`. A `bg` plate has no figure, so C7 does not apply to `bg`.
+#### C7a. Figure constants
 
-All of these are present:
+Applies to `full`, `chibi` and `sheet`. C7a does not apply to `bg`.
 
 - Black blazer (`#121214`, ΔE00 ≤ 10), single-breasted, notch lapel, with signature piping on the lapel and the collar.
 - White shirt (`#F7F7F5`).
 - Solid tie, no pattern.
 - Short bob with a colored under-light.
 - Tail tip in the signature color (last ~15%).
-- Flat cel shading: one shadow tone and at most one highlight. Uniform line `#1A1A1F`. No photoreal texture, no 3D gradient, no painterly strands.
+
+#### C7b. Style constants
+
+Applies to `full`, `chibi`, `sheet` and `bg`.
+
+Flat cel shading: one shadow tone and at most one highlight. Uniform line `#1A1A1F`. No photoreal texture, no 3D gradient, no painterly strands. On a `bg` plate this is flat fill and the same line family, `#1A1A1F`.
 
 ### C8. Color
 
@@ -102,7 +111,8 @@ Applies to `bg` only. No people. Accent pixels are at most 10% of the frame and 
 
 ## Verdict
 
-- `full`, `chibi` and `sheet`: C1–C11 pass. C13 does not apply. Outcome: `approved`.
-- `bg`: C1–C3, C8–C11 and C13 pass. C6 and C7 do not apply to `bg`. Outcome: `approved`.
+- `full` and `chibi`: C1–C11 pass. C13 does not apply. Outcome: `approved`.
+- `sheet`: C1–C3 and C6–C11 pass. C4 and C5 do not apply to `sheet`. C13 does not apply. Outcome: `approved`.
+- `bg`: C1–C3, C7b, C8–C11 and C13 pass. C4, C5, C6 and C7a do not apply to `bg`. Outcome: `approved`.
 - Any applicable check fails: `rejected`, with `failed_items` and swatch ΔE00 values.
 - C12 is recorded and is not a gate until a cutoff is calibrated in a later canon version.

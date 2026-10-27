@@ -295,6 +295,18 @@ function scanTree(files) {
   }
 }
 
+function scanNamedBrand(dirName, body) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-brand-case-'));
+  try {
+    const full = path.join(dir, dirName, 'note.txt');
+    fs.mkdirSync(path.dirname(full), { recursive: true });
+    fs.writeFileSync(full, `${body}\n`);
+    return scanPaths(['brand'], dir);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 function runSafety(args, { hash, ci } = {}) {
   const env = { ...process.env };
   if (hash === undefined) delete env[OPERATOR_ENV];
@@ -718,14 +730,48 @@ test('reviewer checklist covers C1 through C13', () => {
 test('a background plate is not gated on character anatomy', () => {
   const text = fs.readFileSync(path.join(VWXYZ, 'reviewer-checklist.md'), 'utf8');
   const section = (start, end) => text.slice(text.indexOf(start), text.indexOf(end));
+  const c4 = section('### C4.', '### C5.');
+  const c5 = section('### C5.', '### C6.');
   const c6 = section('### C6.', '### C7.');
-  const c7 = section('### C7.', '### C8.');
+  const c7a = section('#### C7a.', '#### C7b.');
+  const c7b = section('#### C7b.', '### C8.');
+  assert.match(c4, /Applies to `full` and `chibi` only/);
+  assert.match(c4, /does not apply to `sheet` or `bg`/);
+  assert.match(c5, /Applies to `full` and `chibi` only/);
+  assert.match(c5, /does not apply to `sheet` or `bg`/);
   assert.match(c6, /`full`, `chibi` and `sheet`/);
   assert.match(c6, /does not apply to `bg`/);
-  assert.match(c7, /does not apply to `bg`/);
+  assert.match(c7a, /`full`, `chibi` and `sheet`/);
+  assert.match(c7a, /does not apply to `bg`/);
+  assert.match(c7a, /blazer/i);
+  assert.match(c7b, /`full`, `chibi`, `sheet` and `bg`/);
+  assert.match(c7b, /Flat cel shading/);
+  assert.match(c7b, /#1A1A1F/);
+  assert.match(c7b, /photoreal/);
+  assert.match(c7b, /3D gradient/);
   const verdict = text.slice(text.indexOf('## Verdict'));
-  assert.match(verdict, /C6 and C7 do not apply to `bg`/);
-  assert.match(verdict, /`bg`: C1–C3, C8–C11 and C13 pass/);
+  assert.match(verdict, /`full` and `chibi`: C1–C11 pass/);
+  assert.match(verdict, /`sheet`: C1–C3 and C6–C11 pass/);
+  assert.match(verdict, /C4 and C5 do not apply to `sheet`/);
+  assert.match(verdict, /C7b/);
+  assert.match(verdict, /C4, C5, C6 and C7a do not apply to `bg`/);
+});
+
+test('a case-variant brand directory is still scanned', () => {
+  withOperatorEnv(undefined, () => {
+    const alphabet = 'Aa0Bb1Cc2Dd3' + 'Ee4Ff5Gg6Hh7Ii8' + 'Jj9Kk';
+    let driveId = '';
+    for (let i = 0; i < 33; i += 1) driveId += alphabet[i % alphabet.length];
+    assert.equal(driveId.length, 33);
+    const flagged = scanNamedBrand('Brand', driveId);
+    assert.ok(flagged.hits.some((hit) => hit.includes('long-id')));
+
+    const legit = ['brand_mark_full-', 'color_v008'].join('');
+    const host = ['https://', ['drive', 'google', 'com'].join('.'), '/x'].join('');
+    const allowed = scanNamedBrand('BRAND', `${legit}\n${host}`);
+    assert.ok(allowed.hits.some((hit) => hit.includes('google-host')));
+    assert.equal(allowed.hits.some((hit) => hit.includes('long-id')), false);
+  }, false);
 });
 
 test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {

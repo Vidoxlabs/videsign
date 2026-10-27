@@ -16,7 +16,7 @@
  * shapes: kebab-case design tokens (lowercase hyphen segments, with a short
  * scale such as 3xl), and persona asset slugs vi_type_slot_vNNN whose slot
  * is 1 to 27 characters. Brand filenames are excluded only in files under
- * brand/. The asset is one of mark, favicon, lockup, wordmark, social,
+ * brand/, matched without regard to case. The asset is one of mark, favicon, lockup, wordmark, social,
  * avatar, banner, icon or stripe, and the variant is 1 to 27 characters of
  * lowercase letters, digits and hyphens. A split id, a longer slot or
  * variant, or the same filename outside brand/ remains a long id. A trailing
@@ -107,7 +107,22 @@ function isBrandFile(token) {
 
 function isUnderBrand(display) {
   const normalized = String(display).split(path.sep).join('/');
-  return normalized === 'brand' || normalized.startsWith('brand/');
+  const head = normalized.split('/')[0];
+  return head.toLowerCase() === 'brand';
+}
+
+function resolveBrandDir(root) {
+  const exact = path.resolve(root, 'brand');
+  if (fs.existsSync(exact)) return exact;
+  let entries;
+  try {
+    entries = fs.readdirSync(root, { withFileTypes: true });
+  } catch (err) {
+    return exact;
+  }
+  const match = entries.find((entry) => entry.name.toLowerCase() === 'brand');
+  if (!match) return exact;
+  return path.join(root, match.name);
 }
 
 function isLongId(token, options = {}) {
@@ -255,7 +270,7 @@ function scanPaths(targets, root = process.cwd()) {
   }
   const perFile = contentOperator(operator);
   for (const rel of targets) {
-    const full = path.resolve(root, rel);
+    const full = rel === 'brand' ? resolveBrandDir(root) : path.resolve(root, rel);
     if (!fs.existsSync(full)) {
       if (OPTIONAL_TARGETS.has(rel)) continue;
       hits.push(`missing ${rel}`);
