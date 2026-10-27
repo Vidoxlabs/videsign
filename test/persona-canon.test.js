@@ -831,6 +831,47 @@ test('duplicate and look-alike brand folders fail closed', () => {
   }, false);
 });
 
+test('a non-directory brand entry fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    const expectNonDirectory = (setup) => {
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-brand-entry-'));
+      const extra = [];
+      try {
+        setup(root, extra);
+        const result = scanPaths(['brand'], root);
+        assert.equal(result.ok, false);
+        assert.ok(result.hits.some((hit) => hit.includes('non-directory-brand')));
+      } finally {
+        fs.rmSync(root, { recursive: true, force: true });
+        for (const dir of extra) fs.rmSync(dir, { recursive: true, force: true });
+      }
+    };
+
+    expectNonDirectory((root) => {
+      fs.writeFileSync(path.join(root, 'brand'), 'palette note\n');
+    });
+    expectNonDirectory((root) => {
+      fs.writeFileSync(path.join(root, 'Brand'), 'palette note\n');
+    });
+    expectNonDirectory((root) => {
+      fs.writeFileSync(path.join(root, 'brand.'), 'palette note\n');
+    });
+    expectNonDirectory((root, extra) => {
+      const target = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-brand-link-'));
+      extra.push(target);
+      fs.writeFileSync(path.join(target, 'n.txt'), `${driveToken()}\n`);
+      fs.symlinkSync(target, path.join(root, 'brand'));
+    });
+    expectNonDirectory((root) => {
+      fs.symlinkSync('missing-brand-target', path.join(root, 'brand'));
+    });
+    expectNonDirectory((root) => {
+      const made = spawnSync('mkfifo', [path.join(root, 'brand')]);
+      assert.equal(made.status, 0);
+    });
+  }, false);
+});
+
 test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {
   const design = fs.readFileSync(path.join(ROOT, 'DESIGN.md'), 'utf8');
   const end = design.indexOf('\n---\n', 4);

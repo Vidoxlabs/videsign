@@ -21,7 +21,9 @@
  * lowercase letters, digits and hyphens. Every top-level folder whose name
  * skeletons to brand is scanned. More than one such folder fails closed, and
  * so does a look-alike (a confusable letter, a small capital, or a trailing
- * dot or space). A split id, a longer slot or variant, or the same filename
+ * dot or space). A brand-skeleton name that is not a real directory (a file,
+ * a symlink, or anything else) fails closed and is not followed. A split id,
+ * a longer slot or variant, or the same filename
  * outside brand/ remains a long id. A trailing extension is not part of the
  * id run.
  * A 64-hex value of a key ending in sha256 stays allowlisted. The brand
@@ -156,22 +158,37 @@ function isUnderBrand(display) {
   return brandSkeleton(head) === 'brand';
 }
 
+function isRealDirectory(root, entry) {
+  if (entry.isSymbolicLink()) return false;
+  if (entry.isDirectory()) return true;
+  try {
+    const stat = fs.lstatSync(path.join(root, entry.name));
+    return stat.isDirectory() && !stat.isSymbolicLink();
+  } catch (err) {
+    return false;
+  }
+}
+
 function collectBrandDirs(root) {
   let entries;
   try {
     entries = fs.readdirSync(root, { withFileTypes: true });
   } catch (err) {
-    return { dirs: [], lookalike: false };
+    return { dirs: [], lookalike: false, nonDirectory: false };
   }
   const dirs = [];
   let lookalike = false;
+  let nonDirectory = false;
   for (const entry of entries) {
-    if (!entry.isDirectory()) continue;
     if (brandSkeleton(entry.name) !== 'brand') continue;
+    if (!isRealDirectory(root, entry)) {
+      nonDirectory = true;
+      continue;
+    }
     dirs.push(path.join(root, entry.name));
     if (!isPlainBrandName(entry.name)) lookalike = true;
   }
-  return { dirs, lookalike };
+  return { dirs, lookalike, nonDirectory };
 }
 
 function isLongId(token, options = {}) {
@@ -360,8 +377,9 @@ function scanPaths(targets, root = process.cwd()) {
   for (const rel of targets) {
     if (rel === 'brand') {
       const found = collectBrandDirs(root);
+      if (found.nonDirectory) hits.push('non-directory-brand');
       if (found.dirs.length === 0) {
-        if (OPTIONAL_TARGETS.has(rel)) continue;
+        if (found.nonDirectory || OPTIONAL_TARGETS.has(rel)) continue;
         hits.push(`missing ${rel}`);
         continue;
       }
