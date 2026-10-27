@@ -45,9 +45,13 @@ jobs:
             mcp-server.js \
             preview \
             .github \
+            brand \
             scripts \
             test
           do
+            if [ "$path" = brand ] && [ ! -e "$path" ]; then
+              continue
+            fi
             test -e "$path"
           done
           node scripts/check-public-safety.js

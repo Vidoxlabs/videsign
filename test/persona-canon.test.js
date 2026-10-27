@@ -508,6 +508,36 @@ test('long ids cover case and separator shapes and spare token names', () => {
   assert.deepEqual(scanText('violet_chibi_neutral_v001').hits, []);
 });
 
+test('brand filenames are allowlisted and near-misses stay flagged', () => {
+  assert.deepEqual(scanText('brand_mark_full-color_v008.svg').hits, []);
+  assert.deepEqual(scanText('brand_lockup_horizontal-dark_v004').hits, []);
+
+  const alphabet = 'Aa0Bb1Cc2Dd3' + 'Ee4Ff5Gg6Hh7Ii8' + 'Jj9Kk';
+  let driveId = '';
+  for (let i = 0; i < 33; i += 1) driveId += alphabet[i % alphabet.length];
+  assert.equal(driveId.length, 33);
+  assert.match(driveId, /[A-Z]/);
+  assert.match(driveId, /[a-z]/);
+  assert.match(driveId, /[0-9]/);
+  assert.ok(scanText(driveId).hits.includes('long-id'));
+
+  const abused = `brand_mark_${'a'.repeat(28)}_v001`;
+  assert.ok(abused.includes('a'.repeat(28)));
+  assert.ok(scanText(abused).hits.includes('long-id'));
+});
+
+test('a missing brand directory is skipped', () => {
+  assert.ok(DEFAULT_TARGETS.includes('brand'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-brand-'));
+  try {
+    const result = withOperatorEnv(undefined, () => scanPaths(['brand'], dir));
+    assert.equal(result.ok, true);
+    assert.deepEqual(result.hits, []);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('missing, empty and invalid paths fail closed', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-safety-'));
   const missing = path.join(dir, 'absent.json');
@@ -659,6 +689,7 @@ test('the public-safety CLI scans the default targets', () => {
   assert.ok(DEFAULT_TARGETS.includes('canon'));
   assert.ok(DEFAULT_TARGETS.includes('preview'));
   assert.ok(DEFAULT_TARGETS.includes('.github'));
+  assert.ok(DEFAULT_TARGETS.includes('brand'));
   assert.ok(DEFAULT_TARGETS.includes('scripts'));
   assert.ok(DEFAULT_TARGETS.includes('test'));
   const result = runSafety([], {});

@@ -12,12 +12,15 @@
  * A malformed entry exits 1 in either environment. Messages name the
  * variable and never print a value.
  *
- * Long ids are runs of length >= 25 that mix letters and digits. Two shapes
+ * Long ids are runs of length >= 25 that mix letters and digits. Three shapes
  * are excluded so the public tree stays clean: kebab-case design tokens
- * (lowercase hyphen segments, with a short scale such as 3xl) and persona
- * asset slugs vi_type_slot_vNNN. Those slugs are the published naming
- * standard, not host file ids. A 64-hex value of a key ending in sha256
- * stays allowlisted.
+ * (lowercase hyphen segments, with a short scale such as 3xl), persona
+ * asset slugs vi_type_slot_vNNN, and brand filenames
+ * brand_{asset}_{variant}_vNNN. Asset and variant are at most 27 characters
+ * of lowercase letters, digits, and hyphens, so a long random middle cannot
+ * hide in the brand shape. A trailing extension is not part of the id run.
+ * A 64-hex value of a key ending in sha256 stays allowlisted. The brand
+ * directory is optional: a missing brand target is skipped.
  */
 
 const fs = require('fs');
@@ -37,9 +40,12 @@ const DEFAULT_TARGETS = [
   'mcp-server.js',
   'preview',
   '.github',
+  'brand',
   'scripts',
   'test',
 ];
+
+const OPTIONAL_TARGETS = new Set(['brand']);
 
 function joinDot(parts) {
   return parts.join('.');
@@ -90,11 +96,16 @@ function isAssetSlug(token) {
   return new RegExp(`^${vi}_${type}_[a-z0-9-]+_v[0-9]{3}$`).test(token);
 }
 
+function isBrandFile(token) {
+  const part = '[a-z0-9-]{1,27}';
+  return new RegExp(`^brand_${part}_${part}_v[0-9]{3}$`).test(token);
+}
+
 function isLongId(token) {
   if (token.length < 25) return false;
   if (!/^[A-Za-z0-9_-]+$/.test(token)) return false;
   if (!/[A-Za-z]/.test(token) || !/[0-9]/.test(token)) return false;
-  if (isKebabToken(token) || isAssetSlug(token)) return false;
+  if (isKebabToken(token) || isAssetSlug(token) || isBrandFile(token)) return false;
   return true;
 }
 
@@ -236,6 +247,7 @@ function scanPaths(targets, root = process.cwd()) {
   for (const rel of targets) {
     const full = path.resolve(root, rel);
     if (!fs.existsSync(full)) {
+      if (OPTIONAL_TARGETS.has(rel)) continue;
       hits.push(`missing ${rel}`);
       continue;
     }
