@@ -147,6 +147,24 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 **Consequences**: `npm run tokens` maps rhythm keys into Tailwind `padding`, `margin` and `gap`. Lint and the site raw-value audit treat lengths outside this set as drift.
 
+## ADR-010: VWXYZ Character Canon and Persona Assets
+
+**Status**: Proposed (pending owner confirmation).
+
+**Context**: Character art and UI accents had diverged (teal and rose versus crimson and magenta). The two layers were being treated as one palette.
+
+**Decision**:
+
+1.  `canon/vwxyz/palette.json` is the source of truth for character colors.
+2.  UI persona accents in `DESIGN.md` must equal the canon signature, or be an explicitly listed text-safe variant. CI enforces this in the token-alignment change that follows this record. This record does not change token values.
+3.  Persona images follow ADR-002: they will be served from the asset service under `{ASSET_BASE}/vi/{vi}/{type}/{file}` (planned, ADR-010), with immutable versioned keys, and are never committed.
+4.  The naming standard and the vocabulary are controlled lists. New expressions are added to `canon/vwxyz/vocabulary.json` first.
+5.  Only assets that pass ViCanon review and Gavin's approval are published.
+
+**Negative guardrails**: Never generate persona art without the anchor reference. Never invent persona hex values. Never hotlink Drive.
+
+**Consequences**: Read `canon/vwxyz/` before specifying a character color or a persona image. Product UI keeps using `colors.persona-accent-*` from `DESIGN.md` until the alignment change lands. Persona images require alt text that names the persona and the expression or pose.
+
 ## Negative Constraints against Boilerplate Generation
 
 Agents MUST NOT generate the following boilerplate or generic patterns:

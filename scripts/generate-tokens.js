@@ -17,6 +17,7 @@
  */
 
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const { generateStandardArtifacts } = require('./generate-standard');
@@ -286,7 +287,7 @@ function emitGlassCSS(tokens) {
  */
 function emitCatalogCSS() {
   const cli = require.resolve('tailwindcss/lib/cli.js');
-  const input = path.join(DIST_DIR, '.catalog-input.css');
+  const input = path.join(os.tmpdir(), `videsign-catalog-${process.pid}.css`);
   const output = path.join(DIST_DIR, 'catalog.css');
   fs.writeFileSync(input, '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n', 'utf-8');
   try {

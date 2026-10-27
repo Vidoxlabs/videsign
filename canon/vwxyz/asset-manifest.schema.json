@@ -1,0 +1,396 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VWXYZ canon contracts",
+  "description": "Subschemas for the character palette, a manifest entry, a generation sidecar and an asset request. Validate a document against the matching entry in $defs.",
+  "$defs": {
+    "hex": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "assetId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(/[a-z0-9-]+){3}$",
+      "examples": [
+        "violet/sheet/anchor/v001",
+        "group/sheet/lineup/v001",
+        "violet/full/scene-neutral/v001"
+      ]
+    },
+    "viName": {
+      "type": "string",
+      "enum": ["violet", "wisteria", "xylia", "yarrow", "zinnia"]
+    },
+    "assetType": {
+      "type": "string",
+      "enum": ["full", "chibi", "bg", "sheet"]
+    },
+    "palette": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "canon_version",
+        "date",
+        "status",
+        "note",
+        "color_space",
+        "review_threshold",
+        "shared",
+        "vi",
+        "family_rules",
+        "delta_e_matrix_signature"
+      ],
+      "properties": {
+        "schema": { "const": "vidoxlabs.vi-palette/1" },
+        "canon_version": { "const": "v1" },
+        "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "status": { "type": "string", "minLength": 1 },
+        "note": { "type": "string", "minLength": 1 },
+        "color_space": { "const": "sRGB hex" },
+        "review_threshold": { "$ref": "#/$defs/reviewThreshold" },
+        "shared": { "$ref": "#/$defs/sharedColors" },
+        "vi": { "$ref": "#/$defs/viMap" },
+        "family_rules": { "$ref": "#/$defs/familyRules" },
+        "delta_e_matrix_signature": { "$ref": "#/$defs/signatureMatrix" }
+      }
+    },
+    "reviewThreshold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metric", "max_delta_e", "applies_to", "min_pairwise"],
+      "properties": {
+        "metric": { "const": "CIEDE2000" },
+        "max_delta_e": { "const": 10 },
+        "applies_to": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "type": "string", "enum": ["signature", "hair", "eyes"] }
+        },
+        "min_pairwise": { "const": 20 }
+      }
+    },
+    "sharedColors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blazer", "shirt", "lineart", "skin", "tie_black", "tie_charcoal"],
+      "properties": {
+        "blazer": { "$ref": "#/$defs/hex" },
+        "shirt": { "$ref": "#/$defs/hex" },
+        "lineart": { "$ref": "#/$defs/hex" },
+        "skin": { "$ref": "#/$defs/hex" },
+        "tie_black": { "$ref": "#/$defs/hex" },
+        "tie_charcoal": { "$ref": "#/$defs/hex" }
+      }
+    },
+    "viMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["violet", "wisteria", "xylia", "yarrow", "zinnia"],
+      "properties": {
+        "violet": { "$ref": "#/$defs/viEntry" },
+        "wisteria": { "$ref": "#/$defs/viEntry" },
+        "xylia": { "$ref": "#/$defs/viEntry" },
+        "yarrow": { "$ref": "#/$defs/viEntry" },
+        "zinnia": { "$ref": "#/$defs/viEntry" }
+      }
+    },
+    "viEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signature",
+        "hair",
+        "underlight",
+        "eyes",
+        "trim",
+        "tie",
+        "tail_tip",
+        "secondary",
+        "inner_ear",
+        "background",
+        "anchor",
+        "default_revisable"
+      ],
+      "properties": {
+        "signature": { "$ref": "#/$defs/hex" },
+        "hair": { "$ref": "#/$defs/hex" },
+        "underlight": { "$ref": "#/$defs/hex" },
+        "eyes": { "$ref": "#/$defs/hex" },
+        "trim": { "$ref": "#/$defs/hex" },
+        "tie": { "$ref": "#/$defs/hex" },
+        "tail_tip": { "$ref": "#/$defs/hex" },
+        "secondary": { "$ref": "#/$defs/hex" },
+        "inner_ear": { "$ref": "#/$defs/hex" },
+        "background": { "$ref": "#/$defs/background" },
+        "anchor": { "$ref": "#/$defs/anchor" },
+        "default_revisable": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "background": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base", "mid", "line", "name", "mood"],
+      "properties": {
+        "base": { "$ref": "#/$defs/hex" },
+        "mid": { "$ref": "#/$defs/hex" },
+        "line": { "$ref": "#/$defs/hex" },
+        "name": { "type": "string", "minLength": 1 },
+        "mood": { "type": "string", "minLength": 1 }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id"],
+      "properties": {
+        "asset_id": { "$ref": "#/$defs/assetId" }
+      }
+    },
+    "familyRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tail_tip", "group_reference"],
+      "properties": {
+        "tail_tip": { "type": "string", "minLength": 1 },
+        "group_reference": { "$ref": "#/$defs/assetId" }
+      }
+    },
+    "signatureMatrix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "violet-wisteria",
+        "violet-xylia",
+        "violet-yarrow",
+        "violet-zinnia",
+        "wisteria-xylia",
+        "wisteria-yarrow",
+        "wisteria-zinnia",
+        "xylia-yarrow",
+        "xylia-zinnia",
+        "yarrow-zinnia"
+      ],
+      "properties": {
+        "violet-wisteria": { "type": "number", "minimum": 20 },
+        "violet-xylia": { "type": "number", "minimum": 20 },
+        "violet-yarrow": { "type": "number", "minimum": 20 },
+        "violet-zinnia": { "type": "number", "minimum": 20 },
+        "wisteria-xylia": { "type": "number", "minimum": 20 },
+        "wisteria-yarrow": { "type": "number", "minimum": 20 },
+        "wisteria-zinnia": { "type": "number", "minimum": 20 },
+        "xylia-yarrow": { "type": "number", "minimum": 20 },
+        "xylia-zinnia": { "type": "number", "minimum": 20 },
+        "yarrow-zinnia": { "type": "number", "minimum": 20 }
+      }
+    },
+    "manifestEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "vi",
+        "type",
+        "slot",
+        "version",
+        "status",
+        "url",
+        "key",
+        "sha256",
+        "bytes",
+        "width",
+        "height",
+        "mode",
+        "canon_version",
+        "palette_sha256",
+        "alt",
+        "created_at",
+        "approved_at",
+        "supersedes",
+        "legacy_alias"
+      ],
+      "properties": {
+        "asset_id": { "$ref": "#/$defs/assetId" },
+        "vi": { "$ref": "#/$defs/viName" },
+        "type": { "$ref": "#/$defs/assetType" },
+        "slot": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "version": { "type": "integer", "minimum": 1 },
+        "status": {
+          "type": "string",
+          "enum": ["published", "superseded", "needs-regen", "legacy"]
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://assets\\.vidoxlabs\\.dev/vi/(violet|wisteria|xylia|yarrow|zinnia)/(full|chibi|bg|sheet)/(violet|wisteria|xylia|yarrow|zinnia)_(full|chibi|bg|sheet)_[a-z0-9-]+_v[0-9]{3}\\.png$"
+        },
+        "key": {
+          "type": "string",
+          "pattern": "^vi/(violet|wisteria|xylia|yarrow|zinnia)/(full|chibi|bg|sheet)/(violet|wisteria|xylia|yarrow|zinnia)_(full|chibi|bg|sheet)_[a-z0-9-]+_v[0-9]{3}\\.png$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "mode": { "type": "string", "enum": ["RGBA", "RGB"] },
+        "canon_version": { "type": "string", "pattern": "^v[0-9]+$" },
+        "palette_sha256": { "$ref": "#/$defs/sha256" },
+        "alt": { "type": "string", "minLength": 1 },
+        "created_at": { "type": "string", "minLength": 1 },
+        "approved_at": { "type": ["string", "null"] },
+        "supersedes": { "type": ["string", "null"] },
+        "legacy_alias": { "type": ["string", "null"] }
+      }
+    },
+    "sidecar": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "vi",
+        "type",
+        "slot",
+        "version",
+        "canon_version",
+        "palette_sha256",
+        "sha256",
+        "width",
+        "height",
+        "mode",
+        "matted",
+        "generator",
+        "run_id",
+        "created_at",
+        "created_by",
+        "review",
+        "supersedes"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^(violet|wisteria|xylia|yarrow|zinnia)_(full|chibi|bg|sheet)_[a-z0-9-]+_v[0-9]{3}\\.png$"
+        },
+        "vi": { "$ref": "#/$defs/viName" },
+        "type": { "$ref": "#/$defs/assetType" },
+        "slot": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "version": { "type": "integer", "minimum": 1 },
+        "canon_version": { "type": "string", "pattern": "^v[0-9]+$" },
+        "palette_sha256": { "$ref": "#/$defs/sha256" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "mode": { "type": "string", "enum": ["RGBA", "RGB"] },
+        "matted": { "type": "boolean" },
+        "generator": { "$ref": "#/$defs/generator" },
+        "run_id": { "type": "string", "minLength": 1 },
+        "created_at": { "type": "string", "minLength": 1 },
+        "created_by": { "type": "string", "minLength": 1 },
+        "review": { "$ref": "#/$defs/review" },
+        "supersedes": { "type": ["string", "null"] }
+      }
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tool", "model", "seed", "prompt", "negative_prompt", "reference_images"],
+      "properties": {
+        "tool": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "seed": { "type": ["integer", "null"] },
+        "prompt": { "type": "string", "minLength": 1 },
+        "negative_prompt": { "type": "string", "minLength": 1 },
+        "reference_images": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/refImage" }
+        }
+      }
+    },
+    "refImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id", "role"],
+      "properties": {
+        "asset_id": { "$ref": "#/$defs/assetId" },
+        "role": { "type": "string", "minLength": 1 }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reviewer",
+        "reviewed_at",
+        "checklist_version",
+        "failed_items",
+        "swatches",
+        "notes"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["quarantine", "approved", "rejected"]
+        },
+        "reviewer": { "type": ["string", "null"] },
+        "reviewed_at": { "type": ["string", "null"] },
+        "checklist_version": { "type": "string", "minLength": 1 },
+        "failed_items": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "swatches": { "type": "object" },
+        "notes": { "type": "string" }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "vi",
+        "type",
+        "slot",
+        "purpose",
+        "requester",
+        "status",
+        "dedupe_key"
+      ],
+      "properties": {
+        "request_id": { "type": "string", "minLength": 1 },
+        "vi": { "$ref": "#/$defs/viName" },
+        "type": { "$ref": "#/$defs/assetType" },
+        "slot": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "purpose": { "type": "string", "minLength": 1 },
+        "requester": { "type": "string", "minLength": 1 },
+        "status": {
+          "type": "string",
+          "enum": [
+            "requested",
+            "queued",
+            "claimed",
+            "generating",
+            "candidate_ready",
+            "in_review",
+            "published",
+            "fulfilled_existing",
+            "rejected",
+            "rejected_final",
+            "needs_human",
+            "cancelled",
+            "invalid"
+          ]
+        },
+        "dedupe_key": { "$ref": "#/$defs/sha256" },
+        "asset_id": { "$ref": "#/$defs/assetId" }
+      }
+    }
+  }
+}

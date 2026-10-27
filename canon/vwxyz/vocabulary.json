@@ -1,0 +1,91 @@
+{
+  "schema": "vidoxlabs.vi-vocabulary/1",
+  "canon_version": "v1",
+  "vi": ["violet", "wisteria", "xylia", "yarrow", "zinnia"],
+  "type": ["full", "chibi", "bg", "sheet"],
+  "expression": [
+    "neutral",
+    "focused",
+    "happy",
+    "smile",
+    "laugh",
+    "excited",
+    "proud",
+    "thinking",
+    "curious",
+    "confused",
+    "determined",
+    "surprised",
+    "shocked",
+    "sad",
+    "worried",
+    "embarrassed",
+    "annoyed",
+    "angry",
+    "disgusted",
+    "smug",
+    "wink",
+    "sleepy"
+  ],
+  "expression_groups": {
+    "neutral": ["neutral", "focused"],
+    "positive": ["happy", "smile", "laugh", "excited", "proud"],
+    "cognitive": ["thinking", "curious", "confused", "determined"],
+    "surprise": ["surprised", "shocked"],
+    "negative-low": ["sad", "worried", "embarrassed"],
+    "negative-high": ["annoyed", "angry", "disgusted"],
+    "attitude": ["smug", "wink"],
+    "energy": ["sleepy"]
+  },
+  "expression_notes": {
+    "violet": {
+      "disgusted": "Dry, mildly appalled side-eye."
+    },
+    "wisteria": {
+      "angry": "Quiet disappointment."
+    },
+    "xylia": {
+      "angry": "Cold disapproval, not villain-coded.",
+      "disgusted": "Cold disapproval, not villain-coded.",
+      "laugh": "A restrained smirk."
+    },
+    "yarrow": {
+      "*": "Expressions stay measured."
+    },
+    "zinnia": {
+      "*": "Never goofy."
+    }
+  },
+  "pose": [
+    "standing",
+    "point-forward",
+    "arms-crossed",
+    "holding-tablet",
+    "typing",
+    "wave",
+    "walking",
+    "seated"
+  ],
+  "pose_applies_to": "full",
+  "viseme": ["a", "e", "i", "o", "u"],
+  "state": [
+    "alert",
+    "loading",
+    "searching",
+    "success",
+    "planning",
+    "keyboard",
+    "snack"
+  ],
+  "bg": {
+    "violet": ["orchestration-deck"],
+    "wisteria": ["lattice-studio"],
+    "xylia": ["review-chamber"],
+    "yarrow": ["map-room"],
+    "zinnia": ["launch-lane"]
+  },
+  "reserved_slot": ["anchor", "lineup"],
+  "slot_prefix": ["viseme-", "scene-"],
+  "vi_alias": ["group"],
+  "slot_rule": "A slot is an expression, a pose, a pose-expression pair, a viseme prefixed as viseme-, a scene prefixed as scene-, a reserved sheet slot (anchor or lineup), a state, or a bg slug. An asset id may use a character vi, or the group alias for the lineup. Unknown slugs are rejected. New slugs are added to this file first."
+}
