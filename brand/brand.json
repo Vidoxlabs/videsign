@@ -3,6 +3,7 @@
   "naming": "brand_{asset}_{variant}_v{NNN}.{ext}",
   "source_tree": "design_system/brand/",
   "full_colour_on": "dark-tile",
+  "full_colour_on_light": false,
   "signature_gradients": false,
   "text_safe_xylia": "pending",
   "text_safe_zinnia": "pending",
@@ -43,6 +44,7 @@
   "min_sizes_px": {
     "favicon": 16,
     "mark_header": 38,
+    "header_below_38_favicon_grade": 24,
     "mark_tile": 81.778
   },
   "clear_space": "Do not crop the master viewBox. The tile padding inside that viewBox is the clear space.",

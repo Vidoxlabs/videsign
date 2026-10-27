@@ -9,26 +9,26 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 ## ADR-001: Strict Surface Layering
 
-> **Amended by ADR-006 (2026-10-05):** crystal glass is the sanctioned material for public product surfaces, limited to controls and lenses. The flat-surface, no-extraneous-shadow rules below still govern every non-glass surface.
+> **Proposed amendment (ADR-006, awaiting ratification):** crystal glass would be the sanctioned material for public product surfaces, limited to controls and lenses. The flat-surface, no-extraneous-shadow rules below still govern every non-glass surface.
 
 **Context**: In complex multi-repo architectures, LLMs frequently hallucinate surface elevations, adding unwanted drop shadows or nested glassmorphism that degrades visual determinism.
 
-**Decision**: The Nocturne Museum design system strictly enforces a flat surface architecture. Crystal glass (ADR-006) is the only glass material.
+**Decision**: The Nocturne Museum design system strictly enforces a flat surface architecture. Crystal glass is the only glass material only if the proposed ADR-006 amendment is ratified.
 
 1.  **Base Surfaces**: All core surfaces must use a solid color token (e.g., `{colors.surface-background-primary-base}`).
 2.  **No Extraneous Shadows**: Standard components (cards, standard buttons, layout panels) must NOT use drop shadows.
-3.  **Crystal glass only (ADR-006)**: Glass appears only on controls and lenses — island navigation, overlays and popovers, the question bar, the persona switcher, and the evidence lens. Never on paragraphs, cards, section containers or sidebars.
+3.  **Crystal glass only (proposed amendment, ADR-006)**: If ADR-006 is ratified, glass appears only on controls and lenses — island navigation, overlays and popovers, the question bar, the persona switcher, and the evidence lens. Never on paragraphs, cards, section containers or sidebars.
 
 ## ADR-002: Asset & Media Hosting
 
-> **Amended by ADR-011:** binary rasters stay banned. The only exception is text-only `brand/**/*.svg` at or under 8 KB, checked in test.
+> **Proposed amendment (ADR-011, awaiting ratification):** binary rasters stay banned. The only exception would be text-only `brand/**/*.svg` at or under 8 KB, checked in test.
 
 **Context**: Storing binary assets (PNG, JPG, SVG, video) directly within the repository leads to unacceptable repo bloat and slows down CI/CD pipelines.
 
 **Decision**:
 1. No binary assets or base64-embedded images may be stored in the repository.
 2. All assets must be hosted on an external CDN.
-3. Agents must reference assets using the `{ASSET_BASE}` placeholder followed by the relative path (e.g., `{ASSET_BASE}/assets/logos/vidoxlabs/cube.png`). Consuming repos resolve this at build time via their environment configuration.
+3. Agents must reference assets using the `{ASSET_BASE}` placeholder followed by the relative path (e.g., `{ASSET_BASE}/brand/brand_mark_header_v008.svg`). `cube.png` paths are deprecated. Consuming repos resolve this at build time via their environment configuration.
 4. The `assets/` directory exists for local development reference only; its contents are gitignored and never committed.
 
 ## ADR-003: Continuous Interaction via Browser Primitives
@@ -61,7 +61,7 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 2. Emitted custom properties follow the pipeline format `--vi-colors-persona-accent-<persona>-base`.
 3. Persona accents are identity markers only. Yarrow shares a hex with the warning status token and Zinnia with the error status token; shared hexes never make the roles interchangeable. Status semantics always use status tokens.
-4. Persona Violet (#8B5CF6) is distinct from the brand accent `{colors.surface-accent-violet-base}` (#7C3AED). The brand accent stays reserved for key CTAs and focus outlines.
+4. Persona Violet (#8B5CF6) is the target for new CTA fills and focus rings. `#7C3AED` (`{colors.surface-accent-violet-base}`) is retired for that role. The matrix value stays `#7C3AED` until a follow-up changes it, so this record does not collide with other open token work. Labels on `#8B5CF6` follow the interim contrast rule in ADR-011 (pending Gavin): no normal-size label of any colour.
 5. New persona states (hover, active) or any new persona color must be added to the DESIGN.md matrix first, then referenced — never invented locally in a consuming product.
 
 ## ADR-005: Hero Billboard Exception
@@ -161,19 +161,23 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 2.  **Consult DESIGN.md**: For specific color codes and strict negative boundaries.
 3.  **Inspect previews**: Look at the `preview/` directory for pure HTML implementations.
 
-## ADR-011: Brand identity (VWXYZ)
+## ADR-011: Brand identity (brand v1)
 
 **Status**: Proposed (awaiting owner ratification). Amends ADR-002.
 
-**Context**: The VWXYZ mark (mark C) needs masters in this repository. ADR-002 bans SVG along with other binaries, so a mark file could not be committed. Raster exports of the mark still do not belong in git.
+**Context**: The brand v1 mark (mark C) needs masters in this repository. ADR-002 bans SVG along with other binaries, so a mark file could not be committed. Raster exports of the mark still do not belong in git.
 
 **Decision**:
 
 1. Binary rasters stay banned. PNG, JPG, GIF, WebP, and video are not committed, including under `brand/`.
-2. Narrow exception: `brand/**/*.svg` may be committed when each file is at most 8 KB, is SVG text, and contains no `<image>`, no `data:` URI, and no `<metadata>`, RDF, or XMP. `npm test` checks every file under `brand/`. An empty SVG is denied. A tree with zero SVGs passes that size check.
-3. Mark C facets are Wisteria and Yarrow on the top face, Xylia and Zinnia on the side faces, and Violet on the V band. Full colour is used on the dark tile `#121214`. Mono variants are light `#F7F7F5`, dark `#121214`, and violet `#8B5CF6`. Signature hexes are Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`. There is no gradient between those colours.
+2. Narrow exception: `brand/**/*.svg` may be committed when each file is at most 8 KB of SVG text and passes a fail-closed allow-list. Elements are `svg`, `g`, `path`, `rect`, and `use`. Attributes are a closed set. `href` and `xlink:href` may only be a same-document `#fragment`. Fills and strokes must be one of Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`, field dark `#121214`, or field light `#F7F7F5`. The gate rejects comments, editor namespaces, script, event-handler attributes, `foreignObject`, external references, external `url()`, `title` and `desc`, non-SVG text, `javascript:` and `data:` in any attribute, and any other colour. `none` and `currentColor` are rejected because the committed masters do not use them. `npm test` checks every file under `brand/`. An empty SVG is denied. A tree with zero SVGs passes that size check.
+3. Mark C facets are Wisteria and Yarrow on the top face, Xylia and Zinnia on the side faces, and Violet on the V band. Full colour is used on the dark tile `#121214`. Full colour is banned on the light field `#F7F7F5` (Wisteria and Yarrow are about 2.01:1 there). Mono variants are light `#F7F7F5` on a dark field, dark `#121214` on a light field, and violet `#8B5CF6`. Signature hexes are Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`. There is no gradient between those colours.
 4. Xylia is never text and never appears alone. Text-safe Xylia and text-safe Zinnia are pending and are not defined here.
-5. Names follow `brand_{asset}_{variant}_v{NNN}.{ext}`. Agents reference a family and version. They do not draw or approximate the mark.
+5. Names follow `brand_{asset}_{variant}_v{NNN}.{ext}`. `on-dark` and `on-light` name the field, not the ink. Versions are never reused. Agents reference a family and version. They do not draw or approximate the mark.
 6. Promoted masters are kept at the path `design_system/brand/`. That path is a name, not a link.
+7. Interim contrast rule (pending Gavin). No normal-size label of any colour on Violet `#8B5CF6`. Measured: `#121214` is 4.42:1, white is 4.23:1, and `#F7F7F5` is 3.95:1. All three fail 4.5:1 for normal text and pass 3:1 for large text (at least 24px, or at least 18.66px and bold).
+8. Headers under 38px may use the favicon-grade mark down to 24px. The px16 master is in `brand/`. There is no px32 master in this repository.
+9. `brand-signature-*` becomes the persona accent once the canon record lands. Until then the `DESIGN.md` persona accents stay in force. `{effects.ambient-glow-teal-base}` stays the default glow. `ambient-glow-wisteria-base` is the pending successor.
+10. `#7C3AED` is retired for new CTA fills and focus rings. The `DESIGN.md` token value stays `#7C3AED` until a follow-up changes it. Focus rings and fills use `#8B5CF6` under the interim contrast rule.
 
-**Consequences**: `.gitignore` re-includes `brand/**/*.svg` and leaves every raster ignored. `brand/tokens.json` records the signature, field, and `ambient-glow-wisteria-base` values. Persona accent rows in `DESIGN.md` are unchanged by this record.
+**Consequences**: `.gitignore` re-includes `brand/**/*.svg` and leaves every raster ignored. `.gitattributes` marks those SVGs `-text` so line endings are not rewritten. `brand/tokens.json` records the signature, field, and `ambient-glow-wisteria-base` values. Persona accent rows in `DESIGN.md` are unchanged by this record. This record stays Proposed until the owner ratifies it.

@@ -72,7 +72,7 @@ architectural decision records.
 
 ## Brand
 
-Mark C (VWXYZ), the favicon, lockups, and wordmarks are documented in [brand/README.md](brand/README.md). Full colour is for the dark tile. File digests are in `brand/MANIFEST.json`. Promoted masters use the path `design_system/brand/`.
+The brand v1 set (mark C), the favicon, lockups, and wordmarks are documented in [brand/README.md](brand/README.md). Full colour is for the dark field. File digests are in `brand/MANIFEST.json`. Promoted masters use the path `design_system/brand/`.
 
 ## License
 
