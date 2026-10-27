@@ -280,6 +280,21 @@ function withOperatorEnv(value, fn, ci) {
   }
 }
 
+function scanTree(files) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-scan-'));
+  try {
+    for (const [rel, body] of Object.entries(files)) {
+      const full = path.join(dir, rel);
+      fs.mkdirSync(path.dirname(full), { recursive: true });
+      fs.writeFileSync(full, `${body}\n`);
+    }
+    const targets = [...new Set(Object.keys(files).map((rel) => rel.split('/')[0]))];
+    return scanPaths(targets, dir);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 function runSafety(args, { hash, ci } = {}) {
   const env = { ...process.env };
   if (hash === undefined) delete env[OPERATOR_ENV];
@@ -322,7 +337,7 @@ test('palette validates against the schema palette subset and has five VIs', () 
   assert.deepEqual(Object.keys(palette.vi), Object.keys(SIGNATURES));
   assert.equal(palette.canon_version, 'v1');
   assert.equal(palette.schema, 'vidoxlabs.vi-palette/1');
-  assert.equal(palette.status, 'canon-v1, approved anchor Set B');
+  assert.equal(palette.status, 'canon-v1, Proposed (pending owner confirmation)');
   assert.equal(palette.date, '2026-10-26');
   assert.equal(palette.family_rules.group_reference, 'group/sheet/lineup/v001');
   assert.deepEqual(palette.review_threshold.applies_to, ['signature', 'hair', 'eyes']);
@@ -442,6 +457,7 @@ test('canon files pass the public-safety scan', () => {
 });
 
 test('public-safety self-checks hosts, long ids and sha256 values', () => {
+  withOperatorEnv(undefined, () => {
   const field = 'sha' + '256';
   const pair = (key, value) => `"${key}":"${value}"`;
   const hash = hash64('ab');
@@ -483,9 +499,11 @@ test('public-safety self-checks hosts, long ids and sha256 values', () => {
   assert.deepEqual(scanText(`${'~'}name`).hits, []);
   assert.ok(scanText(['10', '0', '0', '1'].join('.')).hits.includes('ipv4'));
   assert.deepEqual(scanText('surface-background-primary-base').hits, []);
+  }, false);
 });
 
 test('long ids cover case and separator shapes and spare token names', () => {
+  withOperatorEnv(undefined, () => {
   const lower = `a1${'b'.repeat(23)}`;
   const upper = `A1${'B'.repeat(23)}`;
   const hyphen = `a1b2c3d4e5f-${'g6h7i8j9k0abc'}`;
@@ -506,24 +524,60 @@ test('long ids cover case and separator shapes and spare token names', () => {
   assert.deepEqual(scanText('surface-background-primary-base').hits, []);
   assert.deepEqual(scanText('text-typography-size-3xl-base').hits, []);
   assert.deepEqual(scanText('violet_chibi_neutral_v001').hits, []);
+  }, false);
 });
 
 test('brand filenames are allowlisted and near-misses stay flagged', () => {
-  assert.deepEqual(scanText('brand_mark_full-color_v008.svg').hits, []);
-  assert.deepEqual(scanText('brand_lockup_horizontal-dark_v004').hits, []);
+  withOperatorEnv(undefined, () => {
+    const mark = ['brand_mark_full-', 'color_v008'].join('') + '.svg';
+    const lockup = ['brand_lockup_horizontal-', 'dark_v004'].join('');
+    const stripe = ['brand_stripe_full-', 'color_v001'].join('');
 
-  const alphabet = 'Aa0Bb1Cc2Dd3' + 'Ee4Ff5Gg6Hh7Ii8' + 'Jj9Kk';
-  let driveId = '';
-  for (let i = 0; i < 33; i += 1) driveId += alphabet[i % alphabet.length];
-  assert.equal(driveId.length, 33);
-  assert.match(driveId, /[A-Z]/);
-  assert.match(driveId, /[a-z]/);
-  assert.match(driveId, /[0-9]/);
-  assert.ok(scanText(driveId).hits.includes('long-id'));
+    const inside = scanTree({
+      'brand/mark.svg': mark,
+      'brand/lockup.txt': lockup,
+      'brand/stripe.svg': stripe,
+    });
+    assert.equal(inside.ok, true, inside.hits.join('\n'));
+    assert.deepEqual(inside.hits, []);
 
-  const abused = `brand_mark_${'a'.repeat(28)}_v001`;
-  assert.ok(abused.includes('a'.repeat(28)));
-  assert.ok(scanText(abused).hits.includes('long-id'));
+    assert.ok(scanText(mark).hits.includes('long-id'));
+    assert.ok(scanText(lockup).hits.includes('long-id'));
+    assert.ok(scanText(stripe).hits.includes('long-id'));
+    const outside = scanTree({ 'preview/note.txt': `${mark}\n${lockup}\n${stripe}` });
+    assert.equal(outside.ok, false);
+    assert.ok(outside.hits.some((hit) => hit.includes('long-id')));
+
+    const alphabet = 'Aa0Bb1Cc2Dd3' + 'Ee4Ff5Gg6Hh7Ii8' + 'Jj9Kk';
+    let driveId = '';
+    for (let i = 0; i < 33; i += 1) driveId += alphabet[i % alphabet.length];
+    assert.equal(driveId.length, 33);
+    assert.match(driveId, /[A-Z]/);
+    assert.match(driveId, /[a-z]/);
+    assert.match(driveId, /[0-9]/);
+    assert.ok(scanText(driveId).hits.includes('long-id'));
+
+    const abused = `brand_mark_${'a'.repeat(28)}_v001`;
+    assert.ok(abused.includes('a'.repeat(28)));
+    assert.ok(scanText(abused).hits.includes('long-id'));
+    const abusedInside = scanTree({ 'brand/abused.svg': abused });
+    assert.ok(abusedInside.hits.some((hit) => hit.includes('long-id')));
+
+    const left = `a1${'b'.repeat(18)}`;
+    const right = `c2${'d'.repeat(17)}`;
+    assert.equal(left.length, 20);
+    assert.equal(right.length, 19);
+    const split = `brand_${left}_${right}_v001`;
+    assert.ok(scanText(split).hits.includes('long-id'));
+    const splitInside = scanTree({ 'brand/split.svg': split });
+    assert.ok(splitInside.hits.some((hit) => hit.includes('long-id')));
+
+    const slug = `violet_full_${'a'.repeat(44)}_v001`;
+    assert.equal('a'.repeat(44).length, 44);
+    assert.ok(scanText(slug).hits.includes('long-id'));
+    const slugInside = scanTree({ 'brand/slug.txt': slug });
+    assert.ok(slugInside.hits.some((hit) => hit.includes('long-id')));
+  }, false);
 });
 
 test('a missing brand directory is skipped', () => {
@@ -672,12 +726,12 @@ test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {
 
   const skill = fs.readFileSync(path.join(ROOT, 'SKILL.md'), 'utf8');
   assert.match(skill, /## ADR-010: VWXYZ Character Canon and Persona Assets/);
-  assert.match(skill, /Accepted \(owner-approved 2026-10-26\)/);
+  assert.match(skill, /Proposed \(pending owner confirmation\)/);
   assert.match(skill, /Only assets that pass ViCanon review and Gavin's approval are published/);
   assert.match(skill, /will be served from the asset service/);
 
   const canonReadme = fs.readFileSync(path.join(VWXYZ, 'README.md'), 'utf8');
-  assert.match(canonReadme, /Accepted \(owner-approved 2026-10-26\)/);
+  assert.match(canonReadme, /Proposed \(pending owner confirmation\)/);
   assert.match(canonReadme, /planned, ADR-010/);
   for (const file of ['README.md', 'DESIGN.md', 'AGENTS.md']) {
     const text = fs.readFileSync(path.join(ROOT, file), 'utf8');

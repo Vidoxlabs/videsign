@@ -12,13 +12,15 @@
  * A malformed entry exits 1 in either environment. Messages name the
  * variable and never print a value.
  *
- * Long ids are runs of length >= 25 that mix letters and digits. Three shapes
- * are excluded so the public tree stays clean: kebab-case design tokens
- * (lowercase hyphen segments, with a short scale such as 3xl), persona
- * asset slugs vi_type_slot_vNNN, and brand filenames
- * brand_{asset}_{variant}_vNNN. Asset and variant are at most 27 characters
- * of lowercase letters, digits, and hyphens, so a long random middle cannot
- * hide in the brand shape. A trailing extension is not part of the id run.
+ * Long ids are runs of length >= 25 that mix letters and digits. Excluded
+ * shapes: kebab-case design tokens (lowercase hyphen segments, with a short
+ * scale such as 3xl), and persona asset slugs vi_type_slot_vNNN whose slot
+ * is 1 to 27 characters. Brand filenames are excluded only in files under
+ * brand/. The asset is one of mark, favicon, lockup, wordmark, social,
+ * avatar, banner, icon or stripe, and the variant is 1 to 27 characters of
+ * lowercase letters, digits and hyphens. A split id, a longer slot or
+ * variant, or the same filename outside brand/ remains a long id. A trailing
+ * extension is not part of the id run.
  * A 64-hex value of a key ending in sha256 stays allowlisted. The brand
  * directory is optional: a missing brand target is skipped.
  */
@@ -93,19 +95,27 @@ function isKebabToken(token) {
 function isAssetSlug(token) {
   const vi = '(violet|wisteria|xylia|yarrow|zinnia)';
   const type = '(full|chibi|bg|sheet)';
-  return new RegExp(`^${vi}_${type}_[a-z0-9-]+_v[0-9]{3}$`).test(token);
+  const slot = '[a-z0-9-]{1,27}';
+  return new RegExp(`^${vi}_${type}_${slot}_v[0-9]{3}$`).test(token);
 }
 
 function isBrandFile(token) {
-  const part = '[a-z0-9-]{1,27}';
-  return new RegExp(`^brand_${part}_${part}_v[0-9]{3}$`).test(token);
+  const asset = '(mark|favicon|lockup|wordmark|social|avatar|banner|icon|stripe)';
+  const variant = '[a-z0-9-]{1,27}';
+  return new RegExp(`^brand_${asset}_${variant}_v[0-9]{3}$`).test(token);
 }
 
-function isLongId(token) {
+function isUnderBrand(display) {
+  const normalized = String(display).split(path.sep).join('/');
+  return normalized === 'brand' || normalized.startsWith('brand/');
+}
+
+function isLongId(token, options = {}) {
   if (token.length < 25) return false;
   if (!/^[A-Za-z0-9_-]+$/.test(token)) return false;
   if (!/[A-Za-z]/.test(token) || !/[0-9]/.test(token)) return false;
-  if (isKebabToken(token) || isAssetSlug(token) || isBrandFile(token)) return false;
+  if (isKebabToken(token) || isAssetSlug(token)) return false;
+  if (options.inBrand && isBrandFile(token)) return false;
   return true;
 }
 
@@ -161,7 +171,7 @@ function inspectSha256(text) {
   return { hits, redacted };
 }
 
-function patternHits(text) {
+function patternHits(text, options) {
   const hits = [];
   const source = patternSource();
   if (new RegExp(source.hosts).test(text)) hits.push('google-host');
@@ -169,7 +179,7 @@ function patternHits(text) {
   if (new RegExp(source.home, 'i').test(text)) hits.push('home-path');
   if (new RegExp(source.ipv4).test(text)) hits.push('ipv4');
   const tokens = text.match(/[A-Za-z0-9_-]{25,}/g) || [];
-  if (tokens.some(isLongId)) hits.push('long-id');
+  if (tokens.some((token) => isLongId(token, options))) hits.push('long-id');
   return hits;
 }
 
@@ -184,7 +194,7 @@ function operatorFailure(operator) {
  * @param {object} [operatorState]
  * @returns {{ ok: boolean, hits: string[], operatorCheck: string }}
  */
-function scanText(text, operatorState) {
+function scanText(text, operatorState, options) {
   const operator = operatorState || loadOperatorHashes();
   const hits = [];
   let operatorCheck = 'checked';
@@ -197,7 +207,7 @@ function scanText(text, operatorState) {
   }
   const sha = inspectSha256(text);
   hits.push(...sha.hits);
-  hits.push(...patternHits(sha.redacted));
+  hits.push(...patternHits(sha.redacted, options));
   return { ok: hits.length === 0, hits, operatorCheck };
 }
 
@@ -285,7 +295,7 @@ function scanPaths(targets, root = process.cwd()) {
           continue;
         }
       }
-      const result = scanText(text, perFile);
+      const result = scanText(text, perFile, { inBrand: isUnderBrand(display) });
       for (const hit of result.hits) hits.push(`${display}: ${hit}`);
     }
   }

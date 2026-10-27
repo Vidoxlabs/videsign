@@ -2,7 +2,7 @@
   "schema": "vidoxlabs.vi-palette/1",
   "canon_version": "v1",
   "date": "2026-10-26",
-  "status": "canon-v1, approved anchor Set B",
+  "status": "canon-v1, Proposed (pending owner confirmation)",
   "note": "Single source of truth for VI colours. Use exact hex values. Values marked default_revisable are DEFAULT — revisable decisions. review_threshold.max_delta_e applies to signature, hair and eyes. review_threshold.min_pairwise applies to signature pairs.",
   "color_space": "sRGB hex",
   "review_threshold": {

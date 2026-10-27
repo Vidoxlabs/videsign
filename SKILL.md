@@ -147,7 +147,7 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 ## ADR-010: VWXYZ Character Canon and Persona Assets
 
-**Status**: Accepted (owner-approved 2026-10-26).
+**Status**: Proposed (pending owner confirmation).
 
 **Context**: Character art and UI accents had diverged (teal and rose versus crimson and magenta). The two layers were being treated as one palette.
 

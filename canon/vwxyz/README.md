@@ -1,6 +1,6 @@
 # VWXYZ character canon v1
 
-- **Status:** Accepted (owner-approved 2026-10-26). Canon v1. Approved anchor is the Set B sheets dated 2026-06-24. Decisions marked *DEFAULT — revisable* may change in a later canon version.
+- **Status:** Proposed (pending owner confirmation). Canon v1. Anchor is the Set B sheets dated 2026-06-24. Decisions marked *DEFAULT — revisable* may change in a later canon version.
 - **Date:** 2026-10-26.
 - **Machine source:** `palette.json`. If this document and `palette.json` disagree, `palette.json` wins.
 - **Companion files:** `vocabulary.json` (controlled slugs), `asset-manifest.schema.json` (palette, manifest entry, generation sidecar, request), `reviewer-checklist.md` (C1–C13).
