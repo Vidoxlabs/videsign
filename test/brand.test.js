@@ -615,7 +615,8 @@ test('ADR-011 is proposed and amends the raster ban', () => {
   assert.match(sidebar, /brand\/brand_favicon_px16_v008\.svg/);
   assert.doesNotMatch(sidebar, /brand_mark_header_v008\.svg/);
   assert.doesNotMatch(sidebar, /cube\.png/);
-  assert.match(sidebar, /border-persona-accent-violet-base/);
-  assert.match(sidebar, /bg-persona-accent-violet-base/);
+  assert.match(sidebar, /border-surface-accent-violet-base/);
+  assert.match(sidebar, /bg-surface-accent-violet-base/);
+  assert.doesNotMatch(sidebar, /persona-accent-violet-base/);
   assert.doesNotMatch(sidebar, /text-surface-accent-violet-base/);
 });
