@@ -207,7 +207,7 @@ test('interim contrast rule (D5 pending the owner)', () => {
     const doc = read(rel);
     assert.match(doc, /pending the owner/);
     assert.equal(doc.includes(['pending', 'Gavin'].join(' ')), false);
-    assert.match(doc, /#7C3AED is to be retired once ADR-011 is ratified/);
+    assert.match(doc, /ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6/);
     assert.equal(doc.includes(['#7C3AED', 'is retired'].join(' ')), false);
   }
   for (const rel of ['brand/README.md', 'SKILL.md']) {
@@ -601,7 +601,14 @@ test('ADR-011 is proposed and amends the raster ban', () => {
   assert.match(read('.gitattributes'), /brand\/\*\*\/\*\.svg -text/);
   assert.doesNotMatch(read('.gitattributes'), /brand\/\*\*\/\*\.svg binary/);
   const design = read('DESIGN.md');
-  assert.match(design, /surface-accent-violet-base: "#7C3AED"/);
+  assert.match(design, /surface-accent-violet-base: "#8B5CF6"/);
+  assert.match(design, /surface-accent-violet-hover: "#6B46C1"/);
+  assert.match(design, /surface-accent-violet-active: "#5B21B6"/);
+  const adr011 = skill.slice(skill.indexOf('## ADR-011:'), skill.indexOf('## ADR-012:'));
+  assert.match(adr011, /Item 10 is Accepted/);
+  assert.match(adr011, /Items 1-9 stay Proposed/);
+  assert.match(adr011, /Proposed \(awaiting owner ratification\)/);
+  assert.doesNotMatch(adr011, /\*\*Status\*\*: Accepted/);
   assert.match(design, /persona-accent-wisteria-base: "#A78BFA"/);
   assert.match(design, /ambient-glow-teal-base/);
   assert.match(design, /being retired/);

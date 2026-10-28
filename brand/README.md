@@ -44,7 +44,7 @@ Xylia is never set as text and never appears alone. Text-safe Xylia and text-saf
 
 No normal-size label of any colour on Violet `#8B5CF6`. Measured against that fill: `#121214` is 4.42:1, white is 4.23:1, and `#F7F7F5` is 3.95:1. All three fail 4.5:1 for normal text and pass 3:1 for large text (at least 24px, or at least 18.66px and bold). This is a revisable default pending the owner.
 
-#7C3AED is to be retired once ADR-011 is ratified. Until then the live value for new CTA fills and focus rings stays `#7C3AED`. Persona Violet `#8B5CF6` is the target for those fills and rings after that ratification, under this label rule. The `DESIGN.md` value of `{colors.surface-accent-violet-base}` stays `#7C3AED` until a follow-up changes it. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`.
+ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6. Items 1-9 stay Proposed. `{colors.surface-accent-violet-base}` is that value. Hover stays `#6B46C1` and active stays `#5B21B6`; the matrix has no darker violet scale step. The label rule above still applies. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`.
 
 ## Names
 

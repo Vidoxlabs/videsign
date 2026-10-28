@@ -107,7 +107,7 @@ Do not draw or approximate the mark. Reference a file in `brand/` by family and 
 
 Full colour is for the dark field. Do not place the full-colour mark on the light field `#F7F7F5`.
 
-#7C3AED is to be retired once ADR-011 is ratified. Until then `{colors.surface-accent-violet-base}` stays `#7C3AED` and is the live value for new CTA fills and focus rings. Persona Violet `#8B5CF6` is the target for those fills and rings after that ratification. Follow the interim contrast rule in `brand/README.md` (pending the owner): no normal-size label of any colour on that violet. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`. `{effects.ambient-glow-teal-base}` stays the default glow.
+ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Items 1-9 stay Proposed. Hover stays `#6B46C1` and active stays `#5B21B6`; the matrix has no darker violet scale step. Follow the interim contrast rule in `brand/README.md` (pending the owner): no normal-size label of any colour on that violet. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`. `{effects.ambient-glow-teal-base}` stays the default glow.
 
 Xylia is never text and never appears alone. Do not build a gradient between the five signature colours. Text-safe Xylia and text-safe Zinnia are pending. Do not define them.
 

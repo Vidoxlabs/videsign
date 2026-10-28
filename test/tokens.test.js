@@ -201,11 +201,13 @@ test('glass.css ships pill radius variants for plain-CSS consumers', () => {
   assert.match(GLASS, /\.vi-glass-core--pill \{[^}]*border-radius: 9999px;/s);
 });
 
-test('focus outline pinned to surface-accent-violet until ADR-011 is ratified', () => {
+test('CTA fill and focus outline are #8B5CF6 and the violet glow stays put', () => {
+  assert.equal(TOKENS.colors['surface-accent-violet-base'], '#8B5CF6');
+  assert.equal(TOKENS.colors['surface-accent-violet-hover'], '#6B46C1');
+  assert.equal(TOKENS.colors['surface-accent-violet-active'], '#5B21B6');
   const css = emitGlassCSS(TOKENS);
-  const accent = TOKENS.colors['surface-accent-violet-base'];
-  assert.equal(accent, '#7C3AED');
-  assert.match(css, new RegExp(`outline: 2px solid ${accent};`));
+  assert.match(css, /outline: 2px solid #8B5CF6;/);
+  assert.equal(TOKENS.effects['ambient-glow-violet-base'], 'rgba(124, 58, 237, 0.30)');
 });
 
 test('ambient violet glow stays the measured main value', () => {
