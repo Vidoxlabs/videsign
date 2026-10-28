@@ -18,7 +18,8 @@ design system — the shared visual language for all Vidoxlabs products and appl
   all fragments. Layout compositions are in `preview/layout-*.html`.
 - **scripts/generate-tokens.js**: Token generation pipeline. Parses `DESIGN.md` YAML
   front-matter and emits `dist/tailwind.config.js`, `dist/tokens.css`,
-  `dist/tokens.json`, `dist/glass.css` (crystal glass with literal Safari-safe
+  `dist/tokens.json`, `dist/themes.css` (product light theme mappings under
+  `[data-theme="light"]`, ADR-012), `dist/glass.css` (crystal glass with literal Safari-safe
   declarations, ADR-006) and `dist/catalog.css` (Tailwind utilities for the preview
   catalog only). Run `npm run tokens` to regenerate.
 - **scripts/lint-preview.js**: Static checks for `preview/*.html` (arbitrary values,
@@ -33,6 +34,7 @@ design system — the shared visual language for all Vidoxlabs products and appl
 - **canon/vwxyz/**: Persona character canon. Never invent character colors. Images will be served from the asset service (planned, ADR-010).
 - **dist/**: Generated artifacts (gitignored). Produced by `npm run tokens`. Consuming
   repos import `dist/tailwind.config.js` or `dist/tokens.css` from this repo.
+  `dist/themes.css` is an explicit opt-in for the product light theme.
 - **brand/**: Brand v1 mark C masters (text-only SVG, ADR-011). See `brand/README.md`
   and `brand/MANIFEST.json`. Do not redraw the mark.
 
@@ -56,12 +58,15 @@ Within the `videsign` repository, agents are restricted to the following command
   preview fragments (ESLint alone never saw them).
 - `npm run mcp`: Starts the local MCP server for cross-repo communication.
 - `npm run tokens`: Parses `DESIGN.md` and regenerates `dist/tailwind.config.js`,
-  `dist/tokens.css`, and `dist/tokens.json`. Run this after modifying tokens in
+  `dist/tokens.css`, `dist/tokens.json`, and `dist/themes.css`. Run this after modifying tokens in
   `DESIGN.md`.
-- `npm test`: Runs the MCP stdio smoke test, the token contract tests
-  (`test/tokens.test.js`), the preview fragment contract (`test/preview.test.js`)
-  and the persona canon contract (`test/persona-canon.test.js`).
-  Run this after changing `mcp-server.js`, `DESIGN.md` tokens, `canon/vwxyz/` or any fragment.
+- `npm test`: Runs `node --test test/*.test.js`: the MCP stdio smoke test
+  (`test/mcp-server.test.js`), the token contract (`test/tokens.test.js`),
+  the theme contract (`test/themes.test.js`), the preview fragment contract
+  (`test/preview.test.js`), the brand contract (`test/brand.test.js`),
+  the agent standard contract (`test/standard.test.js`), and the persona canon
+  contract (`test/persona-canon.test.js`).
+  Run this after changing `mcp-server.js`, `DESIGN.md` tokens, `canon/vwxyz/`, `brand/`, or any fragment.
 - `npm run canon:check`: Runs the persona canon contract on its own.
 
 ## `{ASSET_BASE}` resolution
@@ -85,7 +90,9 @@ All design tokens follow the 4-part semantic matrix: `category-role-variant-stat
 | category   | `colors`, `typography`, `effects`, `spacing` | Token domain                        |
 | role       | `surface-background`, `text-content`, `status-indicator` | Functional role within the category |
 | variant    | `primary`, `secondary`, `violet`, `success` | Specific variant of the role        |
-| state      | `base`, `hover`, `active`                  | Interaction state                   |
+| state      | `base`, `hover`, `active`                  | Interaction state. `light` is a theme suffix, not an interaction state. |
+
+`light` is the product-theme suffix. It is not a `hover` or `active` state. `dist/themes.css` maps each light colour onto the matching `base` variable.
 
 Agents bind tokens using the reference syntax: `{colors.surface-background-primary-base}`.
 Never invent tokens outside this matrix. If a needed value is missing, add it to

@@ -7,6 +7,7 @@
  *   dist/tailwind.config.js  — Tailwind theme mapping (semantic token classes)
  *   dist/tokens.css          — CSS custom properties (--vi-*)
  *   dist/tokens.json         — Machine-readable JSON for MCP and tooling
+ *   dist/themes.css          — Product light theme mappings (ADR-012)
  *   dist/glass.css           — Crystal glass stylesheet with LITERAL declarations (ADR-006)
  *   dist/catalog.css         — Tailwind utilities compiled from the config, for preview/ only
  *   dist/standard.json|md    — Agent-readable standard (addendum §2)
@@ -70,6 +71,16 @@ function withPrefix(entries, prefix) {
   return Object.fromEntries(Object.entries(entries || {}).filter(([k]) => k.startsWith(prefix)));
 }
 
+/**
+ * Tailwind 3 drops an opacity modifier when the color is a bare var() it cannot
+ * parse. color-mix keeps the custom property, so a light-theme override of that
+ * variable still flows through, and /opacity utilities still compile.
+ */
+function tailwindColorValue(key, value) {
+  if (!/^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/.test(value)) return value;
+  return `color-mix(in srgb, var(--vi-colors-${key}) calc(<alpha-value> * 100%), transparent)`;
+}
+
 // --- Emitters ---
 
 function emitTailwindConfig(tokens) {
@@ -80,7 +91,7 @@ function emitTailwindConfig(tokens) {
       // Each token key is already in the format: role-variant-state
       // Use the full key as the Tailwind theme name.
       if (!theme[category]) theme[category] = {};
-      theme[category][key] = value;
+      theme[category][key] = category === 'colors' ? tailwindColorValue(key, value) : value;
     }
   }
 
@@ -312,7 +323,7 @@ function emitThemeCSS(tokens) {
     `  --vi-effects-glass-crystal-core-base: ${tokens.effects['glass-crystal-solid-light']};`, '}',
     '[data-theme="dark"] { color-scheme: dark; }',
     '[data-theme="light"] .vi-glass, [data-theme="light"] .vi-glass-shell, [data-theme="light"] .vi-glass--control:hover, [data-theme="light"] .vi-glass--control:focus-within {',
-    `  background: ${tokens.effects['glass-crystal-solid-light']};`, '  backdrop-filter: none;', '  -webkit-backdrop-filter: none;',
+    `  background: ${tokens.effects['glass-crystal-solid-light']};`, '  border: 0;', '  backdrop-filter: none;', '  -webkit-backdrop-filter: none;',
     `  box-shadow: inset 0 0 0 1px ${tokens.effects['glass-crystal-rim-light']};`, '}',
     `[data-theme="light"] .vi-glass-core { background: ${tokens.effects['glass-crystal-solid-light']}; }`,
     '@media (forced-colors: active) {',
