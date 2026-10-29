@@ -20,7 +20,12 @@ test('on-accent text remains readable through all CTA states', () => {
   assert.equal(fill, '#8B5CF6');
   assert.equal(rounded(contrast(onAccent, fill)), 4.23);
   assert.equal(rounded(contrast('#FFFFFF', fill)), 4.23);
-  for (const state of ['hover','active']) assert.ok(contrast(onAccent, tokens.colors[`surface-accent-violet-${state}`]) >= 4.5);
+  assert.equal(tokens.colors['surface-accent-violet-hover'], '#6D28D9');
+  assert.equal(tokens.colors['surface-accent-violet-active'], '#5B21B6');
+  for (const state of ['hover','active']) {
+    assert.ok(contrast(onAccent, tokens.colors[`surface-accent-violet-${state}`]) >= 4.5);
+    assert.ok(contrast('#FFFFFF', tokens.colors[`surface-accent-violet-${state}`]) >= 4.5);
+  }
   const onAccentClass = 'text-text-content-on-accent-base';
   const fillClass = 'bg-surface-accent-violet-base';
   const needs = 'bold xl or larger, or 2xl or larger';

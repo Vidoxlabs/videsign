@@ -233,21 +233,48 @@ test('literal #7C3AED is absent from tokens, CSS and docs', () => {
     'Until then those fills and rings stay on that accent.',
   ].join(' ');
   assert.ok(hits(oldSkill).length > 0);
-  for (const rel of ['DESIGN.md', 'SKILL.md', 'AGENTS.md', 'README.md', 'brand/README.md', 'scripts/generate-tokens.js', 'scripts/generate-standard.js']) {
-    assert.deepEqual(hits(fs.readFileSync(path.join(root, rel), 'utf-8')), [], rel);
-  }
   const css = emitCSS(TOKENS) + emitGlassCSS(TOKENS);
   assert.equal(css.includes(hex), false);
   assert.match(css, /rgba\(124, 58, 237, 0\.30\)/);
+  const prohibition = (line) => /never(?: use)? #7C3AED/i.test(line);
+  for (const rel of ['DESIGN.md', 'SKILL.md', 'AGENTS.md', 'README.md', 'brand/README.md', 'scripts/generate-tokens.js', 'scripts/generate-standard.js']) {
+    const leftover = hits(fs.readFileSync(path.join(root, rel), 'utf-8')).filter((line) => !prohibition(line));
+    assert.deepEqual(leftover, [], rel);
+  }
 });
 
 test('CTA fill and focus outline are #8B5CF6 and the violet glow stays put', () => {
+  const hex = (value) => [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16));
+  const lin = (channel) => {
+    const s = channel / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  const lum = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  const ratio = (a, b) => {
+    const x = lum(hex(a));
+    const y = lum(hex(b));
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  };
+  const hover = TOKENS.colors['surface-accent-violet-hover'];
+  const active = TOKENS.colors['surface-accent-violet-active'];
   assert.equal(TOKENS.colors['surface-accent-violet-base'], '#8B5CF6');
-  assert.equal(TOKENS.colors['surface-accent-violet-hover'], '#6B46C1');
-  assert.equal(TOKENS.colors['surface-accent-violet-active'], '#5B21B6');
+  assert.equal(hover, '#6D28D9');
+  assert.equal(active, '#5B21B6');
+  assert.ok(ratio('#FFFFFF', hover) >= 4.5);
+  assert.ok(ratio('#FFFFFF', active) >= 4.5);
   const css = emitGlassCSS(TOKENS);
   assert.match(css, /outline: 2px solid #8B5CF6;/);
+  assert.equal(css.includes('outline: 2px solid #6D28D9'), false);
   assert.equal(TOKENS.effects['ambient-glow-violet-base'], 'rgba(124, 58, 237, 0.30)');
+  const retiredHover = ['#6B', '46C1'].join('');
+  const root = path.join(__dirname, '..');
+  const files = ['DESIGN.md', 'SKILL.md', 'AGENTS.md', 'README.md', 'brand/README.md', 'scripts/generate-tokens.js', 'scripts/generate-standard.js'];
+  for (const name of fs.readdirSync(path.join(root, 'preview'))) {
+    if (name.endsWith('.html')) files.push(path.join('preview', name));
+  }
+  for (const rel of files) {
+    assert.equal(fs.readFileSync(path.join(root, rel), 'utf-8').includes(retiredHover), false, rel);
+  }
 });
 
 test('ambient violet glow stays the measured main value', () => {

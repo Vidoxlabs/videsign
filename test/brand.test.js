@@ -602,11 +602,12 @@ test('ADR-011 is proposed and amends the raster ban', () => {
   assert.doesNotMatch(read('.gitattributes'), /brand\/\*\*\/\*\.svg binary/);
   const design = read('DESIGN.md');
   assert.match(design, /surface-accent-violet-base: "#8B5CF6"/);
-  assert.match(design, /surface-accent-violet-hover: "#6B46C1"/);
+  assert.match(design, /surface-accent-violet-hover: "#6D28D9"/);
   assert.match(design, /surface-accent-violet-active: "#5B21B6"/);
   const adr011 = skill.slice(skill.indexOf('## ADR-011:'), skill.indexOf('## ADR-012:'));
+  assert.match(adr011, /Item 7 is Accepted/);
   assert.match(adr011, /Item 10 is Accepted/);
-  assert.match(adr011, /Items 1-9 stay Proposed/);
+  assert.match(adr011, /Items 1-6, 8 and 9 stay Proposed/);
   assert.match(adr011, /Proposed \(awaiting owner ratification\)/);
   assert.doesNotMatch(adr011, /\*\*Status\*\*: Accepted/);
   assert.match(design, /persona-accent-wisteria-base: "#A78BFA"/);

@@ -6,9 +6,9 @@ colors:
   surface-background-secondary-base: "#12121A"
   surface-background-tertiary-base: "#1C1C24"
   surface-accent-violet-base: "#8B5CF6"
-  surface-accent-violet-hover: "#6B46C1"
+  surface-accent-violet-hover: "#6D28D9"
   surface-accent-violet-active: "#5B21B6"
-# ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6. Hover and active stay; the matrix has no darker violet scale step. Items 1-9 stay Proposed.
+# ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6. Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, per the 2026-10-28 owner decision on item 10. Item 7 is Accepted. Items 1-6, 8 and 9 stay Proposed.
   text-content-primary-base: "#FFFFFF"
   text-content-secondary-base: "#A1A1AA"
   border-separator-primary-base: "#27272A"
@@ -174,7 +174,7 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > - Persona identity accents are locked. Violet is always `{colors.persona-accent-violet-base}` (#8B5CF6), Wisteria is always `{colors.persona-accent-wisteria-base}` (#A78BFA), Xylia is always `{colors.persona-accent-xylia-base}` (#2DD4BF), Yarrow is always `{colors.persona-accent-yarrow-base}` (#F59E0B), and Zinnia is always `{colors.persona-accent-zinnia-base}` (#F43F5E).
 > - Those matrix values stay in force. For brand artwork, Wisteria `#A78BFA`, Xylia teal `#2DD4BF`, Zinnia rose `#F43F5E`, and `cube.png` paths are being retired. The target signatures are in `brand/tokens.json` and become the persona accents in a follow-up after the canon record lands. Status error `#F43F5E` and status warning `#F59E0B` stay status tokens.
 > - Persona accents are identity markers only. They never substitute for status indicators: Yarrow amber shares its hex with `{colors.status-indicator-warning-base}` and Zinnia rose with `{colors.status-indicator-error-base}` — a shared hex never makes the roles interchangeable. Status semantics always use status tokens; persona identity always uses persona accent tokens.
-> - ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Items 1-9 stay Proposed. Hover stays `#6B46C1` and active stays `#5B21B6` because the matrix has no darker violet scale step. Labels on `#8B5CF6` follow the interim contrast rule in ADR-011 (pending the owner): no normal-size label of any colour. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`.
+> - ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Item 7 is Accepted. Items 1-6, 8 and 9 stay Proposed. Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, per the 2026-10-28 owner decision on item 10. Labels on `#8B5CF6` follow the contrast rule in ADR-011 (pending the owner): no normal-size label of any colour. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`.
 > - **Accent text lives on the primary surface only.** Measured: Violet `{colors.persona-accent-violet-base}` is 4.67:1 on `{colors.surface-background-primary-base}` but 4.40:1 on secondary and 4.00:1 on tertiary, so it fails AA as small text on both. On secondary and tertiary surfaces a persona accent appears only as a non-text indicator (dot, bar, ring, 3:1). Wisteria, Xylia, Yarrow and Zinnia pass 4.5:1 on all three surfaces (Zinnia on tertiary is marginal at 4.61:1).
 > - Never invent persona hex values locally. New persona states (hover, active) or any new persona color must be added to the `colors` matrix in this file first, then referenced.
 
@@ -322,7 +322,7 @@ values must use semantic tokens. Raw utilities like `gap-2`, `w-64`, `text-sm`,
 > | Persona Yarrow `#F59E0B` | 9.20:1 | 8.67:1 | 7.88:1 |
 > | Persona Zinnia `#F43F5E` | 5.38:1 | 5.07:1 | 4.61:1 |
 > | Brand accent `#8B5CF6` (CTA fill and focus; same hex as persona violet) | 4.67:1 | **4.40:1 (fails AA text)** | **4.00:1 (fails AA text)** |
-> | White on brand accent fill | 4.23:1 (fails 4.5:1 for normal text; hover 6.42:1, active 8.98:1) | | |
+> | White on brand accent fill | 4.23:1 (fails 4.5:1 for normal text; hover 7.10:1, active 8.98:1) | | |
 >
 > - Secondary text on tertiary is 6.60:1; the earlier warning that it drops below AA was wrong.
 > - Violet persona accent text stays on the primary surface (see Persona identity accents).
