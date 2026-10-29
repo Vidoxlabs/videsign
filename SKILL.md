@@ -61,7 +61,7 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 2. Emitted custom properties follow the pipeline format `--vi-colors-persona-accent-<persona>-base`.
 3. Persona accents are identity markers only. Yarrow shares a hex with the warning status token and Zinnia with the error status token; shared hexes never make the roles interchangeable. Status semantics always use status tokens.
-4. The persona token `{colors.persona-accent-violet-base}` and the CTA and focus token `{colors.surface-accent-violet-base}` share #8B5CF6. The roles stay separate: persona identity uses the persona token; CTA fills and focus rings use the surface accent. Hover is #6D28D9 and active is #5B21B6. Never use #7C3AED.
+4. The persona token `{colors.persona-accent-violet-base}` and the CTA and focus token `{colors.surface-accent-violet-base}` share #8B5CF6. The roles stay separate: persona identity uses the persona token; CTA fills and focus rings use the surface accent. Hover is #6D28D9 and active is #5B21B6. Never use #7C3AED for CTA fills, hover/active states or focus rings.
 5. New persona states (hover, active) or any new persona color must be added to the DESIGN.md matrix first, then referenced — never invented locally in a consuming product.
 
 ## ADR-005: Hero Billboard Exception
@@ -193,7 +193,7 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 4. Xylia is never text and never alone. Text-safe Xylia and Zinnia are pending and undefined.
 5. Names: `brand_{asset}_{variant}_v{NNN}.{ext}`. Lockup `horizontal-dark`, `horizontal-light`, `stacked-dark` name the field. Mark `mono-dark`, `mono-light` and wordmark `dark`, `light` name the ink. `on-dark` and `on-light` would name the field. Keep brand-index filenames. Never reuse a version. Do not draw the mark.
 6. Promoted masters: path `design_system/brand/` (a name, not a link).
-7. Accepted. White on `#8B5CF6` is 4.23:1. CTA labels on that fill are large or bold: bold xl or larger, or 2xl or larger. No normal-size label of any colour on `#8B5CF6` (pending the owner). `#121214` is 4.42:1, white is 4.23:1, `#F7F7F5` is 3.95:1. Fail 4.5:1 for normal text; pass 3:1 for large text (at least 24px, or at least 18.66px and bold).
+7. Accepted. Item 7 is Accepted: white on #8B5CF6 is 4.23:1. CTA labels are large: bold xl or larger, or 2xl or larger. No normal-size label of any colour on `#8B5CF6`. `#121214` is 4.42:1, white is 4.23:1, `#F7F7F5` is 3.95:1. Fail 4.5:1 for normal text; pass 3:1 for large text (at least 24px, or at least 18.66px and bold).
 8. Headers under 38px may use the favicon-grade mark down to 24px. px16 is in `brand/`. No px32 master here.
 9. `brand-signature-*` becomes the persona accent once the canon record lands. Until then `DESIGN.md` persona accents stay. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`. Teal glow stays the default. `ambient-glow-wisteria-base` in `brand/tokens.json` is the pending successor, not a `DESIGN.md` token.
 10. Accepted. ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, per the 2026-10-28 owner decision on item 10. Focus rings use #8B5CF6 and do not use #6D28D9. This item does not change `{effects.ambient-glow-violet-base}` (`rgba(124, 58, 237, 0.30)`), which remains with item 9.

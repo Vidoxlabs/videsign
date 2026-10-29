@@ -49,12 +49,22 @@ test('breakpoint and state prefixes use the smallest size and weight', () => {
   assert.ok(onlyMd.some((problem) => problem.includes(needs)), onlyMd.join(' | '));
   assert.ok(onlySm.some((problem) => problem.includes(needs)), onlySm.join(' | '));
   assert.deepEqual(label('text-xl font-bold md:text-2xl'), []);
+  const nested = accentLabelProblems(`<button class="${fillClass} ${onAccentClass} text-xl font-bold"><span class="text-sm font-normal">Go</span></button>`);
+  const persona = accentLabelProblems(`<button class="bg-persona-accent-violet-base ${onAccentClass} text-sm font-normal">Go</button>`);
+  const opaque = accentLabelProblems(`<button class="bg-surface-accent-violet-base/90 ${onAccentClass} text-sm font-normal">Go</button>`);
+  const quoted = accentLabelProblems(`<button class='${fillClass} ${onAccentClass} text-sm font-normal'>Go</button>`);
+  const hoverFill = accentLabelProblems(`<button class="hover:${fillClass} ${onAccentClass} text-sm font-normal">Go</button>`);
+  assert.ok(nested.some((problem) => problem.includes('text-sm') && problem.includes(needs)), nested.join(' | '));
+  assert.ok(persona.some((problem) => problem.includes(needs)), persona.join(' | '));
+  assert.ok(opaque.some((problem) => problem.includes(needs)), opaque.join(' | '));
+  assert.ok(quoted.some((problem) => problem.includes(needs)), quoted.join(' | '));
+  assert.ok(hoverFill.some((problem) => problem.includes(needs)), hoverFill.join(' | '));
   const everyBreakpoint = ['', 'sm:', 'md:', 'lg:', 'xl:', '2xl:'].flatMap((prefix) => [
     `${prefix}font-typography-weight-bold-base`,
     `${prefix}text-typography-size-xl-base`,
   ]);
   assert.deepEqual(label(everyBreakpoint.join(' ')), []);
-  assert.deepEqual(accentLabelProblems('<a class="bg-surface-accent-violet-base/30 text-typography-size-xs-base">Research</a>'), []);
+  assert.ok(accentLabelProblems('<a class="bg-surface-accent-violet-base/30 text-typography-size-xs-base">Research</a>').some((problem) => problem.includes(needs)));
   for (const file of ['button.html', 'question-bar.html', 'persona-console.html', 'island-nav.html']) {
     const html = fs.readFileSync(path.join(__dirname, '../preview', file), 'utf8');
     assert.deepEqual(accentLabelProblems(html), [], file);

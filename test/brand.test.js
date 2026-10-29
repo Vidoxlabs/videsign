@@ -1,6 +1,6 @@
 /**
  * Brand v1 contract: signature tokens, mark C spec, SVG allow-list (ADR-011),
- * and the interim contrast rule (D5 pending the owner).
+ * and the Accepted item 7 contrast rule.
  */
 
 const { test } = require('node:test');
@@ -189,7 +189,7 @@ test('brand signatures currently differ from persona accents', () => {
   assert.ok(differ > 0);
 });
 
-test('interim contrast rule (D5 pending the owner)', () => {
+test('item 7 contrast rule is Accepted', () => {
   const tokens = loadBrandTokens(read('brand/tokens.json'));
   const fill = tokens['brand-signature-violet-base'];
   const pairs = [
@@ -205,7 +205,10 @@ test('interim contrast rule (D5 pending the owner)', () => {
   }
   for (const rel of ['brand/README.md', 'SKILL.md', 'AGENTS.md', 'DESIGN.md']) {
     const doc = read(rel);
-    assert.match(doc, /pending the owner/);
+    assert.match(doc, /Item 7 is Accepted: white on #8B5CF6 is 4\.23:1/);
+    assert.match(doc, /large: bold xl or larger, or 2xl or larger/);
+    assert.doesNotMatch(doc, /pending the owner/);
+    assert.doesNotMatch(doc, /Interim contrast/);
     assert.equal(doc.includes(['pending', 'Gavin'].join(' ')), false);
     assert.match(doc, /ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6/);
     assert.equal(doc.includes(['#7C3AED', 'is retired'].join(' ')), false);

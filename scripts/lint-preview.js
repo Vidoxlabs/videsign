@@ -31,7 +31,12 @@ const { parseFrontMatter } = require('./generate-tokens');
 const PREVIEW_DIR = path.join(__dirname, '..', 'preview');
 const TOKENS = parseFrontMatter(fs.readFileSync(path.join(__dirname, '..', 'DESIGN.md'), 'utf-8'));
 const ON_ACCENT = 'text-text-content-on-accent-base';
-const SOLID_ACCENT = 'bg-surface-accent-violet-base';
+const ACCENT_FILL = /^(?:bg-surface-accent-violet-base|bg-persona-accent-violet-base)(?:\/\d+)?$/;
+const STATE_PREFIX = new Set([
+  'hover', 'focus', 'focus-within', 'focus-visible', 'active',
+  'group-hover', 'group-focus', 'group-focus-within', 'group-active',
+  'peer-hover', 'peer-focus', 'peer-focus-within',
+]);
 const BOLD_WEIGHT = 700;
 const SIZE_RANK = { xs: 0, sm: 1, md: 2, lg: 3, xl: 4, '2xl': 5, '3xl': 6, '4xl': 7, '5xl': 8 };
 const XL_RANK = SIZE_RANK.xl;
@@ -56,9 +61,16 @@ const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input'
 const GLASS_FORBIDDEN_TAGS = new Set(['p', 'section', 'article', 'li', 'ul', 'ol', 'table', 'thead', 'tbody', 'tr', 'td', 'th', 'h1', 'h2', 'h3', 'h4', 'span']);
 const MAX_GLASS_LAYERS = 3;
 
+function classAttributes(html) {
+  const values = [];
+  for (const match of html.matchAll(/\bclass\s*=\s*(?:"([^"]*)"|'([^']*)')/g)) {
+    values.push(match[1] ?? match[2] ?? '');
+  }
+  return values;
+}
+
 function classesOf(attrs) {
-  const m = attrs.match(/\bclass\s*=\s*"([^"]*)"/);
-  return m ? m[1].split(/\s+/).filter(Boolean) : [];
+  return classAttributes(attrs).flatMap((value) => value.split(/\s+/).filter(Boolean));
 }
 
 function visibleText(html) {
@@ -76,8 +88,8 @@ function lintFragment(name, html) {
 
   if (/shadow-sm/.test(bare)) problems.push('shadow-sm violates ADR-001');
 
-  for (const m of bare.matchAll(/\bclass\s*=\s*"([^"]*)"/g)) {
-    for (const cls of m[1].split(/\s+/)) {
+  for (const value of classAttributes(bare)) {
+    for (const cls of value.split(/\s+/)) {
       if (!cls) continue;
       if (cls.includes('[') && !cls.includes('ASSET_BASE')) problems.push(`arbitrary Tailwind value "${cls}"`);
       if (/^backdrop-blur(-|$)/.test(cls)) problems.push(`legacy glass utility "${cls}"`);
@@ -142,6 +154,13 @@ function utilityOf(cls) {
   return colon === -1 ? cls : cls.slice(colon + 1);
 }
 
+function isAccentFillClass(cls) {
+  const parts = cls.split(':');
+  const utility = parts.pop();
+  if (!ACCENT_FILL.test(utility)) return false;
+  return parts.length === 0 || parts.some((part) => STATE_PREFIX.has(part));
+}
+
 function sizeStep(cls) {
   const utility = utilityOf(cls);
   const raw = utility.match(/^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl)$/);
@@ -184,7 +203,7 @@ function accentLabelProblems(html) {
     const tag = open[2].toLowerCase();
     const attrs = open[3];
     const classes = classesOf(attrs);
-    if (!classes.includes(SOLID_ACCENT)) continue;
+    if (!classes.some(isAccentFillClass)) continue;
     if (VOID.has(tag) || /\/\s*$/.test(attrs)) continue;
     let depth = 1;
     let closeAt = bare.length;
@@ -201,14 +220,16 @@ function accentLabelProblems(html) {
         depth += 1;
       }
     }
-    if (!elementText(bare.slice(open.index + open[0].length, closeAt))) continue;
+    const inner = bare.slice(open.index + open[0].length, closeAt);
+    if (!elementText(inner)) continue;
     const unprefixed = (cls) => !cls.includes(':');
-    const sizes = classes.map(sizeStep).filter(Boolean);
+    const classesAndDescendants = classes.concat(classAttributes(inner).flatMap((value) => value.split(/\s+/).filter(Boolean)));
+    const sizes = classesAndDescendants.map(sizeStep).filter(Boolean);
     if (!classes.some((cls) => unprefixed(cls) && sizeStep(cls))) {
       const baseSize = sizeStep('text-base');
       if (baseSize) sizes.push(baseSize);
     }
-    const weights = classes.map(weightOf).filter((value) => value !== null);
+    const weights = classesAndDescendants.map(weightOf).filter((value) => value !== null);
     if (!classes.some((cls) => unprefixed(cls) && weightOf(cls) !== null)) {
       weights.push(RAW_WEIGHT['font-normal']);
     }

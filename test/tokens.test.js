@@ -9,6 +9,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 const {
   parseFrontMatter,
@@ -236,7 +237,7 @@ test('literal #7C3AED is absent from tokens, CSS and docs', () => {
   const css = emitCSS(TOKENS) + emitGlassCSS(TOKENS);
   assert.equal(css.includes(hex), false);
   assert.match(css, /rgba\(124, 58, 237, 0\.30\)/);
-  const prohibition = (line) => /never(?: use)? #7C3AED/i.test(line);
+  const prohibition = (line) => /never use #7C3AED for CTA fills, hover\/active states or focus rings/i.test(line);
   for (const rel of ['DESIGN.md', 'SKILL.md', 'AGENTS.md', 'README.md', 'brand/README.md', 'scripts/generate-tokens.js', 'scripts/generate-standard.js']) {
     const leftover = hits(fs.readFileSync(path.join(root, rel), 'utf-8')).filter((line) => !prohibition(line));
     assert.deepEqual(leftover, [], rel);
@@ -289,6 +290,19 @@ test('CTA fill and focus outline are #8B5CF6 and the violet glow stays put', () 
   assert.match(css, /outline: 2px solid #8B5CF6;/);
   assert.equal(css.includes('outline: 2px solid #6D28D9'), false);
   assert.equal(TOKENS.effects['ambient-glow-violet-base'], 'rgba(124, 58, 237, 0.30)');
+});
+
+test('generated dist has no retired hover hex', () => {
+  const root = path.join(__dirname, '..');
+  execFileSync(process.execPath, [path.join(root, 'scripts', 'generate-tokens.js')], {
+    cwd: root,
+    stdio: 'ignore',
+  });
+  const retiredHover = ['#6B', '46C1'].join('');
+  for (const name of fs.readdirSync(path.join(root, 'dist'))) {
+    const text = fs.readFileSync(path.join(root, 'dist', name), 'utf-8');
+    assert.equal(text.includes(retiredHover), false, name);
+  }
 });
 
 test('ambient violet glow stays the measured main value', () => {
