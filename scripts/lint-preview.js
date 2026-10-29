@@ -32,11 +32,6 @@ const PREVIEW_DIR = path.join(__dirname, '..', 'preview');
 const TOKENS = parseFrontMatter(fs.readFileSync(path.join(__dirname, '..', 'DESIGN.md'), 'utf-8'));
 const ON_ACCENT = 'text-text-content-on-accent-base';
 const ACCENT_FILL = /^(?:bg-surface-accent-violet-base|bg-persona-accent-violet-base)(?:\/\d+)?$/;
-const STATE_PREFIX = new Set([
-  'hover', 'focus', 'focus-within', 'focus-visible', 'active',
-  'group-hover', 'group-focus', 'group-focus-within', 'group-active',
-  'peer-hover', 'peer-focus', 'peer-focus-within',
-]);
 const BOLD_WEIGHT = 700;
 const BOLD_MIN_PX = 18.66;
 const LARGE_MIN_PX = 24;
@@ -163,8 +158,7 @@ function utilityOf(cls) {
 function isAccentFillClass(cls) {
   const parts = cls.split(':').map(stripImportant).filter(Boolean);
   const utility = parts.pop();
-  if (!utility || !ACCENT_FILL.test(utility)) return false;
-  return parts.length === 0 || parts.some((part) => STATE_PREFIX.has(part));
+  return Boolean(utility && ACCENT_FILL.test(utility));
 }
 
 function tokenPx(key) {
@@ -209,6 +203,60 @@ function elementText(inner) {
     .trim();
 }
 
+function measureLabel(classList, defaults) {
+  const sizes = classList.map(sizeStep).filter(Boolean);
+  if (defaults && sizes.length === 0) {
+    const baseSize = sizeStep('text-base');
+    if (baseSize) sizes.push(baseSize);
+  }
+  const weights = classList.map(weightOf).filter((value) => value !== null);
+  if (defaults && weights.length === 0) weights.push(RAW_WEIGHT['font-normal']);
+  const size = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : null;
+  const weight = weights.length ? Math.min(...weights) : RAW_WEIGHT['font-normal'];
+  const boldLarge = size !== null && weight >= BOLD_WEIGHT && size.px >= BOLD_MIN_PX;
+  const anyLarge = size !== null && size.px >= LARGE_MIN_PX;
+  return { large: Boolean(boldLarge || anyLarge), size, weight };
+}
+
+function closeIndex(source, tags, open) {
+  const tag = open[2].toLowerCase();
+  let depth = 1;
+  for (const next of tags) {
+    if (next.index <= open.index) continue;
+    if (next[2].toLowerCase() !== tag) continue;
+    if (next[1]) {
+      depth -= 1;
+      if (depth === 0) return next.index;
+    } else if (!VOID.has(tag) && !/\/\s*$/.test(next[3])) {
+      depth += 1;
+    }
+  }
+  return source.length;
+}
+
+/** Classes on descendants that contain text. An empty child contributes nothing. */
+function textBearingClasses(html) {
+  const tags = [...html.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g)];
+  const found = [];
+  for (const open of tags) {
+    if (open[1]) continue;
+    const tag = open[2].toLowerCase();
+    const attrs = open[3];
+    const selfClosing = /\/\s*$/.test(attrs);
+    if ((VOID.has(tag) && tag !== 'input') || (selfClosing && tag !== 'input')) continue;
+    if (tag === 'input') {
+      const value = (attrs.match(/\bvalue\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i) || []).slice(1).find((part) => part !== undefined) || '';
+      if (!value.trim()) continue;
+      found.push(...classesOf(attrs));
+      continue;
+    }
+    const content = html.slice(open.index + open[0].length, closeIndex(html, tags, open));
+    if (!elementText(content)) continue;
+    found.push(...classesOf(attrs));
+  }
+  return found;
+}
+
 /** Solid accent labels are bold xl (or larger) or 2xl (or larger), on the on-accent token. */
 function accentLabelProblems(html) {
   const problems = [];
@@ -222,46 +270,27 @@ function accentLabelProblems(html) {
     if (!classes.some(isAccentFillClass)) continue;
     const isInput = tag === 'input';
     if ((VOID.has(tag) && !isInput) || (/\/\s*$/.test(attrs) && !isInput)) continue;
-    let depth = 1;
-    let closeAt = bare.length;
-    for (const next of tags) {
-      if (next.index <= open.index) continue;
-      if (next[2].toLowerCase() !== tag) continue;
-      if (next[1]) {
-        depth -= 1;
-        if (depth === 0) {
-          closeAt = next.index;
-          break;
-        }
-      } else if (!VOID.has(tag) && !/\/\s*$/.test(next[3])) {
-        depth += 1;
-      }
-    }
+    const closeAt = closeIndex(bare, tags, open);
     const inputValue = isInput
       ? (attrs.match(/\bvalue\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i) || []).slice(1).find((part) => part !== undefined) || ''
       : '';
     const inner = isInput ? '' : bare.slice(open.index + open[0].length, closeAt);
     if (!(isInput ? inputValue.trim() : elementText(inner))) continue;
-    const unprefixed = (cls) => !cls.includes(':');
-    const classesAndDescendants = classes.concat(classAttributes(inner).flatMap((value) => value.split(/\s+/).filter(Boolean)));
-    const sizes = classesAndDescendants.map(sizeStep).filter(Boolean);
-    if (!classes.some((cls) => unprefixed(cls) && sizeStep(cls))) {
-      const baseSize = sizeStep('text-base');
-      if (baseSize) sizes.push(baseSize);
-    }
-    const weights = classesAndDescendants.map(weightOf).filter((value) => value !== null);
-    if (!classes.some((cls) => unprefixed(cls) && weightOf(cls) !== null)) {
-      weights.push(RAW_WEIGHT['font-normal']);
-    }
-    const size = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : null;
-    const weight = weights.length ? Math.min(...weights) : RAW_WEIGHT['font-normal'];
-    const boldLarge = size !== null && weight >= BOLD_WEIGHT && size.px >= BOLD_MIN_PX;
-    const anyLarge = size !== null && size.px >= LARGE_MIN_PX;
-    if (!boldLarge && !anyLarge) {
+    // The fill element itself must carry an unprefixed on-accent class.
+    // Prefixed classes and descendant classes can tighten size and weight. They never satisfy the base rule.
+    const descendantClasses = isInput ? [] : textBearingClasses(inner);
+    const classesAndDescendants = classes.concat(descendantClasses);
+    const baseClasses = classesAndDescendants.filter((cls) => !cls.includes(':'));
+    const base = measureLabel(baseClasses, true);
+    const all = measureLabel(classesAndDescendants, false);
+    if (!base.large || !all.large) {
+      const size = all.size && base.size && all.size.px < base.size.px ? all.size : base.size;
+      const weight = Math.min(base.weight, all.weight);
       const detail = size ? `${size.cls} is ${size.name} at weight ${weight}` : 'has no xl or 2xl size';
       problems.push(`accent label ${detail}; needs ${SIZE_RULE}`);
     }
-    if (!classesAndDescendants.some((cls) => utilityOf(cls) === ON_ACCENT)) problems.push(`accent label must use ${ON_ACCENT}`);
+    const ownOnAccent = classes.some((cls) => !cls.includes(':') && utilityOf(cls) === ON_ACCENT);
+    if (!ownOnAccent) problems.push(`accent label must use ${ON_ACCENT}`);
   }
   return problems;
 }

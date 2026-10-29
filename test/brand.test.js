@@ -17,6 +17,7 @@ const {
   loadBrandSpec,
   loadBrandManifest,
 } = require('../scripts/brand-config');
+const { parseFrontMatter } = require('../scripts/generate-tokens');
 const { MAX_SVG_BYTES, PALETTE, checkSvg, listSvgFiles } = require('../scripts/check-brand-svg');
 
 const ROOT = path.join(__dirname, '..');
@@ -192,9 +193,10 @@ test('brand signatures currently differ from persona accents', () => {
 test('item 7 contrast rule is Accepted', () => {
   const tokens = loadBrandTokens(read('brand/tokens.json'));
   const fill = tokens['brand-signature-violet-base'];
+  const onAccent = parseFrontMatter(read('DESIGN.md')).colors['text-content-on-accent-base'];
   const pairs = [
     [tokens['brand-field-dark'], 4.4188],
-    ['#FFFFFF', 4.2344],
+    [onAccent, 4.2344],
     [tokens['brand-field-light'], 3.9476],
   ];
   for (const [ink, expected] of pairs) {
@@ -206,7 +208,16 @@ test('item 7 contrast rule is Accepted', () => {
   for (const rel of ['brand/README.md', 'SKILL.md', 'AGENTS.md', 'DESIGN.md']) {
     const doc = read(rel);
     assert.match(doc, /Accepted 2026-10-28/);
-    assert.match(doc, /Item 7 is Accepted: white on #8B5CF6 is 4\.23:1/);
+    if (rel === 'SKILL.md') {
+      const statusLine = doc.slice(doc.indexOf('## ADR-011:'), doc.indexOf('## ADR-012:')).split('\n').find((line) => line.startsWith('**Status**:'));
+      assert.match(statusLine, /Item 7 is Accepted 2026-10-28/);
+      assert.match(statusLine, /Item 10 is Accepted 2026-10-28/);
+      assert.match(statusLine, /items 1-6, 8 and 9/);
+      assert.doesNotMatch(doc, /7\. Accepted\. Item 7 is Accepted/);
+      const lightStatus = doc.slice(doc.indexOf('## ADR-012:')).split('\n').find((line) => line.startsWith('**Status**:'));
+      assert.match(lightStatus, /^\*\*Status\*\*: Used by the web app redesign \(2026-10-27\)\.$/);
+    }
+    assert.match(doc, /Item 7 is Accepted 2026-10-28: white on #8B5CF6 is 4\.23:1/);
     assert.match(doc, /large: bold xl or larger, or 2xl or larger/);
     assert.doesNotMatch(doc, /owner decision/);
     assert.doesNotMatch(doc, /pending the owner/);
