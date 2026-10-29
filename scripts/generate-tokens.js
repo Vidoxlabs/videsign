@@ -74,11 +74,13 @@ function withPrefix(entries, prefix) {
 /**
  * Tailwind 3 drops an opacity modifier when the color is a bare var() it cannot
  * parse. color-mix keeps the custom property, so a light-theme override of that
- * variable still flows through, and /opacity utilities still compile.
+ * variable still flows through, and /opacity utilities still compile. The hex
+ * is the fallback when the variable is unset. color-mix() needs Safari 16.2+,
+ * Chrome 111+, or Firefox 113+.
  */
 function tailwindColorValue(key, value) {
   if (!/^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/.test(value)) return value;
-  return `color-mix(in srgb, var(--vi-colors-${key}) calc(<alpha-value> * 100%), transparent)`;
+  return `color-mix(in srgb, var(--vi-colors-${key}, ${value}) calc(<alpha-value> * 100%), transparent)`;
 }
 
 // --- Emitters ---

@@ -33,8 +33,11 @@ design system — the shared visual language for all Vidoxlabs products and appl
   is a proposed exception (ADR-011, awaiting ratification).
 - **canon/vwxyz/**: Persona character canon. Never invent character colors. Images will be served from the asset service (planned, ADR-010).
 - **dist/**: Generated artifacts (gitignored). Produced by `npm run tokens`. Consuming
-  repos import `dist/tailwind.config.js` or `dist/tokens.css` from this repo.
-  `dist/themes.css` is an explicit opt-in for the product light theme.
+  repos import `dist/tailwind.config.js` together with `dist/tokens.css`. Colour
+  utilities are `color-mix()` of `var(--vi-colors-<key>, <hex>)`: `tokens.css`
+  supplies the variable, and the hex is the fallback when that variable is unset.
+  `color-mix()` needs Safari 16.2+, Chrome 111+, or Firefox 113+. `dist/themes.css`
+  is an explicit opt-in that remaps those variables for the product light theme.
 - **brand/**: Brand v1 mark C masters (text-only SVG, ADR-011). See `brand/README.md`
   and `brand/MANIFEST.json`. Do not redraw the mark.
 

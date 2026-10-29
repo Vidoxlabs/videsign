@@ -56,6 +56,10 @@ test('the light glass block pins border, rim, and blur', () => {
   assert.ok(block.includes('backdrop-filter: none;'));
   assert.ok(block.includes('-webkit-backdrop-filter: none;'));
   assert.equal(block.includes('blur('), false);
+  assert.match(tokens.colors['border-separator-primary-light'], /^#[0-9A-Fa-f]{6}$/);
+  const rimAlpha = rim.match(/^rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*([0-9.]+)\s*\)$/);
+  assert.ok(rimAlpha, rim);
+  assert.ok(Number(rimAlpha[1]) > 0, rim);
 });
 test('tailwind colors reference variables instead of literal hex', () => {
   const module_ = {exports: {}};
@@ -64,8 +68,37 @@ test('tailwind colors reference variables instead of literal hex', () => {
   for (const key of Object.keys(tokens.colors)) {
     assert.equal(
       colors[key],
-      `color-mix(in srgb, var(--vi-colors-${key}) calc(<alpha-value> * 100%), transparent)`,
+      `color-mix(in srgb, var(--vi-colors-${key}, ${tokens.colors[key]}) calc(<alpha-value> * 100%), transparent)`,
     );
-    assert.equal(String(colors[key]).includes('#'), false);
   }
+});
+test('each tailwind colour keeps its hex as the var fallback', () => {
+  const module_ = {exports: {}};
+  new Function('module', emitTailwindConfig(tokens))(module_);
+  const colors = module_.exports.theme.extend.colors;
+  for (const [key, hex] of Object.entries(tokens.colors)) {
+    assert.equal(colors[key].includes(`var(--vi-colors-${key}, ${hex})`), true, key);
+  }
+});
+test('accent-fill CTAs use only the on-accent text token', () => {
+  const preview = path.join(root, 'preview');
+  const seen = [];
+  const bad = [];
+  for (const file of fs.readdirSync(preview).filter((name) => name.endsWith('.html')).sort()) {
+    const html = fs.readFileSync(path.join(preview, file), 'utf8').replace(/<!--[\s\S]*?-->/g, '');
+    for (const match of html.matchAll(/\bclass="([^"]*)"/g)) {
+      const classes = match[1].split(/\s+/).filter(Boolean);
+      if (!classes.includes('bg-surface-accent-violet-base')) continue;
+      const textColors = classes.filter((cls) => /^(?:hover:|active:|focus:|focus-visible:)?text-(?!typography-)/.test(cls));
+      if (textColors.length === 0) continue;
+      seen.push(file);
+      for (const cls of textColors) {
+        if (!/^(?:hover:|active:|focus:|focus-visible:)?text-text-content-on-accent-base$/.test(cls)) {
+          bad.push(`${file}: ${cls}`);
+        }
+      }
+    }
+  }
+  assert.deepEqual(bad, []);
+  assert.deepEqual(seen, ['button.html', 'island-nav.html', 'persona-console.html', 'question-bar.html']);
 });
