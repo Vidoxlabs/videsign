@@ -26,8 +26,32 @@
 
 const fs = require('fs');
 const path = require('path');
+const { parseFrontMatter } = require('./generate-tokens');
 
 const PREVIEW_DIR = path.join(__dirname, '..', 'preview');
+const TOKENS = parseFrontMatter(fs.readFileSync(path.join(__dirname, '..', 'DESIGN.md'), 'utf-8'));
+const ON_ACCENT = 'text-text-content-on-accent-base';
+const ACCENT_FILL = /^(?:bg-surface-accent-violet-base|bg-persona-accent-violet-base)(?:\/\d+)?$/;
+const STATE_PREFIX = new Set([
+  'hover', 'focus', 'focus-within', 'focus-visible', 'active',
+  'group-hover', 'group-focus', 'group-focus-within', 'group-active',
+  'peer-hover', 'peer-focus', 'peer-focus-within',
+]);
+const BOLD_WEIGHT = 700;
+const BOLD_MIN_PX = 18.66;
+const LARGE_MIN_PX = 24;
+const SIZE_RULE = 'bold xl or larger, or 2xl or larger';
+const RAW_WEIGHT = {
+  'font-thin': 100,
+  'font-extralight': 200,
+  'font-light': 300,
+  'font-normal': 400,
+  'font-medium': 500,
+  'font-semibold': 600,
+  'font-bold': 700,
+  'font-extrabold': 800,
+  'font-black': 900,
+};
 
 /** Catalog chrome and full-page layout harnesses are not component fragments. */
 const CHROME_FILES = new Set(['index.html']);
@@ -36,9 +60,16 @@ const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input'
 const GLASS_FORBIDDEN_TAGS = new Set(['p', 'section', 'article', 'li', 'ul', 'ol', 'table', 'thead', 'tbody', 'tr', 'td', 'th', 'h1', 'h2', 'h3', 'h4', 'span']);
 const MAX_GLASS_LAYERS = 3;
 
+function classAttributes(html) {
+  const values = [];
+  for (const match of html.matchAll(/\bclass\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)) {
+    values.push(match[1] ?? match[2] ?? '');
+  }
+  return values;
+}
+
 function classesOf(attrs) {
-  const m = attrs.match(/\bclass\s*=\s*"([^"]*)"/);
-  return m ? m[1].split(/\s+/).filter(Boolean) : [];
+  return classAttributes(attrs).flatMap((value) => value.split(/\s+/).filter(Boolean));
 }
 
 function visibleText(html) {
@@ -56,8 +87,8 @@ function lintFragment(name, html) {
 
   if (/shadow-sm/.test(bare)) problems.push('shadow-sm violates ADR-001');
 
-  for (const m of bare.matchAll(/\bclass\s*=\s*"([^"]*)"/g)) {
-    for (const cls of m[1].split(/\s+/)) {
+  for (const value of classAttributes(bare)) {
+    for (const cls of value.split(/\s+/)) {
       if (!cls) continue;
       if (cls.includes('[') && !cls.includes('ASSET_BASE')) problems.push(`arbitrary Tailwind value "${cls}"`);
       if (/^backdrop-blur(-|$)/.test(cls)) problems.push(`legacy glass utility "${cls}"`);
@@ -112,6 +143,126 @@ function lintFragment(name, html) {
   }
   if (layers > MAX_GLASS_LAYERS) problems.push(`${layers} glass layers (max ${MAX_GLASS_LAYERS})`);
 
+  problems.push(...accentLabelProblems(html));
+
+  return problems;
+}
+
+function stripImportant(token) {
+  if (token.startsWith('!')) return token.slice(1);
+  if (token.endsWith('!')) return token.slice(0, -1);
+  return token;
+}
+
+function utilityOf(cls) {
+  const colon = cls.lastIndexOf(':');
+  const utility = colon === -1 ? cls : cls.slice(colon + 1);
+  return stripImportant(utility);
+}
+
+function isAccentFillClass(cls) {
+  const parts = cls.split(':').map(stripImportant).filter(Boolean);
+  const utility = parts.pop();
+  if (!utility || !ACCENT_FILL.test(utility)) return false;
+  return parts.length === 0 || parts.some((part) => STATE_PREFIX.has(part));
+}
+
+function tokenPx(key) {
+  const value = TOKENS.typography[key];
+  if (typeof value !== 'string') return null;
+  if (value.endsWith('rem')) return Number.parseFloat(value) * 16;
+  if (value.endsWith('px')) return Number.parseFloat(value);
+  return null;
+}
+
+function sizeStep(cls) {
+  const utility = utilityOf(cls);
+  const raw = utility.match(/^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl)$/);
+  if (raw) {
+    const name = raw[1] === 'base' ? 'md' : raw[1];
+    const px = tokenPx(`typography-size-${name}-base`);
+    return px === null ? null : { cls, name, px };
+  }
+  const token = utility.match(/^text-typography-size-(xs|sm|md|lg|xl|2xl|3xl|4xl|5xl)-base$/);
+  if (token) {
+    const px = tokenPx(`typography-size-${token[1]}-base`);
+    return px === null ? null : { cls, name: token[1], px };
+  }
+  const arbitrary = utility.match(/^text-\[(\d+(?:\.\d+)?)px\]$/);
+  if (arbitrary) return { cls, name: `${arbitrary[1]}px`, px: Number(arbitrary[1]) };
+  return null;
+}
+
+function weightOf(cls) {
+  const utility = utilityOf(cls);
+  if (Object.prototype.hasOwnProperty.call(RAW_WEIGHT, utility)) return RAW_WEIGHT[utility];
+  if (!utility.startsWith('font-typography-weight-')) return null;
+  const value = TOKENS.typography[utility.slice('font-'.length)];
+  return value === undefined ? null : Number(value);
+}
+
+function elementText(inner) {
+  return inner
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z0-9#]+;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** Solid accent labels are bold xl (or larger) or 2xl (or larger), on the on-accent token. */
+function accentLabelProblems(html) {
+  const problems = [];
+  const bare = html.replace(/<!--[\s\S]*?-->/g, '');
+  const tags = [...bare.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g)];
+  for (const open of tags) {
+    if (open[1]) continue;
+    const tag = open[2].toLowerCase();
+    const attrs = open[3];
+    const classes = classesOf(attrs);
+    if (!classes.some(isAccentFillClass)) continue;
+    const isInput = tag === 'input';
+    if ((VOID.has(tag) && !isInput) || (/\/\s*$/.test(attrs) && !isInput)) continue;
+    let depth = 1;
+    let closeAt = bare.length;
+    for (const next of tags) {
+      if (next.index <= open.index) continue;
+      if (next[2].toLowerCase() !== tag) continue;
+      if (next[1]) {
+        depth -= 1;
+        if (depth === 0) {
+          closeAt = next.index;
+          break;
+        }
+      } else if (!VOID.has(tag) && !/\/\s*$/.test(next[3])) {
+        depth += 1;
+      }
+    }
+    const inputValue = isInput
+      ? (attrs.match(/\bvalue\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i) || []).slice(1).find((part) => part !== undefined) || ''
+      : '';
+    const inner = isInput ? '' : bare.slice(open.index + open[0].length, closeAt);
+    if (!(isInput ? inputValue.trim() : elementText(inner))) continue;
+    const unprefixed = (cls) => !cls.includes(':');
+    const classesAndDescendants = classes.concat(classAttributes(inner).flatMap((value) => value.split(/\s+/).filter(Boolean)));
+    const sizes = classesAndDescendants.map(sizeStep).filter(Boolean);
+    if (!classes.some((cls) => unprefixed(cls) && sizeStep(cls))) {
+      const baseSize = sizeStep('text-base');
+      if (baseSize) sizes.push(baseSize);
+    }
+    const weights = classesAndDescendants.map(weightOf).filter((value) => value !== null);
+    if (!classes.some((cls) => unprefixed(cls) && weightOf(cls) !== null)) {
+      weights.push(RAW_WEIGHT['font-normal']);
+    }
+    const size = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : null;
+    const weight = weights.length ? Math.min(...weights) : RAW_WEIGHT['font-normal'];
+    const boldLarge = size !== null && weight >= BOLD_WEIGHT && size.px >= BOLD_MIN_PX;
+    const anyLarge = size !== null && size.px >= LARGE_MIN_PX;
+    if (!boldLarge && !anyLarge) {
+      const detail = size ? `${size.cls} is ${size.name} at weight ${weight}` : 'has no xl or 2xl size';
+      problems.push(`accent label ${detail}; needs ${SIZE_RULE}`);
+    }
+    if (!classesAndDescendants.some((cls) => utilityOf(cls) === ON_ACCENT)) problems.push(`accent label must use ${ON_ACCENT}`);
+  }
   return problems;
 }
 
@@ -134,4 +285,4 @@ if (require.main === module) {
   process.stdout.write('preview fragments clean\n');
 }
 
-module.exports = { lintFragment, lintAll };
+module.exports = { lintFragment, lintAll, accentLabelProblems };
