@@ -38,9 +38,8 @@ const STATE_PREFIX = new Set([
   'peer-hover', 'peer-focus', 'peer-focus-within',
 ]);
 const BOLD_WEIGHT = 700;
-const SIZE_RANK = { xs: 0, sm: 1, md: 2, lg: 3, xl: 4, '2xl': 5, '3xl': 6, '4xl': 7, '5xl': 8 };
-const XL_RANK = SIZE_RANK.xl;
-const TWO_XL_RANK = SIZE_RANK['2xl'];
+const BOLD_MIN_PX = 18.66;
+const LARGE_MIN_PX = 24;
 const SIZE_RULE = 'bold xl or larger, or 2xl or larger';
 const RAW_WEIGHT = {
   'font-thin': 100,
@@ -63,7 +62,7 @@ const MAX_GLASS_LAYERS = 3;
 
 function classAttributes(html) {
   const values = [];
-  for (const match of html.matchAll(/\bclass\s*=\s*(?:"([^"]*)"|'([^']*)')/g)) {
+  for (const match of html.matchAll(/\bclass\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)) {
     values.push(match[1] ?? match[2] ?? '');
   }
   return values;
@@ -149,16 +148,31 @@ function lintFragment(name, html) {
   return problems;
 }
 
+function stripImportant(token) {
+  if (token.startsWith('!')) return token.slice(1);
+  if (token.endsWith('!')) return token.slice(0, -1);
+  return token;
+}
+
 function utilityOf(cls) {
   const colon = cls.lastIndexOf(':');
-  return colon === -1 ? cls : cls.slice(colon + 1);
+  const utility = colon === -1 ? cls : cls.slice(colon + 1);
+  return stripImportant(utility);
 }
 
 function isAccentFillClass(cls) {
-  const parts = cls.split(':');
+  const parts = cls.split(':').map(stripImportant).filter(Boolean);
   const utility = parts.pop();
-  if (!ACCENT_FILL.test(utility)) return false;
+  if (!utility || !ACCENT_FILL.test(utility)) return false;
   return parts.length === 0 || parts.some((part) => STATE_PREFIX.has(part));
+}
+
+function tokenPx(key) {
+  const value = TOKENS.typography[key];
+  if (typeof value !== 'string') return null;
+  if (value.endsWith('rem')) return Number.parseFloat(value) * 16;
+  if (value.endsWith('px')) return Number.parseFloat(value);
+  return null;
 }
 
 function sizeStep(cls) {
@@ -166,14 +180,16 @@ function sizeStep(cls) {
   const raw = utility.match(/^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl)$/);
   if (raw) {
     const name = raw[1] === 'base' ? 'md' : raw[1];
-    return { cls, name, rank: SIZE_RANK[name] };
+    const px = tokenPx(`typography-size-${name}-base`);
+    return px === null ? null : { cls, name, px };
   }
   const token = utility.match(/^text-typography-size-(xs|sm|md|lg|xl|2xl|3xl|4xl|5xl)-base$/);
-  if (token && typeof TOKENS.typography[`typography-size-${token[1]}-base`] === 'string') {
-    return { cls, name: token[1], rank: SIZE_RANK[token[1]] };
+  if (token) {
+    const px = tokenPx(`typography-size-${token[1]}-base`);
+    return px === null ? null : { cls, name: token[1], px };
   }
-  const px = utility.match(/^text-\[(\d+(?:\.\d+)?)px\]$/);
-  if (px) return { cls, name: `${px[1]}px`, rank: -1 };
+  const arbitrary = utility.match(/^text-\[(\d+(?:\.\d+)?)px\]$/);
+  if (arbitrary) return { cls, name: `${arbitrary[1]}px`, px: Number(arbitrary[1]) };
   return null;
 }
 
@@ -204,7 +220,8 @@ function accentLabelProblems(html) {
     const attrs = open[3];
     const classes = classesOf(attrs);
     if (!classes.some(isAccentFillClass)) continue;
-    if (VOID.has(tag) || /\/\s*$/.test(attrs)) continue;
+    const isInput = tag === 'input';
+    if ((VOID.has(tag) && !isInput) || (/\/\s*$/.test(attrs) && !isInput)) continue;
     let depth = 1;
     let closeAt = bare.length;
     for (const next of tags) {
@@ -220,8 +237,11 @@ function accentLabelProblems(html) {
         depth += 1;
       }
     }
-    const inner = bare.slice(open.index + open[0].length, closeAt);
-    if (!elementText(inner)) continue;
+    const inputValue = isInput
+      ? (attrs.match(/\bvalue\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i) || []).slice(1).find((part) => part !== undefined) || ''
+      : '';
+    const inner = isInput ? '' : bare.slice(open.index + open[0].length, closeAt);
+    if (!(isInput ? inputValue.trim() : elementText(inner))) continue;
     const unprefixed = (cls) => !cls.includes(':');
     const classesAndDescendants = classes.concat(classAttributes(inner).flatMap((value) => value.split(/\s+/).filter(Boolean)));
     const sizes = classesAndDescendants.map(sizeStep).filter(Boolean);
@@ -233,15 +253,15 @@ function accentLabelProblems(html) {
     if (!classes.some((cls) => unprefixed(cls) && weightOf(cls) !== null)) {
       weights.push(RAW_WEIGHT['font-normal']);
     }
-    const size = sizes.length ? sizes.reduce((min, item) => (item.rank < min.rank ? item : min)) : null;
+    const size = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : null;
     const weight = weights.length ? Math.min(...weights) : RAW_WEIGHT['font-normal'];
-    const boldXl = size !== null && size.rank >= XL_RANK && weight >= BOLD_WEIGHT;
-    const twoXl = size !== null && size.rank >= TWO_XL_RANK;
-    if (!boldXl && !twoXl) {
+    const boldLarge = size !== null && weight >= BOLD_WEIGHT && size.px >= BOLD_MIN_PX;
+    const anyLarge = size !== null && size.px >= LARGE_MIN_PX;
+    if (!boldLarge && !anyLarge) {
       const detail = size ? `${size.cls} is ${size.name} at weight ${weight}` : 'has no xl or 2xl size';
       problems.push(`accent label ${detail}; needs ${SIZE_RULE}`);
     }
-    if (!classes.includes(ON_ACCENT)) problems.push(`accent label must use ${ON_ACCENT}`);
+    if (!classesAndDescendants.some((cls) => utilityOf(cls) === ON_ACCENT)) problems.push(`accent label must use ${ON_ACCENT}`);
   }
   return problems;
 }

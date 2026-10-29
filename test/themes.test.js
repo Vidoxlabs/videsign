@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {parseFrontMatter, emitThemeCSS} = require('../scripts/generate-tokens');
-const {accentLabelProblems} = require('../scripts/lint-preview');
+const {accentLabelProblems, lintFragment} = require('../scripts/lint-preview');
 const tokens = parseFrontMatter(fs.readFileSync(path.join(__dirname, '../DESIGN.md'), 'utf8'));
 const luminance = (hex) => hex.match(/[a-f\d]{2}/gi).map(v => parseInt(v,16)/255).map(v => v <= .04045 ? v/12.92 : ((v+.055)/1.055)**2.4).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);
 const contrast = (a,b) => { const x=luminance(a),y=luminance(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };
@@ -30,10 +30,14 @@ test('breakpoint and state prefixes use the smallest size and weight', () => {
   const normal = label('font-typography-weight-regular-base text-typography-size-xl-base');
   const small = label('font-bold text-sm');
   const px24 = label('text-[24px]');
+  const boldLg = label('text-lg font-bold');
+  const prefixedBoldOnly = label('text-xl sm:font-bold');
   assert.ok(fourteen.some((problem) => problem.includes('text-[14px]') && problem.includes(needs)), fourteen.join(' | '));
   assert.ok(normal.some((problem) => problem.includes('weight 400') && problem.includes(needs)), normal.join(' | '));
   assert.ok(small.some((problem) => problem.includes('text-sm') && problem.includes(needs)), small.join(' | '));
-  assert.ok(px24.some((problem) => problem.includes('text-[24px]') && problem.includes(needs)), px24.join(' | '));
+  assert.deepEqual(px24, []);
+  assert.ok(boldLg.some((problem) => problem.includes('text-lg') && problem.includes(needs)), boldLg.join(' | '));
+  assert.ok(prefixedBoldOnly.some((problem) => problem.includes('weight 400') && problem.includes(needs)), prefixedBoldOnly.join(' | '));
   assert.deepEqual(label('font-typography-weight-bold-base text-typography-size-xl-base'), []);
   assert.deepEqual(label('text-typography-size-2xl-base'), []);
   const prefixedSmall = label('font-typography-weight-bold-base text-typography-size-xl-base md:text-sm');
@@ -59,6 +63,20 @@ test('breakpoint and state prefixes use the smallest size and weight', () => {
   assert.ok(opaque.some((problem) => problem.includes(needs)), opaque.join(' | '));
   assert.ok(quoted.some((problem) => problem.includes(needs)), quoted.join(' | '));
   assert.ok(hoverFill.some((problem) => problem.includes(needs)), hoverFill.join(' | '));
+  const upperClass = accentLabelProblems(`<button CLASS="${fillClass} ${onAccentClass} text-sm font-normal">Go</button>`);
+  const importantSize = label('font-bold text-xl !text-sm');
+  const importantFill = accentLabelProblems(`<button class="!${fillClass} ${onAccentClass} text-sm font-normal">Go</button>`);
+  const missingToken = accentLabelProblems(`<button class="${fillClass} text-xl font-bold text-text-content-primary-base">Go</button>`);
+  const inputSubmit = accentLabelProblems(`<input type="submit" value="Go" class="${fillClass} ${onAccentClass} text-sm font-normal">`);
+  const buttonSmall = accentLabelProblems(`<button class="${fillClass} ${onAccentClass} text-sm font-normal">Go</button>`);
+  const viaLint = lintFragment('bad.html', `<button class="${fillClass} ${onAccentClass} text-sm font-normal">Go</button>`);
+  assert.ok(upperClass.some((problem) => problem.includes(needs)), upperClass.join(' | '));
+  assert.ok(importantSize.some((problem) => problem.includes('!text-sm') && problem.includes(needs)), importantSize.join(' | '));
+  assert.ok(importantFill.some((problem) => problem.includes(needs)), importantFill.join(' | '));
+  assert.ok(missingToken.some((problem) => problem.includes(onAccentClass)), missingToken.join(' | '));
+  assert.ok(inputSubmit.some((problem) => problem.includes(needs)), inputSubmit.join(' | '));
+  assert.ok(buttonSmall.some((problem) => problem.includes(needs)), buttonSmall.join(' | '));
+  assert.ok(viaLint.some((problem) => problem.includes(needs)), viaLint.join(' | '));
   const everyBreakpoint = ['', 'sm:', 'md:', 'lg:', 'xl:', '2xl:'].flatMap((prefix) => [
     `${prefix}font-typography-weight-bold-base`,
     `${prefix}text-typography-size-xl-base`,

@@ -272,6 +272,15 @@ test('white on active is at least 4.5:1', () => {
   assert.ok(contrastRatio('#FFFFFF', TOKENS.colors['surface-accent-violet-active']) >= 4.5);
 });
 
+test('focus ring clears 3:1 on light surfaces', () => {
+  const ring = TOKENS.colors['surface-accent-violet-base'];
+  assert.equal(ring, '#8B5CF6');
+  for (const surface of ['#FFFFFF', '#F8F9FA', '#F1F3F5']) {
+    const value = contrastRatio(ring, surface);
+    assert.ok(value >= 3, `${surface} ${value.toFixed(2)}`);
+  }
+});
+
 test('no #6B46C1 outside allowed history', () => {
   const retiredHover = ['#6B', '46C1'].join('');
   const root = path.join(__dirname, '..');
