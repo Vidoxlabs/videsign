@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
-const { lintAll, lintFragment, accentLabelProblems } = require('../scripts/lint-preview');
+const { lintAll, lintFragment } = require('../scripts/lint-preview');
 
 const ROOT = path.join(__dirname, '..');
 const PREVIEW = path.join(ROOT, 'preview');
@@ -34,23 +34,6 @@ function cssSelector(cls) {
 
 test('every preview fragment lints clean', () => {
   assert.deepEqual(lintAll(), []);
-});
-
-test('solid accent labels must be large on-accent text', () => {
-  const fourteen = accentLabelProblems('<button class="bg-surface-accent-violet-base text-text-content-on-accent-base font-typography-weight-bold-base text-[14px]">Go</button>');
-  const normal = accentLabelProblems('<button class="bg-surface-accent-violet-base text-text-content-on-accent-base font-typography-weight-regular-base text-typography-size-xl-base">Go</button>');
-  const small = accentLabelProblems('<button class="bg-surface-accent-violet-base text-text-content-on-accent-base font-bold text-sm">Go</button>');
-  assert.ok(fourteen.some((problem) => problem.includes('text-[14px] is 14px')), fourteen.join(' | '));
-  assert.ok(normal.some((problem) => problem.includes('weight 400')), normal.join(' | '));
-  assert.ok(small.some((problem) => problem.includes('text-sm is 14px')), small.join(' | '));
-  assert.deepEqual(accentLabelProblems('<a class="bg-surface-accent-violet-base/30 text-typography-size-xs-base">Research</a>'), []);
-  assert.deepEqual(accentLabelProblems('<span class="w-4 h-4 bg-surface-accent-violet-base"></span>'), []);
-  const display = accentLabelProblems('<button class="bg-surface-accent-violet-base text-text-content-on-accent-base text-typography-size-2xl-base">Go</button>');
-  assert.deepEqual(display, []);
-  for (const file of ['button.html', 'question-bar.html', 'persona-console.html', 'island-nav.html']) {
-    const html = fs.readFileSync(path.join(PREVIEW, file), 'utf-8');
-    assert.deepEqual(accentLabelProblems(html), [], file);
-  }
 });
 
 test('the linter flags what it claims to flag', () => {

@@ -32,20 +32,11 @@ const PREVIEW_DIR = path.join(__dirname, '..', 'preview');
 const TOKENS = parseFrontMatter(fs.readFileSync(path.join(__dirname, '..', 'DESIGN.md'), 'utf-8'));
 const ON_ACCENT = 'text-text-content-on-accent-base';
 const SOLID_ACCENT = 'bg-surface-accent-violet-base';
-const LARGE_PX = 24;
-const BOLD_PX = 18.66;
 const BOLD_WEIGHT = 700;
-const RAW_TEXT_PX = {
-  'text-xs': 12,
-  'text-sm': 14,
-  'text-base': 16,
-  'text-lg': 18,
-  'text-xl': 20,
-  'text-2xl': 24,
-  'text-3xl': 30,
-  'text-4xl': 36,
-  'text-5xl': 48,
-};
+const SIZE_RANK = { xs: 0, sm: 1, md: 2, lg: 3, xl: 4, '2xl': 5, '3xl': 6, '4xl': 7, '5xl': 8 };
+const XL_RANK = SIZE_RANK.xl;
+const TWO_XL_RANK = SIZE_RANK['2xl'];
+const SIZE_RULE = 'bold xl or larger, or 2xl or larger';
 const RAW_WEIGHT = {
   'font-thin': 100,
   'font-extralight': 200,
@@ -146,15 +137,18 @@ function lintFragment(name, html) {
   return problems;
 }
 
-function pxOf(cls) {
-  if (Object.prototype.hasOwnProperty.call(RAW_TEXT_PX, cls)) return { cls, px: RAW_TEXT_PX[cls] };
-  const arbitrary = cls.match(/^text-\[(\d+(?:\.\d+)?)px\]$/);
-  if (arbitrary) return { cls, px: Number(arbitrary[1]) };
-  if (!cls.startsWith('text-typography-size-')) return null;
-  const value = TOKENS.typography[cls.slice('text-'.length)];
-  if (typeof value !== 'string') return null;
-  if (value.endsWith('rem')) return { cls, px: Number.parseFloat(value) * 16 };
-  if (value.endsWith('px')) return { cls, px: Number.parseFloat(value) };
+function sizeStep(cls) {
+  const raw = cls.match(/^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl)$/);
+  if (raw) {
+    const name = raw[1] === 'base' ? 'md' : raw[1];
+    return { cls, name, rank: SIZE_RANK[name] };
+  }
+  const token = cls.match(/^text-typography-size-(xs|sm|md|lg|xl|2xl|3xl|4xl|5xl)-base$/);
+  if (token && typeof TOKENS.typography[`typography-size-${token[1]}-base`] === 'string') {
+    return { cls, name: token[1], rank: SIZE_RANK[token[1]] };
+  }
+  const px = cls.match(/^text-\[(\d+(?:\.\d+)?)px\]$/);
+  if (px) return { cls, name: `${px[1]}px`, rank: -1 };
   return null;
 }
 
@@ -173,7 +167,7 @@ function elementText(inner) {
     .trim();
 }
 
-/** Solid accent fills that carry a label must be WCAG large text on the on-accent token. */
+/** Solid accent labels are bold xl (or larger) or 2xl (or larger), on the on-accent token. */
 function accentLabelProblems(html) {
   const problems = [];
   const bare = html.replace(/<!--[\s\S]*?-->/g, '');
@@ -201,14 +195,15 @@ function accentLabelProblems(html) {
       }
     }
     if (!elementText(bare.slice(open.index + open[0].length, closeAt))) continue;
-    const sizes = classes.map(pxOf).filter(Boolean);
-    const size = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : null;
+    const sizes = classes.map(sizeStep).filter(Boolean);
+    const size = sizes.length ? sizes.reduce((min, item) => (item.rank < min.rank ? item : min)) : null;
     const weights = classes.map(weightOf).filter((value) => value !== null);
     const weight = weights.length ? Math.max(...weights) : 400;
-    const large = size !== null && (size.px >= LARGE_PX || (size.px >= BOLD_PX && weight >= BOLD_WEIGHT));
-    if (!large) {
-      const detail = size ? `${size.cls} is ${size.px}px at weight ${weight}` : 'has no text size';
-      problems.push(`accent label ${detail}; large text is >=24px or >=18.66px bold`);
+    const boldXl = size !== null && size.rank >= XL_RANK && weight >= BOLD_WEIGHT;
+    const twoXl = size !== null && size.rank >= TWO_XL_RANK;
+    if (!boldXl && !twoXl) {
+      const detail = size ? `${size.cls} is ${size.name} at weight ${weight}` : 'has no xl or 2xl size';
+      problems.push(`accent label ${detail}; needs ${SIZE_RULE}`);
     }
     if (!classes.includes(ON_ACCENT)) problems.push(`accent label must use ${ON_ACCENT}`);
   }
