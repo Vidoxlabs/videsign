@@ -45,10 +45,10 @@ test('unprefixed classes set accent size and weight', () => {
   const groupNormal = label('font-typography-weight-bold-base text-typography-size-xl-base group-hover:font-normal');
   const onlyMd = label('md:text-2xl md:font-bold');
   const onlySm = label('sm:text-xl sm:font-bold');
-  assert.deepEqual(prefixedSmall, []);
-  assert.deepEqual(prefixedNormal, []);
-  assert.deepEqual(hoverSmall, []);
-  assert.deepEqual(groupNormal, []);
+  assert.ok(prefixedSmall.some((problem) => problem.includes('md:text-sm') && problem.includes(needs)), prefixedSmall.join(' | '));
+  assert.ok(prefixedNormal.some((problem) => problem.includes('weight 400') && problem.includes(needs)), prefixedNormal.join(' | '));
+  assert.ok(hoverSmall.some((problem) => problem.includes('hover:text-sm') && problem.includes(needs)), hoverSmall.join(' | '));
+  assert.ok(groupNormal.some((problem) => problem.includes('weight 400') && problem.includes(needs)), groupNormal.join(' | '));
   assert.ok(onlyMd.some((problem) => problem.includes(needs)), onlyMd.join(' | '));
   assert.ok(onlySm.some((problem) => problem.includes(needs)), onlySm.join(' | '));
   assert.deepEqual(label('text-xl font-bold md:text-2xl'), []);
@@ -229,8 +229,43 @@ test('dark prefixed size on the fill is not inherited', () => {
   assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
 });
 
-test('unprefixed fill may add prefixed classes', () => {
-  assert.deepEqual(accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold hover:text-sm md:text-sm"><span class="font-bold">Go</span></button>`), []);
+test('prefixed downgrades on a compliant fill are denied', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold hover:text-sm md:text-sm"><span class="font-bold">Go</span></button>`);
+  assert.ok(problems.some((problem) => problem.includes('hover:text-sm') && problem.includes(needsLarge)), problems.join(' | '));
+  assert.ok(problems.some((problem) => problem.includes('md:text-sm') && problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('dark and max-md weight or size downgrades are denied', () => {
+  const dark = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold dark:font-normal">Go</button>`);
+  const maxMd = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold max-md:text-sm">Go</button>`);
+  const regular = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold md:font-regular">Go</button>`);
+  const shrunk = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-2xl sm:text-base">Go</button>`);
+  const arbitrary = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold [&]:text-sm">Go</button>`);
+  assert.ok(dark.some((problem) => problem.includes('dark:font-normal') && problem.includes(needsLarge)), dark.join(' | '));
+  assert.ok(maxMd.some((problem) => problem.includes('max-md:text-sm') && problem.includes(needsLarge)), maxMd.join(' | '));
+  assert.ok(regular.some((problem) => problem.includes('md:font-regular') && problem.includes(needsLarge)), regular.join(' | '));
+  assert.ok(shrunk.some((problem) => problem.includes('sm:text-base') && problem.includes(needsLarge)), shrunk.join(' | '));
+  assert.ok(arbitrary.some((problem) => problem.includes('[&]:text-sm') && problem.includes(needsLarge)), arbitrary.join(' | '));
+});
+
+test('prefixed size on a child is a downgrade', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold"><span class="md:text-sm">Go</span></button>`);
+  assert.ok(problems.some((problem) => problem.includes('md:text-sm') && problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('sr-only and visually-hidden children are not sized', () => {
+  assert.deepEqual(accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold"><span class="sr-only text-sm">Go</span></button>`), []);
+  assert.deepEqual(accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold"><span class="visually-hidden text-sm">Go</span></button>`), []);
+});
+
+test('emphasis inside a compliant fill is allowed', () => {
+  assert.deepEqual(accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold">Go <em>now</em></button>`), []);
+  assert.deepEqual(accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold">Go <strong>now</strong></button>`), []);
+});
+
+test('emphasis with a prefixed downgrade is denied', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold">Go<em class="md:text-sm">now</em></button>`);
+  assert.ok(problems.some((problem) => problem.includes('md:text-sm') && problem.includes(needsLarge)), problems.join(' | '));
 });
 
 test('theme generation is deterministic and offers solid light and forced-color fallbacks', () => {

@@ -7,7 +7,7 @@
  * never reached the fragments (verification report, finding 3). This script is
  * the gate that does. `npm run lint` runs ESLint and then this file.
  *
- * Only unprefixed base-state classes count for the accent fill, on-accent colour, size and weight checks. A prefixed class (hover:, focus:, active:, a breakpoint such as sm:, md:, lg:, xl: or 2xl:, dark:, or a stack such as md:hover:) never satisfies those checks, never rescues a missing base and is never inherited, on the fill or on a child. Inheritance from the fill uses only the fill's unprefixed metrics. baseClasses is the only filter that applies this rule.
+ * A prefixed accent fill still triggers the label checks. Unprefixed classes alone can satisfy on-accent, size and weight; a prefix never satisfies or rescues that base. Every prefixed size or weight on the fill and on a text-bearing child is still evaluated, and the label fails when any of them drops below bold xl or 2xl. Inheritance uses only the fill's unprefixed metrics. sr-only and visually-hidden children are not sized. Inline emphasis without its own size classes inherits the fill.
  *
  * Rules:
  *   - no `shadow-sm` (ADR-001), no arbitrary Tailwind values (`w-[15px]`)
@@ -43,6 +43,7 @@ const RAW_WEIGHT = {
   'font-extralight': 200,
   'font-light': 300,
   'font-normal': 400,
+  'font-regular': 400,
   'font-medium': 500,
   'font-semibold': 600,
   'font-bold': 700,
@@ -54,6 +55,7 @@ const RAW_WEIGHT = {
 const CHROME_FILES = new Set(['index.html']);
 
 const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
+const EMPHASIS = new Set(['em', 'strong', 'i', 'b', 'mark']);
 const GLASS_FORBIDDEN_TAGS = new Set(['p', 'section', 'article', 'li', 'ul', 'ol', 'table', 'thead', 'tbody', 'tr', 'td', 'th', 'h1', 'h2', 'h3', 'h4', 'span']);
 const MAX_GLASS_LAYERS = 3;
 
@@ -255,12 +257,12 @@ function textBearingElements(html) {
     if (tag === 'input') {
       const value = (attrs.match(/\bvalue\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i) || []).slice(1).find((part) => part !== undefined) || '';
       if (!value.trim()) continue;
-      found.push(classesOf(attrs));
+      found.push({ tag, classes: classesOf(attrs) });
       continue;
     }
     const content = html.slice(open.index + open[0].length, closeIndex(html, tags, open));
     if (!elementText(content)) continue;
-    found.push(classesOf(attrs));
+    found.push({ tag, classes: classesOf(attrs) });
   }
   return found;
 }
@@ -287,6 +289,39 @@ function hasDirectNonWhitespaceText(html) {
 
 function labelDetail(measure) {
   return measure.size ? `${measure.size.cls} is ${measure.size.name} at weight ${measure.weight}` : 'has no xl or 2xl size';
+}
+
+function meetsLarge(size, weight) {
+  if (!size) return false;
+  return (weight >= BOLD_WEIGHT && size.px >= BOLD_MIN_PX) || size.px >= LARGE_MIN_PX;
+}
+
+function skippedMetrics(classes) {
+  return classes.some((cls) => {
+    const utility = utilityOf(cls);
+    return utility === 'sr-only' || utility === 'visually-hidden';
+  });
+}
+
+function declaresMetrics(classes) {
+  return baseClasses(classes).some((cls) => sizeStep(cls) || weightOf(cls) !== null);
+}
+
+/** Prefixed sizes and weights layered on the unprefixed metrics. A drop below the label rule fails. */
+function downgradeDetails(classList, inherited) {
+  const found = [];
+  for (const cls of classList) {
+    if (!cls.includes(':')) continue;
+    const size = sizeStep(cls);
+    const weight = weightOf(cls);
+    if (!size && weight === null) continue;
+    const nextSize = size || inherited.size;
+    const nextWeight = weight !== null ? weight : inherited.weight;
+    if (meetsLarge(nextSize, nextWeight)) continue;
+    const shown = size || nextSize;
+    found.push(shown ? `${cls} is ${shown.name} at weight ${nextWeight}` : `${cls} drops below the label rule`);
+  }
+  return found;
 }
 
 /** A descendant that declares an unprefixed size or weight must still meet the rule. Missing classes inherit the fill's unprefixed metrics. */
@@ -329,15 +364,21 @@ function accentLabelProblems(html) {
     const descendants = isInput ? [] : textBearingElements(inner);
     const fillBase = measureLabel(classes, true);
     if (!fillBase.large) problems.push(`accent label ${labelDetail(fillBase)}; needs ${SIZE_RULE}`);
-    if (direct) {
-      for (const desc of descendants) {
-        const descBase = measureLabel(desc, true);
-        if (!descBase.large) problems.push(`accent label ${labelDetail(descBase)}; needs ${SIZE_RULE}`);
+    for (const drop of downgradeDetails(classes, fillBase)) {
+      problems.push(`accent label ${drop}; needs ${SIZE_RULE}`);
+    }
+    const inherited = fillBase;
+    for (const desc of descendants) {
+      if (skippedMetrics(desc.classes)) continue;
+      for (const drop of downgradeDetails(desc.classes, inherited)) {
+        problems.push(`accent label ${drop}; needs ${SIZE_RULE}`);
       }
-    } else {
-      const inherited = fillBase;
-      for (const desc of descendants) {
-        const detail = descendantConstraint(desc, inherited);
+      if (direct) {
+        if (EMPHASIS.has(desc.tag) && !declaresMetrics(desc.classes)) continue;
+        const descBase = measureLabel(desc.classes, true);
+        if (!descBase.large) problems.push(`accent label ${labelDetail(descBase)}; needs ${SIZE_RULE}`);
+      } else {
+        const detail = descendantConstraint(desc.classes, inherited);
         if (detail) problems.push(`accent label ${detail}; needs ${SIZE_RULE}`);
       }
     }

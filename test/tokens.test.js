@@ -228,13 +228,8 @@ test('literal #7C3AED is absent from tokens, CSS and docs', () => {
   const hex = '#7C3AED';
   const hits = (text) => text.split('\n').filter((line) => line.includes(hex));
   const prohibition = (line) => /never use #7C3AED for CTA fills, hover\/active states or focus rings/i.test(line);
-  const oldSkill = [
-    '4. Persona Violet (#8B5CF6) is distinct from the brand accent `{colors.surface-accent-violet-base}` (#7C3AED).',
-    'The brand accent stays reserved for key CTAs and focus outlines.',
-    '#7C3AED is to be retired once ADR-011 is ratified.',
-    'Until then those fills and rings stay on that accent.',
-  ].join('\n');
-  assert.ok(hits(oldSkill).some((line) => !prohibition(line)));
+  const historical = execFileSync('git', ['show', 'f48a2ad:SKILL.md'], { cwd: root, encoding: 'utf8' });
+  assert.ok(hits(historical).some((line) => !prohibition(line)));
   const css = emitCSS(TOKENS) + emitGlassCSS(TOKENS);
   assert.equal(css.includes(hex), false);
   assert.match(css, /rgba\(124, 58, 237, 0\.30\)/);

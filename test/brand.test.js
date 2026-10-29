@@ -210,23 +210,22 @@ test('item 7 contrast rule is Accepted', () => {
     assert.match(doc, /Accepted 2026-10-28/);
     if (rel === 'SKILL.md') {
       const statusLine = doc.slice(doc.indexOf('## ADR-011:'), doc.indexOf('## ADR-012:')).split('\n').find((line) => line.startsWith('**Status**:'));
-      assert.match(statusLine, /Items 7 and 10 are Accepted 2026-10-28/);
-      assert.match(statusLine, /#8B5CF6 is the brand accent \(Accepted 2026-10-28\)/);
-      assert.match(statusLine, /Proposed for items 1-6, 8 and 9/);
+      assert.match(statusLine, /^\*\*Status\*\*: Proposed for items 1-6, 8 and 9\. Items 7 and 10 are Accepted 2026-10-28\. Amends ADR-002\.$/);
       assert.doesNotMatch(statusLine, /owner/i);
       assert.doesNotMatch(statusLine, /approv/i);
       assert.doesNotMatch(doc, /7\. Accepted\. Item 7 is Accepted/);
+      assert.doesNotMatch(doc, /10\. Accepted\. ADR-011 item 10 is Accepted/);
       const lightStatus = doc.slice(doc.indexOf('## ADR-012:')).split('\n').find((line) => line.startsWith('**Status**:'));
-      assert.match(lightStatus, /^\*\*Status\*\*: Used by the web app redesign \(2026-10-27\)\.$/);
+      assert.equal(lightStatus, '**Status**: Accepted 2026-10-27. Used by the web app redesign.');
     }
+    assert.doesNotMatch(doc, /#8B5CF6 is the brand accent/);
     assert.match(doc, /Item 7 is Accepted 2026-10-28: white on #8B5CF6 is 4\.23:1/);
     assert.match(doc, /large: bold xl or larger, or 2xl or larger/);
     assert.doesNotMatch(doc, /owner decision/);
     assert.doesNotMatch(doc, /pending the owner/);
     assert.doesNotMatch(doc, /Interim contrast/);
     assert.equal(doc.includes(['pending', 'Gavin'].join(' ')), false);
-    assert.match(doc, /#8B5CF6 is the brand accent \(Accepted 2026-10-28\)/);
-    assert.match(doc, /ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6/);
+    assert.match(doc, /item 10 is Accepted 2026-10-28: CTA fills and focus rings are #8B5CF6/i);
     assert.equal(doc.includes(['#7C3AED', 'is retired'].join(' ')), false);
   }
   for (const rel of ['brand/README.md', 'SKILL.md']) {
@@ -628,7 +627,8 @@ test('ADR-011 is proposed and amends the raster ban', () => {
   assert.match(adr011, /Item 10 is Accepted/);
   assert.match(adr011, /Items 1-6, 8 and 9 stay Proposed/);
   assert.match(adr011, /Proposed for items 1-6, 8 and 9/);
-  assert.match(adr011, /#8B5CF6 is the brand accent \(Accepted 2026-10-28\)/);
+  assert.match(adr011, /^10\. Item 10 is Accepted 2026-10-28:/m);
+  assert.doesNotMatch(adr011, /#8B5CF6 is the brand accent/);
   assert.doesNotMatch(adr011, /\*\*Status\*\*: Accepted/);
   assert.match(design, /persona-accent-wisteria-base: "#A78BFA"/);
   assert.match(design, /ambient-glow-teal-base/);

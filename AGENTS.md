@@ -107,7 +107,7 @@ Do not draw or approximate the mark. Reference a file in `brand/` by family and 
 
 Full colour is for the dark field. Do not place the full-colour mark on the light field `#F7F7F5`.
 
-ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Item 7 is Accepted 2026-10-28. Items 1-6, 8 and 9 stay Proposed. Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, Accepted 2026-10-28. Focus rings use #8B5CF6. Item 7 is Accepted 2026-10-28: white on #8B5CF6 is 4.23:1. CTA labels are large: bold xl or larger, or 2xl or larger. No normal-size label of any colour on that violet. #8B5CF6 is the brand accent (Accepted 2026-10-28). `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`. `{effects.ambient-glow-teal-base}` stays the default glow.
+ADR-011 item 10 is Accepted 2026-10-28: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Item 7 is Accepted 2026-10-28. Items 1-6, 8 and 9 stay Proposed. Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, Accepted 2026-10-28. Focus rings use #8B5CF6. Item 7 is Accepted 2026-10-28: white on #8B5CF6 is 4.23:1. CTA labels are large: bold xl or larger, or 2xl or larger. No normal-size label of any colour on that violet. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`. `{effects.ambient-glow-teal-base}` stays the default glow.
 
 Xylia is never text and never appears alone. Do not build a gradient between the five signature colours. Text-safe Xylia and text-safe Zinnia are pending. Do not define them.
 

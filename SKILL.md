@@ -181,7 +181,7 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 
 ## ADR-011: Brand identity (brand v1)
 
-**Status**: Proposed for items 1-6, 8 and 9. Items 7 and 10 are Accepted 2026-10-28. #8B5CF6 is the brand accent (Accepted 2026-10-28). Amends ADR-002.
+**Status**: Proposed for items 1-6, 8 and 9. Items 7 and 10 are Accepted 2026-10-28. Amends ADR-002.
 
 **Context**: Mark C needs SVG masters here. ADR-002 bans SVG. Rasters stay out of git.
 
@@ -196,14 +196,14 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 7. Item 7 is Accepted 2026-10-28: white on #8B5CF6 is 4.23:1. CTA labels are large: bold xl or larger, or 2xl or larger. No normal-size label of any colour on `#8B5CF6`. `#121214` is 4.42:1, white is 4.23:1, `#F7F7F5` is 3.95:1. Fail 4.5:1 for normal text; pass 3:1 for large text (at least 24px, or at least 18.66px and bold).
 8. Headers under 38px may use the favicon-grade mark down to 24px. px16 is in `brand/`. No px32 master here.
 9. `brand-signature-*` becomes the persona accent once the canon record lands. Until then `DESIGN.md` persona accents stay. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`. Teal glow stays the default. `ambient-glow-wisteria-base` in `brand/tokens.json` is the pending successor, not a `DESIGN.md` token.
-10. Accepted. ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, Accepted 2026-10-28. Focus rings use #8B5CF6 and do not use #6D28D9. This item does not change `{effects.ambient-glow-violet-base}` (`rgba(124, 58, 237, 0.30)`), which remains with item 9.
+10. Item 10 is Accepted 2026-10-28: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, Accepted 2026-10-28. Focus rings use #8B5CF6 and do not use #6D28D9. This item does not change `{effects.ambient-glow-violet-base}` (`rgba(124, 58, 237, 0.30)`), which remains with item 9.
 
 **Consequences**: `.gitignore` re-includes `brand/**/*.svg`; rasters stay ignored. Those SVGs are `-text`. Items 1-6, 8 and 9 stay Proposed until the owner ratifies them. Item 7 is Accepted 2026-10-28. Item 10 is Accepted 2026-10-28.
 
 
 ## ADR-012: Product light theme and semantic foregrounds
 
-**Status**: Used by the web app redesign (2026-10-27).
+**Status**: Accepted 2026-10-27. Used by the web app redesign.
 
 **Decision**: Keep the existing default dark matrix and persona/brand values. Light counterparts remain flat matrix entries with the light state suffix. Generated `dist/themes.css` maps those counterparts onto the existing base semantic variables under `[data-theme="light"]`; consumers import the generated mapping rather than authoring overrides. The normal-text foreground clears 4.5:1 on every reading surface. The border candidate was strengthened from the old consumer override to improve control delineation. `text-content-on-accent-base` stays white across themes for readable brand CTA labels. Status and persona colors remain identity/indicator roles; colored text must be independently measured.
 
