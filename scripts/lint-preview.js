@@ -26,8 +26,37 @@
 
 const fs = require('fs');
 const path = require('path');
+const { parseFrontMatter } = require('./generate-tokens');
 
 const PREVIEW_DIR = path.join(__dirname, '..', 'preview');
+const TOKENS = parseFrontMatter(fs.readFileSync(path.join(__dirname, '..', 'DESIGN.md'), 'utf-8'));
+const ON_ACCENT = 'text-text-content-on-accent-base';
+const SOLID_ACCENT = 'bg-surface-accent-violet-base';
+const LARGE_PX = 24;
+const BOLD_PX = 18.66;
+const BOLD_WEIGHT = 700;
+const RAW_TEXT_PX = {
+  'text-xs': 12,
+  'text-sm': 14,
+  'text-base': 16,
+  'text-lg': 18,
+  'text-xl': 20,
+  'text-2xl': 24,
+  'text-3xl': 30,
+  'text-4xl': 36,
+  'text-5xl': 48,
+};
+const RAW_WEIGHT = {
+  'font-thin': 100,
+  'font-extralight': 200,
+  'font-light': 300,
+  'font-normal': 400,
+  'font-medium': 500,
+  'font-semibold': 600,
+  'font-bold': 700,
+  'font-extrabold': 800,
+  'font-black': 900,
+};
 
 /** Catalog chrome and full-page layout harnesses are not component fragments. */
 const CHROME_FILES = new Set(['index.html']);
@@ -112,6 +141,77 @@ function lintFragment(name, html) {
   }
   if (layers > MAX_GLASS_LAYERS) problems.push(`${layers} glass layers (max ${MAX_GLASS_LAYERS})`);
 
+  problems.push(...accentLabelProblems(html));
+
+  return problems;
+}
+
+function pxOf(cls) {
+  if (Object.prototype.hasOwnProperty.call(RAW_TEXT_PX, cls)) return { cls, px: RAW_TEXT_PX[cls] };
+  const arbitrary = cls.match(/^text-\[(\d+(?:\.\d+)?)px\]$/);
+  if (arbitrary) return { cls, px: Number(arbitrary[1]) };
+  if (!cls.startsWith('text-typography-size-')) return null;
+  const value = TOKENS.typography[cls.slice('text-'.length)];
+  if (typeof value !== 'string') return null;
+  if (value.endsWith('rem')) return { cls, px: Number.parseFloat(value) * 16 };
+  if (value.endsWith('px')) return { cls, px: Number.parseFloat(value) };
+  return null;
+}
+
+function weightOf(cls) {
+  if (Object.prototype.hasOwnProperty.call(RAW_WEIGHT, cls)) return RAW_WEIGHT[cls];
+  if (!cls.startsWith('font-typography-weight-')) return null;
+  const value = TOKENS.typography[cls.slice('font-'.length)];
+  return value === undefined ? null : Number(value);
+}
+
+function elementText(inner) {
+  return inner
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z0-9#]+;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** Solid accent fills that carry a label must be WCAG large text on the on-accent token. */
+function accentLabelProblems(html) {
+  const problems = [];
+  const bare = html.replace(/<!--[\s\S]*?-->/g, '');
+  const tags = [...bare.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g)];
+  for (const open of tags) {
+    if (open[1]) continue;
+    const tag = open[2].toLowerCase();
+    const attrs = open[3];
+    const classes = classesOf(attrs);
+    if (!classes.includes(SOLID_ACCENT)) continue;
+    if (VOID.has(tag) || /\/\s*$/.test(attrs)) continue;
+    let depth = 1;
+    let closeAt = bare.length;
+    for (const next of tags) {
+      if (next.index <= open.index) continue;
+      if (next[2].toLowerCase() !== tag) continue;
+      if (next[1]) {
+        depth -= 1;
+        if (depth === 0) {
+          closeAt = next.index;
+          break;
+        }
+      } else if (!VOID.has(tag) && !/\/\s*$/.test(next[3])) {
+        depth += 1;
+      }
+    }
+    if (!elementText(bare.slice(open.index + open[0].length, closeAt))) continue;
+    const sizes = classes.map(pxOf).filter(Boolean);
+    const size = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : null;
+    const weights = classes.map(weightOf).filter((value) => value !== null);
+    const weight = weights.length ? Math.max(...weights) : 400;
+    const large = size !== null && (size.px >= LARGE_PX || (size.px >= BOLD_PX && weight >= BOLD_WEIGHT));
+    if (!large) {
+      const detail = size ? `${size.cls} is ${size.px}px at weight ${weight}` : 'has no text size';
+      problems.push(`accent label ${detail}; large text is >=24px or >=18.66px bold`);
+    }
+    if (!classes.includes(ON_ACCENT)) problems.push(`accent label must use ${ON_ACCENT}`);
+  }
   return problems;
 }
 
@@ -134,4 +234,4 @@ if (require.main === module) {
   process.stdout.write('preview fragments clean\n');
 }
 
-module.exports = { lintFragment, lintAll };
+module.exports = { lintFragment, lintAll, accentLabelProblems };

@@ -61,7 +61,7 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 2. Emitted custom properties follow the pipeline format `--vi-colors-persona-accent-<persona>-base`.
 3. Persona accents are identity markers only. Yarrow shares a hex with the warning status token and Zinnia with the error status token; shared hexes never make the roles interchangeable. Status semantics always use status tokens.
-4. The persona token `{colors.persona-accent-violet-base}` and the CTA and focus token `{colors.surface-accent-violet-base}` share #8B5CF6. The roles stay separate: persona identity uses the persona token; CTA fills and focus rings use the surface accent. Hover stays #6B46C1 and active stays #5B21B6.
+4. Persona Violet (#8B5CF6) is distinct from the brand accent `{colors.surface-accent-violet-base}` (#7C3AED). The brand accent stays reserved for key CTAs and focus outlines. #7C3AED is to be retired once ADR-011 is ratified. Until then those fills and rings stay on that accent.
 5. New persona states (hover, active) or any new persona color must be added to the DESIGN.md matrix first, then referenced — never invented locally in a consuming product.
 
 ## ADR-005: Hero Billboard Exception

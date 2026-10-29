@@ -201,6 +201,40 @@ test('glass.css ships pill radius variants for plain-CSS consumers', () => {
   assert.match(GLASS, /\.vi-glass-core--pill \{[^}]*border-radius: 9999px;/s);
 });
 
+test('focus ring clears 3:1 on the dark base surfaces', () => {
+  const hex = (value) => [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16));
+  const lin = (channel) => {
+    const s = channel / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  const lum = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  const ratio = (a, b) => {
+    const x = lum(hex(a));
+    const y = lum(hex(b));
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  };
+  const ring = TOKENS.colors['surface-accent-violet-base'];
+  assert.equal(ring, '#8B5CF6');
+  for (const key of ['surface-background-primary-base', 'surface-background-secondary-base', 'surface-background-tertiary-base']) {
+    const value = ratio(ring, TOKENS.colors[key]);
+    assert.ok(value >= 3, `${key} ${value.toFixed(2)}`);
+  }
+  assert.ok(ratio('#52525B', TOKENS.colors['surface-background-primary-base']) < 3);
+});
+
+test('literal #7C3AED is absent outside ADR history and the violet glow stays', () => {
+  const root = path.join(__dirname, '..');
+  const history = /#7C3AED is to be retired once ADR-011 is ratified/;
+  for (const rel of ['DESIGN.md', 'SKILL.md', 'AGENTS.md', 'README.md', 'brand/README.md', 'scripts/generate-tokens.js', 'scripts/generate-standard.js']) {
+    const lines = fs.readFileSync(path.join(root, rel), 'utf-8').split('\n')
+      .filter((line) => line.includes('#7C3AED') && !history.test(line));
+    assert.deepEqual(lines, [], rel);
+  }
+  const css = emitCSS(TOKENS) + emitGlassCSS(TOKENS);
+  assert.equal(css.includes('#7C3AED'), false);
+  assert.match(css, /rgba\(124, 58, 237, 0\.30\)/);
+});
+
 test('CTA fill and focus outline are #8B5CF6 and the violet glow stays put', () => {
   assert.equal(TOKENS.colors['surface-accent-violet-base'], '#8B5CF6');
   assert.equal(TOKENS.colors['surface-accent-violet-hover'], '#6B46C1');
