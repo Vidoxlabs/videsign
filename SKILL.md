@@ -181,7 +181,7 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 
 ## ADR-011: Brand identity (brand v1)
 
-**Status**: Proposed (awaiting owner ratification) for items 1-6, 8 and 9. Item 7 is Accepted 2026-10-28. Item 10 is Accepted 2026-10-28. Amends ADR-002.
+**Status**: Proposed for items 1-6, 8 and 9. Items 7 and 10 are Accepted 2026-10-28. #8B5CF6 is the brand accent (Accepted 2026-10-28). Amends ADR-002.
 
 **Context**: Mark C needs SVG masters here. ADR-002 bans SVG. Rasters stay out of git.
 

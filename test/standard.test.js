@@ -89,6 +89,28 @@ test('standard rules appear in DESIGN.md or SKILL.md (parity guard)', () => {
   }
 });
 
+test('ADR-012 status stays neutral in shipped and generated files', () => {
+  const phrases = [['owner', '-approved'].join(''), ['owner', ' approved'].join('')];
+  const repoName = ['Vi', 'Web'].join('');
+  const listed = execFileSync('git', ['ls-files', '-z'], { cwd: ROOT }).toString().split('\0').filter(Boolean);
+  const generated = generateStandardArtifacts(TOKENS);
+  const adr012 = generated.standard.adrs.find((adr) => adr.id === 'ADR-012');
+  assert.equal(adr012.status, 'Used by the web app redesign (2026-10-27).');
+  const files = new Map(listed.map((rel) => [rel, fs.readFileSync(path.join(ROOT, rel), 'utf8')]));
+  files.set('dist/standard.json', generated['standard.json']);
+  files.set('dist/standard.md', generated['standard.md']);
+  const hits = [];
+  for (const [rel, text] of files) {
+    const lower = text.toLowerCase();
+    for (const phrase of phrases) {
+      if (lower.includes(phrase)) hits.push(`${rel}: ${phrase}`);
+    }
+    const adrText = rel === 'SKILL.md' || rel.startsWith('dist/standard.') || lower.includes('adr-012');
+    if (adrText && lower.includes(repoName.toLowerCase())) hits.push(`${rel}: ${repoName}`);
+  }
+  assert.deepEqual(hits, []);
+});
+
 test('standard digests DESIGN.md and SKILL.md by SHA-256 and reads version from package.json', () => {
   const { standard } = generateStandardArtifacts(TOKENS);
   const crypto = require('crypto');

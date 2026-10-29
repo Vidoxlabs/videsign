@@ -165,6 +165,43 @@ test('breakpoint fill that meets the rule is allowed', () => {
   assert.deepEqual(accentLabelProblems('<button class="md:bg-surface-accent-violet-base text-xl font-bold text-text-content-on-accent-base">Go</button>'), []);
 });
 
+const needsLarge = 'bold xl or larger, or 2xl or larger';
+const onAccent = 'text-text-content-on-accent-base';
+const accentFill = 'bg-surface-accent-violet-base';
+
+test('direct text without size is denied beside a bold xl child', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent}">Go<span class="text-xl font-bold">Now</span></button>`);
+  assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('mixed direct text beside a compliant child is denied', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent}">Go <span class="text-xl font-bold">Now</span> today</button>`);
+  assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('nested child without size is denied when the fill has direct text', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold">Go<span><em>More</em></span></button>`);
+  assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('fill with bold xl and no direct text is allowed', () => {
+  assert.deepEqual(accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold"><span>Go</span></button>`), []);
+});
+
+test('whitespace before a child is not direct text', () => {
+  assert.deepEqual(accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold"> <span>Go</span></button>`), []);
+});
+
+test('compliant child does not rescue a fill without size', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent}"><span class="text-xl font-bold">Go</span></button>`);
+  assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('small child is denied when the fill has no direct text', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold"><span class="text-sm">Go</span></button>`);
+  assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
 test('theme generation is deterministic and offers solid light and forced-color fallbacks', () => {
   assert.equal(typeof emitThemeCSS, 'function');
   const css=emitThemeCSS(tokens);

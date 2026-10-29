@@ -234,8 +234,8 @@ function closeIndex(source, tags, open) {
   return source.length;
 }
 
-/** Classes on descendants that contain text. An empty child contributes nothing. */
-function textBearingClasses(html) {
+/** Class lists of descendants that contain text. An empty child contributes nothing. */
+function textBearingElements(html) {
   const tags = [...html.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g)];
   const found = [];
   for (const open of tags) {
@@ -247,14 +247,54 @@ function textBearingClasses(html) {
     if (tag === 'input') {
       const value = (attrs.match(/\bvalue\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i) || []).slice(1).find((part) => part !== undefined) || '';
       if (!value.trim()) continue;
-      found.push(...classesOf(attrs));
+      found.push(classesOf(attrs));
       continue;
     }
     const content = html.slice(open.index + open[0].length, closeIndex(html, tags, open));
     if (!elementText(content)) continue;
-    found.push(...classesOf(attrs));
+    found.push(classesOf(attrs));
   }
   return found;
+}
+
+/** Text nodes of the element itself. Whitespace and entities do not count. */
+function hasDirectNonWhitespaceText(html) {
+  const re = /<\/?([a-zA-Z][a-zA-Z0-9-]*)\b[^>]*\/?>|[^<]+/g;
+  let depth = 0;
+  let direct = '';
+  for (const match of html.matchAll(re)) {
+    const token = match[0];
+    if (!token.startsWith('<')) {
+      if (depth === 0) direct += token;
+      continue;
+    }
+    const closing = token.startsWith('</');
+    const name = (token.match(/<\/?([a-zA-Z][a-zA-Z0-9-]*)/) || [])[1] || '';
+    const selfClosing = /\/\s*>$/.test(token);
+    if (closing) depth = Math.max(0, depth - 1);
+    else if (!selfClosing && !VOID.has(name.toLowerCase())) depth += 1;
+  }
+  return direct.replace(/&[a-z0-9#]+;/gi, ' ').trim().length > 0;
+}
+
+function labelDetail(base, all) {
+  const size = all.size && base.size && all.size.px < base.size.px ? all.size : base.size;
+  const weight = Math.min(base.weight, all.weight);
+  return size ? `${size.cls} is ${size.name} at weight ${weight}` : 'has no xl or 2xl size';
+}
+
+/** A descendant that declares a size or weight must still meet the rule. Missing classes inherit. */
+function descendantConstraint(classList, inherited) {
+  const sizes = classList.map(sizeStep).filter(Boolean);
+  const weights = classList.map(weightOf).filter((value) => value !== null);
+  if (sizes.length === 0 && weights.length === 0) return null;
+  const size = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : inherited.size;
+  const weight = weights.length ? Math.min(...weights) : inherited.weight;
+  const boldLarge = size !== null && weight >= BOLD_WEIGHT && size.px >= BOLD_MIN_PX;
+  const anyLarge = size !== null && size.px >= LARGE_MIN_PX;
+  if (boldLarge || anyLarge) return null;
+  const shown = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : size;
+  return shown ? `${shown.cls} is ${shown.name} at weight ${weight}` : 'has no xl or 2xl size';
 }
 
 /** Solid accent labels are bold xl (or larger) or 2xl (or larger), on the on-accent token. */
@@ -276,18 +316,30 @@ function accentLabelProblems(html) {
       : '';
     const inner = isInput ? '' : bare.slice(open.index + open[0].length, closeAt);
     if (!(isInput ? inputValue.trim() : elementText(inner))) continue;
-    // The fill element itself must carry an unprefixed on-accent class.
-    // Prefixed classes and descendant classes can tighten size and weight. They never satisfy the base rule.
-    const descendantClasses = isInput ? [] : textBearingClasses(inner);
-    const classesAndDescendants = classes.concat(descendantClasses);
-    const baseClasses = classesAndDescendants.filter((cls) => !cls.includes(':'));
-    const base = measureLabel(baseClasses, true);
-    const all = measureLabel(classesAndDescendants, false);
-    if (!base.large || !all.large) {
-      const size = all.size && base.size && all.size.px < base.size.px ? all.size : base.size;
-      const weight = Math.min(base.weight, all.weight);
-      const detail = size ? `${size.cls} is ${size.name} at weight ${weight}` : 'has no xl or 2xl size';
-      problems.push(`accent label ${detail}; needs ${SIZE_RULE}`);
+    // Unprefixed size and weight must hold on the fill element itself.
+    // A child never supplies that base. Prefixed classes can only tighten it.
+    // Direct text also requires every text-bearing descendant to meet the rule.
+    const direct = isInput ? inputValue.trim().length > 0 : hasDirectNonWhitespaceText(inner);
+    const descendants = isInput ? [] : textBearingElements(inner);
+    const fillForBase = classes;
+    const fillBase = measureLabel(fillForBase.filter((cls) => !cls.includes(':')), true);
+    const fillAll = measureLabel(fillForBase, false);
+    if (!fillBase.large || !fillAll.large) {
+      problems.push(`accent label ${labelDetail(fillBase, fillAll)}; needs ${SIZE_RULE}`);
+    }
+    if (direct) {
+      for (const desc of descendants) {
+        const descBase = measureLabel(desc.filter((cls) => !cls.includes(':')), true);
+        const descAll = measureLabel(desc, false);
+        if (!descBase.large || !descAll.large) {
+          problems.push(`accent label ${labelDetail(descBase, descAll)}; needs ${SIZE_RULE}`);
+        }
+      }
+    } else {
+      for (const desc of descendants) {
+        const detail = descendantConstraint(desc, fillBase);
+        if (detail) problems.push(`accent label ${detail}; needs ${SIZE_RULE}`);
+      }
     }
     const ownOnAccent = classes.some((cls) => !cls.includes(':') && utilityOf(cls) === ON_ACCENT);
     if (!ownOnAccent) problems.push(`accent label must use ${ON_ACCENT}`);
