@@ -7,6 +7,8 @@
  * never reached the fragments (verification report, finding 3). This script is
  * the gate that does. `npm run lint` runs ESLint and then this file.
  *
+ * Only unprefixed base-state classes count for the accent fill, on-accent colour, size and weight checks. A prefixed class (hover:, focus:, active:, a breakpoint such as sm:, md:, lg:, xl: or 2xl:, dark:, or a stack such as md:hover:) never satisfies those checks, never rescues a missing base and is never inherited, on the fill or on a child. Inheritance from the fill uses only the fill's unprefixed metrics. baseClasses is the only filter that applies this rule.
+ *
  * Rules:
  *   - no `shadow-sm` (ADR-001), no arbitrary Tailwind values (`w-[15px]`)
  *   - no inline `style=` attribute and no `<script>` (site CSP posture, ADR-003)
@@ -155,6 +157,11 @@ function utilityOf(cls) {
   return stripImportant(utility);
 }
 
+/** Unprefixed classes only. Variant prefixes never count as base metrics. */
+function baseClasses(classList) {
+  return classList.filter((cls) => !cls.includes(':'));
+}
+
 function isAccentFillClass(cls) {
   const parts = cls.split(':').map(stripImportant).filter(Boolean);
   const utility = parts.pop();
@@ -204,12 +211,13 @@ function elementText(inner) {
 }
 
 function measureLabel(classList, defaults) {
-  const sizes = classList.map(sizeStep).filter(Boolean);
+  const base = baseClasses(classList);
+  const sizes = base.map(sizeStep).filter(Boolean);
   if (defaults && sizes.length === 0) {
     const baseSize = sizeStep('text-base');
     if (baseSize) sizes.push(baseSize);
   }
-  const weights = classList.map(weightOf).filter((value) => value !== null);
+  const weights = base.map(weightOf).filter((value) => value !== null);
   if (defaults && weights.length === 0) weights.push(RAW_WEIGHT['font-normal']);
   const size = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : null;
   const weight = weights.length ? Math.min(...weights) : RAW_WEIGHT['font-normal'];
@@ -277,16 +285,15 @@ function hasDirectNonWhitespaceText(html) {
   return direct.replace(/&[a-z0-9#]+;/gi, ' ').trim().length > 0;
 }
 
-function labelDetail(base, all) {
-  const size = all.size && base.size && all.size.px < base.size.px ? all.size : base.size;
-  const weight = Math.min(base.weight, all.weight);
-  return size ? `${size.cls} is ${size.name} at weight ${weight}` : 'has no xl or 2xl size';
+function labelDetail(measure) {
+  return measure.size ? `${measure.size.cls} is ${measure.size.name} at weight ${measure.weight}` : 'has no xl or 2xl size';
 }
 
-/** A descendant that declares a size or weight must still meet the rule. Missing classes inherit. */
+/** A descendant that declares an unprefixed size or weight must still meet the rule. Missing classes inherit the fill's unprefixed metrics. */
 function descendantConstraint(classList, inherited) {
-  const sizes = classList.map(sizeStep).filter(Boolean);
-  const weights = classList.map(weightOf).filter((value) => value !== null);
+  const base = baseClasses(classList);
+  const sizes = base.map(sizeStep).filter(Boolean);
+  const weights = base.map(weightOf).filter((value) => value !== null);
   if (sizes.length === 0 && weights.length === 0) return null;
   const size = sizes.length ? sizes.reduce((min, item) => (item.px < min.px ? item : min)) : inherited.size;
   const weight = weights.length ? Math.min(...weights) : inherited.weight;
@@ -317,31 +324,24 @@ function accentLabelProblems(html) {
     const inner = isInput ? '' : bare.slice(open.index + open[0].length, closeAt);
     if (!(isInput ? inputValue.trim() : elementText(inner))) continue;
     // Unprefixed size and weight must hold on the fill element itself.
-    // A child never supplies that base. Prefixed classes can only tighten it.
-    // Direct text also requires every text-bearing descendant to meet the rule.
+    // A child never supplies that base. Direct text also requires every text-bearing descendant to meet it.
     const direct = isInput ? inputValue.trim().length > 0 : hasDirectNonWhitespaceText(inner);
     const descendants = isInput ? [] : textBearingElements(inner);
-    const fillForBase = classes;
-    const fillBase = measureLabel(fillForBase.filter((cls) => !cls.includes(':')), true);
-    const fillAll = measureLabel(fillForBase, false);
-    if (!fillBase.large || !fillAll.large) {
-      problems.push(`accent label ${labelDetail(fillBase, fillAll)}; needs ${SIZE_RULE}`);
-    }
+    const fillBase = measureLabel(classes, true);
+    if (!fillBase.large) problems.push(`accent label ${labelDetail(fillBase)}; needs ${SIZE_RULE}`);
     if (direct) {
       for (const desc of descendants) {
-        const descBase = measureLabel(desc.filter((cls) => !cls.includes(':')), true);
-        const descAll = measureLabel(desc, false);
-        if (!descBase.large || !descAll.large) {
-          problems.push(`accent label ${labelDetail(descBase, descAll)}; needs ${SIZE_RULE}`);
-        }
+        const descBase = measureLabel(desc, true);
+        if (!descBase.large) problems.push(`accent label ${labelDetail(descBase)}; needs ${SIZE_RULE}`);
       }
     } else {
+      const inherited = fillBase;
       for (const desc of descendants) {
-        const detail = descendantConstraint(desc, fillBase);
+        const detail = descendantConstraint(desc, inherited);
         if (detail) problems.push(`accent label ${detail}; needs ${SIZE_RULE}`);
       }
     }
-    const ownOnAccent = classes.some((cls) => !cls.includes(':') && utilityOf(cls) === ON_ACCENT);
+    const ownOnAccent = baseClasses(classes).some((cls) => utilityOf(cls) === ON_ACCENT);
     if (!ownOnAccent) problems.push(`accent label must use ${ON_ACCENT}`);
   }
   return problems;

@@ -20,7 +20,7 @@ test('on-accent text remains readable through all CTA states', () => {
   assert.equal(fill, '#8B5CF6');
   assert.equal(rounded(contrast(onAccent, fill)), 4.23);
 });
-test('breakpoint and state prefixes use the smallest size and weight', () => {
+test('unprefixed classes set accent size and weight', () => {
   const onAccentClass = 'text-text-content-on-accent-base';
   const fillClass = 'bg-surface-accent-violet-base';
   const needs = 'bold xl or larger, or 2xl or larger';
@@ -45,10 +45,10 @@ test('breakpoint and state prefixes use the smallest size and weight', () => {
   const groupNormal = label('font-typography-weight-bold-base text-typography-size-xl-base group-hover:font-normal');
   const onlyMd = label('md:text-2xl md:font-bold');
   const onlySm = label('sm:text-xl sm:font-bold');
-  assert.ok(prefixedSmall.some((problem) => problem.includes('md:text-sm') && problem.includes(needs)), prefixedSmall.join(' | '));
-  assert.ok(prefixedNormal.some((problem) => problem.includes('weight 400') && problem.includes(needs)), prefixedNormal.join(' | '));
-  assert.ok(hoverSmall.some((problem) => problem.includes('hover:text-sm') && problem.includes(needs)), hoverSmall.join(' | '));
-  assert.ok(groupNormal.some((problem) => problem.includes('weight 400') && problem.includes(needs)), groupNormal.join(' | '));
+  assert.deepEqual(prefixedSmall, []);
+  assert.deepEqual(prefixedNormal, []);
+  assert.deepEqual(hoverSmall, []);
+  assert.deepEqual(groupNormal, []);
   assert.ok(onlyMd.some((problem) => problem.includes(needs)), onlyMd.join(' | '));
   assert.ok(onlySm.some((problem) => problem.includes(needs)), onlySm.join(' | '));
   assert.deepEqual(label('text-xl font-bold md:text-2xl'), []);
@@ -200,6 +200,37 @@ test('compliant child does not rescue a fill without size', () => {
 test('small child is denied when the fill has no direct text', () => {
   const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold"><span class="text-sm">Go</span></button>`);
   assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('prefixed size on the fill is not inherited by a weight-only child', () => {
+  for (const size of ['md:text-xl', 'hover:text-xl']) {
+    const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} font-bold ${size}"><span class="font-bold">Go</span></button>`);
+    assert.ok(problems.some((problem) => problem.includes(needsLarge)), `${size} ${problems.join(' | ')}`);
+  }
+});
+
+test('prefixed weight on the fill is not inherited by a size-only child', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl hover:font-bold"><span class="text-xl">Go</span></button>`);
+  assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('stacked prefix on the fill does not supply size', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} font-bold md:hover:text-xl"><span class="font-bold">Go</span></button>`);
+  assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('prefixed classes on a child do not supply the base', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent}"><span class="md:text-xl hover:font-bold">Go</span></button>`);
+  assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('dark prefixed size on the fill is not inherited', () => {
+  const problems = accentLabelProblems(`<button class="${accentFill} ${onAccent} font-bold dark:text-xl"><span class="font-bold">Go</span></button>`);
+  assert.ok(problems.some((problem) => problem.includes(needsLarge)), problems.join(' | '));
+});
+
+test('unprefixed fill may add prefixed classes', () => {
+  assert.deepEqual(accentLabelProblems(`<button class="${accentFill} ${onAccent} text-xl font-bold hover:text-sm md:text-sm"><span class="font-bold">Go</span></button>`), []);
 });
 
 test('theme generation is deterministic and offers solid light and forced-color fallbacks', () => {
