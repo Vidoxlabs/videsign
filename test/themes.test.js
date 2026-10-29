@@ -34,6 +34,15 @@ test('on-accent text remains readable through all CTA states', () => {
   assert.ok(px24.some((problem) => problem.includes('text-[24px]') && problem.includes(needs)), px24.join(' | '));
   assert.deepEqual(accentLabelProblems(`<button class="${fillClass} ${onAccentClass} font-typography-weight-bold-base text-typography-size-xl-base">Go</button>`), []);
   assert.deepEqual(accentLabelProblems(`<button class="${fillClass} ${onAccentClass} text-typography-size-2xl-base">Go</button>`), []);
+  const prefixedSmall = accentLabelProblems(`<button class="${fillClass} ${onAccentClass} font-typography-weight-bold-base text-typography-size-xl-base md:text-sm">Go</button>`);
+  const prefixedNormal = accentLabelProblems(`<button class="${fillClass} ${onAccentClass} font-typography-weight-bold-base text-typography-size-xl-base sm:font-normal">Go</button>`);
+  assert.ok(prefixedSmall.some((problem) => problem.includes('md:text-sm') && problem.includes(needs)), prefixedSmall.join(' | '));
+  assert.ok(prefixedNormal.some((problem) => problem.includes('weight 400') && problem.includes(needs)), prefixedNormal.join(' | '));
+  const everyBreakpoint = ['', 'sm:', 'md:', 'lg:', 'xl:', '2xl:'].flatMap((prefix) => [
+    `${prefix}font-typography-weight-bold-base`,
+    `${prefix}text-typography-size-xl-base`,
+  ]);
+  assert.deepEqual(accentLabelProblems(`<button class="${fillClass} ${onAccentClass} ${everyBreakpoint.join(' ')}">Go</button>`), []);
   assert.deepEqual(accentLabelProblems('<a class="bg-surface-accent-violet-base/30 text-typography-size-xs-base">Research</a>'), []);
   for (const file of ['button.html', 'question-bar.html', 'persona-console.html', 'island-nav.html']) {
     const html = fs.readFileSync(path.join(__dirname, '../preview', file), 'utf8');

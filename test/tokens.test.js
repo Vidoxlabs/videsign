@@ -222,16 +222,22 @@ test('focus ring clears 3:1 on the dark base surfaces', () => {
   assert.ok(ratio('#52525B', TOKENS.colors['surface-background-primary-base']) < 3);
 });
 
-test('literal #7C3AED is absent outside ADR history and the violet glow stays', () => {
+test('literal #7C3AED is absent from tokens, CSS and docs', () => {
   const root = path.join(__dirname, '..');
-  const history = /#7C3AED is to be retired once ADR-011 is ratified/;
+  const hex = '#7C3AED';
+  const hits = (text) => text.split('\n').filter((line) => line.includes(hex));
+  const oldSkill = [
+    '4. Persona Violet (#8B5CF6) is distinct from the brand accent `{colors.surface-accent-violet-base}` (#7C3AED).',
+    'The brand accent stays reserved for key CTAs and focus outlines.',
+    '#7C3AED is to be retired once ADR-011 is ratified.',
+    'Until then those fills and rings stay on that accent.',
+  ].join(' ');
+  assert.ok(hits(oldSkill).length > 0);
   for (const rel of ['DESIGN.md', 'SKILL.md', 'AGENTS.md', 'README.md', 'brand/README.md', 'scripts/generate-tokens.js', 'scripts/generate-standard.js']) {
-    const lines = fs.readFileSync(path.join(root, rel), 'utf-8').split('\n')
-      .filter((line) => line.includes('#7C3AED') && !history.test(line));
-    assert.deepEqual(lines, [], rel);
+    assert.deepEqual(hits(fs.readFileSync(path.join(root, rel), 'utf-8')), [], rel);
   }
   const css = emitCSS(TOKENS) + emitGlassCSS(TOKENS);
-  assert.equal(css.includes('#7C3AED'), false);
+  assert.equal(css.includes(hex), false);
   assert.match(css, /rgba\(124, 58, 237, 0\.30\)/);
 });
 

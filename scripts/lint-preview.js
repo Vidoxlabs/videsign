@@ -137,25 +137,32 @@ function lintFragment(name, html) {
   return problems;
 }
 
+function utilityOf(cls) {
+  const colon = cls.lastIndexOf(':');
+  return colon === -1 ? cls : cls.slice(colon + 1);
+}
+
 function sizeStep(cls) {
-  const raw = cls.match(/^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl)$/);
+  const utility = utilityOf(cls);
+  const raw = utility.match(/^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl)$/);
   if (raw) {
     const name = raw[1] === 'base' ? 'md' : raw[1];
     return { cls, name, rank: SIZE_RANK[name] };
   }
-  const token = cls.match(/^text-typography-size-(xs|sm|md|lg|xl|2xl|3xl|4xl|5xl)-base$/);
+  const token = utility.match(/^text-typography-size-(xs|sm|md|lg|xl|2xl|3xl|4xl|5xl)-base$/);
   if (token && typeof TOKENS.typography[`typography-size-${token[1]}-base`] === 'string') {
     return { cls, name: token[1], rank: SIZE_RANK[token[1]] };
   }
-  const px = cls.match(/^text-\[(\d+(?:\.\d+)?)px\]$/);
+  const px = utility.match(/^text-\[(\d+(?:\.\d+)?)px\]$/);
   if (px) return { cls, name: `${px[1]}px`, rank: -1 };
   return null;
 }
 
 function weightOf(cls) {
-  if (Object.prototype.hasOwnProperty.call(RAW_WEIGHT, cls)) return RAW_WEIGHT[cls];
-  if (!cls.startsWith('font-typography-weight-')) return null;
-  const value = TOKENS.typography[cls.slice('font-'.length)];
+  const utility = utilityOf(cls);
+  if (Object.prototype.hasOwnProperty.call(RAW_WEIGHT, utility)) return RAW_WEIGHT[utility];
+  if (!utility.startsWith('font-typography-weight-')) return null;
+  const value = TOKENS.typography[utility.slice('font-'.length)];
   return value === undefined ? null : Number(value);
 }
 
@@ -198,7 +205,7 @@ function accentLabelProblems(html) {
     const sizes = classes.map(sizeStep).filter(Boolean);
     const size = sizes.length ? sizes.reduce((min, item) => (item.rank < min.rank ? item : min)) : null;
     const weights = classes.map(weightOf).filter((value) => value !== null);
-    const weight = weights.length ? Math.max(...weights) : 400;
+    const weight = weights.length ? Math.min(...weights) : 400;
     const boldXl = size !== null && size.rank >= XL_RANK && weight >= BOLD_WEIGHT;
     const twoXl = size !== null && size.rank >= TWO_XL_RANK;
     if (!boldXl && !twoXl) {
