@@ -202,10 +202,18 @@ function accentLabelProblems(html) {
       }
     }
     if (!elementText(bare.slice(open.index + open[0].length, closeAt))) continue;
+    const unprefixed = (cls) => !cls.includes(':');
     const sizes = classes.map(sizeStep).filter(Boolean);
-    const size = sizes.length ? sizes.reduce((min, item) => (item.rank < min.rank ? item : min)) : null;
+    if (!classes.some((cls) => unprefixed(cls) && sizeStep(cls))) {
+      const baseSize = sizeStep('text-base');
+      if (baseSize) sizes.push(baseSize);
+    }
     const weights = classes.map(weightOf).filter((value) => value !== null);
-    const weight = weights.length ? Math.min(...weights) : 400;
+    if (!classes.some((cls) => unprefixed(cls) && weightOf(cls) !== null)) {
+      weights.push(RAW_WEIGHT['font-normal']);
+    }
+    const size = sizes.length ? sizes.reduce((min, item) => (item.rank < min.rank ? item : min)) : null;
+    const weight = weights.length ? Math.min(...weights) : RAW_WEIGHT['font-normal'];
     const boldXl = size !== null && size.rank >= XL_RANK && weight >= BOLD_WEIGHT;
     const twoXl = size !== null && size.rank >= TWO_XL_RANK;
     if (!boldXl && !twoXl) {
