@@ -9,6 +9,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 const {
   parseFrontMatter,
@@ -201,11 +202,116 @@ test('glass.css ships pill radius variants for plain-CSS consumers', () => {
   assert.match(GLASS, /\.vi-glass-core--pill \{[^}]*border-radius: 9999px;/s);
 });
 
-test('focus outline pinned to surface-accent-violet until ADR-011 is ratified', () => {
+test('focus ring clears 3:1 on the dark base surfaces', () => {
+  const hex = (value) => [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16));
+  const lin = (channel) => {
+    const s = channel / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  const lum = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  const ratio = (a, b) => {
+    const x = lum(hex(a));
+    const y = lum(hex(b));
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  };
+  const ring = TOKENS.colors['surface-accent-violet-base'];
+  assert.equal(ring, '#8B5CF6');
+  for (const key of ['surface-background-primary-base', 'surface-background-secondary-base', 'surface-background-tertiary-base']) {
+    const value = ratio(ring, TOKENS.colors[key]);
+    assert.ok(value >= 3, `${key} ${value.toFixed(2)}`);
+  }
+  assert.ok(ratio('#52525B', TOKENS.colors['surface-background-primary-base']) < 3);
+});
+
+test('literal #7C3AED is absent from tokens, CSS and docs', () => {
+  const root = path.join(__dirname, '..');
+  const hex = '#7C3AED';
+  const hits = (text) => text.split('\n').filter((line) => line.includes(hex));
+  const oldSkill = [
+    '4. Persona Violet (#8B5CF6) is distinct from the brand accent `{colors.surface-accent-violet-base}` (#7C3AED).',
+    'The brand accent stays reserved for key CTAs and focus outlines.',
+    '#7C3AED is to be retired once ADR-011 is ratified.',
+    'Until then those fills and rings stay on that accent.',
+  ].join(' ');
+  assert.ok(hits(oldSkill).length > 0);
+  const css = emitCSS(TOKENS) + emitGlassCSS(TOKENS);
+  assert.equal(css.includes(hex), false);
+  assert.match(css, /rgba\(124, 58, 237, 0\.30\)/);
+  const prohibition = (line) => /never use #7C3AED for CTA fills, hover\/active states or focus rings/i.test(line);
+  for (const rel of ['DESIGN.md', 'SKILL.md', 'AGENTS.md', 'README.md', 'brand/README.md', 'scripts/generate-tokens.js', 'scripts/generate-standard.js']) {
+    const leftover = hits(fs.readFileSync(path.join(root, rel), 'utf-8')).filter((line) => !prohibition(line));
+    assert.deepEqual(leftover, [], rel);
+  }
+});
+
+function contrastRatio(foreground, background) {
+  const hex = (value) => [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16));
+  const lin = (channel) => {
+    const s = channel / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  const lum = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  const x = lum(hex(foreground));
+  const y = lum(hex(background));
+  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+}
+
+test('hover equals #6D28D9', () => {
+  assert.equal(TOKENS.colors['surface-accent-violet-hover'], '#6D28D9');
+});
+
+test('active equals #5B21B6', () => {
+  assert.equal(TOKENS.colors['surface-accent-violet-active'], '#5B21B6');
+});
+
+test('white on hover is at least 4.5:1', () => {
+  assert.ok(contrastRatio('#FFFFFF', TOKENS.colors['surface-accent-violet-hover']) >= 4.5);
+});
+
+test('white on active is at least 4.5:1', () => {
+  assert.ok(contrastRatio('#FFFFFF', TOKENS.colors['surface-accent-violet-active']) >= 4.5);
+});
+
+test('focus ring clears 3:1 on light surfaces', () => {
+  const ring = TOKENS.colors['surface-accent-violet-base'];
+  assert.equal(ring, '#8B5CF6');
+  for (const surface of ['#FFFFFF', '#F8F9FA', '#F1F3F5']) {
+    const value = contrastRatio(ring, surface);
+    assert.ok(value >= 3, `${surface} ${value.toFixed(2)}`);
+  }
+});
+
+test('no #6B46C1 outside allowed history', () => {
+  const retiredHover = ['#6B', '46C1'].join('');
+  const root = path.join(__dirname, '..');
+  const files = ['DESIGN.md', 'SKILL.md', 'AGENTS.md', 'README.md', 'brand/README.md', 'scripts/generate-tokens.js', 'scripts/generate-standard.js'];
+  for (const name of fs.readdirSync(path.join(root, 'preview'))) {
+    if (name.endsWith('.html')) files.push(path.join('preview', name));
+  }
+  for (const rel of files) {
+    assert.equal(fs.readFileSync(path.join(root, rel), 'utf-8').includes(retiredHover), false, rel);
+  }
+});
+
+test('CTA fill and focus outline are #8B5CF6 and the violet glow stays put', () => {
+  assert.equal(TOKENS.colors['surface-accent-violet-base'], '#8B5CF6');
   const css = emitGlassCSS(TOKENS);
-  const accent = TOKENS.colors['surface-accent-violet-base'];
-  assert.equal(accent, '#7C3AED');
-  assert.match(css, new RegExp(`outline: 2px solid ${accent};`));
+  assert.match(css, /outline: 2px solid #8B5CF6;/);
+  assert.equal(css.includes('outline: 2px solid #6D28D9'), false);
+  assert.equal(TOKENS.effects['ambient-glow-violet-base'], 'rgba(124, 58, 237, 0.30)');
+});
+
+test('generated dist has no retired hover hex', () => {
+  const root = path.join(__dirname, '..');
+  execFileSync(process.execPath, [path.join(root, 'scripts', 'generate-tokens.js')], {
+    cwd: root,
+    stdio: 'ignore',
+  });
+  const retiredHover = ['#6B', '46C1'].join('');
+  for (const name of fs.readdirSync(path.join(root, 'dist'))) {
+    const text = fs.readFileSync(path.join(root, 'dist', name), 'utf-8');
+    assert.equal(text.includes(retiredHover), false, name);
+  }
 });
 
 test('ambient violet glow stays the measured main value', () => {

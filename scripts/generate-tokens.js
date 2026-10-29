@@ -217,7 +217,7 @@ function emitGlassCSS(tokens) {
     `  box-shadow: ${rimShadow(rimHover)}, ${highlight}, ${shadow};`,
     '}',
     '',
-    '/* Focus outlines stay on surface-accent-violet until ADR-011 is ratified. */',
+    '/* Focus outlines use surface-accent-violet-base (ADR-011 item 10). */',
     '.vi-glass--control:focus-within {',
     `  outline: 2px solid ${focusAccent};`,
     '  outline-offset: 2px;',
