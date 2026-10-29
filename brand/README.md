@@ -44,7 +44,7 @@ Xylia is never set as text and never appears alone. Text-safe Xylia and text-saf
 
 Item 7 is Accepted: white on #8B5CF6 is 4.23:1. CTA labels are large: bold xl or larger, or 2xl or larger. No normal-size label of any colour on Violet `#8B5CF6`. Measured against that fill: `#121214` is 4.42:1, white is 4.23:1, and `#F7F7F5` is 3.95:1. All three fail 4.5:1 for normal text and pass 3:1 for large text (at least 24px, or at least 18.66px and bold).
 
-ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6. Item 7 is Accepted. Items 1-6, 8 and 9 stay Proposed. `{colors.surface-accent-violet-base}` is that value. Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, per the 2026-10-28 owner decision on item 10. Focus rings use #8B5CF6. The label rule above still applies. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`.
+ADR-011 item 10 is Accepted: CTA fills and focus rings are #8B5CF6. Item 7 is Accepted. Items 1-6, 8 and 9 stay Proposed. `{colors.surface-accent-violet-base}` is that value. Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, Accepted 2026-10-28. Focus rings use #8B5CF6. The label rule above still applies. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`.
 
 ## Names
 

@@ -205,8 +205,10 @@ test('item 7 contrast rule is Accepted', () => {
   }
   for (const rel of ['brand/README.md', 'SKILL.md', 'AGENTS.md', 'DESIGN.md']) {
     const doc = read(rel);
+    assert.match(doc, /Accepted 2026-10-28/);
     assert.match(doc, /Item 7 is Accepted: white on #8B5CF6 is 4\.23:1/);
     assert.match(doc, /large: bold xl or larger, or 2xl or larger/);
+    assert.doesNotMatch(doc, /owner decision/);
     assert.doesNotMatch(doc, /pending the owner/);
     assert.doesNotMatch(doc, /Interim contrast/);
     assert.equal(doc.includes(['pending', 'Gavin'].join(' ')), false);
