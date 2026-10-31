@@ -321,6 +321,25 @@ function scanBrandLayout(files) {
   }
 }
 
+function filesystemDistinguishesBrandCase() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-case-probe-'));
+  try {
+    fs.mkdirSync(path.join(dir, 'brand'));
+    try {
+      fs.mkdirSync(path.join(dir, 'Brand'));
+    } catch (err) {
+      if (err && err.code === 'EEXIST') return false;
+      throw err;
+    }
+    const names = new Set(fs.readdirSync(dir));
+    return names.has('brand') && names.has('Brand');
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+const brandCaseDistinct = filesystemDistinguishesBrandCase();
+
 function scanTopLevelName(name, { symlink = false } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-top-'));
   const extra = [];
@@ -914,18 +933,37 @@ test('a case-variant brand directory is still scanned', () => {
   }, false);
 });
 
-test('duplicate and look-alike brand folders fail closed', () => {
+test('a case-only brand duplicate fails closed', {
+  skip: brandCaseDistinct ? false : 'filesystem does not keep brand and Brand as distinct directories',
+}, () => {
   withOperatorEnv(undefined, () => {
     const driveId = driveToken();
     assert.equal(driveId.length, 33);
     const both = scanBrandLayout({
       'brand/a.txt': 'palette note',
       'Brand/n.txt': driveId,
-      'brand./b.txt': 'palette note',
     });
     assert.equal(both.ok, false);
     assert.ok(both.hits.some((hit) => hit.includes('long-id')));
     assert.ok(both.hits.some((hit) => hit.includes('duplicate-brand')));
+    assert.equal(both.hits.some((hit) => hit.includes('look-alike-brand')), false);
+  }, false);
+});
+
+test('a trailing-dot brand directory fails closed', () => {
+  withOperatorEnv(undefined, () => {
+    const dotted = scanBrandLayout({ 'brand./b.txt': 'palette note' });
+    assert.equal(dotted.ok, false);
+    assert.ok(dotted.hits.some((hit) => hit.includes('look-alike-brand')));
+    assert.equal(dotted.hits.some((hit) => hit.includes('duplicate-brand')), false);
+    assert.equal(dotted.hits.some((hit) => hit.includes('long-id')), false);
+  }, false);
+});
+
+test('look-alike brand folders fail closed', () => {
+  withOperatorEnv(undefined, () => {
+    const driveId = driveToken();
+    assert.equal(driveId.length, 33);
 
     const fullWidth = 'brand'.replace(/[a-z]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) + 0xFEE0));
     const wide = scanBrandLayout({ [`${fullWidth}/n.txt`]: driveId });

@@ -49,8 +49,13 @@ styled visual catalog of every component (`python3 -m http.server 8000`). The ca
 ## Consuming from a product repo
 
 1. **Tailwind**: Import the generated config — `const videsign = require('@vidoxlabs/videsign/dist/tailwind.config.js')`
-   and spread into your `tailwind.config.js` `theme.extend`.
+   and spread into your `tailwind.config.js` `theme.extend`. Colour utilities are
+   `color-mix()` of `var(--vi-colors-<key>, <hex>)`, so import `dist/tokens.css`
+   with the config. The hex is the fallback when the variable is unset.
+   `color-mix()` needs Safari 16.2+, Chrome 111+, or Firefox 113+.
 2. **CSS custom properties**: Import `dist/tokens.css` for `--vi-*` CSS variables.
+   Import `dist/themes.css` as well to opt into the product light theme, which
+   remaps the base variables.
 3. **MCP**: Run `npm run mcp` and query resources/tools from your product repo's agent.
 4. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
    to your CDN endpoint.
