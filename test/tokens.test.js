@@ -227,17 +227,12 @@ test('literal #7C3AED is absent from tokens, CSS and docs', () => {
   const root = path.join(__dirname, '..');
   const hex = '#7C3AED';
   const hits = (text) => text.split('\n').filter((line) => line.includes(hex));
-  const oldSkill = [
-    '4. Persona Violet (#8B5CF6) is distinct from the brand accent `{colors.surface-accent-violet-base}` (#7C3AED).',
-    'The brand accent stays reserved for key CTAs and focus outlines.',
-    '#7C3AED is to be retired once ADR-011 is ratified.',
-    'Until then those fills and rings stay on that accent.',
-  ].join(' ');
-  assert.ok(hits(oldSkill).length > 0);
+  const prohibition = (line) => /never use #7C3AED for CTA fills, hover\/active states or focus rings/i.test(line);
+  const historical = execFileSync('git', ['show', 'f48a2ad:SKILL.md'], { cwd: root, encoding: 'utf8' });
+  assert.ok(hits(historical).some((line) => !prohibition(line)));
   const css = emitCSS(TOKENS) + emitGlassCSS(TOKENS);
   assert.equal(css.includes(hex), false);
   assert.match(css, /rgba\(124, 58, 237, 0\.30\)/);
-  const prohibition = (line) => /never use #7C3AED for CTA fills, hover\/active states or focus rings/i.test(line);
   for (const rel of ['DESIGN.md', 'SKILL.md', 'AGENTS.md', 'README.md', 'brand/README.md', 'scripts/generate-tokens.js', 'scripts/generate-standard.js']) {
     const leftover = hits(fs.readFileSync(path.join(root, rel), 'utf-8')).filter((line) => !prohibition(line));
     assert.deepEqual(leftover, [], rel);
@@ -265,19 +260,22 @@ test('active equals #5B21B6', () => {
 });
 
 test('white on hover is at least 4.5:1', () => {
-  assert.ok(contrastRatio('#FFFFFF', TOKENS.colors['surface-accent-violet-hover']) >= 4.5);
+  const onAccent = TOKENS.colors['text-content-on-accent-base'];
+  assert.ok(contrastRatio(onAccent, TOKENS.colors['surface-accent-violet-hover']) >= 4.5);
 });
 
 test('white on active is at least 4.5:1', () => {
-  assert.ok(contrastRatio('#FFFFFF', TOKENS.colors['surface-accent-violet-active']) >= 4.5);
+  const onAccent = TOKENS.colors['text-content-on-accent-base'];
+  assert.ok(contrastRatio(onAccent, TOKENS.colors['surface-accent-violet-active']) >= 4.5);
 });
 
 test('focus ring clears 3:1 on light surfaces', () => {
   const ring = TOKENS.colors['surface-accent-violet-base'];
   assert.equal(ring, '#8B5CF6');
-  for (const surface of ['#FFFFFF', '#F8F9FA', '#F1F3F5']) {
+  for (const key of ['surface-background-primary-light', 'surface-background-secondary-light', 'surface-background-tertiary-light']) {
+    const surface = TOKENS.colors[key];
     const value = contrastRatio(ring, surface);
-    assert.ok(value >= 3, `${surface} ${value.toFixed(2)}`);
+    assert.ok(value >= 3, `${key} ${value.toFixed(2)}`);
   }
 });
 

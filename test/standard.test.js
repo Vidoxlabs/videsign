@@ -89,6 +89,55 @@ test('standard rules appear in DESIGN.md or SKILL.md (parity guard)', () => {
   }
 });
 
+test('ADR-012 status stays neutral in shipped and generated files', () => {
+  const phrases = [['owner', '-approved'].join(''), ['owner', ' approved'].join('')];
+  const repoName = ['Vi', 'Web'].join('');
+  const listed = execFileSync('git', ['ls-files', '-z'], { cwd: ROOT }).toString().split('\0').filter(Boolean);
+  const generated = generateStandardArtifacts(TOKENS);
+  const adr012 = generated.standard.adrs.find((adr) => adr.id === 'ADR-012');
+  assert.equal(adr012.status, 'Accepted 2026-10-27. Used by the web app redesign.');
+  const files = new Map(listed.map((rel) => [rel, fs.readFileSync(path.join(ROOT, rel), 'utf8')]));
+  files.set('dist/standard.json', generated['standard.json']);
+  files.set('dist/standard.md', generated['standard.md']);
+  const hits = [];
+  for (const [rel, text] of files) {
+    const lower = text.toLowerCase();
+    for (const phrase of phrases) {
+      if (lower.includes(phrase)) hits.push(`${rel}: ${phrase}`);
+    }
+    const adrText = rel === 'SKILL.md' || rel.startsWith('dist/standard.') || lower.includes('adr-012');
+    if (adrText && lower.includes(repoName.toLowerCase())) hits.push(`${rel}: ${repoName}`);
+  }
+  assert.deepEqual(hits, []);
+});
+
+test('accepted status is limited to items 7 and 10 and the light theme', () => {
+  const lines = SKILL.split('\n');
+  let current = '';
+  const statuses = [];
+  for (const line of lines) {
+    const heading = line.match(/^## (ADR-\d+):/);
+    if (heading) current = heading[1];
+    if (line.startsWith('**Status**:') && current) statuses.push({ id: current, status: line.slice('**Status**:'.length).trim() });
+  }
+  for (const adr of statuses) {
+    if (adr.id === 'ADR-012') {
+      assert.equal(adr.status, 'Accepted 2026-10-27. Used by the web app redesign.');
+    } else if (adr.id === 'ADR-011') {
+      assert.equal(adr.status, 'Proposed for items 1-6, 8 and 9. Items 7 and 10 are Accepted 2026-10-28. Amends ADR-002.');
+    } else {
+      assert.equal(adr.status.startsWith('Accepted'), false, adr.id);
+      assert.equal(adr.status.includes('are Accepted'), false, adr.id);
+    }
+  }
+  assert.equal(/items 1-6, 8 and 9 are Accepted/i.test(SKILL), false);
+  assert.equal(SKILL.includes('Items 1-10 are Accepted'), false);
+  const adr004 = SKILL.slice(SKILL.indexOf('## ADR-004:'), SKILL.indexOf('## ADR-005:'));
+  const item4 = adr004.split('\n').find((line) => line.startsWith('4. '));
+  assert.match(item4, /The persona token `\{colors\.persona-accent-violet-base\}` and the CTA and focus token/);
+  assert.equal(/waiv|decid|settl/i.test(item4), false);
+});
+
 test('standard digests DESIGN.md and SKILL.md by SHA-256 and reads version from package.json', () => {
   const { standard } = generateStandardArtifacts(TOKENS);
   const crypto = require('crypto');
