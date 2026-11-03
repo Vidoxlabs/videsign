@@ -34,7 +34,7 @@ test('resolve_token returns a locked persona accent', async () => {
   });
 
   assert.notEqual(result.isError, true, result.content[0].text);
-  assert.equal(result.content[0].text, 'colors.persona-accent-xylia-base = #2DD4BF');
+  assert.equal(result.content[0].text, 'colors.persona-accent-xylia-base = #D92B3A');
 });
 
 test('resolve_token reports an unknown token as an error', async () => {

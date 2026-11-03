@@ -24,10 +24,10 @@ colors:
   status-indicator-error-base: "#F43F5E"
   status-indicator-info-base: "#06B6D4"
   persona-accent-violet-base: "#8B5CF6"
-  persona-accent-wisteria-base: "#A78BFA"
-  persona-accent-xylia-base: "#2DD4BF"
-  persona-accent-yarrow-base: "#F59E0B"
-  persona-accent-zinnia-base: "#F43F5E"
+  persona-accent-wisteria-base: "#B4A7F2"
+  persona-accent-xylia-base: "#D92B3A"
+  persona-accent-yarrow-base: "#F0A020"
+  persona-accent-zinnia-base: "#E13D9E"
 
 typography:
   typography-family-sans-base: "Geist, ui-sans-serif, system-ui, sans-serif"
@@ -171,9 +171,10 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 >
 > ### Persona identity accents
 >
-> - Persona identity accents are locked. Violet is always `{colors.persona-accent-violet-base}` (#8B5CF6), Wisteria is always `{colors.persona-accent-wisteria-base}` (#A78BFA), Xylia is always `{colors.persona-accent-xylia-base}` (#2DD4BF), Yarrow is always `{colors.persona-accent-yarrow-base}` (#F59E0B), and Zinnia is always `{colors.persona-accent-zinnia-base}` (#F43F5E).
-> - Those matrix values stay in force. For brand artwork, Wisteria `#A78BFA`, Xylia teal `#2DD4BF`, Zinnia rose `#F43F5E`, and `cube.png` paths are being retired. The target signatures are in `brand/tokens.json` and become the persona accents in a follow-up after the canon record lands. Status error `#F43F5E` and status warning `#F59E0B` stay status tokens.
-> - Persona accents are identity markers only. They never substitute for status indicators: Yarrow amber shares its hex with `{colors.status-indicator-warning-base}` and Zinnia rose with `{colors.status-indicator-error-base}` — a shared hex never makes the roles interchangeable. Status semantics always use status tokens; persona identity always uses persona accent tokens.
+> - Persona identity accents are locked and equal the canon signatures (ratified 2026-11-03, ADR-010 §2 + ADR-011 item 9). Violet is always `{colors.persona-accent-violet-base}` (#8B5CF6), Wisteria is always `{colors.persona-accent-wisteria-base}` (#B4A7F2), Xylia is always `{colors.persona-accent-xylia-base}` (#D92B3A), Yarrow is always `{colors.persona-accent-yarrow-base}` (#F0A020), and Zinnia is always `{colors.persona-accent-zinnia-base}` (#E13D9E). The retired UI-only teal/rose/lavender persona values are gone from the matrix.
+> - The matrix now equals the canon signatures in force (ratified 2026-11-03). Status error `#F43F5E` and status warning `#F59E0B` remain status tokens with their own roles — neither shares a hex with a persona accent anymore, so a shared-hex collision no longer exists.
+> - Persona accents are identity markers only. They never substitute for status indicators; status semantics always use status tokens. Since the 2026-11-03 re-sync no persona accent shares a hex with a status token (warning `#F59E0B`, error `#F43F5E` keep their exclusive role tokens).
+> - The legacy UI-only persona values (`#A78BFA`, `#2DD4BF`, `#F59E0B`-as-persona, `#F43F5E`-as-persona) are being retired from every consumer as the three product overlays retire at their next token sync.
 > - ADR-011 item 10 is Accepted 2026-10-28: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Items 1-6, 8 and 9 stay Proposed. Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, Accepted 2026-10-28. Item 7 is Accepted 2026-10-28: white on #8B5CF6 is 4.23:1. CTA labels are large: bold xl or larger, or 2xl or larger. No normal-size label of any colour on `#8B5CF6`. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`.
 > - **Accent text lives on the primary surface only.** Measured: Violet `{colors.persona-accent-violet-base}` is 4.67:1 on `{colors.surface-background-primary-base}` but 4.40:1 on secondary and 4.00:1 on tertiary, so it fails AA as small text on both. On secondary and tertiary surfaces a persona accent appears only as a non-text indicator (dot, bar, ring, 3:1). Wisteria, Xylia, Yarrow and Zinnia pass 4.5:1 on all three surfaces (Zinnia on tertiary is marginal at 4.61:1).
 > - Never invent persona hex values locally. New persona states (hover, active) or any new persona color must be added to the `colors` matrix in this file first, then referenced.
@@ -316,14 +317,14 @@ values must use semantic tokens. Raw utilities like `gap-2`, `w-64`, `text-sm`,
 > | --- | --- | --- | --- |
 > | `{colors.text-content-primary-base}` `#FFFFFF` | 19.76:1 | 18.63:1 | 16.92:1 |
 > | `{colors.text-content-secondary-base}` `#A1A1AA` | 7.71:1 | 7.27:1 | 6.60:1 |
-> | Persona Violet `#8B5CF6` | 4.67:1 | **4.40:1 (fails AA text)** | **4.00:1 (fails AA text)** |
-> | Persona Wisteria `#A78BFA` | 7.26:1 | 6.85:1 | 6.22:1 |
-> | Persona Xylia `#2DD4BF` | 10.62:1 | 10.01:1 | 9.09:1 |
-> | Persona Yarrow `#F59E0B` | 9.20:1 | 8.67:1 | 7.88:1 |
-> | Persona Zinnia `#F43F5E` | 5.38:1 | 5.07:1 | 4.61:1 |
+> | Persona Violet `#8B5CF6` | 4.67:1 (AA text) | **4.40:1 (indicator only ≥3:1)** | **4.00:1 (indicator only ≥3:1)** |
+> | Persona Wisteria `#B4A7F2` | 9.18:1 | 8.65:1 | 7.86:1 (AA text on all three dark surfaces; indicator only on the light theme) |
+> | Persona Xylia `#D92B3A` | **4.10:1 (never text — 4.5 fails)** | **3.87:1 (indicator only ≥3:1)** | **3.51:1 (indicator only ≥3:1)** |
+> | Persona Yarrow `#F0A020` | 9.18:1 | 8.65:1 | 7.86:1 (AA text on all three dark surfaces; indicator only on the light theme) |
+> | Persona Zinnia `#E13D9E` | 5.05:1 (AA text) | 4.76:1 (AA text) | **4.32:1 (indicator only ≥3:1)** |
 > | Brand accent `#8B5CF6` (CTA fill and focus; same hex as persona violet) | 4.67:1 | **4.40:1 (fails AA text)** | **4.00:1 (fails AA text)** |
 > | White on brand accent fill | 4.23:1 (fails 4.5:1 for normal text; hover 7.10:1, active 8.98:1) | | |
 >
 > - Secondary text on tertiary is 6.60:1; the earlier warning that it drops below AA was wrong.
-> - Violet persona accent text stays on the primary surface (see Persona identity accents).
+> - Per the measured table above: Violet persona-accent text stays on the primary surface; on secondary and tertiary it is an indicator only. Xylia is never text on any surface and never appears alone. Zinnia drops to indicator-only on tertiary surfaces.
 > - Text on crystal glass is measured over the worst backdrop in the catalog, not from these static pairs (see Crystal glass).

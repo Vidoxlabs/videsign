@@ -1136,10 +1136,10 @@ test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {
   const end = design.indexOf('\n---\n', 4);
   const front = design.slice(0, end);
   assert.match(front, /persona-accent-violet-base: "#8B5CF6"/);
-  assert.match(front, new RegExp(`${'persona-accent-' + 'wisteria-base'}: "#A78BFA"`));
-  assert.match(front, /persona-accent-xylia-base: "#2DD4BF"/);
-  assert.match(front, /persona-accent-yarrow-base: "#F59E0B"/);
-  assert.match(front, /persona-accent-zinnia-base: "#F43F5E"/);
+  assert.match(front, new RegExp(`${'persona-accent-' + 'wisteria-base'}: "#B4A7F2"`));
+  assert.match(front, /persona-accent-xylia-base: "#D92B3A"/);
+  assert.match(front, /persona-accent-yarrow-base: "#F0A020"/);
+  assert.match(front, /persona-accent-zinnia-base: "#E13D9E"/);
   assert.match(design.slice(end), /### Persona character assets/);
 
   const skill = fs.readFileSync(path.join(ROOT, 'SKILL.md'), 'utf8');
@@ -1154,6 +1154,18 @@ test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {
   for (const file of ['README.md', 'DESIGN.md', 'AGENTS.md']) {
     const text = fs.readFileSync(path.join(ROOT, file), 'utf8');
     assert.match(text, /planned, ADR-010/);
+  }
+});
+
+test('UI persona accents equal the canon signatures (ADR-010 section 2 gate)', () => {
+  const design = fs.readFileSync(path.join(ROOT, 'DESIGN.md'), 'utf8');
+  const end = design.indexOf('\n---\n', 4);
+  const front = design.slice(0, end);
+  const palette = readJson('palette.json');
+  for (const [vi, entry] of Object.entries(palette.vi)) {
+    const re = new RegExp('persona-accent-' + vi + '-base: "#[0-9A-Fa-f]{6}"');
+    assert.match(front, re, `persona accent for ${vi} missing from the DESIGN.md matrix`);
+    assert.match(front, new RegExp('persona-accent-' + vi + '-base: "' + entry.signature + '"'), `${vi} accent must equal the canon signature in palette.json`);
   }
 });
 

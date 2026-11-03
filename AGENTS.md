@@ -106,9 +106,9 @@ tokens from the semantic matrix. Any generated code must pass `npm run lint`.
 
 ## Brand rules for agents
 
-The live persona accents are the `DESIGN.md` matrix. Those older persona hexes are being retired. `brand/tokens.json` holds the target signatures, and they become the persona accents in a follow-up after the canon record lands. Until that follow-up, do not treat the brand file as the live matrix, and do not invent a replacement hex.
+The `DESIGN.md` persona-accent matrix equals the canon signatures (ratified 2026-11-03; ADR-011 item 9 + ADR-010 §2): Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`. Field tiles stay `#121214` and `#F7F7F5`. Status error `#F43F5E` and status warning `#F59E0B` keep their own role tokens (no shared-hex collisions remain).
 
-The canon palette file lands with that canon record. It is not a dependency of this branch. Brand artwork uses the target signatures in `brand/tokens.json`: Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`. Field tiles are `#121214` and `#F7F7F5`.
+Character canon stays in `canon/vwxyz/`. Do not invent a persona hex. Anyone adding a new persona state adds it to the `DESIGN.md` matrix first and the canon test asserts accent-equality, so a drift fails `npm test`.
 
 Do not draw or approximate the mark. Reference a file in `brand/` by family and version (`brand_{asset}_{variant}_v{NNN}.{ext}`). On a lockup, `horizontal-dark`, `horizontal-light`, and `stacked-dark` name the field. On a mark, `mono-dark` and `mono-light` name the ink. On a wordmark, `dark` and `light` name the ink. `on-dark` and `on-light` would name the field. Shipped masters keep the brand-index filenames. Versions are not reused.
 
@@ -118,6 +118,6 @@ ADR-011 item 10 is Accepted 2026-10-28: CTA fills and focus rings are #8B5CF6 (`
 
 Xylia is never text and never appears alone. Do not build a gradient between the five signature colours. Text-safe Xylia and text-safe Zinnia are pending. Do not define them.
 
-Being retired for brand artwork: teal `#2DD4BF` and rose `#F43F5E` as persona colours, `#7226FA`, `#A78BFA`, the V-shield mark, the chevron favicon, `cube.png` paths, and Inter. They remain the `DESIGN.md` persona values until the follow-up. Status error `#F43F5E` and status warning `#F59E0B` stay status tokens.
+Still being retired for brand artwork: `#7226FA`, `#A78BFA`, teal `#2DD4BF` and rose `#F43F5E` as persona colours, the V-shield mark, the chevron favicon, `cube.png` paths, and Inter. Status error `#F43F5E` and status warning `#F59E0B` keep their tokens as status only.
 
 Promoted masters live at the path `design_system/brand/`. Cite that path by name only.

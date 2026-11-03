@@ -169,19 +169,17 @@ Expression notes in the vocabulary are binding. Xylia's `angry` and `disgusted` 
 
 ## 8. UI accents and ADR-002
 
-Character color and UI accent color are different layers.
+Character color and UI accent color are different layers, and as of **2026-10-27 → ratified 2026-11-03** they carry the same hex values per VI (the ADR-010 §2 equality is now a live canon test in the videsign suite).
 
-| VI | Character signature (`palette.json`) | UI accent token in `DESIGN.md` (not changed here) |
+| VI | Character signature (`palette.json`) | UI accent token in `DESIGN.md` |
 | --- | --- | --- |
 | Violet | `#8B5CF6` | `#8B5CF6` |
-| Wisteria | `#B4A7F2` | `#A78BFA` |
-| Xylia | `#D92B3A` | `#2DD4BF` |
-| Yarrow | `#F0A020` | `#F59E0B` |
-| Zinnia | `#E13D9E` | `#F43F5E` |
+| Wisteria | `#B4A7F2` | `#B4A7F2` |
+| Xylia | `#D92B3A` | `#D92B3A` |
+| Yarrow | `#F0A020` | `#F0A020` |
+| Zinnia | `#E13D9E` | `#E13D9E` |
 
-`palette.json` is the source for character art. `DESIGN.md` persona accent tokens are the source for UI dots, rings and badges. This canon does not edit those tokens. ADR-010 requires each UI accent to equal the canon signature, or an explicitly listed text-safe variant. Enforcement of that equality is a later token change, not this document.
-
-Do not paint character art with the UI teal or the UI rose. Xylia's character signature is crimson `#D92B3A`. Zinnia's is magenta `#E13D9E`. Both of those UI retirements are *DEFAULT — revisable* and land with the token change.
+`palette.json` is the source for character art and stays byte-authoritative on hexes; `DESIGN.md` persona accent tokens drive UI dots, rings and badges and are asserted equal per test. Do not paint character art with any retired UI teal or rose variant (`#2DD4BF`/`#F43F5E` remain status/dataviz-style artifacts only; the status tokens keep those exact hexes).
 
 Persona images follow ADR-002. They are never committed to this repository. No binary masters, sheets or boards belong here. The public path will be `{ASSET_BASE}/vi/{vi}/{type}/{file}` (planned, ADR-010). Consumers resolve `{ASSET_BASE}` in their own build.
 

@@ -123,7 +123,7 @@ test('brand signature tokens use the canon hexes and the wisteria glow', () => {
   assert.equal(Object.hasOwn(tokens, 'ambient-glow-teal-base'), false);
 });
 
-test('brand signatures match persona accents', { skip: 'skipped until the colours match: https://github.com/Vidoxlabs/videsign/issues/15' }, () => {
+test('brand signatures match persona accents (issue 15 follow-up live since 2026-11-03)', () => {
   const tokens = loadBrandTokens(read('brand/tokens.json'));
   const design = read('DESIGN.md');
   const pairs = [
@@ -171,7 +171,7 @@ test('brand spec maps facets to the five VIs and records sizes', () => {
   assert.ok(spec.clear_space.trim().length > 0);
 });
 
-test('brand signatures currently differ from persona accents', () => {
+test('brand signatures and persona accents stay in lockstep (re-sync complete 2026-11-03)', () => {
   const tokens = loadBrandTokens(read('brand/tokens.json'));
   const design = read('DESIGN.md');
   const pairs = [
@@ -181,13 +181,14 @@ test('brand signatures currently differ from persona accents', () => {
     ['brand-signature-yarrow-base', 'persona-accent-yarrow-base'],
     ['brand-signature-zinnia-base', 'persona-accent-zinnia-base'],
   ];
-  let differ = 0;
+  let matched = 0;
   for (const [brandKey, personaKey] of pairs) {
     const match = design.match(new RegExp(`${personaKey}: "(#[0-9A-Fa-f]{6})"`));
     assert.ok(match, personaKey);
-    if (tokens[brandKey] !== match[1]) differ += 1;
+    assert.equal(tokens[brandKey], match[1], `${brandKey} vs ${personaKey}`);
+    matched += 1;
   }
-  assert.ok(differ > 0);
+  assert.equal(matched, 5);
 });
 
 test('item 7 contrast rule is Accepted', () => {
@@ -210,7 +211,7 @@ test('item 7 contrast rule is Accepted', () => {
     assert.match(doc, /Accepted 2026-10-28/);
     if (rel === 'SKILL.md') {
       const statusLine = doc.slice(doc.indexOf('## ADR-011:'), doc.indexOf('## ADR-012:')).split('\n').find((line) => line.startsWith('**Status**:'));
-      assert.match(statusLine, /^\*\*Status\*\*: Proposed for items 1-6, 8 and 9\. Items 7 and 10 are Accepted 2026-10-28\. Amends ADR-002\.$/);
+      assert.match(statusLine, /^\*\*Status\*\*: Proposed for items 1-6 and 8\. Items 7, 9 and 10 are Accepted \(7 and 10 on 2026-10-28; 9 on 2026-11-03\)\. Amends ADR-002\.$/);
       assert.doesNotMatch(statusLine, /owner/i);
       assert.doesNotMatch(statusLine, /approv/i);
       assert.doesNotMatch(doc, /7\. Accepted\. Item 7 is Accepted/);
@@ -625,12 +626,12 @@ test('ADR-011 is proposed and amends the raster ban', () => {
   const adr011 = skill.slice(skill.indexOf('## ADR-011:'), skill.indexOf('## ADR-012:'));
   assert.match(adr011, /Item 7 is Accepted/);
   assert.match(adr011, /Item 10 is Accepted/);
-  assert.match(adr011, /Items 1-6, 8 and 9 stay Proposed/);
-  assert.match(adr011, /Proposed for items 1-6, 8 and 9/);
+  assert.match(adr011, /Items 1-6 and 8 stay Proposed/);
+  assert.match(adr011, /Proposed for items 1-6 and 8/);
   assert.match(adr011, /^10\. Item 10 is Accepted 2026-10-28:/m);
   assert.doesNotMatch(adr011, /#8B5CF6 is the brand accent/);
   assert.doesNotMatch(adr011, /\*\*Status\*\*: Accepted/);
-  assert.match(design, /persona-accent-wisteria-base: "#A78BFA"/);
+  assert.match(design, /persona-accent-wisteria-base: "#B4A7F2"/);
   assert.match(design, /ambient-glow-teal-base/);
   assert.match(design, /being retired/);
   assert.match(design, /brand\/brand_mark_header_v008\.svg/);

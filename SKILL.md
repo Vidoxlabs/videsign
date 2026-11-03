@@ -54,13 +54,13 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 | Persona | Canonical token | Value | Research-doc alias (never consume) |
 | --- | --- | --- | --- |
 | Violet | `{colors.persona-accent-violet-base}` | #8B5CF6 | `--vi-persona-violet-base` |
-| Wisteria | `{colors.persona-accent-wisteria-base}` | #A78BFA | `--vi-persona-wisteria-base` |
-| Xylia | `{colors.persona-accent-xylia-base}` | #2DD4BF | `--vi-persona-xylia-base` |
-| Yarrow | `{colors.persona-accent-yarrow-base}` | #F59E0B | `--vi-persona-yarrow-base` |
-| Zinnia | `{colors.persona-accent-zinnia-base}` | #F43F5E | `--vi-persona-zinnia-base` |
+| Wisteria | `{colors.persona-accent-wisteria-base}` | #B4A7F2 | `--vi-persona-wisteria-base` |
+| Xylia | `{colors.persona-accent-xylia-base}` | #D92B3A | `--vi-persona-xylia-base` |
+| Yarrow | `{colors.persona-accent-yarrow-base}` | #F0A020 | `--vi-persona-yarrow-base` |
+| Zinnia | `{colors.persona-accent-zinnia-base}` | #E13D9E | `--vi-persona-zinnia-base` |
 
 2. Emitted custom properties follow the pipeline format `--vi-colors-persona-accent-<persona>-base`.
-3. Persona accents are identity markers only. Yarrow shares a hex with the warning status token and Zinnia with the error status token; shared hexes never make the roles interchangeable. Status semantics always use status tokens.
+3. Persona accents are identity markers only. Since the 2026-11-03 accent re-sync, no persona accent shares a hex with a status token (warning stays `#F59E0B`, error stays `#F43F5E`); the roles are still separate by name. Xylia is never text and never appears alone. Persona-identity uses persona tokens; status semantics always use status tokens.
 4. The persona token `{colors.persona-accent-violet-base}` and the CTA and focus token `{colors.surface-accent-violet-base}` share #8B5CF6. The roles stay separate: persona identity uses the persona token; CTA fills and focus rings use the surface accent. Hover is #6D28D9 and active is #5B21B6. Never use #7C3AED for CTA fills, hover/active states or focus rings.
 5. New persona states (hover, active) or any new persona color must be added to the DESIGN.md matrix first, then referenced — never invented locally in a consuming product.
 
@@ -181,7 +181,7 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 
 ## ADR-011: Brand identity (brand v1)
 
-**Status**: Proposed for items 1-6, 8 and 9. Items 7 and 10 are Accepted 2026-10-28. Amends ADR-002.
+**Status**: Proposed for items 1-6 and 8. Items 7, 9 and 10 are Accepted (7 and 10 on 2026-10-28; 9 on 2026-11-03). Amends ADR-002.
 
 **Context**: Mark C needs SVG masters here. ADR-002 bans SVG. Rasters stay out of git.
 
@@ -195,10 +195,10 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 6. Promoted masters: path `design_system/brand/` (a name, not a link).
 7. Item 7 is Accepted 2026-10-28: white on #8B5CF6 is 4.23:1. CTA labels are large: bold xl or larger, or 2xl or larger. No normal-size label of any colour on `#8B5CF6`. `#121214` is 4.42:1, white is 4.23:1, `#F7F7F5` is 3.95:1. Fail 4.5:1 for normal text; pass 3:1 for large text (at least 24px, or at least 18.66px and bold).
 8. Headers under 38px may use the favicon-grade mark down to 24px. px16 is in `brand/`. No px32 master here.
-9. `brand-signature-*` becomes the persona accent once the canon record lands. Until then `DESIGN.md` persona accents stay. `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`. Teal glow stays the default. `ambient-glow-wisteria-base` in `brand/tokens.json` is the pending successor, not a `DESIGN.md` token.
+9. **Accepted 2026-11-03 (owner ratification).** `brand-signature-*` is the persona accent in `DESIGN.md` (Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`; Violet unchanged). The ADR-010 §2 UI-equality requirement is now a live canon test. The persona accent re-sync did NOT touch ambient glows: `{effects.ambient-glow-violet-base}` stays `rgba(124, 58, 237, 0.30)`, the teal glow stays the default glow, and `ambient-glow-wisteria-base` remains the pending successor in `brand/tokens.json` under its own decision.
 10. Item 10 is Accepted 2026-10-28: CTA fills and focus rings are #8B5CF6 (`{colors.surface-accent-violet-base}`). Hover #6D28D9 (violet-700) and active #5B21B6 (violet-800) are darker steps of #8B5CF6, Accepted 2026-10-28. Focus rings use #8B5CF6 and do not use #6D28D9. This item does not change `{effects.ambient-glow-violet-base}` (`rgba(124, 58, 237, 0.30)`), which remains with item 9.
 
-**Consequences**: `.gitignore` re-includes `brand/**/*.svg`; rasters stay ignored. Those SVGs are `-text`. Items 1-6, 8 and 9 stay Proposed until the owner ratifies them. Item 7 is Accepted 2026-10-28. Item 10 is Accepted 2026-10-28.
+**Consequences**: `.gitignore` re-includes `brand/**/*.svg`; rasters stay ignored. Those SVGs are `-text`. Items 1-6 and 8 stay Proposed until the owner ratifies them. Items 7 and 10 are Accepted 2026-10-28; item 9 is Accepted 2026-11-03 (the caused accent re-sync lives in DESIGN.md).
 
 
 ## ADR-012: Product light theme and semantic foregrounds

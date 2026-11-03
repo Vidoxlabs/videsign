@@ -124,7 +124,7 @@ test('accepted status is limited to items 7 and 10 and the light theme', () => {
     if (adr.id === 'ADR-012') {
       assert.equal(adr.status, 'Accepted 2026-10-27. Used by the web app redesign.');
     } else if (adr.id === 'ADR-011') {
-      assert.equal(adr.status, 'Proposed for items 1-6, 8 and 9. Items 7 and 10 are Accepted 2026-10-28. Amends ADR-002.');
+      assert.equal(adr.status, 'Proposed for items 1-6 and 8. Items 7, 9 and 10 are Accepted (7 and 10 on 2026-10-28; 9 on 2026-11-03). Amends ADR-002.');
     } else {
       assert.equal(adr.status.startsWith('Accepted'), false, adr.id);
       assert.equal(adr.status.includes('are Accepted'), false, adr.id);
