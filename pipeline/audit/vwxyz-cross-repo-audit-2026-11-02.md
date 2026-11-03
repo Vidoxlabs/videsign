@@ -52,13 +52,33 @@
 - `web/public/favicon.svg` (284 bytes, digest `d3fd83fa...`) matches **no** row of `brand/MANIFEST.json`; the `web/dist/` copy is the same lineage. This is an unverified legacy favicon, presumably pre-Brand-v1. **Recommendation:** replace it with a byte copy of `brand_favicon_px16_v008.svg` and record the digest in a ViWeb provenance file, or drop it in favour of the vidoxlabs.dev-verified copy.
 - No `cube.png` references and no non-matrix persona aliases in code; the one documentation hit correctly instructs agents to use the canonical emitted names.
 
+### 4.1 Addendum — same-day follow-up verification (2026-11-02, later pass)
+
+Re-verified against the live checkouts after this audit was written:
+
+- **ViWeb:** `web/public/favicon.svg` now hashes to `07bc0643…` — byte-identical to
+  `brand_favicon_px16_v008.svg` in `brand/MANIFEST.json`; `web/dist/favicon.svg` matches too.
+  The replacement is documented in `ViWeb/web/public/PROVENANCE.json`
+  (schema `viweb.brand-provenance.v1`, copied at source revision `f48a2ad`, digest verified
+  after write). The section 4 medium finding is resolved and the summary row is closed.
+- **vijobs:** all 13 pinned companion digests re-verified against the mission-20 record
+  (13 of 13 match); all 7 `web/src/assets/PROVENANCE.json` rows match `brand/MANIFEST.json`
+  (7 of 7). Schema `vijobs.brand-provenance.v1` mirrors the ViWeb provenance shape.
+- **ViApp:** all 16 chibi digests re-hashed and re-verified against the mission-20 record
+  (16 of 16 match).
+
+No deprecated `cube.png` references and no non-matrix `--vi-persona-*` aliases were found
+in any consumer checkout during this pass. The persona identity-badge fragment
+(`preview/persona-identity-badge.html`) is canonical in `videsign`; byte-copy staging into
+`vijobs` and `ViWeb` remains an open follow-up owned by those repositories.
+
 ## 5. Summary of actions
 
 | Finding | Severity | Proposed action |
 | --- | --- | --- |
 | 3 legacy ViApp slot names not in vocabulary | low | `legacy_alias` mapping at manifest registration (proposals in section 1.1) |
 | vijobs pre-canon naming, no sidecars | low | migrate to canon naming + sidecars via `scripts/canon-tool.js`; keep runtime aliases until cutover |
-| ViWeb favicon not in brand manifest | medium | re-copy from `videsign/brand` with digest provenance, or remove |
+| ViWeb favicon not in brand manifest | resolved | closed 2026-11-02, same-day addendum in section 4.1 (byte-verified copy + provenance record) |
 | ViApp rig layer names differ from canon anchors | info | adopt the mapping table in `pipeline/animation/vwxyz-animation-v1.json` |
 | No `cube.png` / non-matrix alias usage anywhere | pass | none |
 | All 16 ViApp chibi hashes match the record | pass | none |
