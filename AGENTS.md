@@ -41,17 +41,14 @@ design system — the shared visual language for all Vidoxlabs products and appl
 - **brand/**: Brand v1 mark C masters (text-only SVG, ADR-011). See `brand/README.md`
   and `brand/MANIFEST.json`. Do not redraw the mark.
 
-## AI Agent Initialization & Cross-Repo Fetching
+## AI Agent Initialization, Ephemeral Data & Cross-Repo Fetching
 
-When an AI agent initializes in any product repository that consumes this design system,
-it MUST execute the following routine:
+**All ephemeral and volatile data must utilize tool calls for simplicity and contextual relativity.** When an AI agent initializes in this or any product repository that consumes this design system, it MUST resolve current token definitions, historical ADRs, and fragments via tool calls rather than static assumptions:
 
-1. **Query MCP Server**: Query the `videsign` MCP server (`npm run mcp`) to fetch the
-   latest unified specifications.
-2. **Fetch Tokens**: Read the YAML front-matter from `DESIGN.md` via MCP to understand
-   the available `category-role-variant-state` tokens.
-3. **Inspect Fragments**: Use the `preview/` HTML fragments exposed via MCP to capture
-   clean structural snippets instead of hallucinating framework-specific state logic.
+1. **Development Intelligence**: Invoke `vidox-dev-intel` (`context.brief`, `context.assemble`) before substantial planning or token changes.
+2. **Query MCP Server**: Query the `videsign` MCP server (`npm run mcp`, tool `resolve_token`) to fetch the latest unified specifications.
+3. **Fetch Tokens**: Read the YAML front-matter from `DESIGN.md` via MCP to understand the available `category-role-variant-state` tokens.
+4. **Inspect Fragments**: Use the `preview/` HTML fragments exposed via MCP to capture clean structural snippets instead of hallucinating framework-specific state logic.
 
 ## Approved CLI Commands
 
