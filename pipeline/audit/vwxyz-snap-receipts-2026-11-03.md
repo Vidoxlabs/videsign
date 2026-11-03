@@ -29,3 +29,12 @@ The proposal's "11 headroom-limited" finding inverted the constraint: a downward
 1. **§8d human sign-off** (Gavin) per file after ViCanon visual review of the 65 evidence grids (worse for Wisteria/Xylia given the residual fronts — the v005/v003 wave is review-ready for violet and yarrow first-wa限ing; wisteria/xylia may be rere-gen'd instead of snapped further).
 2. The two instrument reconciliation decisions above.
 3. The viesign-side palette digest fork (`7dd02a5f…` Drive canon vs repo `01a8b5cc…`) already flagged in the receipts — unchanged by this wave.
+
+## Hold-resolution addendum (2026-11-03, later same day)
+
+Owner directive: "continue to proceed through all holds, approved".
+
+1. **vijobs push — PASSED.** The no-push holdback was explicitly overridden; `feat/local-cockpit` pushed and remote-confirmed (`dcb6ca8`).
+2. **vidoxlabs.dev apex cutover — STILL pending on the platform build.** Native pushed commits land (`62f22d4` remote-confirmed); the live Workers Build artifact still serves the pre-item-10 bundle (`BaseLayout.Ut64psvJ`, hover `#6b46c1`); this session has no credential to force it. The apex contract smoke (18/18) passes on the current artifact; the local artifact (`BaseLayout.B8yk-LLx`) carries the re-synced accents and the ADR-011 item-10 hover values — the honest production claim is "committed+verified locally, installed-on-publication pending the Workers Build".
+3. **Wisteria/Xylia regeneration trial — NOT EXECUTED (image generation permission denied).** The trial slot (`wisteria_chibi_neutral_trial`) could not be built because the image-edit permission was refused at the gate; the residual fronts stay exactly as quantified in the wave table above (Wisteria hair 18.6 / eyes 17.9; Xylia underlight 11.7). Options open to the owner: grant the image-generation permission for this workflow, or hand the two slots to ViForge's next run; either path ends in the same v1.2 candidate folder shape with my receipts, so no process rework is needed.
+4. **ViWeb `test:la` LA-policy failures — pre-existing, out of scope for the design layer.** Control: my ViWeb delta is exactly `web/src/styles/tokens.css` + `web/src/paletteBrandV1.test.ts`.
