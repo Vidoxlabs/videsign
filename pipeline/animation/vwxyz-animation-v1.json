@@ -1,0 +1,190 @@
+{
+  "schema": "vidoxlabs.vi-animation/1",
+  "canon_version": "v1",
+  "date": "2026-11-02",
+  "status": "Proposed companion to VWXYZ character canon v1 (pending owner confirmation)",
+  "machine_source_note": "Companion to pipeline/animation/vwxyz-animation-v1.md. If they disagree, this file wins.",
+  "sprite_matrix": {
+    "type": "chibi",
+    "canvas": { "width": 926, "height": 1596, "mode": "RGBA" },
+    "runtime_cell": { "width": 463, "height": 798 },
+    "core_expressions": [
+      "neutral",
+      "happy",
+      "thinking",
+      "focused",
+      "sad",
+      "smug",
+      "wink",
+      "surprised"
+    ],
+    "operational_states": [
+      "alert",
+      "loading",
+      "searching",
+      "success",
+      "planning",
+      "keyboard",
+      "snack"
+    ],
+    "visemes": ["viseme-a", "viseme-e", "viseme-i", "viseme-o", "viseme-u"],
+    "state_semantics": "An operational state is an overlay posture on the current expression sprite; a viseme swaps mouth_viseme only.",
+    "legacy_alias": {
+      "carefree": "smile",
+      "lockedin": "focused",
+      "sleeping": "sleepy"
+    }
+  },
+  "layers": [
+    {
+      "order": 1,
+      "name": "tail_back",
+      "content": "Tail root and shaft behind the torso",
+      "pivot": { "x": 0.5, "y": 0.62 },
+      "drive": "pose"
+    },
+    {
+      "order": 2,
+      "name": "tail_tip_signature",
+      "content": "Last ~15% of the tail in the signature colour",
+      "pivot": { "x": 0.5, "y": 0.62 },
+      "drive": "pose",
+      "inherits": "tail_back"
+    },
+    {
+      "order": 3,
+      "name": "hair_back",
+      "content": "Hair mass behind head and shoulders",
+      "pivot": { "x": 0.5, "y": 0.3 },
+      "drive": "pose"
+    },
+    {
+      "order": 4,
+      "name": "torso_blazer_shirt_tie",
+      "content": "Blazer, shirt, tie, arms at rest baseline",
+      "pivot": { "x": 0.5, "y": 0.55 },
+      "drive": "static"
+    },
+    {
+      "order": 5,
+      "name": "arm_left",
+      "content": "Left arm and hand",
+      "pivot": { "x": 0.38, "y": 0.38 },
+      "drive": "pose"
+    },
+    {
+      "order": 6,
+      "name": "arm_right",
+      "content": "Right arm and hand",
+      "pivot": { "x": 0.62, "y": 0.38 },
+      "drive": "pose"
+    },
+    {
+      "order": 7,
+      "name": "head_base",
+      "content": "Face base, skin, cheeks",
+      "pivot": { "x": 0.5, "y": 0.3 },
+      "drive": "pose"
+    },
+    {
+      "order": 8,
+      "name": "eyes_iris_whites",
+      "content": "Whites and iris, open and closed variants",
+      "pivot": { "x": 0.5, "y": 0.3 },
+      "drive": "blink",
+      "variants": ["open", "closed"]
+    },
+    {
+      "order": 9,
+      "name": "eyebrows",
+      "content": "Brow shapes per expression",
+      "pivot": { "x": 0.5, "y": 0.3 },
+      "drive": "expression"
+    },
+    {
+      "order": 10,
+      "name": "mouth_viseme",
+      "content": "Rest mouth plus five viseme shapes",
+      "pivot": { "x": 0.5, "y": 0.3 },
+      "drive": "viseme",
+      "variants": ["rest", "viseme-a", "viseme-e", "viseme-i", "viseme-o", "viseme-u"]
+    },
+    {
+      "order": 11,
+      "name": "hair_bangs_underlight",
+      "content": "Front bangs mass with signature under-light",
+      "pivot": { "x": 0.5, "y": 0.3 },
+      "drive": "expression"
+    },
+    {
+      "order": 12,
+      "name": "ear_left",
+      "content": "Left cat ear",
+      "pivot": { "x": 0.4, "y": 0.16 },
+      "drive": "pose",
+      "max_degrees": 4
+    },
+    {
+      "order": 13,
+      "name": "ear_right",
+      "content": "Right cat ear",
+      "pivot": { "x": 0.6, "y": 0.16 },
+      "drive": "pose",
+      "max_degrees": 4
+    }
+  ],
+  "layer_rules": {
+    "flatten_must_match": "Flattened layers must be pixel-identical to the approved flat master, silhouette and 3% border padding included",
+    "lipsync_layers": ["mouth_viseme"],
+    "blink_layer": "eyes_iris_whites",
+    "z_order_is_canonical": true,
+    "lineart": "#1A1A1F"
+  },
+  "rig_candidate_mapping": {
+    "tail_back": ["tail"],
+    "tail_tip_signature": ["tail"],
+    "torso_blazer_shirt_tie": ["torso", "chest", "hips"],
+    "arm_left": ["arm_l", "hand_l"],
+    "arm_right": ["arm_r", "hand_r", "hand_r_point"],
+    "head_base": ["head"],
+    "eyes_iris_whites": ["eyes", "eyes_closed"],
+    "mouth_viseme": ["mouth_rest", "mouth_open", "mouth_rounded", "mouth_wide"],
+    "ear_left": ["ear_l"],
+    "ear_right": ["ear_r"],
+    "hair_back": [],
+    "eyebrows": [],
+    "hair_bangs_underlight": []
+  },
+  "motion": {
+    "animated_properties": ["transform", "opacity"],
+    "durations_ms": {
+      "swap_fast": 150,
+      "expression": 200,
+      "state_entry": 300,
+      "entrance": 500
+    },
+    "easing": {
+      "standard": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "spring": "cubic-bezier(0.32, 0.72, 0, 1)"
+    },
+    "sprite_swap": "Cross-fade opacity at swap_fast duration; slots share canvas and registration so no transform compensation is needed",
+    "blink": "Opacity swap of eyes_iris_whites open and closed variants at swap_fast duration",
+    "idle_sway": "transform translateY with spring easing, only while an explicit idle state is active; never a decorative loop",
+    "viseme_binding": "vvs stream classes map one-to-one to viseme-* slots; transitions at swap_fast duration; rest mouth on stream end",
+    "reduced_motion": "prefers-reduced-motion: reduce renders final states instantly; blink stops on open eyes; idle sway off",
+    "transform_budget": {
+      "tail_back_degrees": 8,
+      "tail_tip_signature_degrees": 8,
+      "ear_degrees": 4,
+      "arms": "rotate about shoulder pivots only",
+      "z_order_changes": false
+    }
+  },
+  "delivery": {
+    "naming": "{vi}_{type}_{slot}_v{NNN}.png",
+    "asset_id": "{vi}/{type}/{slot}/v{NNN}",
+    "sidecar": "canon/vwxyz/asset-manifest.schema.json $defs/sidecar",
+    "manifest_entry": "canon/vwxyz/asset-manifest.schema.json $defs/manifestEntry",
+    "rasters_in_git": false
+  }
+}

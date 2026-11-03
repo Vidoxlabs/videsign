@@ -1,0 +1,38 @@
+{
+  "schema_note": "Fill-in skeleton for a generation sidecar. Every {{TOKEN}} is a canonical placeholder, replaced at generation time; the finished document must validate against $defs/sidecar in canon/vwxyz/asset-manifest.schema.json (the canon-tool sidecar command emits a fully valid document from a real PNG; test/canon-tool.test.js proves it).",
+  "file": "{{FILENAME}}",
+  "vi": "{{VI}}",
+  "type": "{{TYPE}}",
+  "slot": "{{SLOT}}",
+  "version": "{{VERSION}}",
+  "canon_version": "v1",
+  "palette_sha256": "{{PALETTE_SHA256}}",
+  "sha256": "{{PNG_SHA256}}",
+  "width": "{{WIDTH}}",
+  "height": "{{HEIGHT}}",
+  "mode": "{{MODE}}",
+  "matted": false,
+  "generator": {
+    "tool": "{{TOOL}}",
+    "model": "{{MODEL}}",
+    "seed": "{{SEED}}",
+    "prompt": "{{PROMPT}}",
+    "negative_prompt": "{{NEGATIVE_PROMPT}}",
+    "reference_images": [
+      { "asset_id": "{{ANCHOR_ASSET_ID}}", "role": "anchor" }
+    ]
+  },
+  "run_id": "{{RUN_ID}}",
+  "created_at": "{{CREATED_AT}}",
+  "created_by": "{{CREATED_BY}}",
+  "review": {
+    "status": "quarantine",
+    "reviewer": null,
+    "reviewed_at": null,
+    "checklist_version": "v1",
+    "failed_items": "{{FAILED_ITEMS}}",
+    "swatches": "{{SWATCHES}}",
+    "notes": "{{NOTES}}"
+  },
+  "supersedes": "{{SUPERSEDES}}"
+}

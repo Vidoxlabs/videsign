@@ -2,7 +2,8 @@
 
 /**
  * Fail-closed public-safety scan for canon, docs, previews, workflows,
- * the MCP server, scripts and tests. Exit 0 only when every target exists,
+ * the MCP server, scripts, tests and the asset pipeline directory.
+ * Exit 0 only when every target exists,
  * every file is non-empty, every JSON file parses, and no pattern hits.
  *
  * Operator handles are SHA-256 hashes in SAFETY_SCAN_SHA256_LIST
@@ -55,6 +56,7 @@ const DEFAULT_TARGETS = [
   'brand',
   'scripts',
   'test',
+  'pipeline',
 ];
 
 const OPTIONAL_TARGETS = new Set(['brand']);
@@ -263,8 +265,16 @@ function inspectSha256(text) {
   const pair = /"([^"\\]*)"\s*:\s*"([^"\\]*)"/g;
   let match = pair.exec(text);
   while (match) {
-    if (match[1].endsWith('sha256')) {
-      if (/^[0-9a-f]{64}$/.test(match[2])) {
+    // Keys ending in sha256, and the canon request dedupe_key (it is a
+    // SHA-256 digest by schema), stay allowlisted when the value is exact
+    // 64-hex; anything else under those keys is a hit, never a pass. A
+    // canonical ALL-CAPS {{PLACEHOLDER}} template token is allowlisted too
+    // so fill-in skeletons can name digest fields without forging digests;
+    // real values still have to be exact 64-hex.
+    const digestKey = match[1].endsWith('sha256') || match[1] === 'dedupe_key';
+    if (digestKey) {
+      const canonicalPlaceholder = /^\{\{[A-Z][A-Z0-9_]*\}\}$/.test(match[2]);
+      if (/^[0-9a-f]{64}$/.test(match[2]) || canonicalPlaceholder) {
         ranges.push([match.index, match.index + match[0].length]);
       } else {
         hits.push('sha256-value');

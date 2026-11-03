@@ -6,6 +6,7 @@
   "main": "mcp-server.js",
   "scripts": {
     "canon:check": "node --test test/persona-canon.test.js",
+    "canon:tool": "node scripts/canon-tool.js",
     "lint": "eslint . && node scripts/lint-preview.js",
     "mcp": "node mcp-server.js",
     "test": "node --test test/*.test.js",
