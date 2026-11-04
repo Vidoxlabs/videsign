@@ -10,7 +10,8 @@
     "lint": "eslint . && node scripts/lint-preview.js",
     "mcp": "node mcp-server.js",
     "test": "node --test test/*.test.js",
-    "tokens": "node scripts/generate-tokens.js"
+    "tokens": "node scripts/generate-tokens.js && node scripts/generate-canon-style-pack.js",
+    "style-pack": "node scripts/generate-canon-style-pack.js"
   },
   "devDependencies": {
     "eslint": "10.13.0",

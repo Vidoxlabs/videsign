@@ -6,13 +6,13 @@
  * Scope per the residual-front ruling: wisteria + xylia (+violet reference row). */
 const fs=require('fs');
 const path=require('path');
-const S=require('/private/var/folders/xb/rq5vbg9j37s2hb48gws_t15r0000gn/T/opencode/vwxyz-models/sampler8a.cjs');
+const S=require('./sampler8a.cjs');
 const PAL=S.PAL;
 const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xedb88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
 function crc32(b){let c=0xffffffff;for(const v of b)c=CRC[(c^v)&0xff]^(c>>>8);return (c^0xffffffff)>>>0;}
 function chunk(t,bo){const o=Buffer.alloc(12+bo.length);o.writeUInt32BE(bo.length,0);o.write(t,4,'ascii');bo.copy(o,8);o.writeUInt32BE(crc32(o.subarray(4,8+bo.length)),8+bo.length);return o;}
 function writePng(f,w,h,rgba){const raw=Buffer.alloc(h*(w*4+1));for(let y=0;y<h;y++){raw[y*(w*4+1)]=0;rgba.copy(raw,y*(w*4+1)+1,y*w*4,(y+1)*w*4);}const ih=Buffer.alloc(13);ih.writeUInt32BE(w,0);ih.writeUInt32BE(h,4);ih[8]=8;ih[9]=6;fs.writeFileSync(f,Buffer.concat([Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]),chunk('IHDR',ih),chunk('IDAT',require('zlib').deflateSync(raw,{level:9})),chunk('IEND',Buffer.alloc(0))]))}
-const OUT='/Users/viotic/Documents/Vidoxlabs/videsign/assets/quarantine/run_20261103-regen';
+const OUT=path.join(__dirname, '..', '..', 'assets', 'quarantine', 'run_20261103-regen');
 fs.mkdirSync(OUT,{recursive:true}); fs.mkdirSync(path.join(OUT,'review_8a'),{recursive:true});
 
 const LINE='#1A1A1F';
@@ -148,7 +148,7 @@ function outPng(buf,W,H){ return {buf,W,H}; }
         const sha=require('crypto').createHash('sha256').update(fs.readFileSync(path.join(OUT,file))).digest('hex');
         const side={
           file, vi, type:'chibi', slot, version:9, canon_version:'v1',
-          palette_sha256: require('crypto').createHash('sha256').update(fs.readFileSync('/Users/viotic/Documents/Vidoxlabs/videsign/canon/vwxyz/palette.json')).digest('hex'),
+          palette_sha256: require('crypto').createHash('sha256').update(fs.readFileSync(path.join(__dirname, '..', '..', 'canon', 'vwxyz', 'palette.json'))).digest('hex'),
           sha256: sha, width:W, height:H, mode:'RGBA', matted:true,
           synthetic:true, note:'procedural fixture candidate: palette-true geometry mapping only; NOT character art; NOT approved art; status hold.',
           run_id:'run_20261103-regen',
