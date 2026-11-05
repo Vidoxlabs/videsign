@@ -19,6 +19,8 @@ colors:
   text-content-primary-light: "#0F172A"
   text-content-secondary-light: "#475569"
   border-separator-primary-light: "#CBD5E1"
+  border-graph-line-base: "#80808A"
+  border-graph-line-light: "#64748B"
   status-indicator-success-base: "#10B981"
   status-indicator-warning-base: "#F59E0B"
   status-indicator-error-base: "#F43F5E"
@@ -104,6 +106,7 @@ size:
   indicator-dot-base: "0.5rem"
   indicator-mark-base: "0.75rem"
   indicator-brand-base: "1.75rem"
+  indicator-fivebar-base: "3px"
 
 space:
   gap-dense-default: "0.25rem"
@@ -135,6 +138,8 @@ transition:
   transition-duration-normal-base: "200ms"
   transition-duration-slow-base: "300ms"
   transition-duration-entrance-base: "500ms"
+  transition-duration-ambient-drift-base: "32s"
+  transition-duration-ambient-pulse-base: "6s"
   transition-easing-standard-base: "cubic-bezier(0.16, 1, 0.3, 1)"
   transition-easing-spring-base: "cubic-bezier(0.32, 0.72, 0, 1)"
 ---
@@ -198,7 +203,7 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 
 Consuming products present sovereign personas and evidence inside static-edge constraints (static builds, zero runtime bindings, strict CSP `script-src 'self'`). Continuity therefore comes from browser-native primitives, never client-framework hydration.
 
-- **Motion vocabulary**: durations come only from `{transition.transition-duration-fast-base}` (150ms), `{transition.transition-duration-normal-base}` (200ms), `{transition.transition-duration-slow-base}` (300ms) and, for entrances only, `{transition.transition-duration-entrance-base}` (500ms: scroll reveals, opening the lens, highlighting the field). Easing is `{transition.transition-easing-standard-base}` by default and `{transition.transition-easing-spring-base}` for lens and sheet motion. Animated properties are `transform` and `opacity` only; blur is never animated. Zero bounce: neither easing overshoots (ADR-008).
+- **Motion vocabulary**: durations come only from `{transition.transition-duration-fast-base}` (150ms), `{transition.transition-duration-normal-base}` (200ms), `{transition.transition-duration-slow-base}` (300ms) and, for entrances only, `{transition.transition-duration-entrance-base}` (500ms: scroll reveals, opening the lens, highlighting the field). Easing is `{transition.transition-easing-standard-base}` by default and `{transition.transition-easing-spring-base}` for lens and sheet motion. Animated properties are `transform` and `opacity` only; blur is never animated. Zero bounce: neither easing overshoots (ADR-008). Ambient loops are the one exception to the interaction durations: the stage backdrop drifts on `{transition.transition-duration-ambient-drift-base}` (32s) and breathes on `{transition.transition-duration-ambient-pulse-base}` (6s), transform and opacity only, and every product ships a visible pause control for them (WCAG 2.2.2, ADR-013).
 - **View transitions**: document-level navigation cross-fades via the View Transitions API with a 200ms fade (`{transition.transition-easing-standard-base}`). Non-supporting browsers perform an instant swap. Shared shell elements (header, navigation) persist across navigation.
 - **Scroll-driven motion**: editorial surfaces reveal via `animation-timeline: view()` (entry 10% to cover 30%), opacity and `transform` only, zero JavaScript. Unsupported browsers see the completed static layout.
 - **Discrete panel transitions**: drawers, filters, and metadata panels animate entry and exit with `@starting-style` and `transition-behavior: allow-discrete` instead of JavaScript style manipulation. Unsupported browsers snap instantly.
