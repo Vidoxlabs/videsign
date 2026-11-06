@@ -119,6 +119,8 @@ const STANDARD_RESOURCES = [
   { file: 'dist/tokens.ts', name: 'Tokens for TypeScript', mimeType: 'text/plain', description: 'Typed raw values, CSS variable names and a token() lookup for web apps.' },
   { file: 'dist/ViTokens.swift', name: 'Tokens for SwiftUI', mimeType: 'text/plain', description: 'Colours, points, seconds and easing curves for Apple platforms.' },
   { file: 'dist/videsign_tokens.py', name: 'Tokens for Python', mimeType: 'text/plain', description: 'Read-only mappings for Textual and other Python UIs.' },
+  { file: 'dist/dialects.css', name: 'Persona dialects (CSS)', mimeType: 'text/css', description: 'Agent-surface dialects for the five seats (ADR-015): .vi-agent[data-persona].' },
+  { file: 'dist/dialects.json', name: 'Persona dialects (resolved)', mimeType: 'application/json', description: 'Each seat\'s tempo, density, label type, motif and lead order, resolved to seconds and points.' },
   { file: 'dist/tokens.dtcg.json', name: 'Tokens in DTCG 2025.10 format', mimeType: 'application/json', description: 'W3C Design Tokens Community Group format for design tools and converters.' },
 ];
 

@@ -13,6 +13,7 @@ const crypto = require('crypto');
 const ROOT = path.join(__dirname, '..');
 const PKG = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf-8'));
 const { STAGE_VARIANT_OPACITY, STAGE_NARROW_AMBIENT_OPACITY, STAGE_TEXT_SCRIM } = require('../lib/stage');
+const { DIALECTS: PERSONA_DIALECTS } = require('../lib/dialects');
 
 /** Canon order of the five signature colours (ADR-011, ADR-013). */
 const SIGNATURE_ORDER = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
@@ -58,6 +59,7 @@ function buildStandard(tokens, designMd, skillMd) {
         swift: 'dist/ViTokens.swift',
         python: 'dist/videsign_tokens.py',
         dtcg: 'dist/tokens.dtcg.json',
+        dialects: ['dist/dialects.css', 'dist/dialects.json'],
       },
     },
     tokens,
@@ -175,6 +177,15 @@ function buildStandard(tokens, designMd, skillMd) {
         minContrast: 3,
         hairlineForSeparatorsOnly: tokens.colors['border-separator-primary-base'],
       },
+      dialects: {
+        adr: 'ADR-015',
+        strength: 'moderate',
+        scope: 'agent surfaces only: .vi-agent[data-persona]',
+        defaultSeat: 'violet',
+        varies: ['tempo', 'density', 'label type', 'motif', 'lead order'],
+        leadOrderInDom: true,
+        seats: Object.fromEntries(Object.entries(PERSONA_DIALECTS).map(([seat, d]) => [seat, { motif: d.motif, lead: d.lead, ...d.motion, ...d.density }])),
+      },
       chatDock: {
         adr: 'ADR-013',
         launcher: 'fixed bottom right, at least the touch target, mark or five seat dots plus a label, five-bar foot',
@@ -289,6 +300,12 @@ function emitStandardMd(standard) {
     `- Dark: ${standard.rules.graphLine.dark}; light: ${standard.rules.graphLine.light}`,
     `- Minimum contrast: ${standard.rules.graphLine.minContrast}:1 (WCAG 1.4.11)`,
     `- Hairline ${standard.rules.graphLine.hairlineForSeparatorsOnly} is for layout separators only`,
+    '',
+    '## Persona dialects (ADR-015)',
+    '',
+    `- Strength: ${standard.rules.dialects.strength}; scope: ${standard.rules.dialects.scope}; default seat: ${standard.rules.dialects.defaultSeat}`,
+    `- Varies: ${standard.rules.dialects.varies.join(', ')}; lead order is applied in the DOM, never by CSS order`,
+    ...Object.entries(standard.rules.dialects.seats).map(([seat, d]) => `- ${seat}: motif ${d.motif}; leads with ${d.lead.join(', ')}`),
     '',
     '## Chat dock (ADR-013)',
     '',

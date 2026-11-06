@@ -37,6 +37,8 @@ design system — the shared visual language for all Vidoxlabs products and appl
   compositing implementation (tests, primitives and MCP use it; do not re-implement it).
   `lib/stage.js` and `lib/stage.css` are the stage backdrop primitive (ADR-013): geometry, SVG
   renderer and contrast report. After changing `lib/stage.js`, run `npm run stage:fragment`.
+  `lib/dialects.js` defines the persona dialects (ADR-015) as token references; it generates
+  `dist/dialects.css` and `dist/dialects.json`. After changing it, run `npm run dialects:fragment`.
 - **mcp-server.js**: The MCP server that exposes this design system to product
   repositories for cross-repo token and fragment fetching. Tools: `resolve_token` (one token
   value), `style_pack`, `check_contrast` (WCAG ratio of two colours or tokens) and
@@ -82,11 +84,16 @@ Within the `videsign` repository, agents are restricted to the following command
   the agent standard contract (`test/standard.test.js`), the persona canon
   contract (`test/persona-canon.test.js`), the canon tool contract
   (`test/canon-tool.test.js`), the pipeline pack contract (`test/pipeline-packs.test.js`),
-  the stage primitive contract (`test/stage.test.js`), and the platform token contract
-  (`test/platforms.test.js`).
+  the stage primitive contract (`test/stage.test.js`), the platform token contract
+  (`test/platforms.test.js`), the persona dialect contract (`test/dialects.test.js`), and the
+  safety hash builder (`test/safety-hashes.test.js`).
   Run this after changing `mcp-server.js`, `DESIGN.md` tokens, `canon/vwxyz/`, `brand/`, or any fragment.
 - `npm run canon:check`: Runs the persona canon contract on its own.
 - `npm run stage:fragment`: Regenerates `preview/stage-backdrop.html` from `lib/stage.js`.
+- `npm run dialects:fragment`: Regenerates `preview/persona-dialects.html` from `lib/dialects.js`.
+- `npm run safety:scan`: Runs the public-safety scan. `npm run safety:hashes` reads handles on
+  stdin and prints the `SAFETY_SCAN_SHA256_LIST` value (README, "CI secret"). Never put a handle in
+  a command argument, a committed file or a log.
 
 ## `{ASSET_BASE}` resolution
 

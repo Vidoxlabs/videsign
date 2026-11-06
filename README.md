@@ -84,7 +84,11 @@ styled visual catalog of every component (`python3 -m http.server 8000`). The ca
      `ViTokens.Transition.transitionEasingStandardBase.animation(duration: …)`.
    - Python and Textual: `dist/videsign_tokens.py` (`COLORS["persona-accent-violet-base"]`, `token(…)`).
    - Design tools and converters: `dist/tokens.dtcg.json` (DTCG 2025.10).
-6. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
+6. **Persona dialects (ADR-015)**: on an agent surface (chat, persona console, agent panel), load
+   `dist/dialects.css` and set `class="vi-agent" data-persona="xylia"`. Render the reply sections in
+   that seat's `lead` order from `dist/dialects.json` (or `dialects` / `ViDialects` / `DIALECTS`
+   in the TypeScript, Swift and Python outputs). Never apply a dialect to page content.
+7. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
    to your CDN endpoint.
 
 ## Token matrix
@@ -111,6 +115,27 @@ initialization protocol.
 
 See `AGENTS.md` for the full agent initialization protocol and `SKILL.md` for
 architectural decision records.
+
+## CI secret: `SAFETY_SCAN_SHA256_LIST`
+
+CI runs a public-safety scan (`npm run safety:scan`) that blocks private *operator handles* from
+reaching committed files: a personal login or machine name, a private hostname, an internal
+codename. The handles themselves are never stored anywhere in the repository or in CI. CI holds
+only their SHA-256 hashes, in the repository secret `SAFETY_SCAN_SHA256_LIST`; the scan hashes
+every word it reads and fails on a match. In CI the scan **fails closed**: if the secret is missing
+or empty, the job stops, so a misconfigured pipeline can never pass silently.
+
+To set it (a repository admin, once, and again whenever the handle list changes):
+
+1. Write the handles, one per line, in a file **outside** this repository, or keep them in the
+   team vault and export them to such a file. Point `HANDLES_FILE` at it. One word per line:
+   letters, digits, `.`, `_` or `-`. Split a full name into separate lines. (`*safety-handles*`
+   files are git-ignored as a backstop.)
+2. Build the value: `npm run -s safety:hashes < "$HANDLES_FILE"`. It prints only the
+   comma-separated hashes; the handles are never printed.
+3. Optional local check: `SAFETY_SCAN_SHA256_LIST="$(npm run -s safety:hashes < "$HANDLES_FILE")" npm run safety:scan`.
+4. On GitHub: **Settings → Secrets and variables → Actions → New repository secret**. Name
+   `SAFETY_SCAN_SHA256_LIST`, value: the line from step 2. Save, then re-run the failed `validate` job.
 
 ## Brand
 

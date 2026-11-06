@@ -346,6 +346,16 @@ function emitStageArtifacts() {
   return outputs;
 }
 
+/** Persona dialects (ADR-015): the agent-surface stylesheet and the resolved values. */
+function emitDialectArtifacts(tokens) {
+  const { emitDialectCss, resolveDialects } = require('../lib/dialects');
+  const { classify } = require('./lib/token-values');
+  return {
+    'dialects.css': emitDialectCss(),
+    'dialects.json': `${JSON.stringify(resolveDialects(tokens, classify), null, 2)}\n`,
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -370,6 +380,7 @@ function main() {
     'standard.md': standardArtifacts['standard.md'],
     ...emitStageArtifacts(),
     ...require('./generate-platforms').emitPlatformArtifacts(tokens),
+    ...emitDialectArtifacts(tokens),
   };
 
   if (dryRun) {
@@ -407,4 +418,5 @@ module.exports = {
   emitGlassCSS,
   emitCatalogCSS,
   emitStageArtifacts,
+  emitDialectArtifacts,
 };

@@ -12,7 +12,10 @@
     "test": "node --test test/*.test.js",
     "tokens": "node scripts/generate-tokens.js && node scripts/generate-canon-style-pack.js",
     "style-pack": "node scripts/generate-canon-style-pack.js",
-    "stage:fragment": "node scripts/generate-stage-fragment.js"
+    "stage:fragment": "node scripts/generate-stage-fragment.js",
+    "dialects:fragment": "node scripts/generate-dialect-fragment.js",
+    "safety:hashes": "node scripts/safety-hashes.js",
+    "safety:scan": "node scripts/check-public-safety.js"
   },
   "devDependencies": {
     "eslint": "10.13.0",
