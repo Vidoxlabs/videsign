@@ -199,6 +199,26 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > - `typography-fluid-hero-base` (max 5.25rem, emitted `--vi-typography-typography-fluid-hero-base`) is the sanctioned primary-landing-hero scale — one usage per page, page title only.
 > - The 3.5rem ceiling stays binding for `fluid-display`, `fluid-h1`–`fluid-h3` and static `4xl`/`5xl`. Section headings, cards, and prose never consume the hero token.
 
+> [!IMPORTANT]
+>
+> ### Five-bar rule (ADR-013)
+>
+> - Five hard segments, one signature colour each, in canon order: Violet, Wisteria, Xylia, Yarrow, Zinnia. Height `{size.indicator-fivebar-base}` (3px).
+> - Each segment is its own fill. Never a blended gradient, never fewer than five segments, never a reordered set.
+> - Used under the wordmark or a hero headline, along the top of bezelled fact panels, and along the foot of the chat launcher. Decorative: `aria-hidden="true"`.
+> - Reference: `preview/five-bar-rule.html`.
+
+> [!IMPORTANT]
+>
+> ### Chat dock (ADR-013)
+>
+> - A launcher fixed bottom right opens a non-modal dialog (`role="dialog"`, `aria-modal="false"`, labelled by its title). Escape closes it and returns focus to the launcher.
+> - The launcher is at least `{size.action-min-default}`, carries a label, and shows a tracked brand file or the five seat dots, never a drawn or approximated mark. A five-bar rule runs along its foot.
+> - The dialog is a glass shell around a core (ADR-006). Inside: a persona switcher of all five seats (`aria-pressed`), a conversation log (`role="log"`, `aria-live="polite"`, `aria-relevant="additions"`, `aria-label`), solid message cards, action chips, a composer (Enter sends, Shift+Enter adds a line) and a one-line disclosure of how answers are produced.
+> - Seat names stay in `{colors.text-content-primary-base}`. Seat colours mark dots, rings and bars only. A seat's message carries a five-segment marker with that seat lit, so no seat colour appears alone.
+> - The log follows new messages only while the reader is at the bottom; it never scrolls a reader away from what they are reading.
+> - Reference: `preview/chat-dock.html`.
+
 ## Continuous Interaction Standards
 
 Consuming products present sovereign personas and evidence inside static-edge constraints (static builds, zero runtime bindings, strict CSP `script-src 'self'`). Continuity therefore comes from browser-native primitives, never client-framework hydration.
@@ -216,13 +236,13 @@ Consuming products present sovereign personas and evidence inside static-edge co
 
 Crystal glass is the one sanctioned glass material for public product surfaces. It is near-clear, with a bright rim and a top highlight; it dims and softens what is behind it instead of tinting it milky. Tokens: `{effects.glass-crystal-surface-base}`, `{effects.glass-crystal-rim-base}`, `{effects.glass-crystal-highlight-base}`, `{effects.glass-crystal-sheen-base}`, `{effects.glass-crystal-shadow-base}`, `{effects.glass-crystal-backdrop-base}`, `{effects.glass-crystal-core-base}`, and the solid fallback `{effects.glass-crystal-solid-base}`. The generator emits them as `--vi-effects-*` custom properties and as a generated `dist/glass.css` with literal values, because Safari does not resolve custom properties inside `-webkit-backdrop-filter`.
 
-- **Scope.** Glass marks controls and lenses: the floating island navigation, overlays and popovers, the question bar, the persona switcher, and the evidence lens over a field. Never on paragraphs, cards or section containers. Content stays solid and readable.
+- **Scope.** Glass marks controls and lenses: the floating island navigation, overlays and popovers, the question bar, the persona switcher, the evidence lens over a field, and the chat dock dialog (an overlay, ADR-013). Never on paragraphs, cards or section containers. Content stays solid and readable; chat messages are solid cards on the dock's core.
 - **Limits.** At most three glass layers per viewport. Never glass on glass (the lens core is a scrim, not a second blur). Never backdrop blur on scrolling containers. Never animate or transition the blur.
 - **Double bezel.** Glass shells use the outer radius `{spacing.layout-radius-glass-base}` (20px), `{spacing.layout-padding-bezel-base}` (6px) padding, and an inner core at `{spacing.layout-radius-standard-base}` (14px): 20 = 6 + 14, concentric. The rim is an inset box-shadow (not a border box) so the arithmetic holds. Pill shapes use `vi-glass-shell--pill` / `vi-glass-core--pill` so plain-CSS consumers get the full radius without relying on a later Tailwind utility.
-- **Composition.** Clear glass floats over the field, imagery and ambient glows (`{effects.ambient-glow-violet-base}`, `{effects.ambient-glow-teal-base}`, `{effects.ambient-dots-base}`), never directly over body copy. A headline may pass beneath the island while scrolling.
+- **Composition.** Clear glass floats over the field, imagery and the ambient layer, never directly over body copy. The page background is the stage backdrop (ADR-013). The glow tokens (`{effects.ambient-glow-violet-base}`, `{effects.ambient-glow-teal-base}`) and the dot token (`{effects.ambient-dots-base}`) stay for existing consumers; the dot grid is retired for new page backgrounds. A headline may pass beneath the island while scrolling.
 - **Legibility floor.** Text on glass reaches 4.5:1 against the worst backdrop it can pass over, verified by pixel-sampling screenshots, not by the prettiest state. Reading text in the lens sits on the core scrim, which clears 4.5:1 over a fully white backdrop even if the engine does not render the backdrop filter at all (analytic bound in `test/tokens.test.js`).
 - **Text-bearing controls are shell + core.** Any glass control that carries text and can pass over bright imagery (the island navigation, the question bar, the persona switcher) is a `vi-glass-shell` around a `vi-glass-core`, not a single `vi-glass` layer. `brightness(0.5)` turns white into mid grey, so one translucent layer cannot reach 4.5:1 over a white screenshot; the core scrim can. A single `vi-glass` layer is reserved for glass that carries no text.
-- **Ambient field.** The ambient glows and dots sit behind free page text as well as behind glass, so their peak values are bounded by the legibility floor: secondary text clears 4.5:1 over the strongest glow with a dot on top (analytic bound in `test/tokens.test.js`).
+- **Ambient field.** Whatever ambient layer a product paints sits behind free page text as well as behind glass, so its peak values are bounded by the legibility floor. For the legacy glows and dots, secondary text clears 4.5:1 over the strongest glow with a dot on top (analytic bound in `test/tokens.test.js`). For the stage backdrop, the consuming product computes the bound from its own layer alphas (ADR-013 item 1).
 - **Fallbacks.** Under `prefers-reduced-transparency: reduce`, `prefers-contrast: more`, `forced-colors: active`, or when `backdrop-filter` (prefixed or not) is unsupported, the same shapes render as the solid surface with the same rim. Refraction (SVG displacement) is out of scope.
 - **Type.** Eyebrows and labels use `{typography.typography-family-mono-base}` in sentence case with `{typography.typography-tracking-wide-base}` (or widest for micro-labels). Never the Tailwind `uppercase` utility.
 
@@ -262,7 +282,7 @@ To prevent "AI drift" and the generation of generic or hallucinated UI elements,
 >
 > ### 4. Glassmorphism Application
 >
-> - **One material.** Crystal glass (ADR-006) is the only glass. It appears only on controls and lenses: island navigation, overlays and popovers, the question bar, the persona switcher and the evidence lens. Sidebars, cards, section containers and paragraphs stay solid opaque surfaces.
+> - **One material.** Crystal glass (ADR-006) is the only glass. It appears only on controls and lenses: island navigation, overlays and popovers, the question bar, the persona switcher, the evidence lens and the chat dock dialog (ADR-013). Sidebars, cards, section containers and paragraphs stay solid opaque surfaces.
 > - **BAN Legacy Semi-transparent**: Ban legacy `backdrop-blur-*` / `bg-white/*` glass class strings and any other milky overlay. Never glass on glass; at most three glass layers per viewport; never backdrop blur on scrolling containers.
 
 > [!CAUTION]
@@ -333,3 +353,24 @@ values must use semantic tokens. Raw utilities like `gap-2`, `w-64`, `text-sm`,
 > - Secondary text on tertiary is 6.60:1; the earlier warning that it drops below AA was wrong.
 > - Per the measured table above: Violet persona-accent text stays on the primary surface; on secondary and tertiary it is an indicator only. Xylia is never text on any surface and never appears alone. Zinnia drops to indicator-only on tertiary surfaces.
 > - Text on crystal glass is measured over the worst backdrop in the catalog, not from these static pairs (see Crystal glass).
+
+> [!IMPORTANT]
+>
+> ### Non-text contrast (WCAG 1.4.11, ADR-013)
+>
+> Lines and outlines that carry meaning in diagrams (edges, node outlines, axes, map links) need 3:1 against their surface. The hairline separator does not reach it, so it is for layout separators only. Measured (2026-11-06):
+>
+> | Line | on primary | on secondary | on tertiary |
+> | --- | --- | --- | --- |
+> | `{colors.border-graph-line-base}` `#80808A` (dark) | 5.06:1 | 4.77:1 | 4.33:1 |
+> | `{colors.border-separator-primary-base}` `#27272A` (hairline) | **1.33:1 (separators only)** | **1.25:1** | **1.14:1** |
+> | `{colors.border-graph-line-light}` `#64748B` (light theme) | 4.51:1 | 4.76:1 | 4.28:1 |
+> | `{colors.border-separator-primary-light}` `#CBD5E1` (light hairline) | **1.41:1 (separators only)** | **1.48:1** | **1.33:1** |
+>
+> An SVG that contains links is `role="group"` with a label, not `role="img"`, which hides its links from assistive technology.
+
+> [!IMPORTANT]
+>
+> ### Motion that loops (WCAG 2.2.2, ADR-013)
+>
+> Motion that starts on its own, lasts more than five seconds and runs beside content (the stage backdrop, any ambient loop) needs a visible control that pauses it. The control is a real button with `aria-pressed`, it stops every loop on the page, and it holds for the visit. `prefers-reduced-motion: reduce` stops the same loops without the control.

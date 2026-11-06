@@ -370,3 +370,53 @@ test('generators are deterministic', () => {
   assert.equal(emitGlassCSS(TOKENS), emitGlassCSS(parseFrontMatter(DESIGN)));
   assert.equal(emitTailwindConfig(TOKENS), emitTailwindConfig(parseFrontMatter(DESIGN)));
 });
+
+// --- ADR-013: graph line, five-bar rule, ambient loops ------------------
+
+test('graph lines clear 3:1 on every surface; the hairline stays a separator (WCAG 1.4.11)', () => {
+  const pairs = [
+    ['border-graph-line-base', ['surface-background-primary-base', 'surface-background-secondary-base', 'surface-background-tertiary-base']],
+    ['border-graph-line-light', ['surface-background-primary-light', 'surface-background-secondary-light', 'surface-background-tertiary-light']],
+  ];
+  for (const [line, surfaces] of pairs) {
+    for (const surface of surfaces) {
+      const value = contrastRatio(TOKENS.colors[line], TOKENS.colors[surface]);
+      assert.ok(value >= 3, `${line} on ${surface} is ${value.toFixed(2)}:1`);
+    }
+  }
+  // The separator is a hairline on purpose; if it ever reaches 3:1 the two roles should merge.
+  assert.ok(contrastRatio(TOKENS.colors['border-separator-primary-base'], TOKENS.colors['surface-background-primary-base']) < 3);
+  assert.notEqual(TOKENS.colors['border-graph-line-base'], TOKENS.colors['border-separator-primary-base']);
+});
+
+test('the five-bar rule height is a pixel token', () => {
+  assert.equal(TOKENS.size['indicator-fivebar-base'], '3px');
+});
+
+test('ambient loop durations are seconds-long and separate from interaction durations (ADR-013)', () => {
+  const seconds = (v) => (v.endsWith('ms') ? Number.parseFloat(v) / 1000 : Number.parseFloat(v.replace('s', '')));
+  const drift = TOKENS.transition['transition-duration-ambient-drift-base'];
+  const pulse = TOKENS.transition['transition-duration-ambient-pulse-base'];
+  assert.match(drift, /^\d+s$/);
+  assert.match(pulse, /^\d+s$/);
+  // Longer than five seconds is what makes WCAG 2.2.2 apply, so the pause control is required.
+  assert.ok(seconds(drift) > 5 && seconds(pulse) > 5);
+  const interaction = ['fast', 'normal', 'slow', 'entrance'].map((k) => seconds(TOKENS.transition[`transition-duration-${k}-base`]));
+  assert.ok(Math.max(...interaction) < seconds(pulse));
+});
+
+test('the measured non-text contrast table in DESIGN.md matches the tokens', () => {
+  const table = DESIGN.slice(DESIGN.indexOf('### Non-text contrast'), DESIGN.indexOf('### Motion that loops'));
+  const surfaces = {
+    base: ['surface-background-primary-base', 'surface-background-secondary-base', 'surface-background-tertiary-base'],
+    light: ['surface-background-primary-light', 'surface-background-secondary-light', 'surface-background-tertiary-light'],
+  };
+  const rows = [...table.matchAll(/^> \| `\{colors\.([a-z-]+)\}` `(#[0-9A-F]{6})`[^|]*\|(.+)$/gm)];
+  assert.equal(rows.length, 4);
+  for (const [, key, hexValue, rest] of rows) {
+    assert.equal(TOKENS.colors[key], hexValue, key);
+    const measured = [...rest.matchAll(/(\d+\.\d{2}):1/g)].map((m) => m[1]);
+    const expected = surfaces[key.endsWith('-light') ? 'light' : 'base'].map((s) => contrastRatio(hexValue, TOKENS.colors[s]).toFixed(2));
+    assert.deepEqual(measured, expected, key);
+  }
+});

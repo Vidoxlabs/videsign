@@ -13,6 +13,9 @@ const crypto = require('crypto');
 const ROOT = path.join(__dirname, '..');
 const PKG = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf-8'));
 
+/** Canon order of the five signature colours (ADR-011, ADR-013). */
+const SIGNATURE_ORDER = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
+
 function sha256(text) {
   return crypto.createHash('sha256').update(text, 'utf8').digest('hex');
 }
@@ -58,6 +61,7 @@ function buildStandard(tokens, designMd, skillMd) {
           'question bar',
           'persona switcher',
           'evidence lens',
+          'chat dock',
         ],
         neverOn: ['paragraphs', 'cards', 'section containers', 'sidebars'],
         maxLayersPerViewport: 3,
@@ -124,6 +128,48 @@ function buildStandard(tokens, designMd, skillMd) {
         animateOnly: ['transform', 'opacity'],
         zeroBounce: true,
         reducedMotion: 'final state under prefers-reduced-motion: reduce',
+        ambient: {
+          drift: tokens.transition['transition-duration-ambient-drift-base'],
+          pulse: tokens.transition['transition-duration-ambient-pulse-base'],
+          scope: 'ambient loops only (the stage backdrop), never interactions',
+          pauseControl: 'visible control in every product (WCAG 2.2.2)',
+        },
+      },
+      stage: {
+        adr: 'ADR-013',
+        lights: SIGNATURE_ORDER,
+        crown: 'xylia',
+        ringSegmentsCanonCycle: true,
+        oneSignatureColourPerGradient: true,
+        noGridPattern: true,
+        dotGridRetired: true,
+        readingTextBound: 'every layer keeps secondary text at 4.5:1; full strength only behind a scrim',
+        stopsUnder: ['prefers-reduced-motion: reduce', 'pause control'],
+      },
+      fiveBar: {
+        adr: 'ADR-013',
+        order: SIGNATURE_ORDER,
+        height: tokens.size['indicator-fivebar-base'],
+        hardSegments: true,
+        usedOn: ['under the wordmark or a hero headline', 'top of bezelled fact panels', 'foot of the chat launcher'],
+      },
+      graphLine: {
+        adr: 'ADR-013',
+        dark: tokens.colors['border-graph-line-base'],
+        light: tokens.colors['border-graph-line-light'],
+        minContrast: 3,
+        hairlineForSeparatorsOnly: tokens.colors['border-separator-primary-base'],
+      },
+      chatDock: {
+        adr: 'ADR-013',
+        launcher: 'fixed bottom right, at least the touch target, mark or five seat dots plus a label, five-bar foot',
+        dialog: { role: 'dialog', ariaModal: false, closesOn: 'Escape', material: 'glass shell + core' },
+        log: { role: 'log', ariaLive: 'polite', ariaRelevant: 'additions', labelled: true },
+        personaSwitcher: { seats: SIGNATURE_ORDER, pressedState: 'aria-pressed' },
+        seatNamesInPrimaryText: true,
+        composer: 'Enter sends, Shift+Enter adds a line',
+        disclosureRequired: true,
+        neverDrawTheMark: true,
       },
       spacing: {
         rhythmBasePx: 4,
@@ -134,7 +180,11 @@ function buildStandard(tokens, designMd, skillMd) {
       accessibility: {
         minTouchTarget: tokens.size['action-min-default'],
         contrastFloorText: 4.5,
+        contrastFloorNonText: 3,
         personaVioletAccentTextSurfaces: ['primary'],
+        xyliaNeverText: true,
+        xyliaNeverAlone: true,
+        pauseControlForAmbientMotion: true,
       },
       personaAccents: {
         violet: tokens.colors['persona-accent-violet-base'],
@@ -200,6 +250,42 @@ function emitStandardMd(standard) {
     `- Easing standard: ${standard.rules.motion.easing.standard}`,
     `- Easing spring: ${standard.rules.motion.easing.spring}`,
     `- Animate only: ${standard.rules.motion.animateOnly.join(', ')}`,
+    `- Ambient loops: drift ${standard.rules.motion.ambient.drift}, pulse ${standard.rules.motion.ambient.pulse}; ${standard.rules.motion.ambient.scope}`,
+    `- Pause control: ${standard.rules.motion.ambient.pauseControl}`,
+    '',
+    '## Stage backdrop (ADR-013)',
+    '',
+    `- Lights in canon order: ${standard.rules.stage.lights.join(', ')} (crown: ${standard.rules.stage.crown})`,
+    '- One signature colour per gradient; the ring is five single-colour segments in the canon cycle',
+    '- No grid pattern; the dot grid is retired for page backgrounds',
+    `- Reading text: ${standard.rules.stage.readingTextBound}`,
+    `- Stops under: ${standard.rules.stage.stopsUnder.join('; ')}`,
+    '',
+    '## Five-bar rule (ADR-013)',
+    '',
+    `- Order: ${standard.rules.fiveBar.order.join(', ')}`,
+    `- Height: ${standard.rules.fiveBar.height}, hard segments, never a blended gradient`,
+    `- Used on: ${standard.rules.fiveBar.usedOn.join('; ')}`,
+    '',
+    '## Graph line (ADR-013)',
+    '',
+    `- Dark: ${standard.rules.graphLine.dark}; light: ${standard.rules.graphLine.light}`,
+    `- Minimum contrast: ${standard.rules.graphLine.minContrast}:1 (WCAG 1.4.11)`,
+    `- Hairline ${standard.rules.graphLine.hairlineForSeparatorsOnly} is for layout separators only`,
+    '',
+    '## Chat dock (ADR-013)',
+    '',
+    `- Launcher: ${standard.rules.chatDock.launcher}`,
+    `- Dialog: role=${standard.rules.chatDock.dialog.role}, aria-modal=${standard.rules.chatDock.dialog.ariaModal}, closes on ${standard.rules.chatDock.dialog.closesOn}, ${standard.rules.chatDock.dialog.material}`,
+    `- Log: role=${standard.rules.chatDock.log.role}, aria-live=${standard.rules.chatDock.log.ariaLive}, aria-relevant=${standard.rules.chatDock.log.ariaRelevant}, labelled`,
+    `- Composer: ${standard.rules.chatDock.composer}`,
+    '- Seat names stay in the primary text colour; a disclosure line says how answers are produced',
+    '',
+    '## Accessibility',
+    '',
+    `- Touch target: ${standard.rules.accessibility.minTouchTarget}`,
+    `- Text contrast: ${standard.rules.accessibility.contrastFloorText}:1; non-text contrast: ${standard.rules.accessibility.contrastFloorNonText}:1`,
+    '- Xylia is never text and never appears alone',
     '',
     '## Spacing rhythm (ADR-009)',
     '',
@@ -230,6 +316,7 @@ function generateStandardArtifacts(tokens) {
 }
 
 module.exports = {
+  SIGNATURE_ORDER,
   parseAdrIndex,
   buildStandard,
   emitStandardJson,

@@ -24,6 +24,8 @@
  *   - no `animate-pulse` (decorative loop)
  *   - no raw type utilities (`font-medium|bold|semibold`, bare `tracking-*` /
  *     `leading-*`); use typography weight/tracking/leading tokens
+ *   - signature colours (ADR-011, ADR-013): no Xylia text, no Xylia without the
+ *     other four, and no signature colour as a gradient stop (`from-`, `via-`, `to-`)
  */
 
 const fs = require('fs');
@@ -76,6 +78,32 @@ function visibleText(html) {
     .replace(/<!--[\s\S]*?-->/g, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&[a-z0-9#]+;/gi, ' ');
+}
+
+const SIGNATURES = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
+
+/**
+ * Brand v1 signature-colour rules (ADR-011, ADR-013): Xylia is never text and never appears
+ * without the other four, and no gradient stop carries a signature colour, so no gradient can
+ * join two of them.
+ */
+function signatureColourProblems(bare) {
+  const problems = [];
+  const classes = classesOf(bare);
+  const used = new Set();
+  for (const cls of classes) {
+    const base = cls.slice(cls.lastIndexOf(':') + 1);
+    const hit = base.match(/persona-accent-(violet|wisteria|xylia|yarrow|zinnia)-/);
+    if (!hit) continue;
+    used.add(hit[1]);
+    if (/^text-persona-accent-xylia-/.test(base)) problems.push(`Xylia as text "${cls}" (Xylia is never text)`);
+    if (/^(from|via|to)-persona-accent-/.test(base)) problems.push(`signature colour in a gradient stop "${cls}"`);
+  }
+  if (used.has('xylia')) {
+    const missing = SIGNATURES.filter((name) => !used.has(name));
+    if (missing.length > 0) problems.push(`Xylia appears without ${missing.join(', ')} (Xylia never appears alone)`);
+  }
+  return problems;
 }
 
 /** Returns a list of human-readable problems for one fragment. */
@@ -143,6 +171,7 @@ function lintFragment(name, html) {
   if (layers > MAX_GLASS_LAYERS) problems.push(`${layers} glass layers (max ${MAX_GLASS_LAYERS})`);
 
   problems.push(...accentLabelProblems(html));
+  problems.push(...signatureColourProblems(bare));
 
   return problems;
 }

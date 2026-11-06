@@ -126,3 +126,53 @@ test('Violet accent text never sits on the secondary or tertiary surface (ADR-00
     }
   }
 });
+
+// --- ADR-011 / ADR-013 signature colours, five-bar rule and chat dock ---
+
+const CANON = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
+const read = (f) => fs.readFileSync(path.join(PREVIEW, f), 'utf-8').replace(/<!--[\s\S]*?-->/g, '');
+const fiveBars = (html) => [...html.matchAll(/<div aria-hidden="true" class="[^"]*">\s*((?:<span class="[^"]*h-indicator-fivebar-base[^"]*"><\/span>\s*){5})<\/div>/g)]
+  .map((m) => [...m[1].matchAll(/bg-persona-accent-([a-z]+)-base/g)].map((c) => c[1]));
+
+test('the linter enforces the signature-colour rules', () => {
+  const alone = lintFragment('a.html', '<span class="bg-persona-accent-xylia-base"></span>');
+  assert.ok(alone.some((p) => p.includes('Xylia appears without')), alone.join(' | '));
+  const text = lintFragment('b.html', `<p class="text-persona-accent-xylia-base">x</p>${CANON.map((c) => `<i class="bg-persona-accent-${c}-base"></i>`).join('')}`);
+  assert.ok(text.some((p) => p.includes('Xylia as text')), text.join(' | '));
+  const gradient = lintFragment('c.html', '<div class="bg-gradient-to-r from-persona-accent-violet-base to-persona-accent-zinnia-base"></div>');
+  assert.equal(gradient.filter((p) => p.includes('gradient stop')).length, 2, gradient.join(' | '));
+  const hover = lintFragment('d.html', '<span class="hover:text-persona-accent-xylia-base"></span>');
+  assert.ok(hover.some((p) => p.includes('Xylia as text')), hover.join(' | '));
+  const together = lintFragment('e.html', CANON.map((c) => `<i class="bg-persona-accent-${c}-base"></i>`).join(''));
+  assert.deepEqual(together.filter((p) => /Xylia|gradient/.test(p)), []);
+});
+
+test('the five-bar rule is five hard segments in canon order, hidden from assistive tech', () => {
+  const bars = fiveBars(read('five-bar-rule.html'));
+  assert.equal(bars.length, 1);
+  assert.deepEqual(bars[0], CANON);
+  assert.doesNotMatch(read('five-bar-rule.html'), /bg-gradient|from-|via-/);
+});
+
+test('the chat dock fragment carries the ADR-013 dialog, log and launcher contract', () => {
+  const html = read('chat-dock.html');
+  assert.match(html, /role="dialog" aria-modal="false" aria-labelledby="chat-dock-title"/);
+  assert.match(html, /role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation"/);
+  assert.match(html, /role="group" aria-label="Choose a guide"/);
+  const pressed = [...html.matchAll(/aria-pressed="(true|false)"[^>]*>(?:<span[^>]*><\/span>)?([A-Z][a-z]+)<\/button>/g)];
+  assert.deepEqual(pressed.map((m) => m[2].toLowerCase()), CANON);
+  assert.equal(pressed.filter((m) => m[1] === 'true').length, 1);
+  // Seat names stay in a text token, never a persona colour.
+  assert.doesNotMatch(html, /text-persona-accent-/);
+  // A disclosure line says how answers are produced.
+  assert.match(html, /Scripted guides\. Answers quote published pages and link to them\./);
+  // The launcher never draws a mark: no inline SVG or image, and a five-bar foot in canon order follows it.
+  assert.doesNotMatch(html, /<svg|<img|<path/);
+  assert.match(html, /aria-controls="chat-dock"/);
+  const bars = fiveBars(html);
+  assert.deepEqual(bars.at(-1), CANON);
+  // Every interactive control meets the touch target floor.
+  for (const m of html.matchAll(/<(button|textarea)\b[^>]*class="([^"]*)"/g)) {
+    assert.match(m[2], /h-action-(min|wide)-default/, m[0].slice(0, 80));
+  }
+});
