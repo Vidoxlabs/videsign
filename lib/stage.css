@@ -1,0 +1,237 @@
+/* Stage backdrop primitive (ADR-013 item 1). Pair with lib/stage.js, which renders the SVG and
+   sets each layer's opacity from its alpha table. This sheet sets colour, stroke and motion from
+   emitted tokens only (dist/tokens.css). Transform and opacity only. Motion stops under
+   prefers-reduced-motion and under the product's pause control, which sets
+   data-motion="paused" on the root element (WCAG 2.2.2). */
+
+.stage {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+}
+
+/* Gradient stops: one signature colour per gradient. */
+.stage-stop--violet {
+  stop-color: var(--vi-colors-persona-accent-violet-base);
+}
+
+.stage-stop--wisteria {
+  stop-color: var(--vi-colors-persona-accent-wisteria-base);
+}
+
+.stage-stop--xylia {
+  stop-color: var(--vi-colors-persona-accent-xylia-base);
+}
+
+.stage-stop--yarrow {
+  stop-color: var(--vi-colors-persona-accent-yarrow-base);
+}
+
+.stage-stop--zinnia {
+  stop-color: var(--vi-colors-persona-accent-zinnia-base);
+}
+
+/* Small persona marks are tints (mixed with transparent), never a solid signature paint. */
+.stage-tint--violet {
+  fill: color-mix(in srgb, var(--vi-colors-persona-accent-violet-base) 92%, transparent);
+}
+
+.stage-tint--wisteria {
+  fill: color-mix(in srgb, var(--vi-colors-persona-accent-wisteria-base) 92%, transparent);
+}
+
+.stage-tint--xylia {
+  fill: color-mix(in srgb, var(--vi-colors-persona-accent-xylia-base) 92%, transparent);
+}
+
+.stage-tint--yarrow {
+  fill: color-mix(in srgb, var(--vi-colors-persona-accent-yarrow-base) 92%, transparent);
+}
+
+.stage-tint--zinnia {
+  fill: color-mix(in srgb, var(--vi-colors-persona-accent-zinnia-base) 92%, transparent);
+}
+
+.stage-paint--light {
+  fill: var(--vi-colors-text-content-primary-base);
+}
+
+.stage-line--light {
+  stroke: var(--vi-colors-text-content-primary-base);
+}
+
+.stage-line--violet {
+  stroke: var(--vi-colors-persona-accent-violet-base);
+}
+
+.stage-line--wisteria {
+  stroke: var(--vi-colors-persona-accent-wisteria-base);
+}
+
+.stage-line--xylia {
+  stroke: var(--vi-colors-persona-accent-xylia-base);
+}
+
+.stage-line--yarrow {
+  stroke: var(--vi-colors-persona-accent-yarrow-base);
+}
+
+.stage-line--zinnia {
+  stroke: var(--vi-colors-persona-accent-zinnia-base);
+}
+
+.stage__arc,
+.stage__inner-ring,
+.stage__ripple,
+.stage__segment {
+  fill: none;
+}
+
+.stage__arc,
+.stage__inner-ring,
+.stage__sheet {
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.stage__ripple {
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.stage__ring .stage__segment {
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.stage__ring-glow .stage__segment {
+  stroke-width: 14;
+}
+
+/* ---------- Motion ---------- */
+
+.stage__lights {
+  transform-box: view-box;
+  transform-origin: 50% 106.67%;
+  animation: stage-sway var(--vi-transition-transition-duration-ambient-drift-base) var(--vi-transition-transition-easing-standard-base) infinite alternate;
+}
+
+.stage__light {
+  animation: stage-breathe var(--vi-transition-transition-duration-ambient-pulse-base) var(--vi-transition-transition-easing-standard-base) infinite alternate;
+}
+
+.stage__light[data-index="1"],
+.stage__ring .stage__segment[data-index="1"] {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) * -0.2);
+}
+
+.stage__light[data-index="2"],
+.stage__ring .stage__segment[data-index="2"] {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) * -0.4);
+}
+
+.stage__light[data-index="3"],
+.stage__ring .stage__segment[data-index="3"] {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) * -0.6);
+}
+
+.stage__light[data-index="4"],
+.stage__ring .stage__segment[data-index="4"] {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) * -0.8);
+}
+
+.stage__ring .stage__segment {
+  animation: stage-breathe var(--vi-transition-transition-duration-ambient-pulse-base) var(--vi-transition-transition-easing-standard-base) infinite alternate;
+}
+
+.stage__spark {
+  animation: stage-breathe calc(var(--vi-transition-transition-duration-ambient-pulse-base) * 1.5) var(--vi-transition-transition-easing-standard-base) infinite alternate;
+}
+
+.stage__spark:nth-child(even) {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) * -0.7);
+}
+
+.stage__beam {
+  animation: stage-breathe calc(var(--vi-transition-transition-duration-ambient-pulse-base) * 0.75) var(--vi-transition-transition-easing-standard-base) infinite alternate;
+}
+
+.stage__ripple {
+  transform-box: view-box;
+  transform-origin: 50% 87.78%;
+  opacity: 0;
+  animation: stage-ripple calc(var(--vi-transition-transition-duration-ambient-pulse-base) * 1.5) linear infinite;
+}
+
+.stage__ripple[data-index="1"] {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) * -0.5);
+}
+
+.stage__ripple[data-index="2"] {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) * -1);
+}
+
+@keyframes stage-sway {
+  from {
+    transform: rotate(-3deg);
+  }
+  to {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes stage-breathe {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes stage-ripple {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* The visitor's pause control (WCAG 2.2.2) and the system preference both stop every loop. */
+:root[data-motion="paused"] .stage *,
+:root[data-motion="paused"] .stage {
+  animation-play-state: paused;
+}
+
+/* Narrow screens scale the stage up behind more of the text; the ambient copy goes quieter.
+   0.16 equals STAGE_NARROW_AMBIENT_OPACITY in lib/stage.js (test/stage.test.js). */
+@media (max-width: 767px) {
+  .stage--ambient {
+    opacity: 0.16;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage *,
+  .stage {
+    animation: none;
+  }
+
+  .stage__ripple {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .stage {
+    display: none;
+  }
+}

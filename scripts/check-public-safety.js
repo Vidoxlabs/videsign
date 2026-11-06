@@ -2,7 +2,7 @@
 
 /**
  * Fail-closed public-safety scan for canon, docs, previews, workflows,
- * the MCP server, scripts, tests and the asset pipeline directory.
+ * the MCP server, scripts, shared primitives (lib), tests and the asset pipeline directory.
  * Exit 0 only when every target exists,
  * every file is non-empty, every JSON file parses, and no pattern hits.
  *
@@ -55,6 +55,7 @@ const DEFAULT_TARGETS = [
   '.github',
   'brand',
   'scripts',
+  'lib',
   'test',
   'pipeline',
 ];

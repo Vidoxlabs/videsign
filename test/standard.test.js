@@ -148,3 +148,63 @@ test('standard digests DESIGN.md and SKILL.md by SHA-256 and reads version from 
   assert.equal(standard.designBodyHashSeed, undefined);
   assert.equal(standard.skillBodyHashSeed, undefined);
 });
+
+test('standard carries the ADR-013 rules and they match the tokens', () => {
+  const { standard } = generateStandardArtifacts(TOKENS);
+  const { rules } = standard;
+  const canon = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-013' && a.status.startsWith('Proposed')));
+  assert.ok(rules.glass.scope.includes('chat dock'));
+  assert.equal(rules.motion.ambient.drift, TOKENS.transition['transition-duration-ambient-drift-base']);
+  assert.equal(rules.motion.ambient.pulse, TOKENS.transition['transition-duration-ambient-pulse-base']);
+  assert.deepEqual(rules.stage.lights, canon);
+  assert.equal(rules.stage.crown, canon[2]);
+  assert.equal(rules.stage.dotGridRetired, true);
+  assert.deepEqual(rules.fiveBar.order, canon);
+  assert.equal(rules.fiveBar.height, TOKENS.size['indicator-fivebar-base']);
+  assert.equal(rules.graphLine.dark, TOKENS.colors['border-graph-line-base']);
+  assert.equal(rules.graphLine.light, TOKENS.colors['border-graph-line-light']);
+  assert.equal(rules.graphLine.minContrast, rules.accessibility.contrastFloorNonText);
+  assert.deepEqual(rules.chatDock.log, { role: 'log', ariaLive: 'polite', ariaRelevant: 'additions', labelled: true });
+  assert.equal(rules.chatDock.dialog.ariaModal, false);
+  assert.deepEqual(rules.chatDock.personaSwitcher.seats, canon);
+  assert.equal(rules.accessibility.xyliaNeverText, true);
+  assert.equal(rules.accessibility.xyliaNeverAlone, true);
+});
+
+test('ADR-013 rules in the standard are stated in DESIGN.md prose (parity guard)', () => {
+  const prose = DESIGN.toLowerCase();
+  for (const phrase of [
+    'five-bar rule (adr-013)',
+    'chat dock (adr-013)',
+    'non-text contrast (wcag 1.4.11, adr-013)',
+    'motion that loops (wcag 2.2.2, adr-013)',
+    'role="log"',
+    'aria-live="polite"',
+    'aria-modal="false"',
+    'shift+enter',
+    'escape closes',
+    'the dot grid is retired',
+    '{size.indicator-fivebar-base}',
+    '{colors.border-graph-line-base}',
+    '{colors.border-graph-line-light}',
+    '{transition.transition-duration-ambient-drift-base}',
+    '{transition.transition-duration-ambient-pulse-base}',
+  ]) {
+    assert.ok(prose.includes(phrase), `DESIGN.md is missing: ${phrase}`);
+  }
+  const md = generateStandardArtifacts(TOKENS)['standard.md'];
+  assert.ok(prose.includes('lib/stage.js'), 'DESIGN.md must point at the stage primitive');
+  for (const heading of ['## Stage backdrop (ADR-013)', '## Five-bar rule (ADR-013)', '## Graph line (ADR-013)', '## Chat dock (ADR-013)', '## Accessibility']) {
+    assert.ok(md.includes(heading), `standard.md is missing ${heading}`);
+  }
+});
+
+test('the standard carries the stage primitive values from lib/stage.js', () => {
+  const stage = require('../lib/stage');
+  const { rules } = generateStandardArtifacts(TOKENS).standard;
+  assert.equal(rules.stage.primitive, 'lib/stage.js');
+  assert.equal(rules.stage.ambientOpacity, stage.STAGE_VARIANT_OPACITY.ambient);
+  assert.equal(rules.stage.narrowAmbientOpacity, stage.STAGE_NARROW_AMBIENT_OPACITY);
+  assert.equal(rules.stage.heroTextScrim, stage.STAGE_TEXT_SCRIM);
+});

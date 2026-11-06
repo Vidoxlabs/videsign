@@ -7,8 +7,9 @@
  * fragments as read-only resources to AI agents in product repositories.
  * Fragments are auto-discovered at startup — no manual resource list to maintain.
  *
- * Also provides a `resolve_token` tool so agents can query individual token
- * values without parsing the entire DESIGN.md.
+ * Tools: `resolve_token` (one token value), `style_pack` (the canon style pack),
+ * `check_contrast` (WCAG ratio of two colours or tokens) and `stage_backdrop` (the ADR-013 stage
+ * SVG with its contrast report). All tools compute or read; none writes.
  */
 
 const { Server } = require('@modelcontextprotocol/sdk/server');
@@ -26,6 +27,21 @@ const path = require('path');
 const { parseFrontMatter } = require('./scripts/generate-tokens');
 const DESIGN_CONTENT = fs.readFileSync(path.join(__dirname, 'DESIGN.md'), 'utf-8');
 const TOKENS = parseFrontMatter(DESIGN_CONTENT);
+const { contrastRatio, wcagLevels } = require('./lib/contrast');
+const stage = require('./lib/stage');
+const BRAND_TOKENS = JSON.parse(fs.readFileSync(path.join(__dirname, 'brand', 'tokens.json'), 'utf-8'));
+
+/** A `#RRGGBB` literal, or a `colors.<key>` token path resolved from DESIGN.md. */
+function resolveColour(input) {
+  const value = String(input ?? '').trim();
+  if (/^#[0-9a-f]{6}$/i.test(value) || /^#[0-9a-f]{3}$/i.test(value)) return value.toUpperCase();
+  const match = /^colors\.([a-z0-9-]+)$/.exec(value);
+  const token = match ? TOKENS.colors[match[1]] : undefined;
+  if (typeof token === 'string' && /^#[0-9a-f]{6}$/i.test(token)) return token;
+  return null;
+}
+
+const textResult = (text, isError = false) => ({ content: [{ type: 'text', text }], ...(isError ? { isError: true } : {}) });
 
 // --- Resource discovery -------------------------------------------------
 
@@ -248,6 +264,31 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
       {
+        name: 'check_contrast',
+        description: 'WCAG 2 contrast ratio between two opaque colours. Each argument is a #RRGGBB literal or a colors.<key> token path (e.g., "colors.text-content-secondary-base"). Returns the ratio and whether it clears AA text (4.5:1), large text (3:1) and non-text (3:1).',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            foreground: { type: 'string', description: 'Text or mark colour: #RRGGBB or colors.<key>.' },
+            background: { type: 'string', description: 'Surface colour: #RRGGBB or colors.<key>.' },
+          },
+          required: ['foreground', 'background'],
+        },
+      },
+      {
+        name: 'stage_backdrop',
+        description: 'Renders the ADR-013 stage backdrop SVG (lib/stage.js) for a variant and reports, per painted layer, the worst secondary-text contrast over the page field (system primary surface and brand dark field). Style it with dist/stage.css. Use opacity to test a product-specific ambient strength and scrim for hero copy.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            variant: { type: 'string', enum: Object.keys(stage.STAGE_VARIANT_OPACITY), description: 'ambient (behind reading text) or hero (behind a scrim).' },
+            opacity: { type: 'number', minimum: 0, maximum: 1, description: 'Override the variant opacity.' },
+            scrim: { type: 'number', minimum: 0, maximum: 1, description: 'Share of the field mixed back over the stage behind text (hero copy uses STAGE_TEXT_SCRIM).' },
+            includeSvg: { type: 'boolean', description: 'Include the SVG markup (default true).' },
+          },
+        },
+      },
+      {
         name: 'style_pack',
         description: 'Returns the canon style pack (single deterministic JSON): persona accents, character canon palette + signals via canon/vwxyz/palette.json, naming/asset-id/review-threshold rules, motion budget, negative guardrails, burned-run pointers and the executable workflow. Use this for one-call style retrieval instead of reading multiple canon files.',
         inputSchema: { type: 'object', properties: {} },
@@ -260,6 +301,40 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
+  if (name === 'check_contrast') {
+    const foreground = resolveColour(args?.foreground);
+    const background = resolveColour(args?.background);
+    if (!foreground || !background) {
+      return textResult('Error: "foreground" and "background" must each be #RRGGBB or a colors.<key> token with a hex value.', true);
+    }
+    const ratio = contrastRatio(foreground, background);
+    return textResult(JSON.stringify({ foreground, background, ratio: Math.round(ratio * 100) / 100, aa: wcagLevels(ratio) }, null, 2));
+  }
+  if (name === 'stage_backdrop') {
+    const variant = args?.variant ?? 'ambient';
+    if (!(variant in stage.STAGE_VARIANT_OPACITY)) {
+      return textResult(`Error: variant must be one of ${Object.keys(stage.STAGE_VARIANT_OPACITY).join(', ')}.`, true);
+    }
+    for (const key of ['opacity', 'scrim']) {
+      const value = args?.[key];
+      if (value !== undefined && !(typeof value === 'number' && value >= 0 && value <= 1)) {
+        return textResult(`Error: "${key}" must be a number from 0 to 1.`, true);
+      }
+    }
+    const opacity = args?.opacity ?? stage.STAGE_VARIANT_OPACITY[variant];
+    const scrim = args?.scrim ?? 0;
+    const palette = stage.stagePaletteFromTokens(TOKENS, { extraFields: [BRAND_TOKENS['brand-field-dark']] });
+    const report = stage.stageContrastReport({ palette, opacity, scrim });
+    const body = {
+      variant,
+      report,
+      maxSafeOpacity: stage.maxSafeStageOpacity({ palette, scrim }),
+      stylesheet: 'dist/stage.css',
+      ...(args?.includeSvg === false ? {} : { svg: stage.renderStageSvg({ variant, opacity }) }),
+    };
+    // A failing report is a valid answer (the caller asked "would this pass?"), not a tool error.
+    return textResult(JSON.stringify(body, null, 2));
+  }
   if (name === 'style_pack') {
     const packPath = path.join(__dirname, 'dist', 'canon-style-pack.json');
     if (!fs.existsSync(packPath)) {

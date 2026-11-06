@@ -7,8 +7,7 @@ const {parseFrontMatter, emitThemeCSS, emitTailwindConfig} = require('../scripts
 const {accentLabelProblems, lintFragment} = require('../scripts/lint-preview');
 const root = path.join(__dirname, '..');
 const tokens = parseFrontMatter(fs.readFileSync(path.join(root, 'DESIGN.md'), 'utf8'));
-const luminance = (hex) => hex.match(/[a-f\d]{2}/gi).map(v => parseInt(v,16)/255).map(v => v <= .04045 ? v/12.92 : ((v+.055)/1.055)**2.4).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);
-const contrast = (a,b) => { const x=luminance(a),y=luminance(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };
+const {contrastRatio: contrast} = require('../lib/contrast');
 test('both themes support readable text on every reading surface', () => {
   for (const suffix of ['base','light']) for (const surface of ['primary','secondary','tertiary']) for (const text of ['primary','secondary']) {
     const ratio=contrast(tokens.colors[`text-content-${text}-${suffix}`],tokens.colors[`surface-background-${surface}-${suffix}`]);
