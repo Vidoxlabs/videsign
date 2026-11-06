@@ -209,6 +209,21 @@ Agents MUST NOT generate the following boilerplate or generic patterns:
 
 Light glass uses the canonical solid light surface and rim, with blur disabled. Forced colors uses Canvas/CanvasText and the same geometry. Dark crystal defaults remain unchanged. Existing consumers importing only tokens/glass keep their current behavior; themes.css is an explicit opt-in. This decision does not ratify ADR-010/011 or alter character/brand artwork.
 
+## ADR-014: One token source, native outputs for every platform
+
+**Status**: Proposed (awaiting owner ratification).
+
+**Context**: Vidoxlabs ships on several platforms: static web (vidoxlabs.dev), React web apps, a native macOS app (ViApp, SwiftUI) and Python terminal UIs (the CLI cockpit). Only the web products consumed videsign, as copied CSS pinned to a commit. The others restated colours by hand and drifted: on 2026-11-06 the terminal UI palette carried the retired violet `#7c3aed` and a secondary text colour of `#8e8e93` instead of `#A1A1AA`, and ViApp used system purple and indigo instead of the persona accents.
+
+**Decision**:
+
+1.  `DESIGN.md` stays the only source. `npm run tokens` also writes `dist/tokens.ts` (typed raw values, CSS variable names, `token()`), `dist/ViTokens.swift` (SwiftUI `Color`, points, seconds, easing curves), `dist/videsign_tokens.py` (read-only mappings for Python and Textual) and `dist/tokens.dtcg.json` (W3C Design Tokens Community Group format 2025.10).
+2.  Every value is read once by `scripts/lib/token-values.js`, so no platform converts a value differently. Units: 1px = 1pt, 1rem = 16pt, durations in seconds.
+3.  Values a platform cannot express are never approximated. Shadows, gradients and backdrop filters stay CSS-only and each output lists them. DTCG has no type for `em` or `clamp()`, so those are listed under `$extensions` rather than mistyped; native outputs carry `em` as a multiplier and `clamp()` as its min and max.
+4.  Products consume the output for their platform and never restate a token value. A product that needs a value that is not in the matrix adds it to `DESIGN.md` first.
+
+**Consequences**: `test/platforms.test.js` executes the TypeScript and Python outputs and checks every converted value against `DESIGN.md`; the Swift output is checked structurally because no Swift toolchain runs in CI. The generated standard lists the outputs under `meta.platformOutputs`, and the MCP server serves them as resources. Distribution (versioned releases, a shared sync command) is a separate decision.
+
 ## ADR-013: Stage backdrop, five-bar rule, graph line and chat dock
 
 **Status**: Proposed (awaiting owner ratification). First consumer: vidoxlabs.dev ADR 0041 and ADR 0042. Amends ADR-001 item 3 and ADR-006 item 4 (glass scope gains the chat dock dialog).

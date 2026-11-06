@@ -26,6 +26,7 @@ videsign/
 ├── scripts/
 │   ├── generate-tokens.js        Token pipeline: DESIGN.md YAML → Tailwind config, CSS vars, JSON, themes, glass.css, catalog.css
 │   ├── generate-standard.js      Agent standard: dist/standard.json and dist/standard.md (rules + ADR index)
+│   ├── generate-platforms.js     dist/tokens.ts, ViTokens.swift, videsign_tokens.py, tokens.dtcg.json (ADR-014)
 │   ├── generate-canon-style-pack.js  dist/canon-style-pack.json: one-call canon and style reference
 │   ├── generate-stage-fragment.js    preview/stage-backdrop.html from lib/stage.js
 │   ├── lint-preview.js           Static checks for preview/ fragments
@@ -48,7 +49,7 @@ tokens stay in `DESIGN.md`. Persona images will be served from `{ASSET_BASE}/vi/
 
 ```bash
 npm install
-npm run tokens     # Generate Tailwind config, CSS vars, JSON, the agent standard and the style pack
+npm run tokens     # Generate CSS, Tailwind, TypeScript, Swift, Python and DTCG tokens, the standard and the style pack
 npm run mcp        # Start the MCP server on stdio
 npm run lint       # Validate against no-arbitrary-value rule
 npm test           # Smoke-test the MCP server, tokens, previews and canon
@@ -77,7 +78,13 @@ styled visual catalog of every component (`python3 -m http.server 8000`). The ca
    renders the ADR-013 backdrop as an SVG string (or inline `dist/stage-ambient.svg` /
    `dist/stage-hero.svg`). Import `dist/stage.css` with `dist/tokens.css`. Your pause
    control sets `data-motion="paused"` on the root element.
-5. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
+5. **Other platforms (ADR-014)**: use the generated output for your platform, never a hand copy.
+   - TypeScript: `dist/tokens.ts` (`tokens`, `cssVar`, `token("colors.persona-accent-violet-base")`).
+   - SwiftUI: add `dist/ViTokens.swift` to the target; `ViTokens.Colors.personaAccentVioletBase`,
+     `ViTokens.Transition.transitionEasingStandardBase.animation(duration: …)`.
+   - Python and Textual: `dist/videsign_tokens.py` (`COLORS["persona-accent-violet-base"]`, `token(…)`).
+   - Design tools and converters: `dist/tokens.dtcg.json` (DTCG 2025.10).
+6. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
    to your CDN endpoint.
 
 ## Token matrix

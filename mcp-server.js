@@ -115,6 +115,11 @@ const STANDARD_RESOURCES = [
     mimeType: 'text/markdown',
     description: 'Human-readable agent standard generated alongside standard.json.',
   },
+  // Platform token outputs (ADR-014): one per Vidoxlabs platform, all from DESIGN.md.
+  { file: 'dist/tokens.ts', name: 'Tokens for TypeScript', mimeType: 'text/plain', description: 'Typed raw values, CSS variable names and a token() lookup for web apps.' },
+  { file: 'dist/ViTokens.swift', name: 'Tokens for SwiftUI', mimeType: 'text/plain', description: 'Colours, points, seconds and easing curves for Apple platforms.' },
+  { file: 'dist/videsign_tokens.py', name: 'Tokens for Python', mimeType: 'text/plain', description: 'Read-only mappings for Textual and other Python UIs.' },
+  { file: 'dist/tokens.dtcg.json', name: 'Tokens in DTCG 2025.10 format', mimeType: 'application/json', description: 'W3C Design Tokens Community Group format for design tools and converters.' },
 ];
 
 /** Title-case a kebab-case filename into a human-readable resource name. */

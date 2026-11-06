@@ -369,6 +369,7 @@ function main() {
     'standard.json': standardArtifacts['standard.json'],
     'standard.md': standardArtifacts['standard.md'],
     ...emitStageArtifacts(),
+    ...require('./generate-platforms').emitPlatformArtifacts(tokens),
   };
 
   if (dryRun) {

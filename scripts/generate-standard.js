@@ -51,6 +51,14 @@ function buildStandard(tokens, designMd, skillMd) {
       canonicalProvenance: 'Vidoxlabs/videsign',
       authorityFiles: ['DESIGN.md', 'SKILL.md'],
       generatedBy: 'scripts/generate-standard.js',
+      platformOutputs: {
+        css: ['dist/tokens.css', 'dist/themes.css', 'dist/glass.css', 'dist/stage.css'],
+        tailwind: 'dist/tailwind.config.js',
+        typescript: 'dist/tokens.ts',
+        swift: 'dist/ViTokens.swift',
+        python: 'dist/videsign_tokens.py',
+        dtcg: 'dist/tokens.dtcg.json',
+      },
     },
     tokens,
     rules: {
@@ -225,6 +233,7 @@ function emitStandardMd(standard) {
     `- Design system: ${standard.meta.designSystem}`,
     `- Version: ${standard.meta.version}`,
     `- Authority: ${standard.meta.authorityFiles.join(', ')}`,
+    `- Platform outputs (ADR-014): ${Object.entries(standard.meta.platformOutputs).map(([k, v]) => `${k} ${[].concat(v).join(' + ')}`).join('; ')}`,
     '',
     '## Glass',
     '',
