@@ -6,7 +6,8 @@
   colour and only the dots carry seat colours. Messages are solid cards. A seat's
   message carries a five-segment marker with that seat lit, so no seat colour appears
   alone. The conversation is a labelled polite log; Enter sends and Shift+Enter adds a
-  line. The launcher shows the five seat dots, never a drawn or approximated mark;
+  line. The launcher shows the five seat dots, never a drawn or approximated mark,
+  and carries the five-bar rule along its foot;
   products reference the tracked brand file instead. Example text describes the
   component, not a product claim.
 -->
@@ -56,14 +57,23 @@
       <p class="px-layout-padding-medium-base pb-layout-padding-small-base font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Scripted guides. Answers quote published pages and link to them.</p>
     </div>
   </div>
-  <button type="button" aria-expanded="true" aria-controls="chat-dock" aria-label="Chat with the guides" class="relative inline-flex items-center gap-gap-compact-default h-action-wide-default pl-inset-compact-default pr-layout-padding-medium-base bg-surface-background-secondary-base border border-surface-accent-violet-base rounded-layout-radius-full-base font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">
-    <span aria-hidden="true" class="inline-flex items-center gap-gap-dense-default">
-      <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>
-      <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span>
-      <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span>
-      <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span>
-      <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span>
-    </span>
-    <span aria-hidden="true">Chat</span>
-  </button>
+  <div class="flex flex-col items-stretch gap-gap-dense-default">
+    <button type="button" aria-expanded="true" aria-controls="chat-dock" aria-label="Chat with the guides" class="relative inline-flex items-center gap-gap-compact-default h-action-wide-default pl-inset-compact-default pr-layout-padding-medium-base bg-surface-background-secondary-base border border-surface-accent-violet-base rounded-layout-radius-full-base font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">
+      <span aria-hidden="true" class="inline-flex items-center gap-gap-dense-default">
+        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>
+        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span>
+        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span>
+        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span>
+        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span>
+      </span>
+      <span aria-hidden="true">Chat</span>
+    </button>
+    <div aria-hidden="true" class="flex gap-gap-dense-default px-layout-padding-medium-base">
+      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>
+      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span>
+      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span>
+      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span>
+      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span>
+    </div>
+  </div>
 </div>
