@@ -15,6 +15,10 @@ videsign/
 ├── AGENTS.md        Engineering governance and agent initialization protocol
 ├── canon/
 │   └── vwxyz/       VWXYZ character canon v1: palette, vocabulary, schema, checklist
+├── lib/
+│   ├── contrast.js  WCAG contrast and alpha compositing, shared by tests, primitives and MCP
+│   ├── stage.js     Stage backdrop primitive: geometry, SVG renderer, contrast report (ADR-013)
+│   └── stage.css    Stage colour and motion from emitted tokens
 ├── preview/         Pure, flat, state-free HTML component fragments + layout compositions
 ├── preview/index.html  Visual catalog (open in a browser)
 ├── brand/           Brand v1 masters (text-only SVG) and MANIFEST.json digests (ADR-011)
@@ -23,12 +27,13 @@ videsign/
 │   ├── generate-tokens.js        Token pipeline: DESIGN.md YAML → Tailwind config, CSS vars, JSON, themes, glass.css, catalog.css
 │   ├── generate-standard.js      Agent standard: dist/standard.json and dist/standard.md (rules + ADR index)
 │   ├── generate-canon-style-pack.js  dist/canon-style-pack.json: one-call canon and style reference
+│   ├── generate-stage-fragment.js    preview/stage-backdrop.html from lib/stage.js
 │   ├── lint-preview.js           Static checks for preview/ fragments
 │   ├── check-brand-svg.js        Brand master checks
 │   ├── check-public-safety.js    Fail-closed public-safety scan (CI)
 │   └── canon-tool.js             VWXYZ candidate validator and sidecar generator
 ├── test/            node --test contracts: tokens, themes, preview, standard, brand, canon, MCP
-├── mcp-server.js    Read-only MCP server: docs, canon, standard, style pack, fragments, resolve_token tool
+├── mcp-server.js    Read-only MCP server: docs, canon, standard, style pack, fragments; tools resolve_token, style_pack, check_contrast, stage_backdrop
 ├── assets/          Local-only design images (gitignored, never committed)
 ├── dist/            Generated artifacts (gitignored, run `npm run tokens` to regenerate)
 ├── eslint.config.js AST validation: enforces no-arbitrary-value rule
@@ -68,7 +73,11 @@ styled visual catalog of every component (`python3 -m http.server 8000`). The ca
    `dist/standard.json` is the machine-readable rule set (glass, type, motion, stage
    backdrop, five-bar rule, graph line, chat dock, accessibility) with the ADR index.
    Sync it into a product with the product's own token sync script, pinned to a videsign SHA.
-4. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
+4. **Stage backdrop**: `const { renderStageSvg, stageContrastReport } = require('@vidoxlabs/videsign/lib/stage.js')`
+   renders the ADR-013 backdrop as an SVG string (or inline `dist/stage-ambient.svg` /
+   `dist/stage-hero.svg`). Import `dist/stage.css` with `dist/tokens.css`. Your pause
+   control sets `data-motion="paused"` on the root element.
+5. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
    to your CDN endpoint.
 
 ## Token matrix

@@ -194,7 +194,17 @@ test('ADR-013 rules in the standard are stated in DESIGN.md prose (parity guard)
     assert.ok(prose.includes(phrase), `DESIGN.md is missing: ${phrase}`);
   }
   const md = generateStandardArtifacts(TOKENS)['standard.md'];
+  assert.ok(prose.includes('lib/stage.js'), 'DESIGN.md must point at the stage primitive');
   for (const heading of ['## Stage backdrop (ADR-013)', '## Five-bar rule (ADR-013)', '## Graph line (ADR-013)', '## Chat dock (ADR-013)', '## Accessibility']) {
     assert.ok(md.includes(heading), `standard.md is missing ${heading}`);
   }
+});
+
+test('the standard carries the stage primitive values from lib/stage.js', () => {
+  const stage = require('../lib/stage');
+  const { rules } = generateStandardArtifacts(TOKENS).standard;
+  assert.equal(rules.stage.primitive, 'lib/stage.js');
+  assert.equal(rules.stage.ambientOpacity, stage.STAGE_VARIANT_OPACITY.ambient);
+  assert.equal(rules.stage.narrowAmbientOpacity, stage.STAGE_NARROW_AMBIENT_OPACITY);
+  assert.equal(rules.stage.heroTextScrim, stage.STAGE_TEXT_SCRIM);
 });

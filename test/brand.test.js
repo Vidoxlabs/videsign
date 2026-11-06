@@ -36,24 +36,7 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), 'utf8');
 }
 
-function channel(hex, index) {
-  return Number.parseInt(hex.slice(1 + index * 2, 3 + index * 2), 16) / 255;
-}
-
-function linearize(value) {
-  return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
-}
-
-function luminance(hex) {
-  const weights = [0.2126, 0.7152, 0.0722];
-  return weights.reduce((sum, weight, index) => sum + weight * linearize(channel(hex, index)), 0);
-}
-
-function contrast(foreground, background) {
-  const lighter = Math.max(luminance(foreground), luminance(background));
-  const darker = Math.min(luminance(foreground), luminance(background));
-  return (lighter + 0.05) / (darker + 0.05);
-}
+const { contrastRatio: contrast } = require('../lib/contrast');
 
 function shell(inner, extra) {
   return `<svg xmlns="${SVG_NS}" viewBox="0 0 1 1"${extra || ''}>${inner}</svg>`;

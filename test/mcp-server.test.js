@@ -80,3 +80,40 @@ test('reading an unknown resource is rejected', async () => {
     /Resource not found/,
   );
 });
+
+test('check_contrast resolves tokens and reports the AA levels', async () => {
+  const result = await client.callTool({
+    name: 'check_contrast',
+    arguments: { foreground: 'colors.text-content-secondary-base', background: 'colors.surface-background-primary-base' },
+  });
+  assert.notEqual(result.isError, true, result.content[0].text);
+  const body = JSON.parse(result.content[0].text);
+  assert.equal(body.foreground, '#A1A1AA');
+  assert.equal(body.ratio, 7.71);
+  assert.deepEqual(body.aa, { text: true, largeText: true, nonText: true });
+});
+
+test('check_contrast rejects a colour it cannot resolve', async () => {
+  const result = await client.callTool({ name: 'check_contrast', arguments: { foreground: 'red', background: '#000000' } });
+  assert.equal(result.isError, true);
+});
+
+test('stage_backdrop returns the SVG and a passing ambient report', async () => {
+  const result = await client.callTool({ name: 'stage_backdrop', arguments: { variant: 'ambient' } });
+  assert.notEqual(result.isError, true, result.content[0].text);
+  const body = JSON.parse(result.content[0].text);
+  assert.equal(body.report.passes, true);
+  assert.ok(body.maxSafeOpacity >= body.report.opacity);
+  assert.match(body.svg, /^<svg class="stage stage--ambient"/);
+  assert.equal(body.stylesheet, 'dist/stage.css');
+});
+
+test('stage_backdrop reports, without erroring, an opacity that fails the bound', async () => {
+  const result = await client.callTool({ name: 'stage_backdrop', arguments: { variant: 'hero', includeSvg: false } });
+  assert.notEqual(result.isError, true);
+  const body = JSON.parse(result.content[0].text);
+  assert.equal(body.report.passes, false);
+  assert.equal(body.svg, undefined);
+  const bad = await client.callTool({ name: 'stage_backdrop', arguments: { variant: 'hero', opacity: 2 } });
+  assert.equal(bad.isError, true);
+});

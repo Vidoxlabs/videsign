@@ -333,6 +333,19 @@ function emitThemeCSS(tokens) {
   return lines.join('\n');
 }
 
+/**
+ * Stage backdrop primitive (ADR-013 item 1): the stylesheet as shipped, and one rendered SVG per
+ * variant, so a static consumer can inline the markup without running the renderer.
+ */
+function emitStageArtifacts() {
+  const { renderStageSvg, STAGE_VARIANT_OPACITY } = require('../lib/stage');
+  const outputs = { 'stage.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'stage.css'), 'utf-8') };
+  for (const variant of Object.keys(STAGE_VARIANT_OPACITY)) {
+    outputs[`stage-${variant}.svg`] = `${renderStageSvg({ variant })}\n`;
+  }
+  return outputs;
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -355,6 +368,7 @@ function main() {
     'glass.css': emitGlassCSS(tokens),
     'standard.json': standardArtifacts['standard.json'],
     'standard.md': standardArtifacts['standard.md'],
+    ...emitStageArtifacts(),
   };
 
   if (dryRun) {
@@ -391,4 +405,5 @@ module.exports = {
   emitThemeCSS,
   emitGlassCSS,
   emitCatalogCSS,
+  emitStageArtifacts,
 };

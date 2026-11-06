@@ -1173,6 +1173,7 @@ test('the public-safety CLI scans the default targets', () => {
   assert.ok(DEFAULT_TARGETS.includes('canon'));
   assert.ok(DEFAULT_TARGETS.includes('preview'));
   assert.ok(DEFAULT_TARGETS.includes('.github'));
+  assert.ok(DEFAULT_TARGETS.includes('lib'));
   assert.ok(DEFAULT_TARGETS.includes('brand'));
   assert.ok(DEFAULT_TARGETS.includes('scripts'));
   assert.ok(DEFAULT_TARGETS.includes('test'));

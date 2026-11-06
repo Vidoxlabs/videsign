@@ -17,6 +17,7 @@ const {
   emitTailwindConfig,
   emitGlassCSS,
 } = require('../scripts/generate-tokens');
+const { contrastRatio, hexToRgb, parseRgba, over } = require('../lib/contrast');
 
 const DESIGN = fs.readFileSync(path.join(__dirname, '..', 'DESIGN.md'), 'utf-8');
 const TOKENS = parseFrontMatter(DESIGN);
@@ -203,24 +204,13 @@ test('glass.css ships pill radius variants for plain-CSS consumers', () => {
 });
 
 test('focus ring clears 3:1 on the dark base surfaces', () => {
-  const hex = (value) => [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16));
-  const lin = (channel) => {
-    const s = channel / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  };
-  const lum = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-  const ratio = (a, b) => {
-    const x = lum(hex(a));
-    const y = lum(hex(b));
-    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-  };
   const ring = TOKENS.colors['surface-accent-violet-base'];
   assert.equal(ring, '#8B5CF6');
   for (const key of ['surface-background-primary-base', 'surface-background-secondary-base', 'surface-background-tertiary-base']) {
-    const value = ratio(ring, TOKENS.colors[key]);
+    const value = contrastRatio(ring, TOKENS.colors[key]);
     assert.ok(value >= 3, `${key} ${value.toFixed(2)}`);
   }
-  assert.ok(ratio('#52525B', TOKENS.colors['surface-background-primary-base']) < 3);
+  assert.ok(contrastRatio('#52525B', TOKENS.colors['surface-background-primary-base']) < 3);
 });
 
 test('literal #7C3AED is absent from tokens, CSS and docs', () => {
@@ -238,18 +228,6 @@ test('literal #7C3AED is absent from tokens, CSS and docs', () => {
     assert.deepEqual(leftover, [], rel);
   }
 });
-
-function contrastRatio(foreground, background) {
-  const hex = (value) => [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16));
-  const lin = (channel) => {
-    const s = channel / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  };
-  const lum = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-  const x = lum(hex(foreground));
-  const y = lum(hex(background));
-  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-}
 
 test('hover equals #6D28D9', () => {
   assert.equal(TOKENS.colors['surface-accent-violet-hover'], '#6D28D9');
@@ -331,14 +309,9 @@ test('core text clears 4.5:1 over a pure-white backdrop with NO backdrop filter 
   // headless or older engine may not render the filter, so the core scrim alone must carry the
   // contrast over a fully white backdrop. (Measured: Playwright WebKit and Firefox did not apply
   // brightness() to a backdrop in this repo's checks.)
-  const [r, g, b, a] = TOKENS.effects['glass-crystal-core-base'].match(/rgba\((\d+), (\d+), (\d+), ([\d.]+)\)/).slice(1).map(Number);
-  const behind = 255;
-  const mix = (core) => core * a + behind * (1 - a);
-  const lin = (c) => { const s = c / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; };
-  const lum = ([R, G, B]) => 0.2126 * lin(R) + 0.7152 * lin(G) + 0.0722 * lin(B);
-  const bg = lum([mix(r), mix(g), mix(b)]);
-  const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-  const ratio = (fg) => (lum(hex(fg)) + 0.05) / (bg + 0.05);
+  const [r, g, b, a] = parseRgba(TOKENS.effects['glass-crystal-core-base']);
+  const backdrop = over([r, g, b], a, [255, 255, 255]);
+  const ratio = (fg) => contrastRatio(fg, backdrop);
   const secondary = TOKENS.colors['text-content-secondary-base'];
   assert.ok(ratio(secondary) >= 4.5, `secondary text ${ratio(secondary).toFixed(2)}:1`);
   assert.ok(ratio(TOKENS.colors['text-content-primary-base']) >= 4.5);
@@ -347,17 +320,15 @@ test('core text clears 4.5:1 over a pure-white backdrop with NO backdrop filter 
 test('free text clears 4.5:1 over the strongest ambient glow with a dot on top (analytic worst case)', () => {
   // The ambient layer sits behind free page text. Peak glow alpha is at the gradient centre; a dot
   // can land under a glyph, so composite glow, then dot, over the page surface.
-  const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-  const rgba = (v) => v.match(/rgba\((\d+), (\d+), (\d+), ([\d.]+)\)/).slice(1).map(Number);
-  const over = ([r, g, b, a], under) => [r * a + under[0] * (1 - a), g * a + under[1] * (1 - a), b * a + under[2] * (1 - a)];
-  const lin = (c) => { const s = c / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; };
-  const lum = ([R, G, B]) => 0.2126 * lin(R) + 0.7152 * lin(G) + 0.0722 * lin(B);
-  const surface = hex(TOKENS.colors['surface-background-primary-base']);
-  const dots = rgba(TOKENS.effects['ambient-dots-base']);
+  const coat = (value, under) => {
+    const [r, g, b, a] = parseRgba(value);
+    return over([r, g, b], a, under);
+  };
+  const surface = hexToRgb(TOKENS.colors['surface-background-primary-base']);
   for (const glow of ['ambient-glow-violet-base', 'ambient-glow-teal-base']) {
-    const bg = lum(over(dots, over(rgba(TOKENS.effects[glow]), surface)));
+    const backdrop = coat(TOKENS.effects['ambient-dots-base'], coat(TOKENS.effects[glow], surface));
     for (const text of ['text-content-primary-base', 'text-content-secondary-base']) {
-      const ratio = (lum(hex(TOKENS.colors[text])) + 0.05) / (bg + 0.05);
+      const ratio = contrastRatio(TOKENS.colors[text], backdrop);
       assert.ok(ratio >= 4.5, `${text} over ${glow} + dot is ${ratio.toFixed(2)}:1`);
     }
   }

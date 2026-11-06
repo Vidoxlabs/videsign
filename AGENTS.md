@@ -30,9 +30,14 @@ design system — the shared visual language for all Vidoxlabs products and appl
   backdrop, five-bar rule, graph line, chat dock, accessibility) plus the ADR index and the
   SHA-256 of `DESIGN.md` and `SKILL.md`. Product repos sync this file; keep it in parity
   with the prose (`test/standard.test.js`).
+- **lib/**: Shared JavaScript primitives. `lib/contrast.js` is the one WCAG contrast and
+  compositing implementation (tests, primitives and MCP use it; do not re-implement it).
+  `lib/stage.js` and `lib/stage.css` are the stage backdrop primitive (ADR-013): geometry, SVG
+  renderer and contrast report. After changing `lib/stage.js`, run `npm run stage:fragment`.
 - **mcp-server.js**: The MCP server that exposes this design system to product
-  repositories for cross-repo token and fragment fetching. Also provides a
-  `resolve_token` tool for querying individual token values.
+  repositories for cross-repo token and fragment fetching. Tools: `resolve_token` (one token
+  value), `style_pack`, `check_contrast` (WCAG ratio of two colours or tokens) and
+  `stage_backdrop` (stage SVG plus its contrast report).
 - **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
   naming convention. Raster binaries are not committed. Text-only SVG under `brand/`
   is a proposed exception (ADR-011, awaiting ratification).
@@ -64,17 +69,19 @@ Within the `videsign` repository, agents are restricted to the following command
 - `npm run mcp`: Starts the local MCP server for cross-repo communication.
 - `npm run tokens`: Parses `DESIGN.md` and regenerates `dist/tailwind.config.js`,
   `dist/tokens.css`, `dist/tokens.json`, `dist/themes.css`, `dist/glass.css`,
-  `dist/catalog.css`, `dist/standard.json`, `dist/standard.md` and
-  `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
+  `dist/catalog.css`, `dist/standard.json`, `dist/standard.md`, `dist/stage.css`,
+  `dist/stage-ambient.svg`, `dist/stage-hero.svg` and `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
 - `npm test`: Runs `node --test test/*.test.js`: the MCP stdio smoke test
   (`test/mcp-server.test.js`), the token contract (`test/tokens.test.js`),
   the theme contract (`test/themes.test.js`), the preview fragment contract
   (`test/preview.test.js`), the brand contract (`test/brand.test.js`),
   the agent standard contract (`test/standard.test.js`), the persona canon
   contract (`test/persona-canon.test.js`), the canon tool contract
-  (`test/canon-tool.test.js`), and the pipeline pack contract (`test/pipeline-packs.test.js`).
+  (`test/canon-tool.test.js`), the pipeline pack contract (`test/pipeline-packs.test.js`),
+  and the stage primitive contract (`test/stage.test.js`).
   Run this after changing `mcp-server.js`, `DESIGN.md` tokens, `canon/vwxyz/`, `brand/`, or any fragment.
 - `npm run canon:check`: Runs the persona canon contract on its own.
+- `npm run stage:fragment`: Regenerates `preview/stage-backdrop.html` from `lib/stage.js`.
 
 ## `{ASSET_BASE}` resolution
 

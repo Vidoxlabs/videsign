@@ -12,6 +12,7 @@ const crypto = require('crypto');
 
 const ROOT = path.join(__dirname, '..');
 const PKG = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf-8'));
+const { STAGE_VARIANT_OPACITY, STAGE_NARROW_AMBIENT_OPACITY, STAGE_TEXT_SCRIM } = require('../lib/stage');
 
 /** Canon order of the five signature colours (ADR-011, ADR-013). */
 const SIGNATURE_ORDER = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
@@ -145,6 +146,12 @@ function buildStandard(tokens, designMd, skillMd) {
         dotGridRetired: true,
         readingTextBound: 'every layer keeps secondary text at 4.5:1; full strength only behind a scrim',
         stopsUnder: ['prefers-reduced-motion: reduce', 'pause control'],
+        primitive: 'lib/stage.js',
+        stylesheet: 'dist/stage.css',
+        ambientOpacity: STAGE_VARIANT_OPACITY.ambient,
+        narrowAmbientOpacity: STAGE_NARROW_AMBIENT_OPACITY,
+        heroTextScrim: STAGE_TEXT_SCRIM,
+        contrastOver: 'page field only; opaque surfaces cover the stage',
       },
       fiveBar: {
         adr: 'ADR-013',
@@ -260,6 +267,7 @@ function emitStandardMd(standard) {
     '- No grid pattern; the dot grid is retired for page backgrounds',
     `- Reading text: ${standard.rules.stage.readingTextBound}`,
     `- Stops under: ${standard.rules.stage.stopsUnder.join('; ')}`,
+    `- Primitive: ${standard.rules.stage.primitive} with ${standard.rules.stage.stylesheet}; ambient ${standard.rules.stage.ambientOpacity} (narrow ${standard.rules.stage.narrowAmbientOpacity}), hero copy on a ${standard.rules.stage.heroTextScrim} scrim`,
     '',
     '## Five-bar rule (ADR-013)',
     '',
