@@ -1,0 +1,49 @@
+<!--
+  Nocturne Museum: Explorable instrument (ADR-015)
+  An interactive panel inside an article or proof. One solid panel, never glass.
+  It opens with what it shows and what to try. The diagram is a readout: the current
+  state is the accent outline; a blocked state is the status error token with a text
+  label, never colour alone; labels sit beneath their node. Every control changes the
+  receipt or the diagram: a boolean is a switch row with the whole row as the hit
+  area, a number is a labelled range with its value in tabular mono figures, a choice
+  among presets is one segmented control. The receipt is a ledger of hairline rows in
+  a polite live region. An instrument that runs on fixtures says so once. Example
+  text describes the component, not a product claim.
+-->
+<div class="flex flex-col gap-gap-section-default p-layout-padding-large-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+  <div class="flex flex-col gap-gap-compact-default">
+    <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">Shows where a gate stops a request and why.</p>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Try it: turn on every precondition and see whether the last stage runs. Runs on sample data in this page.</p>
+  </div>
+  <ol aria-label="Stages, with the blocked stage marked" class="flex items-start gap-gap-compact-default">
+        <li class="flex flex-col items-center shrink-0 gap-gap-compact-default"><span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border border-border-graph-line-base text-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">1</span><span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Plan</span></li>
+        <li aria-hidden="true" class="flex items-center flex-1 min-w-0 h-icon-md-base"><span class="w-full border-t border-border-graph-line-base"></span></li>
+        <li class="flex flex-col items-center shrink-0 gap-gap-compact-default"><span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border-2 border-dashed border-status-indicator-error-base text-text-content-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">2</span><span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Ratify</span><span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Blocked here</span></li>
+        <li aria-hidden="true" class="flex items-center flex-1 min-w-0 h-icon-md-base"><span class="w-full border-t border-border-graph-line-base"></span></li>
+        <li class="flex flex-col items-center shrink-0 gap-gap-compact-default"><span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border border-border-graph-line-base text-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">3</span><span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Review</span></li>
+        <li aria-hidden="true" class="flex items-center flex-1 min-w-0 h-icon-md-base"><span class="w-full border-t border-border-graph-line-base"></span></li>
+        <li class="flex flex-col items-center shrink-0 gap-gap-compact-default"><span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border border-border-graph-line-base text-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">4</span><span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Action</span></li>
+  </ol>
+  <div class="flex flex-col gap-gap-section-default md:flex-row">
+    <div class="flex flex-col flex-1 min-w-0 gap-gap-spacious-default">
+      <div role="group" aria-label="Presets" class="flex flex-wrap gap-gap-dense-default">
+        <button type="button" aria-pressed="true" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base bg-surface-background-tertiary-base border border-surface-accent-violet-base rounded-layout-radius-control-base">Read only</button>
+        <button type="button" aria-pressed="false" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base">Change request</button>
+      </div>
+      <div role="group" aria-label="Preconditions" class="flex flex-col">
+        <button type="button" role="switch" aria-checked="true" class="flex items-center justify-between gap-gap-spacious-default w-full h-action-min-default border-b border-border-separator-primary-base last:border-b-0 font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base"><span>Endpoint present</span><span aria-hidden="true" class="flex items-center justify-end shrink-0 w-action-min-default h-icon-sm-base px-layout-padding-bezel-base rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base"><span class="w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base bg-text-content-primary-base"></span></span></button>
+        <button type="button" role="switch" aria-checked="false" class="flex items-center justify-between gap-gap-spacious-default w-full h-action-min-default border-b border-border-separator-primary-base last:border-b-0 font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base"><span>Human approval supplied</span><span aria-hidden="true" class="flex items-center justify-start shrink-0 w-action-min-default h-icon-sm-base px-layout-padding-bezel-base rounded-layout-radius-full-base border border-border-graph-line-base"><span class="w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base bg-border-graph-line-base"></span></span></button>
+        <button type="button" role="switch" aria-checked="false" class="flex items-center justify-between gap-gap-spacious-default w-full h-action-min-default border-b border-border-separator-primary-base last:border-b-0 font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base"><span>Policy review passed</span><span aria-hidden="true" class="flex items-center justify-start shrink-0 w-action-min-default h-icon-sm-base px-layout-padding-bezel-base rounded-layout-radius-full-base border border-border-graph-line-base"><span class="w-indicator-mark-base h-indicator-mark-base rounded-layout-radius-full-base bg-border-graph-line-base"></span></span></button>
+      </div>
+      <label class="flex flex-col gap-gap-compact-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
+        <span class="flex items-center justify-between"><span>Task depth</span><output class="font-typography-family-mono-base text-typography-size-sm-base tabular-nums">0.45</output></span>
+        <input type="range" min="0" max="1" step="0.05" value="0.45" class="w-full h-action-min-default accent-surface-accent-violet-base" />
+      </label>
+    </div>
+    <dl aria-live="polite" aria-label="Receipt" class="flex flex-col flex-1 min-w-0">
+        <div class="flex flex-col gap-gap-dense-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0"><dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Gate state</dt><dd class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">ratify_absent</dd></div>
+        <div class="flex flex-col gap-gap-dense-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0"><dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Allowed</dt><dd class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">false</dd></div>
+        <div class="flex flex-col gap-gap-dense-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0"><dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Reason</dt><dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">No human approval was supplied for this request.</dd></div>
+    </dl>
+  </div>
+</div>

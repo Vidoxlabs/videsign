@@ -27,7 +27,7 @@ design system — the shared visual language for all Vidoxlabs products and appl
   layer limit, signature-colour rules). `npm run lint` runs ESLint and then this script.
 - **scripts/generate-standard.js**: Emits `dist/standard.json` and `dist/standard.md`, the
   machine-readable rule set (glass, typography, geometry, motion and ambient loops, stage
-  backdrop, five-bar rule, graph line, chat dock, accessibility) plus the ADR index and the
+  backdrop, five-bar rule, graph line, chat dock, conversation surface, explorable instrument, accessibility) plus the ADR index and the
   SHA-256 of `DESIGN.md` and `SKILL.md`. Product repos sync this file; keep it in parity
   with the prose (`test/standard.test.js`).
 - **lib/**: Shared JavaScript primitives. `lib/contrast.js` is the one WCAG contrast and
