@@ -213,7 +213,11 @@ function buildStandard(tokens, designMd, skillMd) {
           optionalModeOnlyWhileEmpty: true,
           keys: 'Enter sends, Shift+Enter adds a line',
         },
-        disclosure: { linesAtRest: 1, detail: 'expands in place' },
+        disclosure: {
+          linesAtRest: 1,
+          detail: 'expands in place',
+          beforeFirstTurn: 'the full statement stands where typed text is sent to a service',
+        },
         states: ['idle', 'composing', 'thinking', 'streaming', 'settled', 'failed'],
         motion: {
           open: tokens.transition['transition-duration-slow-base'],
@@ -370,7 +374,7 @@ function emitStandardMd(standard) {
     `- Provenance: ${standard.rules.conversation.messages.provenance}`,
     `- Starters: at most ${standard.rules.conversation.starters.max}, one source, gone after the first turn; follow-ups: at most ${standard.rules.conversation.followUps.max}, latest reply only`,
     `- Composer: one field with send inside; ${standard.rules.conversation.composer.keys}`,
-    `- Disclosure: ${standard.rules.conversation.disclosure.linesAtRest} line at rest, detail ${standard.rules.conversation.disclosure.detail}`,
+    `- Disclosure: ${standard.rules.conversation.disclosure.linesAtRest} line at rest, detail ${standard.rules.conversation.disclosure.detail}; before the first turn ${standard.rules.conversation.disclosure.beforeFirstTurn}`,
     `- States: ${standard.rules.conversation.states.join(', ')}`,
     `- Motion: opens on ${standard.rules.conversation.motion.open}, a turn enters on ${standard.rules.conversation.motion.turnEnter}; the only loop is the ${standard.rules.conversation.motion.onlyLoop}`,
     '',

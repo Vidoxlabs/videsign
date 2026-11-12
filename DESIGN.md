@@ -245,7 +245,7 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > - **Provenance by exception.** A reply is labelled only when it leaves the default path.
 > - **Starters and follow-ups.** At most four starters on an empty conversation, from one source; they leave after the first turn. At most three follow-up chips, on the latest reply only.
 > - **Composer.** One bordered field holding the text area and send. Dictation, where offered, sits inside the field and shows only while it is empty. Enter sends, Shift+Enter adds a line.
-> - **Disclosure.** One line at rest; the detail expands in place.
+> - **Disclosure.** One line at rest; the detail expands in place. Where typed text is sent to a service, the full statement stands until the visitor's first turn, then rests at one line.
 > - **States.** Idle, composing, thinking, streaming, settled, failed. Thinking is the five-segment pulse; no spinner, no skeleton bubble.
 > - **Motion.** Opens on `{transition.transition-duration-slow-base}` with `{transition.transition-easing-spring-base}`; a turn enters on `{transition.transition-duration-normal-base}`; sprites cross-fade. The thinking pulse is the only loop.
 > - Reference: `preview/conversation-surface.html` (empty state) and `preview/chat-dock.html` (in progress).

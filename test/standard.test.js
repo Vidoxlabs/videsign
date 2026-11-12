@@ -258,6 +258,7 @@ test('ADR-014 and ADR-015 rules are stated in DESIGN.md prose (parity guard)', (
     'at most four starters',
     'at most three follow-up chips',
     'one line at rest',
+    "the full statement stands until the visitor's first turn",
     'the thinking pulse is the only loop',
     'every control has a consequence',
     'switch row',
