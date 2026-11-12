@@ -219,8 +219,8 @@ test('standard carries the ADR-014 conversation rules and they match the tokens'
   assert.equal(conversation.header.overflowMenus, 1);
   assert.deepEqual(conversation.seatDots.seats, chatDock.personaSwitcher.seats);
   assert.equal(conversation.seatDots.pressedState, chatDock.personaSwitcher.pressedState);
-  assert.equal(conversation.seatDots.minHeight, TOKENS.size['action-min-default']);
-  assert.equal(conversation.seatDots.minWidth, TOKENS.size['icon-md-base']);
+  assert.equal(conversation.seatDots.minTarget, TOKENS.size['action-min-default']);
+  assert.deepEqual(conversation.header.secondLine, ['seat dots']);
   assert.equal(conversation.seatDots.printsNames, false);
   assert.equal(conversation.starters.max, 4);
   assert.equal(conversation.followUps.max, 3);
@@ -264,7 +264,7 @@ test('ADR-014 and ADR-015 rules are stated in DESIGN.md prose (parity guard)', (
     'no bordered fieldset and no default checkbox',
     'receipt as ledger',
     '{size.layout-width-conversation-base}',
-    '{size.icon-md-base}',
+    'a second line holds the seat dots',
     '{colors.status-indicator-error-base}',
   ]) {
     assert.ok(prose.includes(phrase), `DESIGN.md is missing: ${phrase}`);

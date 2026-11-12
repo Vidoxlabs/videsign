@@ -157,7 +157,7 @@ test('the five-bar rule is five hard segments in canon order, hidden from assist
   assert.doesNotMatch(read('five-bar-rule.html'), /bg-gradient|from-|via-/);
 });
 
-/** Seat dots (ADR-014): five buttons in canon order, named for the seat, one pressed, hit area 44 by 32. */
+/** Seat dots (ADR-014): five buttons in canon order, named for the seat, one pressed, hit area 44 by 44. */
 function seatDots(html) {
   const group = html.match(/<div role="group" aria-label="Choose a guide"[^>]*>([\s\S]*?)<\/div>/);
   assert.ok(group, 'seat dot group missing');
@@ -167,10 +167,10 @@ function seatDots(html) {
 
 function assertConversationBudget(file) {
   const html = read(file);
-  // One header row, in order: avatar, seat name and role, seat dots, close. No printed product title.
+  // One header row: the name line (name, role, menu, close) and the seat dots beneath it. No printed product title.
   assert.equal([...html.matchAll(/<header\b/g)].length, 1, `${file}: one header`);
   const header = html.match(/<header\b[^>]*>([\s\S]*?)<\/header>/)[1];
-  assert.ok(header.indexOf('aria-label="Choose a guide"') < header.indexOf('aria-label="Close chat"'), `${file}: dots before close`);
+  assert.ok(header.indexOf('aria-label="Close chat"') < header.indexOf('aria-label="Choose a guide"'), `${file}: the dots sit on the second line`);
   assert.equal([...header.matchAll(/aria-label="More options"/g)].length <= 1, true, `${file}: at most one overflow menu`);
   assert.doesNotMatch(header, /AI assistant|Vidoxlabs guides|>Guides</, `${file}: no product title or model badge in view`);
   assert.match(header, /<p aria-live="polite" class="sr-only">Companion state: [a-z ]+<\/p>/, `${file}: state is carried by hidden live text`);
@@ -179,7 +179,7 @@ function assertConversationBudget(file) {
   assert.deepEqual(dots.map((d) => d.seat), CANON, `${file}: seat order`);
   assert.equal(dots.filter((d) => d.pressed).length, 1, `${file}: one pressed seat`);
   for (const d of dots) {
-    assert.match(d.classes, /\bw-icon-md-base\b/, `${file}: ${d.seat} hit width`);
+    assert.match(d.classes, /\bw-action-min-default\b/, `${file}: ${d.seat} hit width`);
     assert.match(d.classes, /\bh-action-min-default\b/, `${file}: ${d.seat} hit height`);
     assert.match(d.inner, new RegExp(`bg-persona-accent-${d.seat}-base`), `${file}: ${d.seat} dot colour`);
     // The ring is the pressed seat's own colour, and only the pressed seat carries one.
