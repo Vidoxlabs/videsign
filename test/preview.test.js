@@ -157,7 +157,7 @@ test('the five-bar rule is five hard segments in canon order, hidden from assist
   assert.doesNotMatch(read('five-bar-rule.html'), /bg-gradient|from-|via-/);
 });
 
-/** Seat dots (ADR-014): five buttons in canon order, named for the seat, one pressed, hit area 44 by 44. */
+/** Seat dots (ADR-016): five buttons in canon order, named for the seat, one pressed, hit area 44 by 44. */
 function seatDots(html) {
   const group = html.match(/<div role="group" aria-label="Choose a guide"[^>]*>([\s\S]*?)<\/div>/);
   assert.ok(group, 'seat dot group missing');
@@ -209,7 +209,7 @@ function assertConversationBudget(file) {
   return html;
 }
 
-test('the conversation surface fragment keeps the ADR-014 chrome budget (empty state)', () => {
+test('the conversation surface fragment keeps the ADR-016 chrome budget (empty state)', () => {
   const html = assertConversationBudget('conversation-surface.html');
   const starters = html.match(/<div role="group" aria-label="Starters"[^>]*>([\s\S]*?)<\/div>/);
   assert.ok(starters, 'starters group missing');
@@ -220,7 +220,7 @@ test('the conversation surface fragment keeps the ADR-014 chrome budget (empty s
   assert.doesNotMatch(html.match(/role="log"[\s\S]*?<form/)[0], /bg-surface-background-secondary-base/);
 });
 
-test('the chat dock fragment carries the ADR-013 dialog and launcher and the ADR-014 contents', () => {
+test('the chat dock fragment carries the ADR-013 dialog and launcher and the ADR-016 contents', () => {
   const html = assertConversationBudget('chat-dock.html');
   const log = html.match(/role="log"[\s\S]*?<form/)[0];
   // Starters leave once a turn is sent; follow-ups are at most three.
@@ -243,7 +243,7 @@ test('the chat dock fragment carries the ADR-013 dialog and launcher and the ADR
   assert.deepEqual(bars.at(-1), CANON);
 });
 
-test('the instrument fragment follows ADR-015', () => {
+test('the instrument fragment follows ADR-017', () => {
   const html = read('instrument.html');
   // A solid panel, never glass.
   assert.doesNotMatch(html, /vi-glass/);

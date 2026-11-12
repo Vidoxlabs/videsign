@@ -209,11 +209,11 @@ test('the standard carries the stage primitive values from lib/stage.js', () => 
   assert.equal(rules.stage.heroTextScrim, stage.STAGE_TEXT_SCRIM);
 });
 
-test('standard carries the ADR-014 conversation rules and they match the tokens', () => {
+test('standard carries the ADR-016 conversation rules and they match the tokens', () => {
   const { standard } = generateStandardArtifacts(TOKENS);
   const { conversation, chatDock } = standard.rules;
-  assert.ok(standard.adrs.some((a) => a.id === 'ADR-014' && a.status.startsWith('Proposed')));
-  assert.equal(conversation.adr, 'ADR-014');
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-016' && a.status.startsWith('Proposed')));
+  assert.equal(conversation.adr, 'ADR-016');
   assert.equal(conversation.atRest.length, 4);
   assert.equal(conversation.header.rows, 1);
   assert.equal(conversation.header.overflowMenus, 1);
@@ -233,10 +233,10 @@ test('standard carries the ADR-014 conversation rules and they match the tokens'
   assert.equal(TOKENS.size['layout-width-conversation-base'], '27.5rem');
 });
 
-test('standard carries the ADR-015 instrument rules and they match the tokens', () => {
+test('standard carries the ADR-017 instrument rules and they match the tokens', () => {
   const { standard } = generateStandardArtifacts(TOKENS);
   const { instrument, graphLine, accessibility } = standard.rules;
-  assert.ok(standard.adrs.some((a) => a.id === 'ADR-015' && a.status.startsWith('Proposed')));
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-017' && a.status.startsWith('Proposed')));
   assert.equal(instrument.everyControlHasConsequence, true);
   assert.equal(instrument.controls.minTarget, accessibility.minTouchTarget);
   assert.equal(instrument.diagram.line, graphLine.dark);
@@ -245,11 +245,11 @@ test('standard carries the ADR-015 instrument rules and they match the tokens', 
   assert.equal(instrument.receipt.ariaLive, 'polite');
 });
 
-test('ADR-014 and ADR-015 rules are stated in DESIGN.md prose (parity guard)', () => {
+test('ADR-016 and ADR-017 rules are stated in DESIGN.md prose (parity guard)', () => {
   const prose = DESIGN.toLowerCase();
   for (const phrase of [
-    'conversation surface (adr-014)',
-    'explorable instrument (adr-015)',
+    'conversation surface (adr-016)',
+    'explorable instrument (adr-017)',
     'one header row, the conversation, one composer field and one disclosure line',
     'five dots in canon order',
     'the switcher prints no names',
@@ -271,7 +271,7 @@ test('ADR-014 and ADR-015 rules are stated in DESIGN.md prose (parity guard)', (
     assert.ok(prose.includes(phrase), `DESIGN.md is missing: ${phrase}`);
   }
   const md = generateStandardArtifacts(TOKENS)['standard.md'];
-  for (const heading of ['## Conversation surface (ADR-014)', '## Explorable instrument (ADR-015)']) {
+  for (const heading of ['## Conversation surface (ADR-016)', '## Explorable instrument (ADR-017)']) {
     assert.ok(md.includes(heading), `standard.md is missing ${heading}`);
   }
   for (const fragment of ['preview/conversation-surface.html', 'preview/chat-dock.html', 'preview/instrument.html']) {

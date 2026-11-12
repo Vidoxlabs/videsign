@@ -179,7 +179,7 @@ function buildStandard(tokens, designMd, skillMd) {
         neverDrawTheMark: true,
       },
       conversation: {
-        adr: 'ADR-014',
+        adr: 'ADR-016',
         appliesTo: ['chat dock', 'full-page chat', 'native product panels'],
         atRest: ['one header row', 'the conversation', 'one composer field', 'one disclosure line'],
         header: {
@@ -228,7 +228,7 @@ function buildStandard(tokens, designMd, skillMd) {
         fullPageMeasure: '65ch',
       },
       instrument: {
-        adr: 'ADR-015',
+        adr: 'ADR-017',
         everyControlHasConsequence: true,
         opensWith: ['what it shows', 'what to try'],
         anatomy: ['diagram as readout', 'controls', 'receipt'],
@@ -362,7 +362,7 @@ function emitStandardMd(standard) {
     `- Composer: ${standard.rules.chatDock.composer}`,
     '- Seat names stay in the primary text colour; a disclosure line says how answers are produced',
     '',
-    '## Conversation surface (ADR-014)',
+    '## Conversation surface (ADR-016)',
     '',
     `- Applies to: ${standard.rules.conversation.appliesTo.join('; ')}`,
     `- At rest: ${standard.rules.conversation.atRest.join('; ')}`,
@@ -378,7 +378,7 @@ function emitStandardMd(standard) {
     `- States: ${standard.rules.conversation.states.join(', ')}`,
     `- Motion: opens on ${standard.rules.conversation.motion.open}, a turn enters on ${standard.rules.conversation.motion.turnEnter}; the only loop is the ${standard.rules.conversation.motion.onlyLoop}`,
     '',
-    '## Explorable instrument (ADR-015)',
+    '## Explorable instrument (ADR-017)',
     '',
     '- Every control changes the readout or the diagram, or it is removed',
     `- Opens with: ${standard.rules.instrument.opensWith.join('; ')}`,

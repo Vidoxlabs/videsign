@@ -225,14 +225,14 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 >
 > - A launcher fixed bottom right opens a non-modal dialog (`role="dialog"`, `aria-modal="false"`, labelled by its title). Escape closes it and returns focus to the launcher.
 > - The launcher is at least `{size.action-min-default}`, carries a label, and shows a tracked brand file or the five seat dots, never a drawn or approximated mark. A five-bar rule runs along its foot.
-> - The dialog is a glass shell around a core (ADR-006). Inside: a persona switcher of all five seats (`aria-pressed`), a conversation log (`role="log"`, `aria-live="polite"`, `aria-relevant="additions"`, `aria-label`), action chips, a composer (Enter sends, Shift+Enter adds a line) and a one-line disclosure of how answers are produced. What those parts look like is set by the conversation surface (ADR-014).
+> - The dialog is a glass shell around a core (ADR-006). Inside: a persona switcher of all five seats (`aria-pressed`), a conversation log (`role="log"`, `aria-live="polite"`, `aria-relevant="additions"`, `aria-label`), action chips, a composer (Enter sends, Shift+Enter adds a line) and a one-line disclosure of how answers are produced. What those parts look like is set by the conversation surface (ADR-016).
 > - Seat names stay in `{colors.text-content-primary-base}`. Seat colours mark dots, rings and bars only. A seat's message carries a five-segment marker with that seat lit, so no seat colour appears alone.
 > - The log follows new messages only while the reader is at the bottom; it never scrolls a reader away from what they are reading.
 > - Reference: `preview/chat-dock.html`.
 
 > [!IMPORTANT]
 >
-> ### Conversation surface (ADR-014)
+> ### Conversation surface (ADR-016)
 >
 > The standard for every Vidoxlabs AI chat: the chat dock, a full-page chat and native product panels.
 >
@@ -252,7 +252,7 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 
 > [!IMPORTANT]
 >
-> ### Explorable instrument (ADR-015)
+> ### Explorable instrument (ADR-017)
 >
 > The standard for interactive panels inside articles and proofs.
 >
@@ -283,7 +283,7 @@ Consuming products present sovereign personas and evidence inside static-edge co
 
 Crystal glass is the one sanctioned glass material for public product surfaces. It is near-clear, with a bright rim and a top highlight; it dims and softens what is behind it instead of tinting it milky. Tokens: `{effects.glass-crystal-surface-base}`, `{effects.glass-crystal-rim-base}`, `{effects.glass-crystal-highlight-base}`, `{effects.glass-crystal-sheen-base}`, `{effects.glass-crystal-shadow-base}`, `{effects.glass-crystal-backdrop-base}`, `{effects.glass-crystal-core-base}`, and the solid fallback `{effects.glass-crystal-solid-base}`. The generator emits them as `--vi-effects-*` custom properties and as a generated `dist/glass.css` with literal values, because Safari does not resolve custom properties inside `-webkit-backdrop-filter`.
 
-- **Scope.** Glass marks controls and lenses: the floating island navigation, overlays and popovers, the question bar, the persona switcher, the evidence lens over a field, and the chat dock dialog (an overlay, ADR-013). Never on paragraphs, cards or section containers. Content stays solid and readable; chat text sits on the dock's core scrim and the visitor's turn is a solid bubble (ADR-014).
+- **Scope.** Glass marks controls and lenses: the floating island navigation, overlays and popovers, the question bar, the persona switcher, the evidence lens over a field, and the chat dock dialog (an overlay, ADR-013). Never on paragraphs, cards or section containers. Content stays solid and readable; chat text sits on the dock's core scrim and the visitor's turn is a solid bubble (ADR-016).
 - **Limits.** At most three glass layers per viewport. Never glass on glass (the lens core is a scrim, not a second blur). Never backdrop blur on scrolling containers. Never animate or transition the blur.
 - **Double bezel.** Glass shells use the outer radius `{spacing.layout-radius-glass-base}` (20px), `{spacing.layout-padding-bezel-base}` (6px) padding, and an inner core at `{spacing.layout-radius-standard-base}` (14px): 20 = 6 + 14, concentric. The rim is an inset box-shadow (not a border box) so the arithmetic holds. Pill shapes use `vi-glass-shell--pill` / `vi-glass-core--pill` so plain-CSS consumers get the full radius without relying on a later Tailwind utility.
 - **Composition.** Clear glass floats over the field, imagery and the ambient layer, never directly over body copy. The page background is the stage backdrop (ADR-013). The glow tokens (`{effects.ambient-glow-violet-base}`, `{effects.ambient-glow-teal-base}`) and the dot token (`{effects.ambient-dots-base}`) stay for existing consumers; the dot grid is retired for new page backgrounds. A headline may pass beneath the island while scrolling.
