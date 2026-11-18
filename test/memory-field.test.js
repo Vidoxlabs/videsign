@@ -137,7 +137,7 @@ test('the SVG is a labelled group with a hidden rest web and no inline style', (
   assert.doesNotMatch(svg, /\sstyle=/);
   assert.doesNotMatch(svg, /#[0-9A-Fa-f]{6}\b/, 'colour comes from the stylesheet');
   assert.equal((svg.match(/class="vi-mf-node"/g) || []).length, 24);
-  assert.match(svg, /data-class="unconfirmed"/);
+  assert.match(svg, /data-memory="unconfirmed"/);
   assert.match(svg, /data-band="(fresh|warm|cold)"/);
   assert.match(svg, /Synthetic data/, 'a fixture field says so');
 });
@@ -241,4 +241,44 @@ test('motion stops under reduced motion and under the pause control, and loops a
   assert.match(CSS, /var\(--vi-transition-transition-duration-ambient-drift-base\)/);
   assert.match(CSS, /var\(--vi-transition-transition-duration-ambient-pulse-base\)/);
   assert.match(CSS, /var\(--vi-transition-transition-duration-entrance-base\)/);
+});
+
+// --- Distribution (ADR-018 consequences) ---------------------------------------------
+
+const { memoryFieldFragment, memoryPipelineFragment } = require('../scripts/generate-memory-field-fragment');
+const { emitMemoryFieldArtifacts } = require('../scripts/generate-tokens');
+const { generateStandardArtifacts } = require('../scripts/generate-standard');
+
+test('the committed catalog fragments match the renderer', () => {
+  const field = fs.readFileSync(path.join(ROOT, 'preview', 'memory-field.html'), 'utf-8');
+  const pipeline = fs.readFileSync(path.join(ROOT, 'preview', 'memory-pipeline.html'), 'utf-8');
+  assert.equal(field, memoryFieldFragment(), 'preview/memory-field.html drifted; run `npm run memory-field:fragment`');
+  assert.equal(pipeline, memoryPipelineFragment(), 'preview/memory-pipeline.html drifted; run `npm run memory-field:fragment`');
+  const index = fs.readFileSync(path.join(ROOT, 'preview', 'index.html'), 'utf-8');
+  assert.match(index, /memory-field\.html/);
+  assert.match(index, /memory-pipeline\.html/);
+  assert.match(index, /dist\/memory-field\.css/);
+});
+
+test('npm run tokens ships the stylesheet and both samples', () => {
+  const out = emitMemoryFieldArtifacts();
+  assert.equal(out['memory-field.css'], CSS);
+  assert.match(out['memory-field-sample.svg'], /^<svg class="vi-mf"/);
+  assert.match(out['memory-pipeline-sample.svg'], /^<svg class="vi-mp"/);
+});
+
+test('the standard carries the memory field rules and they match the tokens and the primitive', () => {
+  const { standard } = generateStandardArtifacts(TOKENS);
+  const rules = standard.rules.memoryField;
+  assert.equal(rules.adr, 'ADR-018');
+  for (const [code, meta] of Object.entries(mf.LINK_CODES)) {
+    assert.equal(rules.links[code].dark, C[`${meta.token}-base`]);
+    assert.equal(rules.links[code].light, C[`${meta.token}-light`]);
+  }
+  assert.deepEqual(rules.budget, { ...mf.BUDGET });
+  assert.ok(standard.adrs.some((adr) => adr.id === 'ADR-018'));
+  const prose = fs.readFileSync(path.join(ROOT, 'DESIGN.md'), 'utf-8').toLowerCase();
+  for (const phrase of ['memory field (adr-018)', 'aria-hidden', 'renderMemoryFieldTable'.toLowerCase(), '300 nodes and 3,000 edges']) {
+    assert.ok(prose.includes(phrase), `DESIGN.md states: ${phrase}`);
+  }
 });

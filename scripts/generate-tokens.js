@@ -346,6 +346,20 @@ function emitStageArtifacts() {
   return outputs;
 }
 
+/**
+ * Memory field primitive (ADR-018): the stylesheet as shipped and one rendered sample of each
+ * figure, so a static consumer can inspect the markup without running the renderer.
+ */
+function emitMemoryFieldArtifacts() {
+  const mf = require('../lib/memory-field');
+  const layout = mf.layoutMemoryField(mf.sampleMemoryField(), { seed: 5 });
+  return {
+    'memory-field.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'memory-field.css'), 'utf-8'),
+    'memory-field-sample.svg': `${mf.renderMemoryFieldSvg(layout, { title: 'Memory field sample' })}\n`,
+    'memory-pipeline-sample.svg': `${mf.renderMemoryPipelineSvg(mf.SAMPLE_PIPELINE, { title: 'Memory pipeline sample' })}\n`,
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -369,6 +383,7 @@ function main() {
     'standard.json': standardArtifacts['standard.json'],
     'standard.md': standardArtifacts['standard.md'],
     ...emitStageArtifacts(),
+    ...emitMemoryFieldArtifacts(),
   };
 
   if (dryRun) {
@@ -406,4 +421,5 @@ module.exports = {
   emitGlassCSS,
   emitCatalogCSS,
   emitStageArtifacts,
+  emitMemoryFieldArtifacts,
 };

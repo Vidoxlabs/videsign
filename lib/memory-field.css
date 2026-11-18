@@ -99,7 +99,7 @@
   stroke-width: 1.25;
 }
 
-.vi-mf-node[data-class="organizational"] .vi-mf-node-mark {
+.vi-mf-node[data-memory="organizational"] .vi-mf-node-mark {
   fill: var(--vi-colors-border-graph-line-base);
 }
 
@@ -113,7 +113,7 @@
   stroke-width: 1;
 }
 
-.vi-mf-node[data-class="unconfirmed"] .vi-mf-node-mark {
+.vi-mf-node[data-memory="unconfirmed"] .vi-mf-node-mark {
   stroke-dasharray: 2 2;
 }
 

@@ -13,6 +13,7 @@ const crypto = require('crypto');
 const ROOT = path.join(__dirname, '..');
 const PKG = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf-8'));
 const { STAGE_VARIANT_OPACITY, STAGE_NARROW_AMBIENT_OPACITY, STAGE_TEXT_SCRIM } = require('../lib/stage');
+const memoryField = require('../lib/memory-field');
 
 /** Canon order of the five signature colours (ADR-011, ADR-013). */
 const SIGNATURE_ORDER = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
@@ -251,6 +252,28 @@ function buildStandard(tokens, designMd, skillMd) {
         syntheticStatedOnce: true,
         seatColoursOnlyAsSetOfFive: true,
       },
+      memoryField: {
+        adr: 'ADR-018',
+        primitive: 'lib/memory-field.js',
+        stylesheet: 'dist/memory-field.css',
+        links: Object.fromEntries(
+          Object.entries(memoryField.LINK_CODES).map(([code, meta]) => [
+            code,
+            { label: meta.label, cue: meta.cue, dark: tokens.colors[`${meta.token}-base`], light: tokens.colors[`${meta.token}-light`] },
+          ]),
+        ),
+        minContrast: 3,
+        nodeClasses: [...memoryField.NODE_CLASSES],
+        radii: [...memoryField.NODE_RADII],
+        recencyBands: [...memoryField.RECENCY_BANDS],
+        budget: { ...memoryField.BUDGET },
+        restWeb: 'aria-hidden decoration',
+        motions: ['entrance draw-in', 'recall pulse', 'Forget retraction', 'ambient drift', 'pipeline flow'],
+        loopsOptIn: ['data-ambient="on"', 'data-flow="on"'],
+        stopsUnder: ['prefers-reduced-motion: reduce', 'data-motion="paused" on the root'],
+        textEquivalent: 'renderMemoryFieldTable beside the figure',
+        neverRedrawn: true,
+      },
       spacing: {
         rhythmBasePx: 4,
         pageGutter: tokens.space['rhythm-page-gutter-base'],
@@ -388,6 +411,16 @@ function emitStandardMd(standard) {
     `- Diagram: lines ${standard.rules.instrument.diagram.line}; current = ${standard.rules.instrument.diagram.current}; blocked = ${standard.rules.instrument.diagram.blocked} with a text label; labels never overlap`,
     `- Receipt: ${standard.rules.instrument.receipt.form}, aria-live=${standard.rules.instrument.receipt.ariaLive}`,
     '- A fixture-driven instrument says so once; seat colours only where the five seats appear together',
+    '',
+    '## Memory field (ADR-018)',
+    '',
+    `- Primitive: ${standard.rules.memoryField.primitive} with ${standard.rules.memoryField.stylesheet}; products never redraw it`,
+    ...Object.entries(standard.rules.memoryField.links).map(([code, link]) => `- ${link.label}: dark ${link.dark}, light ${link.light}; ${link.cue}`),
+    `- Lit links reach ${standard.rules.memoryField.minContrast}:1; the rest web is ${standard.rules.memoryField.restWeb}`,
+    `- Node classes: ${standard.rules.memoryField.nodeClasses.join(', ')}; radii ${standard.rules.memoryField.radii.join('/')}; recency ${standard.rules.memoryField.recencyBands.join(', ')}`,
+    `- Budget: ${standard.rules.memoryField.budget.nodes} nodes, ${standard.rules.memoryField.budget.edges} edges`,
+    `- Motions: ${standard.rules.memoryField.motions.join(', ')}; loops opt in with ${standard.rules.memoryField.loopsOptIn.join(' or ')}; all stop under ${standard.rules.memoryField.stopsUnder.join(' and ')}`,
+    `- Text equivalent: ${standard.rules.memoryField.textEquivalent}`,
     '',
     '## Accessibility',
     '',

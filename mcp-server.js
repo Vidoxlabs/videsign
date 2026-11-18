@@ -8,7 +8,8 @@
  * Fragments are auto-discovered at startup — no manual resource list to maintain.
  *
  * Tools: `resolve_token` (one token value), `style_pack` (the canon style pack),
- * `check_contrast` (WCAG ratio of two colours or tokens) and `stage_backdrop` (the ADR-013 stage
+ * `check_contrast` (WCAG ratio of two colours or tokens) and `memory_field` (the ADR-018 memory field SVG, text equivalent and contrast report) and
+ * `stage_backdrop` (the ADR-013 stage
  * SVG with its contrast report). All tools compute or read; none writes.
  */
 
@@ -29,6 +30,7 @@ const DESIGN_CONTENT = fs.readFileSync(path.join(__dirname, 'DESIGN.md'), 'utf-8
 const TOKENS = parseFrontMatter(DESIGN_CONTENT);
 const { contrastRatio, wcagLevels } = require('./lib/contrast');
 const stage = require('./lib/stage');
+const memoryField = require('./lib/memory-field');
 const BRAND_TOKENS = JSON.parse(fs.readFileSync(path.join(__dirname, 'brand', 'tokens.json'), 'utf-8'));
 
 /** A `#RRGGBB` literal, or a `colors.<key>` token path resolved from DESIGN.md. */
@@ -289,6 +291,22 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
       {
+        name: 'memory_field',
+        description: 'Lays out and renders the ADR-018 memory field (lib/memory-field.js): a deterministic constellation SVG, its text equivalent and the lit-link contrast report for a theme. Pass your own nodes and edges, or omit data for the synthetic sample. Style it with dist/memory-field.css. Over-budget or invalid data returns a typed error.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            data: { type: 'object', description: '{ nodes: [{ id, label, class, group?, href?, recallCount?, lastRecalledAt?, band? }], edges: [{ source, target, code: CR|RR|LR|TR, count? }], synthetic? }' },
+            seed: { type: 'integer', description: 'Layout seed (default 1).' },
+            width: { type: 'number', description: 'View width (default 960).' },
+            height: { type: 'number', description: 'View height (default 600).' },
+            now: { type: 'string', description: 'ISO time that recency bands are measured from; without it nodes are fresh.' },
+            theme: { type: 'string', enum: ['base', 'light'], description: 'Theme for the contrast report (default base).' },
+            includeSvg: { type: 'boolean', description: 'Include the SVG and text equivalent (default true).' },
+          },
+        },
+      },
+      {
         name: 'style_pack',
         description: 'Returns the canon style pack (single deterministic JSON): persona accents, character canon palette + signals via canon/vwxyz/palette.json, naming/asset-id/review-threshold rules, motion budget, negative guardrails, burned-run pointers and the executable workflow. Use this for one-call style retrieval instead of reading multiple canon files.',
         inputSchema: { type: 'object', properties: {} },
@@ -334,6 +352,31 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     };
     // A failing report is a valid answer (the caller asked "would this pass?"), not a tool error.
     return textResult(JSON.stringify(body, null, 2));
+  }
+  if (name === 'memory_field') {
+    try {
+      const data = args?.data ?? memoryField.sampleMemoryField();
+      const layout = memoryField.layoutMemoryField(data, {
+        seed: args?.seed ?? 1,
+        width: args?.width,
+        height: args?.height,
+        now: args?.now ?? null,
+      });
+      const body = {
+        nodes: layout.nodes.length,
+        edges: layout.edges.length,
+        synthetic: layout.synthetic,
+        report: memoryField.memoryFieldContrastReport(TOKENS, { theme: args?.theme ?? 'base' }),
+        stylesheet: 'dist/memory-field.css',
+        ...(args?.includeSvg === false
+          ? {}
+          : { svg: memoryField.renderMemoryFieldSvg(layout), table: memoryField.renderMemoryFieldTable(layout) }),
+      };
+      return textResult(JSON.stringify(body, null, 2));
+    } catch (err) {
+      if (err instanceof memoryField.MemoryFieldError) return textResult(`Error: ${err.message}`, true);
+      throw err;
+    }
   }
   if (name === 'style_pack') {
     const packPath = path.join(__dirname, 'dist', 'canon-style-pack.json');

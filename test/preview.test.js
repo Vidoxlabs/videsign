@@ -18,15 +18,15 @@ const FRAGMENTS = fs.readdirSync(PREVIEW).filter((f) => f.endsWith('.html')).sor
 
 /**
  * Marker classes with no CSS rule of their own. The stage hooks name the backdrop's parts so a
- * product can target them; lib/stage.css styles their children instead.
+ * product can target them; lib/stage.css styles their children instead. The memory field layer hooks (vi-mf-links, vi-mf-nodes) work the same way.
  */
-const MARKERS = new Set(['group', 'peer', 'stage--hero', 'stage__sky', 'stage__core', 'stage__floor', 'stage__floor-glow']);
+const MARKERS = new Set(['group', 'peer', 'stage--hero', 'stage__sky', 'stage__core', 'stage__floor', 'stage__floor-glow', 'vi-mf-links', 'vi-mf-nodes']);
 
 let css = '';
 
 before(() => {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'generate-tokens.js')], { cwd: ROOT, stdio: 'ignore' });
-  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css']
+  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css']
     .map((f) => fs.readFileSync(path.join(ROOT, 'dist', f), 'utf-8'))
     .join('\n');
 });
