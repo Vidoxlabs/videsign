@@ -166,6 +166,13 @@ test('a focus set lights its edges and dims the rest; recall and forget orient e
   assert.match(forget, /data-mode="forget"/);
   assert.match(forget, /data-id="n0"[^>]*data-state="forgetting"/);
   assert.match(forget, /data-forgetting="true"/);
+  // Forget hides only the forgotten node's rest edges; the rest of the web stays.
+  const field = mf.layoutMemoryField(mf.sampleMemoryField({ nodes: 30, edges: 60 }), { iterations: 20 });
+  const target = field.edges[0].source;
+  const restEdges = [...mf.renderMemoryFieldSvg(field, { forget: target }).matchAll(/<path class="vi-mf-rest-edge"[^>]*>/g)].map((m) => m[0]);
+  const touching = field.edges.filter((edge) => edge.source === target || edge.target === target).length;
+  assert.equal(restEdges.filter((tag) => tag.includes('data-forgetting="true"')).length, touching);
+  assert.ok(restEdges.length > touching);
   assert.throws(() => mf.renderMemoryFieldSvg(layout, { forget: 'nope' }), (err) => err.code === 'MEMORY_FIELD_INVALID');
 });
 

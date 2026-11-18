@@ -25,8 +25,14 @@
   opacity: 0.22;
 }
 
-.vi-mf:not([data-mode="field"]) .vi-mf-rest-edge {
+/* Focus and recall push the rest web back. Forget keeps it: the other memories stay linked, and
+   only the forgotten node's rest edges go, with its links. */
+.vi-mf:is([data-mode="focus"], [data-mode="recall"]) .vi-mf-rest-edge {
   opacity: 0.08;
+}
+
+.vi-mf-rest-edge[data-forgetting="true"] {
+  opacity: 0;
 }
 
 /* --- Link codes: one base token each, plus a second cue ----------------------------------- */
