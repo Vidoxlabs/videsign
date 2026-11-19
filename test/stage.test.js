@@ -112,6 +112,7 @@ test('lib/stage.css reads emitted tokens only and paints every persona class', (
   const vars = new Set([...CSS.matchAll(/var\((--[a-z0-9-]+)/g)].map((m) => m[1]));
   const emitted = fs.readFileSync(path.join(ROOT, 'dist', 'tokens.css'), 'utf-8');
   for (const name of vars) {
+    if (stage.STAGE_RUNTIME_PROPERTIES.includes(name)) continue;
     assert.ok(name.startsWith('--vi-'), `${name} is not a videsign token`);
     assert.ok(emitted.includes(`${name}:`), `${name} is not emitted by dist/tokens.css`);
   }
@@ -136,6 +137,39 @@ test('lib/stage.css animates transform and opacity only and stops on request', (
   const mixes = CSS.match(/color-mix\(/g) ?? [];
   const tints = [...CSS.matchAll(/color-mix\(in srgb, var\(--vi-colors-persona-accent-[a-z]+-base\) \d+%, transparent\)/g)];
   assert.equal(tints.length, mixes.length);
+});
+
+// --- Reactive stage (ADR-019) ---------------------------------------------------
+
+test('the veils are five single-colour glows in canon order, all five or none', () => {
+  assert.deepEqual(stage.veils.map((veil) => veil.persona), CANON);
+  const svg = stage.renderStageSvg({ variant: 'ambient' });
+  assert.deepEqual([...svg.matchAll(/class="stage__veil" data-persona="([a-z]+)"/g)].map((m) => m[1]), CANON);
+  for (const persona of CANON) assert.match(svg, new RegExp(`fill="url\\(#stage-ambient-veil-${persona}\\)"`));
+});
+
+test('the stage is three depth planes, far to near, and the sheet maps STAGE_DEPTH exactly', () => {
+  const svg = stage.renderStageSvg({ variant: 'hero' });
+  assert.deepEqual([...svg.matchAll(/class="stage__plane stage__plane--([a-z]+)"/g)].map((m) => m[1]), ['far', 'mid', 'near']);
+  for (const [depth, value] of Object.entries(stage.STAGE_DEPTH)) {
+    assert.match(CSS, new RegExp(`\\.stage__plane--${depth} \\{\\s*--stage-depth: ${value};`));
+  }
+  assert.ok(stage.STAGE_DEPTH.far < stage.STAGE_DEPTH.mid && stage.STAGE_DEPTH.mid < stage.STAGE_DEPTH.near);
+});
+
+test('the reactive layer only moves, spreads or lowers: it never raises a painted alpha', () => {
+  // Every opacity the sheet sets outside keyframes is at most 1 and only on whole elements whose
+  // painted alpha already comes from STAGE_ALPHA.
+  const outside = CSS.replace(/@keyframes [\w-]+ \{[\s\S]*?\n\}/g, '');
+  for (const [, value] of outside.matchAll(/\bopacity: ([\d.]+);/g)) assert.ok(Number(value) <= 1, value);
+  assert.match(CSS, /:root\[data-active-persona\] \.stage__veil \{\s*opacity: 0\.45;/);
+  // Scroll depth is progressive and limited to the ambient variant.
+  assert.match(CSS, /@supports \(animation-timeline: scroll\(\)\) \{\s*\.stage--ambient/);
+  // Longhands only: a minifier folds a timeline into the shorthand, which engines reject whole.
+  assert.doesNotMatch(CSS, /animation: stage-scroll/);
+  assert.match(CSS, /animation-name: stage-scroll-near;[\s\S]*?animation-timeline: scroll\(root\);/);
+  // Reduced motion drops the pointer translation and every transition, not only the loops.
+  assert.match(CSS, /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?transition: none;[\s\S]*?\.stage__plane \{\s*translate: none;/);
 });
 
 // --- Generated outputs ---------------------------------------------------------

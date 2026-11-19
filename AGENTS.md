@@ -32,7 +32,7 @@ design system — the shared visual language for all Vidoxlabs products and appl
   with the prose (`test/standard.test.js`).
 - **lib/**: Shared JavaScript primitives. `lib/contrast.js` is the one WCAG contrast and
   compositing implementation (tests, primitives and MCP use it; do not re-implement it).
-  `lib/stage.js` and `lib/stage.css` are the stage backdrop primitive (ADR-013): geometry, SVG
+  `lib/stage.js` and `lib/stage.css` are the stage backdrop primitive (ADR-013; reactive planes ADR-019): geometry, SVG
   renderer and contrast report. After changing `lib/stage.js`, run `npm run stage:fragment`.
   `lib/memory-field.js` and `lib/memory-field.css` are the memory field primitive (ADR-018):
   deterministic constellation layout, SVG, text equivalent, link contrast report and the memory

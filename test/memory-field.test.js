@@ -289,3 +289,35 @@ test('the standard carries the memory field rules and they match the tokens and 
     assert.ok(prose.includes(phrase), `DESIGN.md states: ${phrase}`);
   }
 });
+
+// --- Accessible views (ADR-019 item 7) -----------------------------------------------------
+
+test('a summary render is one named image whose description says what the picture shows', () => {
+  const layout = mf.layoutMemoryField(mf.sampleMemoryField({ nodes: 20, edges: 40 }), { seed: 3 });
+  const from = layout.nodes[0].id;
+  const hits = layout.edges.filter((edge) => edge.source === from).map((edge) => edge.target);
+  const svg = mf.renderMemoryFieldSvg(layout, { id: 'sum', title: 'Recall', recall: { from, hits }, summary: true });
+  assert.match(svg, /^<svg[^>]+role="img"[^>]+aria-labelledby="sum-title sum-desc"/);
+  const desc = svg.match(/<desc id="sum-desc">([^<]+)<\/desc>/)[1];
+  assert.match(desc, /^Synthetic data\. 20 memories and 40 links \(/);
+  assert.match(desc, new RegExp(`A recall from ${layout.nodes[0].label} reaches`));
+  assert.doesNotMatch(svg, /role="list"|role="listitem"|tabindex=/);
+  assert.equal(mf.describeMemoryField(layout, { recall: { from, hits } }), desc.replace('Synthetic data. ', ''));
+  const linked = { ...layout, nodes: layout.nodes.map((node, i) => (i === 0 ? { ...node, href: '/x' } : node)) };
+  assert.throws(() => mf.renderMemoryFieldSvg(linked, { summary: true }), /interactive render/);
+});
+
+test('the interactive render gives every named group a role, so its name is exposed', () => {
+  const layout = mf.layoutMemoryField(mf.sampleMemoryField({ nodes: 12, edges: 20 }), { seed: 2 });
+  const svg = mf.renderMemoryFieldSvg(layout);
+  assert.doesNotMatch(svg, /<g(?![^>]*\brole=)[^>]*\baria-label=/);
+  assert.match(svg, /<g class="vi-mf-link"[^>]+role="img" aria-label="[A-Z]{2} [a-z]+: /);
+});
+
+test('the sheet honours more-contrast and forced-colours preferences', () => {
+  assert.match(CSS, /@media \(prefers-contrast: more\) \{[\s\S]*?\.vi-mf-node\[data-band\] \.vi-mf-node-mark/);
+  const forced = CSS.slice(CSS.indexOf('@media (forced-colors: active)'));
+  for (const name of ['.vi-mf-link-line', '.vi-mp-flow-line', '.vi-mf-node-mark']) assert.ok(forced.includes(name), name);
+  assert.match(forced, /stroke: CanvasText;/);
+  assert.match(forced, /stroke: Highlight;/);
+});

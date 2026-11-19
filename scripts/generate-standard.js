@@ -12,7 +12,7 @@ const crypto = require('crypto');
 
 const ROOT = path.join(__dirname, '..');
 const PKG = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf-8'));
-const { STAGE_VARIANT_OPACITY, STAGE_NARROW_AMBIENT_OPACITY, STAGE_TEXT_SCRIM } = require('../lib/stage');
+const { STAGE_VARIANT_OPACITY, STAGE_NARROW_AMBIENT_OPACITY, STAGE_TEXT_SCRIM, STAGE_DEPTH, STAGE_RUNTIME_PROPERTIES } = require('../lib/stage');
 const memoryField = require('../lib/memory-field');
 
 /** Canon order of the five signature colours (ADR-011, ADR-013). */
@@ -153,6 +153,15 @@ function buildStandard(tokens, designMd, skillMd) {
         narrowAmbientOpacity: STAGE_NARROW_AMBIENT_OPACITY,
         heroTextScrim: STAGE_TEXT_SCRIM,
         contrastOver: 'page field only; opaque surfaces cover the stage',
+        reactive: {
+          adr: 'ADR-019',
+          planes: ['far', 'mid', 'near'],
+          depth: STAGE_DEPTH,
+          runtimeProperties: STAGE_RUNTIME_PROPERTIES,
+          activeSeat: 'data-active-persona on the root grows that seat; other veils step back',
+          scroll: 'ambient only, progressive (animation-timeline: scroll())',
+          neverRaisesAlpha: true,
+        },
       },
       fiveBar: {
         adr: 'ADR-013',
@@ -364,6 +373,7 @@ function emitStandardMd(standard) {
     `- Reading text: ${standard.rules.stage.readingTextBound}`,
     `- Stops under: ${standard.rules.stage.stopsUnder.join('; ')}`,
     `- Primitive: ${standard.rules.stage.primitive} with ${standard.rules.stage.stylesheet}; ambient ${standard.rules.stage.ambientOpacity} (narrow ${standard.rules.stage.narrowAmbientOpacity}), hero copy on a ${standard.rules.stage.heroTextScrim} scrim`,
+    `- Reactive (${standard.rules.stage.reactive.adr}): planes ${standard.rules.stage.reactive.planes.join(', ')} at depth ${Object.values(standard.rules.stage.reactive.depth).join(', ')}; pointer via ${standard.rules.stage.reactive.runtimeProperties.slice(0, 2).join(' and ')}; ${standard.rules.stage.reactive.activeSeat}; scroll ${standard.rules.stage.reactive.scroll}; never raises an alpha`,
     '',
     '## Five-bar rule (ADR-013)',
     '',
