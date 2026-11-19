@@ -2,7 +2,12 @@
    sets each layer's opacity from its alpha table. This sheet sets colour, stroke and motion from
    emitted tokens only (dist/tokens.css). Transform and opacity only. Motion stops under
    prefers-reduced-motion and under the product's pause control, which sets
-   data-motion="paused" on the root element (WCAG 2.2.2). */
+   data-motion="paused" on the root element (WCAG 2.2.2).
+
+   Reactive stage (ADR-019): three depth planes follow the pointer through --stage-pointer-x and
+   --stage-pointer-y (each -1..1, set by the product on any ancestor), sink and rise with the page
+   scroll where scroll-driven animation is supported, and answer the active seat through
+   data-active-persona on the root. None of it raises a layer above the alpha in lib/stage.js. */
 
 .stage {
   position: absolute;
@@ -173,6 +178,144 @@
   animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) * -1);
 }
 
+/* ---------- Reactive planes (ADR-019) ---------- */
+
+/* Pointer depth. The product eases the pointer pair; this sheet only maps it to a translation
+   per plane, using the individual translate property so it composes with every animation. */
+.stage__plane {
+  translate: calc(var(--stage-pointer-x, 0) * var(--stage-depth) * 1px) calc(var(--stage-pointer-y, 0) * var(--stage-depth) * 1px);
+}
+
+/* STAGE_DEPTH in lib/stage.js (test/stage.test.js). */
+.stage__plane--far {
+  --stage-depth: 6;
+}
+
+.stage__plane--mid {
+  --stage-depth: 12;
+}
+
+.stage__plane--near {
+  --stage-depth: 20;
+}
+
+/* Persona veils drift on the ambient clock, each on its own phase, so the field never repeats
+   in step. */
+.stage__veil {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity var(--vi-transition-transition-duration-entrance-base) var(--vi-transition-transition-easing-standard-base),
+    scale var(--vi-transition-transition-duration-entrance-base) var(--vi-transition-transition-easing-spring-base);
+  animation: stage-drift var(--vi-transition-transition-duration-ambient-drift-base) var(--vi-transition-transition-easing-standard-base) infinite alternate;
+}
+
+.stage__veil[data-index="1"] {
+  animation-duration: calc(var(--vi-transition-transition-duration-ambient-drift-base) * 0.8);
+  animation-direction: alternate-reverse;
+}
+
+.stage__veil[data-index="2"] {
+  animation-duration: calc(var(--vi-transition-transition-duration-ambient-drift-base) * 1.2);
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-drift-base) * -0.4);
+}
+
+.stage__veil[data-index="3"] {
+  animation-duration: calc(var(--vi-transition-transition-duration-ambient-drift-base) * 0.9);
+  animation-direction: alternate-reverse;
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-drift-base) * -0.2);
+}
+
+.stage__veil[data-index="4"] {
+  animation-duration: calc(var(--vi-transition-transition-duration-ambient-drift-base) * 1.1);
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-drift-base) * -0.6);
+}
+
+/* Active seat. The addressed seat's veil and light grow; the other veils step back. Growing
+   spreads a layer without raising its peak alpha, and stepping back only lowers it. */
+.stage__light > circle:first-child {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--vi-transition-transition-duration-slow-base) var(--vi-transition-transition-easing-spring-base);
+}
+
+:root[data-active-persona] .stage__veil {
+  opacity: 0.45;
+}
+
+:root[data-active-persona="violet"] .stage__veil[data-persona="violet"],
+:root[data-active-persona="wisteria"] .stage__veil[data-persona="wisteria"],
+:root[data-active-persona="xylia"] .stage__veil[data-persona="xylia"],
+:root[data-active-persona="yarrow"] .stage__veil[data-persona="yarrow"],
+:root[data-active-persona="zinnia"] .stage__veil[data-persona="zinnia"] {
+  opacity: 1;
+  scale: 1.25;
+}
+
+:root[data-active-persona="violet"] .stage__light[data-persona="violet"] > circle:first-child,
+:root[data-active-persona="wisteria"] .stage__light[data-persona="wisteria"] > circle:first-child,
+:root[data-active-persona="xylia"] .stage__light[data-persona="xylia"] > circle:first-child,
+:root[data-active-persona="yarrow"] .stage__light[data-persona="yarrow"] > circle:first-child,
+:root[data-active-persona="zinnia"] .stage__light[data-persona="zinnia"] > circle:first-child {
+  transform: scale(1.6);
+}
+
+:root[data-active-persona="violet"] .stage__ring .stage__segment[data-persona="violet"],
+:root[data-active-persona="wisteria"] .stage__ring .stage__segment[data-persona="wisteria"],
+:root[data-active-persona="xylia"] .stage__ring .stage__segment[data-persona="xylia"],
+:root[data-active-persona="yarrow"] .stage__ring .stage__segment[data-persona="yarrow"],
+:root[data-active-persona="zinnia"] .stage__ring .stage__segment[data-persona="zinnia"] {
+  animation: none;
+  opacity: 1;
+}
+
+/* Scroll depth: behind a long page the floor sinks and the far plane rises, so reading feels
+   like moving through the space. Progressive: browsers without scroll timelines keep the still
+   planes. The ambient variant only; a hero scrolls away with its section. Longhands only: a
+   minifier may fold the timeline into the animation shorthand, which engines reject whole. */
+@supports (animation-timeline: scroll()) {
+  .stage--ambient .stage__floor {
+    animation-name: stage-scroll-near;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root);
+  }
+
+  .stage--ambient .stage__veils {
+    animation-name: stage-scroll-far;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes stage-drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(48px, -32px) scale(1.15);
+  }
+}
+
+@keyframes stage-scroll-near {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(90px);
+  }
+}
+
+@keyframes stage-scroll-far {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-40px);
+  }
+}
+
 @keyframes stage-sway {
   from {
     transform: rotate(-3deg);
@@ -223,6 +366,11 @@
   .stage *,
   .stage {
     animation: none;
+    transition: none;
+  }
+
+  .stage__plane {
+    translate: none;
   }
 
   .stage__ripple {

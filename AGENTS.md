@@ -27,7 +27,7 @@ design system — the shared visual language for all Vidoxlabs products and appl
   layer limit, signature-colour rules). `npm run lint` runs ESLint and then this script.
 - **scripts/generate-standard.js**: Emits `dist/standard.json` and `dist/standard.md`, the
   machine-readable rule set (glass, typography, geometry, motion and ambient loops, stage
-  backdrop, five-bar rule, graph line, chat dock, accessibility) plus the ADR index and the
+  backdrop, five-bar rule, graph line, chat dock, conversation surface, explorable instrument, memory field, accessibility) plus the ADR index and the
   SHA-256 of `DESIGN.md` and `SKILL.md`. Product repos sync this file; keep it in parity
   with the prose (`test/standard.test.js`).
 - **scripts/generate-platforms.js**: Emits the native token outputs (ADR-014): `dist/tokens.ts`,
@@ -35,13 +35,17 @@ design system — the shared visual language for all Vidoxlabs products and appl
   once by `scripts/lib/token-values.js`; CSS-only values are listed, never approximated.
 - **lib/**: Shared JavaScript primitives. `lib/contrast.js` is the one WCAG contrast and
   compositing implementation (tests, primitives and MCP use it; do not re-implement it).
-  `lib/stage.js` and `lib/stage.css` are the stage backdrop primitive (ADR-013): geometry, SVG
+  `lib/stage.js` and `lib/stage.css` are the stage backdrop primitive (ADR-013; reactive planes ADR-019): geometry, SVG
   renderer and contrast report. After changing `lib/stage.js`, run `npm run stage:fragment`.
   `lib/dialects.js` defines the persona dialects (ADR-015) as token references; it generates
   `dist/dialects.css` and `dist/dialects.json`. After changing it, run `npm run dialects:fragment`.
+  `lib/memory-field.js` and `lib/memory-field.css` are the memory field primitive (ADR-018):
+  deterministic constellation layout, SVG, text equivalent, link contrast report and the memory
+  pipeline figure. After changing `lib/memory-field.js`, run `npm run memory-field:fragment`.
 - **mcp-server.js**: The MCP server that exposes this design system to product
   repositories for cross-repo token and fragment fetching. Tools: `resolve_token` (one token
-  value), `style_pack`, `check_contrast` (WCAG ratio of two colours or tokens) and
+  value), `style_pack`, `check_contrast` (WCAG ratio of two colours or tokens),
+  `memory_field` (memory field SVG, text equivalent and contrast report) and
   `stage_backdrop` (stage SVG plus its contrast report).
 - **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
   naming convention. Raster binaries are not committed. Text-only SVG under `brand/`
@@ -75,8 +79,10 @@ Within the `videsign` repository, agents are restricted to the following command
 - `npm run tokens`: Parses `DESIGN.md` and regenerates `dist/tailwind.config.js`,
   `dist/tokens.css`, `dist/tokens.json`, `dist/themes.css`, `dist/glass.css`,
   `dist/catalog.css`, `dist/standard.json`, `dist/standard.md`, `dist/stage.css`,
-  `dist/stage-ambient.svg`, `dist/stage-hero.svg`, `dist/tokens.ts`, `dist/ViTokens.swift`,
-  `dist/videsign_tokens.py`, `dist/tokens.dtcg.json` and `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
+  `dist/stage-ambient.svg`, `dist/stage-hero.svg`, `dist/memory-field.css`,
+  `dist/memory-field-sample.svg`, `dist/memory-pipeline-sample.svg`, `dist/tokens.ts`,
+  `dist/ViTokens.swift`, `dist/videsign_tokens.py`, `dist/tokens.dtcg.json`, `dist/dialects.css`,
+  `dist/dialects.json` and `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
 - `npm test`: Runs `node --test test/*.test.js`: the MCP stdio smoke test
   (`test/mcp-server.test.js`), the token contract (`test/tokens.test.js`),
   the theme contract (`test/themes.test.js`), the preview fragment contract
@@ -84,12 +90,15 @@ Within the `videsign` repository, agents are restricted to the following command
   the agent standard contract (`test/standard.test.js`), the persona canon
   contract (`test/persona-canon.test.js`), the canon tool contract
   (`test/canon-tool.test.js`), the pipeline pack contract (`test/pipeline-packs.test.js`),
-  the stage primitive contract (`test/stage.test.js`), the platform token contract
-  (`test/platforms.test.js`), the persona dialect contract (`test/dialects.test.js`), and the
-  safety hash builder (`test/safety-hashes.test.js`).
+  the stage primitive contract (`test/stage.test.js`), the memory field contract
+  (`test/memory-field.test.js`), the platform token contract (`test/platforms.test.js`),
+  the persona dialect contract (`test/dialects.test.js`), and the safety hash builder
+  (`test/safety-hashes.test.js`).
   Run this after changing `mcp-server.js`, `DESIGN.md` tokens, `canon/vwxyz/`, `brand/`, or any fragment.
 - `npm run canon:check`: Runs the persona canon contract on its own.
 - `npm run stage:fragment`: Regenerates `preview/stage-backdrop.html` from `lib/stage.js`.
+- `npm run memory-field:fragment`: Regenerates `preview/memory-field.html` and
+  `preview/memory-pipeline.html` from `lib/memory-field.js`.
 - `npm run dialects:fragment`: Regenerates `preview/persona-dialects.html` from `lib/dialects.js`.
 - `npm run safety:scan`: Runs the public-safety scan. `npm run safety:hashes` reads handles on
   stdin and prints the `SAFETY_SCAN_SHA256_LIST` value (README, "CI secret"). Never put a handle in

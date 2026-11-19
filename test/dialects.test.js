@@ -132,6 +132,14 @@ test('generated outputs match the module and the catalog fragment follows each l
   }
 });
 
+test('dialects add no chrome to a conversation surface (ADR-016)', () => {
+  for (const file of ['conversation-surface.html', 'chat-dock.html']) {
+    const html = fs.readFileSync(path.join(ROOT, 'preview', file), 'utf-8');
+    assert.doesNotMatch(html, /vi-agent__motif/, `${file} must not carry a dialect motif`);
+  }
+  assert.match(fs.readFileSync(path.join(ROOT, 'SKILL.md'), 'utf-8'), /adds no chrome to it/);
+});
+
 test('every platform output carries the dialects', () => {
   const ts = fs.readFileSync(path.join(ROOT, 'dist', 'tokens.ts'), 'utf-8');
   const swift = fs.readFileSync(path.join(ROOT, 'dist', 'ViTokens.swift'), 'utf-8');

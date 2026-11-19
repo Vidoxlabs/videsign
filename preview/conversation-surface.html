@@ -1,0 +1,58 @@
+<!--
+  Nocturne Museum: Conversation surface, empty state (ADR-016, glass per ADR-006)
+  The standard for every AI chat. At rest it shows four things: one header row, the
+  conversation, one composer field and one disclosure line.
+  Header: the avatar, then a first line of seat name, role and close, and a second line
+  holding the five seat dots.
+  No product title, model badge or state label is printed; the dialog's accessible name
+  and a visually hidden live text carry them. The avatar here is the seat's crest;
+  a product shows the seat's sprite in the same slot once art is approved for it.
+  Seat dots: five buttons in canon order, aria-pressed, named for the seat, each hit
+  area 44px by 44px. The pressed seat carries a ring in its own colour and
+  the five sit together, so no seat colour appears alone.
+  A guide's reply is text on the core with no card. An empty conversation offers at
+  most four starters. The composer is one bordered field with send inside it. The
+  disclosure is one line; its detail expands in place. Example text describes the
+  component, not a product claim.
+-->
+<div role="dialog" aria-modal="false" aria-label="Chat with the guides" class="vi-glass-shell w-layout-width-conversation-base">
+  <div class="vi-glass-core flex flex-col">
+    <header class="flex items-center gap-gap-comfortable-default p-layout-padding-medium-base">
+      <span aria-hidden="true" class="grid place-items-center shrink-0 w-action-wide-default h-action-wide-default rounded-layout-radius-full-base border border-border-graph-line-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">V</span>
+      <div class="flex flex-col flex-1 min-w-0">
+        <div class="flex items-center gap-gap-dense-default">
+          <p class="shrink-0 pr-inset-compact-default font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Violet</p>
+          <p class="flex-1 min-w-0 truncate font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Coordinates and ratifies</p>
+          <button type="button" aria-label="Close chat" class="grid place-items-center shrink-0 w-action-min-default h-action-min-default rounded-layout-radius-full-base text-text-content-secondary-base hover:text-text-content-primary-base">×</button>
+        </div>
+        <div role="group" aria-label="Choose a guide" class="flex items-center">
+          <button type="button" aria-pressed="true" aria-label="Violet" class="grid place-items-center w-action-min-default h-action-min-default"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base border border-persona-accent-violet-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span></span></button>
+          <button type="button" aria-pressed="false" aria-label="Wisteria" class="grid place-items-center w-action-min-default h-action-min-default"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span></span></button>
+          <button type="button" aria-pressed="false" aria-label="Xylia" class="grid place-items-center w-action-min-default h-action-min-default"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span></span></button>
+          <button type="button" aria-pressed="false" aria-label="Yarrow" class="grid place-items-center w-action-min-default h-action-min-default"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span></span></button>
+          <button type="button" aria-pressed="false" aria-label="Zinnia" class="grid place-items-center w-action-min-default h-action-min-default"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span></span></button>
+        </div>
+        <p aria-live="polite" class="sr-only">Companion state: at rest</p>
+      </div>
+    </header>
+    <div role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation" class="flex flex-col gap-gap-spacious-default px-layout-padding-medium-base pb-layout-padding-medium-base">
+      <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">What brings you here today?</p>
+      <div role="group" aria-label="Starters" class="flex flex-wrap gap-gap-compact-default">
+        <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base border border-border-separator-primary-base hover:border-surface-accent-violet-base rounded-layout-radius-full-base">Show me the work</button>
+        <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base border border-border-separator-primary-base hover:border-surface-accent-violet-base rounded-layout-radius-full-base">I am here for the research</button>
+        <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base border border-border-separator-primary-base hover:border-surface-accent-violet-base rounded-layout-radius-full-base">Summarize this page</button>
+      </div>
+    </div>
+    <div class="flex flex-col gap-gap-compact-default px-layout-padding-medium-base pb-layout-padding-medium-base">
+      <form class="flex items-end gap-gap-dense-default bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base">
+        <label for="conversation-input" class="sr-only">Message Violet</label>
+        <textarea id="conversation-input" rows="1" placeholder="Ask Violet" class="flex-1 min-w-0 h-action-min-default px-inset-operator-default bg-transparent outline-none font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base placeholder:text-text-content-secondary-base resize-none"></textarea>
+        <button type="submit" aria-label="Send" disabled class="grid place-items-center shrink-0 w-action-min-default h-action-min-default rounded-layout-radius-control-base text-text-content-secondary-base cursor-not-allowed">→</button>
+      </form>
+      <details class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">
+        <summary>Replies come from an AI model. What is sent</summary>
+        <p>Your question, the selected guide, the page path and recent turns. If the service is unavailable the reply is a labelled fallback.</p>
+      </details>
+    </div>
+  </div>
+</div>
