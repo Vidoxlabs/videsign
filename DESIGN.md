@@ -21,6 +21,15 @@ colors:
   border-separator-primary-light: "#CBD5E1"
   border-graph-line-base: "#80808A"
   border-graph-line-light: "#64748B"
+# ADR-018 memory field link types (CR cluster, RR reasoned, LR linked, TR tree). Meaning-bearing lines: at least 3:1 on every surface of their theme, at least 15 deltaE00 from every persona, status and graph-line colour, at least 20 from each other. Never a persona colour; each code also carries a dash or marker and a text label.
+  border-graph-cluster-base: "#5EEAD4"
+  border-graph-cluster-light: "#0F766E"
+  border-graph-reasoned-base: "#FDE047"
+  border-graph-reasoned-light: "#854D0E"
+  border-graph-linked-base: "#60A5FA"
+  border-graph-linked-light: "#1E40AF"
+  border-graph-tree-base: "#FECDD3"
+  border-graph-tree-light: "#86198F"
   status-indicator-success-base: "#10B981"
   status-indicator-warning-base: "#F59E0B"
   status-indicator-error-base: "#F43F5E"
@@ -266,6 +275,20 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > - **Seat colours.** Only where the five seats appear together, as a dot, ring or bar.
 > - Reference: `preview/instrument.html`.
 
+> [!IMPORTANT]
+>
+> ### Memory field (ADR-018)
+>
+> The standard for memory constellations and memory pipelines (Memorix, CRS). Rendered by `lib/memory-field.js` and styled by `lib/memory-field.css`; never redrawn by hand in a product.
+>
+> - **Link codes.** CR cluster (correlation: semantic similarity or a shared concept), RR reasoned (inferred by synthesis, unconfirmed), LR linked (an explicit pointer), TR tree (lineage or sequence). Each code has its own `border-graph-*` token, a second cue (CR solid with width by count, RR long dash, LR dotted, TR solid with an arrowhead) and a text label.
+> - **Edge states.** Rest edges are the ambient web: curved, low opacity, `aria-hidden`. Lit edges (the focus or a recall result) are straight, at full token colour, and carry the meaning. Dim edges sit at 20%.
+> - **Nodes.** A neutral fill with a `{colors.border-graph-line-base}` outline. Memory class is the outline shape: organizational solid, consented personal a ring with a centre dot, active-thread a double ring, unconfirmed a dashed ring. Mass is three radius steps; recency is three opacity bands on the mark only, never on the label. A lit node takes the accent ring.
+> - **Motion.** Entrance draw-in, recall pulse, Forget retraction, ambient drift and pipeline flow. Transform and opacity only; every motion is static under reduced motion and under the pause control.
+> - **Budget.** At most 300 nodes and 3,000 edges; beyond that the renderer refuses and the product samples or aggregates.
+> - **Text equivalent.** Every field ships its link list (`renderMemoryFieldTable`) beside the figure.
+> - Reference: `preview/memory-field.html` and `preview/memory-pipeline.html`.
+
 ## Continuous Interaction Standards
 
 Consuming products present sovereign personas and evidence inside static-edge constraints (static builds, zero runtime bindings, strict CSP `script-src 'self'`). Continuity therefore comes from browser-native primitives, never client-framework hydration.
@@ -414,6 +437,15 @@ values must use semantic tokens. Raw utilities like `gap-2`, `w-64`, `text-sm`,
 > | `{colors.border-separator-primary-base}` `#27272A` (hairline) | **1.33:1 (separators only)** | **1.25:1** | **1.14:1** |
 > | `{colors.border-graph-line-light}` `#64748B` (light theme) | 4.51:1 | 4.76:1 | 4.28:1 |
 > | `{colors.border-separator-primary-light}` `#CBD5E1` (light hairline) | **1.41:1 (separators only)** | **1.48:1** | **1.33:1** |
+>
+> Memory field link tokens (ADR-018), measured 2026-11-18:
+>
+> | Link | Dark value: primary / secondary / tertiary | Light value: primary / secondary / tertiary |
+> | --- | --- | --- |
+> | CR `{colors.border-graph-cluster-base}` / `-light` | `#5EEAD4` 13.36 / 12.59 / 11.44 | `#0F766E` 5.19 / 5.47 / 4.92 |
+> | RR `{colors.border-graph-reasoned-base}` / `-light` | `#FDE047` 14.99 / 14.13 / 12.84 | `#854D0E` 6.50 / 6.85 / 6.16 |
+> | LR `{colors.border-graph-linked-base}` / `-light` | `#60A5FA` 7.77 / 7.33 / 6.66 | `#1E40AF` 8.27 / 8.72 / 7.84 |
+> | TR `{colors.border-graph-tree-base}` / `-light` | `#FECDD3` 14.01 / 13.21 / 12.00 | `#86198F` 7.81 / 8.24 / 7.41 |
 >
 > An SVG that contains links is `role="group"` with a label, not `role="img"`, which hides its links from assistive technology.
 

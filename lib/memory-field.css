@@ -1,0 +1,442 @@
+/* Memory field primitive (ADR-018). Pair with lib/memory-field.js, which renders the SVG. This
+   sheet sets colour, stroke and motion from emitted tokens only (dist/tokens.css); the light theme
+   comes from dist/themes.css, which remaps the same variables. Transform and opacity only.
+
+   Each motion's resting style is its final state and the animation runs from the start state, so
+   under prefers-reduced-motion and under the pause control (data-motion="paused" on the root,
+   WCAG 2.2.2) the field shows where the motion ends. Ambient drift and pipeline flow are the only
+   loops and are opt-in (data-ambient="on", data-flow="on") so a product turns them on beside its
+   pause control. */
+
+.vi-mf,
+.vi-mp {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  overflow: visible;
+  font-family: var(--vi-typography-typography-family-sans-base);
+}
+
+/* --- Rest web: decoration (aria-hidden), curved, faint ----------------------------------- */
+
+.vi-mf-rest-edge {
+  fill: none;
+  stroke-width: 0.6;
+  opacity: 0.22;
+}
+
+/* Focus and recall push the rest web back. Forget keeps it: the other memories stay linked, and
+   only the forgotten node's rest edges go, with its links. */
+.vi-mf:is([data-mode="focus"], [data-mode="recall"]) .vi-mf-rest-edge {
+  opacity: 0.08;
+}
+
+.vi-mf-rest-edge[data-forgetting="true"] {
+  opacity: 0;
+}
+
+/* --- Link codes: one base token each, plus a second cue ----------------------------------- */
+
+.vi-mf-rest-edge[data-code="CR"],
+.vi-mf-link[data-code="CR"] .vi-mf-link-line,
+.vi-mp-flow[data-code="CR"] .vi-mp-flow-line {
+  stroke: var(--vi-colors-border-graph-cluster-base);
+}
+
+.vi-mf-rest-edge[data-code="RR"],
+.vi-mf-link[data-code="RR"] .vi-mf-link-line,
+.vi-mp-flow[data-code="RR"] .vi-mp-flow-line {
+  stroke: var(--vi-colors-border-graph-reasoned-base);
+  stroke-dasharray: 6 4;
+}
+
+.vi-mf-rest-edge[data-code="LR"],
+.vi-mf-link[data-code="LR"] .vi-mf-link-line,
+.vi-mp-flow[data-code="LR"] .vi-mp-flow-line {
+  stroke: var(--vi-colors-border-graph-linked-base);
+  stroke-dasharray: 0.5 4;
+  stroke-linecap: round;
+}
+
+.vi-mf-rest-edge[data-code="TR"],
+.vi-mf-link[data-code="TR"] .vi-mf-link-line,
+.vi-mp-flow[data-code="TR"] .vi-mp-flow-line {
+  stroke: var(--vi-colors-border-graph-tree-base);
+}
+
+.vi-mf-arrow path {
+  fill: var(--vi-colors-border-graph-tree-base);
+}
+
+.vi-mf-link-line {
+  fill: none;
+  stroke-width: 1.25;
+  transform-origin: 0 0;
+}
+
+.vi-mf-link[data-weight="2"] .vi-mf-link-line {
+  stroke-width: 2;
+}
+
+.vi-mf-link[data-weight="3"] .vi-mf-link-line {
+  stroke-width: 2.75;
+}
+
+/* --- Nodes: memory class is the outline shape; recency is the mark's opacity --------------- */
+
+.vi-mf-node {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.vi-mf-node a,
+.vi-mf-node g {
+  outline: none;
+}
+
+.vi-mf-node-halo {
+  fill: var(--vi-colors-border-graph-line-base);
+  opacity: 0.12;
+}
+
+.vi-mf-node-mark {
+  fill: var(--vi-colors-surface-background-tertiary-base);
+  stroke: var(--vi-colors-border-graph-line-base);
+  stroke-width: 1.25;
+}
+
+.vi-mf-node[data-memory="organizational"] .vi-mf-node-mark {
+  fill: var(--vi-colors-border-graph-line-base);
+}
+
+.vi-mf-node-core {
+  fill: var(--vi-colors-border-graph-line-base);
+}
+
+.vi-mf-node-ring {
+  fill: none;
+  stroke: var(--vi-colors-border-graph-line-base);
+  stroke-width: 1;
+}
+
+.vi-mf-node[data-memory="unconfirmed"] .vi-mf-node-mark {
+  stroke-dasharray: 2 2;
+}
+
+.vi-mf-node[data-band="warm"] .vi-mf-node-mark,
+.vi-mf-node[data-band="warm"] .vi-mf-node-core,
+.vi-mf-node[data-band="warm"] .vi-mf-node-ring {
+  opacity: 0.7;
+}
+
+.vi-mf-node[data-band="cold"] .vi-mf-node-mark,
+.vi-mf-node[data-band="cold"] .vi-mf-node-core,
+.vi-mf-node[data-band="cold"] .vi-mf-node-ring {
+  opacity: 0.45;
+}
+
+.vi-mf-node[data-state="lit"] .vi-mf-node-mark,
+.vi-mf-node a:focus-visible .vi-mf-node-mark,
+.vi-mf-node g:focus-visible .vi-mf-node-mark {
+  stroke: var(--vi-colors-surface-accent-violet-base);
+  stroke-width: 2;
+  opacity: 1;
+}
+
+.vi-mf-node[data-state="lit"] .vi-mf-node-halo {
+  fill: var(--vi-colors-surface-accent-violet-base);
+  opacity: 0.22;
+}
+
+.vi-mf-node[data-state="dim"] {
+  opacity: 0.4;
+}
+
+.vi-mf-caption {
+  fill: var(--vi-colors-text-content-secondary-base);
+  font-family: var(--vi-typography-typography-family-mono-base);
+  font-size: var(--vi-typography-typography-size-xs-base);
+}
+
+/* --- Motion 1: entrance draw-in (once; on scroll where view timelines exist) --------------- */
+
+.vi-mf--enter .vi-mf-link-line {
+  animation: vi-mf-draw var(--vi-transition-transition-duration-entrance-base) var(--vi-transition-transition-easing-standard-base) both;
+}
+
+.vi-mf--enter .vi-mf-node {
+  animation: vi-mf-fade-in var(--vi-transition-transition-duration-entrance-base) var(--vi-transition-transition-easing-standard-base) both;
+}
+
+.vi-mf--enter .vi-mf-node[data-band="warm"] {
+  animation-delay: var(--vi-transition-transition-duration-fast-base);
+}
+
+.vi-mf--enter .vi-mf-node[data-band="cold"] {
+  animation-delay: var(--vi-transition-transition-duration-slow-base);
+}
+
+@supports (animation-timeline: view()) {
+  .vi-mf--enter {
+    view-timeline-name: --vi-mf-view;
+  }
+
+  .vi-mf--enter .vi-mf-link-line,
+  .vi-mf--enter .vi-mf-node {
+    animation-timeline: --vi-mf-view;
+    animation-range: entry 10% cover 35%;
+  }
+}
+
+@keyframes vi-mf-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes vi-mf-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- Motion 2: recall pulse (query to hits, then the rest dims) ---------------------------- */
+
+.vi-mf-pulse {
+  fill: var(--vi-colors-surface-accent-violet-base);
+}
+
+.vi-mf-pulse-track {
+  opacity: 0;
+  transform-origin: 0 0;
+}
+
+.vi-mf[data-mode="recall"] .vi-mf-link-line {
+  animation: vi-mf-draw var(--vi-transition-transition-duration-entrance-base) var(--vi-transition-transition-easing-standard-base) both;
+}
+
+.vi-mf[data-mode="recall"] .vi-mf-pulse-track {
+  animation: vi-mf-travel var(--vi-transition-transition-duration-entrance-base) var(--vi-transition-transition-easing-standard-base) both;
+}
+
+.vi-mf[data-mode="recall"] .vi-mf-node[data-state="dim"] {
+  animation: vi-mf-dim var(--vi-transition-transition-duration-slow-base) var(--vi-transition-transition-easing-standard-base) var(--vi-transition-transition-duration-entrance-base) both;
+}
+
+@keyframes vi-mf-travel {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes vi-mf-dim {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+
+/* --- Motion 3: Forget retraction (edges pull back into the node, the node fades) ----------- */
+
+.vi-mf-link[data-forgetting="true"] .vi-mf-link-line {
+  transform: scaleX(0);
+  animation: vi-mf-retract var(--vi-transition-transition-duration-entrance-base) var(--vi-transition-transition-easing-standard-base) both;
+}
+
+.vi-mf-node[data-state="forgetting"] {
+  opacity: 0;
+  animation: vi-mf-vanish var(--vi-transition-transition-duration-slow-base) var(--vi-transition-transition-easing-standard-base) var(--vi-transition-transition-duration-entrance-base) both;
+}
+
+@keyframes vi-mf-retract {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes vi-mf-vanish {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* --- Motion 4: ambient drift of the rest web (loop, opt-in) -------------------------------- */
+
+.vi-mf[data-ambient="on"] .vi-mf-rest {
+  animation: vi-mf-drift var(--vi-transition-transition-duration-ambient-drift-base) ease-in-out infinite alternate;
+}
+
+@keyframes vi-mf-drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(6px, -4px);
+  }
+}
+
+/* --- Pipeline figure ----------------------------------------------------------------------- */
+
+.vi-mp-group-frame {
+  fill: none;
+  stroke: var(--vi-colors-border-separator-primary-base);
+  stroke-width: 1;
+}
+
+.vi-mp-group-label {
+  fill: var(--vi-colors-text-content-secondary-base);
+  font-family: var(--vi-typography-typography-family-mono-base);
+  font-size: var(--vi-typography-typography-size-xs-base);
+  letter-spacing: var(--vi-typography-typography-tracking-wide-base);
+}
+
+.vi-mp-store,
+.vi-mp-step {
+  fill: var(--vi-colors-surface-background-tertiary-base);
+  stroke: var(--vi-colors-border-graph-line-base);
+  stroke-width: 1.25;
+}
+
+.vi-mp-stage-label {
+  fill: var(--vi-colors-text-content-primary-base);
+  font-size: var(--vi-typography-typography-size-sm-base);
+  font-weight: var(--vi-typography-typography-weight-semibold-base);
+}
+
+.vi-mp-stage-sub,
+.vi-mp-flow-label {
+  fill: var(--vi-colors-text-content-secondary-base);
+  font-family: var(--vi-typography-typography-family-mono-base);
+  font-size: var(--vi-typography-typography-size-xs-base);
+}
+
+.vi-mp-flow-line {
+  fill: none;
+  stroke: var(--vi-colors-border-graph-line-base);
+  stroke-width: 1.25;
+}
+
+.vi-mp-arrow path {
+  fill: var(--vi-colors-border-graph-line-base);
+}
+
+.vi-mp-pulse {
+  fill: var(--vi-colors-surface-accent-violet-base);
+}
+
+.vi-mp-pulse-track {
+  opacity: 0;
+  transform-origin: 0 0;
+}
+
+/* --- Motion 5: pipeline flow (loop, opt-in; phases spread the pulses) ---------------------- */
+
+.vi-mp[data-flow="on"] .vi-mp-pulse-track {
+  animation: vi-mp-flow var(--vi-transition-transition-duration-ambient-pulse-base) linear infinite;
+}
+
+.vi-mp[data-flow="on"] [data-phase="1"] .vi-mp-pulse-track {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) / -6);
+}
+
+.vi-mp[data-flow="on"] [data-phase="2"] .vi-mp-pulse-track {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) / -3);
+}
+
+.vi-mp[data-flow="on"] [data-phase="3"] .vi-mp-pulse-track {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) / -2);
+}
+
+.vi-mp[data-flow="on"] [data-phase="4"] .vi-mp-pulse-track {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) / -1.5);
+}
+
+.vi-mp[data-flow="on"] [data-phase="5"] .vi-mp-pulse-track {
+  animation-delay: calc(var(--vi-transition-transition-duration-ambient-pulse-base) / -1.2);
+}
+
+@keyframes vi-mp-flow {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  10% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  70% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+/* --- Stops: reduced motion and the pause control show each final state ------------------- */
+
+:root[data-motion="paused"] .vi-mf *,
+:root[data-motion="paused"] .vi-mp * {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vi-mf *,
+  .vi-mp * {
+    animation: none;
+  }
+}
+
+/* --- Text equivalent ------------------------------------------------------------------------ */
+
+.vi-mf-table {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--vi-typography-typography-size-sm-base);
+  color: var(--vi-colors-text-content-secondary-base);
+}
+
+.vi-mf-table-label {
+  color: var(--vi-colors-text-content-primary-base);
+}
+
+.vi-mf-table-code,
+.vi-mf-table-meta {
+  font-family: var(--vi-typography-typography-family-mono-base);
+  font-size: var(--vi-typography-typography-size-xs-base);
+}

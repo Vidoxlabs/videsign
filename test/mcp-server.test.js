@@ -117,3 +117,22 @@ test('stage_backdrop reports, without erroring, an opacity that fails the bound'
   const bad = await client.callTool({ name: 'stage_backdrop', arguments: { variant: 'hero', opacity: 2 } });
   assert.equal(bad.isError, true);
 });
+
+test('memory_field renders the synthetic sample with its text equivalent and a passing report', async () => {
+  const result = await client.callTool({ name: 'memory_field', arguments: { theme: 'light' } });
+  assert.notEqual(result.isError, true, result.content[0].text);
+  const body = JSON.parse(result.content[0].text);
+  assert.equal(body.synthetic, true);
+  assert.equal(body.report.theme, 'light');
+  assert.equal(body.report.pass, true);
+  assert.match(body.svg, /^<svg class="vi-mf"/);
+  assert.match(body.table, /^<ul class="vi-mf-table"/);
+  assert.equal(body.stylesheet, 'dist/memory-field.css');
+});
+
+test('memory_field refuses invalid data with a typed error', async () => {
+  const data = { nodes: [{ id: 'a', label: 'a', class: 'gossip' }], edges: [] };
+  const result = await client.callTool({ name: 'memory_field', arguments: { data } });
+  assert.equal(result.isError, true);
+  assert.match(result.content[0].text, /MEMORY_FIELD_INVALID/);
+});
