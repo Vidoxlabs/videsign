@@ -165,6 +165,9 @@ test('the reactive layer only moves, spreads or lowers: it never raises a painte
   assert.match(CSS, /:root\[data-active-persona\] \.stage__veil \{\s*opacity: 0\.45;/);
   // Scroll depth is progressive and limited to the ambient variant.
   assert.match(CSS, /@supports \(animation-timeline: scroll\(\)\) \{\s*\.stage--ambient/);
+  // Longhands only: a minifier folds a timeline into the shorthand, which engines reject whole.
+  assert.doesNotMatch(CSS, /animation: stage-scroll/);
+  assert.match(CSS, /animation-name: stage-scroll-near;[\s\S]*?animation-timeline: scroll\(root\);/);
   // Reduced motion drops the pointer translation and every transition, not only the loops.
   assert.match(CSS, /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?transition: none;[\s\S]*?\.stage__plane \{\s*translate: none;/);
 });

@@ -271,15 +271,20 @@
 
 /* Scroll depth: behind a long page the floor sinks and the far plane rises, so reading feels
    like moving through the space. Progressive: browsers without scroll timelines keep the still
-   planes. The ambient variant only; a hero scrolls away with its section. */
+   planes. The ambient variant only; a hero scrolls away with its section. Longhands only: a
+   minifier may fold the timeline into the animation shorthand, which engines reject whole. */
 @supports (animation-timeline: scroll()) {
   .stage--ambient .stage__floor {
-    animation: stage-scroll-near linear both;
+    animation-name: stage-scroll-near;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: scroll(root);
   }
 
   .stage--ambient .stage__veils {
-    animation: stage-scroll-far linear both;
+    animation-name: stage-scroll-far;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: scroll(root);
   }
 }
