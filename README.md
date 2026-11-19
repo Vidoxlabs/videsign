@@ -71,7 +71,7 @@ styled visual catalog of every component (`python3 -m http.server 8000`). The ca
    remaps the base variables.
 3. **MCP**: Run `npm run mcp` and query resources/tools from your product repo's agent.
    `dist/standard.json` is the machine-readable rule set (glass, type, motion, stage
-   backdrop, five-bar rule, graph line, chat dock, accessibility) with the ADR index.
+   backdrop, five-bar rule, graph line, chat dock, conversation surface, explorable instrument, accessibility) with the ADR index.
    Sync it into a product with the product's own token sync script, pinned to a videsign SHA.
 4. **Stage backdrop**: `const { renderStageSvg, stageContrastReport } = require('@vidoxlabs/videsign/lib/stage.js')`
    renders the ADR-013 backdrop as an SVG string (or inline `dist/stage-ambient.svg` /

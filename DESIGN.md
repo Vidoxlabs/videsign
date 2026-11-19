@@ -98,6 +98,7 @@ size:
   action-wide-default: "3.5rem"
   layout-width-sidebar-base: "16rem"
   layout-width-inspector-base: "20rem"
+  layout-width-conversation-base: "27.5rem"
   layout-width-content-base: "80rem"
   icon-xs-base: "1rem"
   icon-sm-base: "1.5rem"
@@ -224,10 +225,46 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 >
 > - A launcher fixed bottom right opens a non-modal dialog (`role="dialog"`, `aria-modal="false"`, labelled by its title). Escape closes it and returns focus to the launcher.
 > - The launcher is at least `{size.action-min-default}`, carries a label, and shows a tracked brand file or the five seat dots, never a drawn or approximated mark. A five-bar rule runs along its foot.
-> - The dialog is a glass shell around a core (ADR-006). Inside: a persona switcher of all five seats (`aria-pressed`), a conversation log (`role="log"`, `aria-live="polite"`, `aria-relevant="additions"`, `aria-label`), solid message cards, action chips, a composer (Enter sends, Shift+Enter adds a line) and a one-line disclosure of how answers are produced.
+> - The dialog is a glass shell around a core (ADR-006). Inside: a persona switcher of all five seats (`aria-pressed`), a conversation log (`role="log"`, `aria-live="polite"`, `aria-relevant="additions"`, `aria-label`), action chips, a composer (Enter sends, Shift+Enter adds a line) and a one-line disclosure of how answers are produced. What those parts look like is set by the conversation surface (ADR-016).
 > - Seat names stay in `{colors.text-content-primary-base}`. Seat colours mark dots, rings and bars only. A seat's message carries a five-segment marker with that seat lit, so no seat colour appears alone.
 > - The log follows new messages only while the reader is at the bottom; it never scrolls a reader away from what they are reading.
 > - Reference: `preview/chat-dock.html`.
+
+> [!IMPORTANT]
+>
+> ### Conversation surface (ADR-016)
+>
+> The standard for every Vidoxlabs AI chat: the chat dock, a full-page chat and native product panels.
+>
+> - **Chrome budget.** At rest the surface shows one header row, the conversation, one composer field and one disclosure line. Anything else appears when asked for, or when it becomes true.
+> - **Header.** One row, as tall as the avatar (the seat's sprite, or its crest where no art is approved). Beside the avatar a first line holds the seat's name in `{colors.text-content-primary-base}`, its role in a mono micro-label, at most one overflow menu and close; a second line holds the seat dots. No product title, model badge or state label in view; the accessible name and a visually hidden live text carry them. A docked surface is `{size.layout-width-conversation-base}` wide; on a narrower surface the role is dropped and nothing wraps.
+> - **Seat dots.** Five dots in canon order, each a button with `aria-pressed` and the seat's name as its accessible name. Each hit area is at least `{size.action-min-default}` in both dimensions. The pressed seat carries a ring in its own colour. The switcher prints no names.
+> - **Messages.** A guide's reply is text on the core, no card. The visitor's turn is the only bubble, on `{colors.surface-background-tertiary-base}`, aligned to the end. Parts of a reply are separated by the hairline, never boxed.
+> - **Speaker marker.** The five-segment marker and seat name head a reply only when the speaker changes, and on the first reply.
+> - **Message actions.** Shown on hover and on keyboard focus; on the latest reply where hover is unavailable.
+> - **Provenance by exception.** A reply is labelled only when it leaves the default path.
+> - **Starters and follow-ups.** At most four starters on an empty conversation, from one source; they leave after the first turn. At most three follow-up chips, on the latest reply only.
+> - **Composer.** One bordered field holding the text area and send. Dictation, where offered, sits inside the field and shows only while it is empty. Enter sends, Shift+Enter adds a line.
+> - **Disclosure.** One line at rest; the detail expands in place. Where typed text is sent to a service, the full statement stands until the visitor's first turn, then rests at one line.
+> - **States.** Idle, composing, thinking, streaming, settled, failed. Thinking is the five-segment pulse; no spinner, no skeleton bubble.
+> - **Motion.** Opens on `{transition.transition-duration-slow-base}` with `{transition.transition-easing-spring-base}`; a turn enters on `{transition.transition-duration-normal-base}`; sprites cross-fade. The thinking pulse is the only loop.
+> - Reference: `preview/conversation-surface.html` (empty state) and `preview/chat-dock.html` (in progress).
+
+> [!IMPORTANT]
+>
+> ### Explorable instrument (ADR-017)
+>
+> The standard for interactive panels inside articles and proofs.
+>
+> - **Every control has a consequence.** Operating a control changes the readout or the diagram, or the control is removed.
+> - **Claim and task.** One line says what the instrument shows; one line says what to try.
+> - **Anatomy.** One solid panel on `{colors.surface-background-secondary-base}`: a diagram that reads out state, the controls, and a receipt. Never glass.
+> - **Controls.** A boolean is a switch row with the whole row as the hit area at `{size.action-min-default}`. A number is a labelled range with its value in tabular mono figures. A choice among presets is one segmented control. No bordered fieldset and no default checkbox.
+> - **Diagram as readout.** Lines use `{colors.border-graph-line-base}`. The current state is the accent outline; a blocked state uses `{colors.status-indicator-error-base}` with a text label. Labels never overlap an edge or another label.
+> - **Receipt as ledger.** Hairline-separated rows of a mono micro-label and a value, in a polite live region.
+> - **Synthetic by statement.** An instrument that runs on fixtures says so once.
+> - **Seat colours.** Only where the five seats appear together, as a dot, ring or bar.
+> - Reference: `preview/instrument.html`.
 
 ## Continuous Interaction Standards
 
@@ -246,7 +283,7 @@ Consuming products present sovereign personas and evidence inside static-edge co
 
 Crystal glass is the one sanctioned glass material for public product surfaces. It is near-clear, with a bright rim and a top highlight; it dims and softens what is behind it instead of tinting it milky. Tokens: `{effects.glass-crystal-surface-base}`, `{effects.glass-crystal-rim-base}`, `{effects.glass-crystal-highlight-base}`, `{effects.glass-crystal-sheen-base}`, `{effects.glass-crystal-shadow-base}`, `{effects.glass-crystal-backdrop-base}`, `{effects.glass-crystal-core-base}`, and the solid fallback `{effects.glass-crystal-solid-base}`. The generator emits them as `--vi-effects-*` custom properties and as a generated `dist/glass.css` with literal values, because Safari does not resolve custom properties inside `-webkit-backdrop-filter`.
 
-- **Scope.** Glass marks controls and lenses: the floating island navigation, overlays and popovers, the question bar, the persona switcher, the evidence lens over a field, and the chat dock dialog (an overlay, ADR-013). Never on paragraphs, cards or section containers. Content stays solid and readable; chat messages are solid cards on the dock's core.
+- **Scope.** Glass marks controls and lenses: the floating island navigation, overlays and popovers, the question bar, the persona switcher, the evidence lens over a field, and the chat dock dialog (an overlay, ADR-013). Never on paragraphs, cards or section containers. Content stays solid and readable; chat text sits on the dock's core scrim and the visitor's turn is a solid bubble (ADR-016).
 - **Limits.** At most three glass layers per viewport. Never glass on glass (the lens core is a scrim, not a second blur). Never backdrop blur on scrolling containers. Never animate or transition the blur.
 - **Double bezel.** Glass shells use the outer radius `{spacing.layout-radius-glass-base}` (20px), `{spacing.layout-padding-bezel-base}` (6px) padding, and an inner core at `{spacing.layout-radius-standard-base}` (14px): 20 = 6 + 14, concentric. The rim is an inset box-shadow (not a border box) so the arithmetic holds. Pill shapes use `vi-glass-shell--pill` / `vi-glass-core--pill` so plain-CSS consumers get the full radius without relying on a later Tailwind utility.
 - **Composition.** Clear glass floats over the field, imagery and the ambient layer, never directly over body copy. The page background is the stage backdrop (ADR-013). The glow tokens (`{effects.ambient-glow-violet-base}`, `{effects.ambient-glow-teal-base}`) and the dot token (`{effects.ambient-dots-base}`) stay for existing consumers; the dot grid is retired for new page backgrounds. A headline may pass beneath the island while scrolling.

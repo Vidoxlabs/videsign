@@ -208,3 +208,74 @@ test('the standard carries the stage primitive values from lib/stage.js', () => 
   assert.equal(rules.stage.narrowAmbientOpacity, stage.STAGE_NARROW_AMBIENT_OPACITY);
   assert.equal(rules.stage.heroTextScrim, stage.STAGE_TEXT_SCRIM);
 });
+
+test('standard carries the ADR-016 conversation rules and they match the tokens', () => {
+  const { standard } = generateStandardArtifacts(TOKENS);
+  const { conversation, chatDock } = standard.rules;
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-016' && a.status.startsWith('Proposed')));
+  assert.equal(conversation.adr, 'ADR-016');
+  assert.equal(conversation.atRest.length, 4);
+  assert.equal(conversation.header.rows, 1);
+  assert.equal(conversation.header.overflowMenus, 1);
+  assert.deepEqual(conversation.seatDots.seats, chatDock.personaSwitcher.seats);
+  assert.equal(conversation.seatDots.pressedState, chatDock.personaSwitcher.pressedState);
+  assert.equal(conversation.seatDots.minTarget, TOKENS.size['action-min-default']);
+  assert.deepEqual(conversation.header.secondLine, ['seat dots']);
+  assert.equal(conversation.seatDots.printsNames, false);
+  assert.equal(conversation.starters.max, 4);
+  assert.equal(conversation.followUps.max, 3);
+  assert.equal(conversation.composer.fields, 1);
+  assert.equal(conversation.composer.keys, chatDock.composer);
+  assert.equal(conversation.disclosure.linesAtRest, 1);
+  assert.equal(conversation.motion.open, TOKENS.transition['transition-duration-slow-base']);
+  assert.equal(conversation.motion.openEasing, TOKENS.transition['transition-easing-spring-base']);
+  assert.equal(conversation.motion.turnEnter, TOKENS.transition['transition-duration-normal-base']);
+  assert.equal(TOKENS.size['layout-width-conversation-base'], '27.5rem');
+});
+
+test('standard carries the ADR-017 instrument rules and they match the tokens', () => {
+  const { standard } = generateStandardArtifacts(TOKENS);
+  const { instrument, graphLine, accessibility } = standard.rules;
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-017' && a.status.startsWith('Proposed')));
+  assert.equal(instrument.everyControlHasConsequence, true);
+  assert.equal(instrument.controls.minTarget, accessibility.minTouchTarget);
+  assert.equal(instrument.diagram.line, graphLine.dark);
+  assert.equal(instrument.diagram.blocked, TOKENS.colors['status-indicator-error-base']);
+  assert.equal(instrument.diagram.blockedNeedsTextLabel, true);
+  assert.equal(instrument.receipt.ariaLive, 'polite');
+});
+
+test('ADR-016 and ADR-017 rules are stated in DESIGN.md prose (parity guard)', () => {
+  const prose = DESIGN.toLowerCase();
+  for (const phrase of [
+    'conversation surface (adr-016)',
+    'explorable instrument (adr-017)',
+    'one header row, the conversation, one composer field and one disclosure line',
+    'five dots in canon order',
+    'the switcher prints no names',
+    'text on the core, no card',
+    'only when the speaker changes',
+    'at most four starters',
+    'at most three follow-up chips',
+    'one line at rest',
+    "the full statement stands until the visitor's first turn",
+    'the thinking pulse is the only loop',
+    'every control has a consequence',
+    'switch row',
+    'no bordered fieldset and no default checkbox',
+    'receipt as ledger',
+    '{size.layout-width-conversation-base}',
+    'a second line holds the seat dots',
+    '{colors.status-indicator-error-base}',
+  ]) {
+    assert.ok(prose.includes(phrase), `DESIGN.md is missing: ${phrase}`);
+  }
+  const md = generateStandardArtifacts(TOKENS)['standard.md'];
+  for (const heading of ['## Conversation surface (ADR-016)', '## Explorable instrument (ADR-017)']) {
+    assert.ok(md.includes(heading), `standard.md is missing ${heading}`);
+  }
+  for (const fragment of ['preview/conversation-surface.html', 'preview/chat-dock.html', 'preview/instrument.html']) {
+    assert.ok(DESIGN.includes(fragment), `DESIGN.md must reference ${fragment}`);
+    assert.ok(fs.existsSync(path.join(ROOT, fragment)), `${fragment} is missing`);
+  }
+});
