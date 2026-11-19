@@ -14,6 +14,7 @@ const ROOT = path.join(__dirname, '..');
 const PKG = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf-8'));
 const { STAGE_VARIANT_OPACITY, STAGE_NARROW_AMBIENT_OPACITY, STAGE_TEXT_SCRIM, STAGE_DEPTH, STAGE_RUNTIME_PROPERTIES } = require('../lib/stage');
 const memoryField = require('../lib/memory-field');
+const { DIALECTS: PERSONA_DIALECTS } = require('../lib/dialects');
 
 /** Canon order of the five signature colours (ADR-011, ADR-013). */
 const SIGNATURE_ORDER = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
@@ -52,6 +53,15 @@ function buildStandard(tokens, designMd, skillMd) {
       canonicalProvenance: 'Vidoxlabs/videsign',
       authorityFiles: ['DESIGN.md', 'SKILL.md'],
       generatedBy: 'scripts/generate-standard.js',
+      platformOutputs: {
+        css: ['dist/tokens.css', 'dist/themes.css', 'dist/glass.css', 'dist/stage.css'],
+        tailwind: 'dist/tailwind.config.js',
+        typescript: 'dist/tokens.ts',
+        swift: 'dist/ViTokens.swift',
+        python: 'dist/videsign_tokens.py',
+        dtcg: 'dist/tokens.dtcg.json',
+        dialects: ['dist/dialects.css', 'dist/dialects.json'],
+      },
     },
     tokens,
     rules: {
@@ -176,6 +186,16 @@ function buildStandard(tokens, designMd, skillMd) {
         light: tokens.colors['border-graph-line-light'],
         minContrast: 3,
         hairlineForSeparatorsOnly: tokens.colors['border-separator-primary-base'],
+      },
+      dialects: {
+        adr: 'ADR-015',
+        strength: 'moderate',
+        scope: 'agent surfaces only: .vi-agent[data-persona]',
+        defaultSeat: 'violet',
+        varies: ['tempo', 'density', 'label type', 'motif', 'lead order'],
+        leadOrderInDom: true,
+        conversationSurface: 'no added chrome (ADR-016): tempo, density, label type and lead order only; no motif element',
+        seats: Object.fromEntries(Object.entries(PERSONA_DIALECTS).map(([seat, d]) => [seat, { motif: d.motif, lead: d.lead, ...d.motion, ...d.density }])),
       },
       chatDock: {
         adr: 'ADR-013',
@@ -330,6 +350,7 @@ function emitStandardMd(standard) {
     `- Design system: ${standard.meta.designSystem}`,
     `- Version: ${standard.meta.version}`,
     `- Authority: ${standard.meta.authorityFiles.join(', ')}`,
+    `- Platform outputs (ADR-014): ${Object.entries(standard.meta.platformOutputs).map(([k, v]) => `${k} ${[].concat(v).join(' + ')}`).join('; ')}`,
     '',
     '## Glass',
     '',
@@ -386,6 +407,13 @@ function emitStandardMd(standard) {
     `- Dark: ${standard.rules.graphLine.dark}; light: ${standard.rules.graphLine.light}`,
     `- Minimum contrast: ${standard.rules.graphLine.minContrast}:1 (WCAG 1.4.11)`,
     `- Hairline ${standard.rules.graphLine.hairlineForSeparatorsOnly} is for layout separators only`,
+    '',
+    '## Persona dialects (ADR-015)',
+    '',
+    `- Strength: ${standard.rules.dialects.strength}; scope: ${standard.rules.dialects.scope}; default seat: ${standard.rules.dialects.defaultSeat}`,
+    `- Varies: ${standard.rules.dialects.varies.join(', ')}; lead order is applied in the DOM, never by CSS order`,
+    `- Conversation surface: ${standard.rules.dialects.conversationSurface}`,
+    ...Object.entries(standard.rules.dialects.seats).map(([seat, d]) => `- ${seat}: motif ${d.motif}; leads with ${d.lead.join(', ')}`),
     '',
     '## Chat dock (ADR-013)',
     '',

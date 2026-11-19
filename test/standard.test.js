@@ -200,6 +200,20 @@ test('ADR-013 rules in the standard are stated in DESIGN.md prose (parity guard)
   }
 });
 
+test('the standard carries the persona dialects from lib/dialects.js (ADR-015)', () => {
+  const { DIALECTS } = require('../lib/dialects');
+  const { standard, 'standard.md': md } = generateStandardArtifacts(TOKENS);
+  assert.equal(standard.rules.dialects.strength, 'moderate');
+  assert.match(standard.rules.dialects.scope, /^agent surfaces only/);
+  for (const [seat, d] of Object.entries(DIALECTS)) {
+    assert.deepEqual(standard.rules.dialects.seats[seat].lead, d.lead);
+    assert.equal(standard.rules.dialects.seats[seat].motif, d.motif);
+  }
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-015' && a.status.startsWith('Proposed')));
+  assert.match(md, /## Persona dialects \(ADR-015\)/);
+  assert.match(DESIGN, /### Persona dialects \(ADR-015\)/);
+});
+
 test('the standard carries the stage primitive values from lib/stage.js', () => {
   const stage = require('../lib/stage');
   const { rules } = generateStandardArtifacts(TOKENS).standard;

@@ -74,6 +74,16 @@ test('reading the character palette returns canon JSON', async () => {
   assert.equal(result.contents[0].text.includes(['drive', 'google', 'com'].join('.')), false);
 });
 
+test('the platform token outputs are served as resources', async () => {
+  const { resources } = await client.listResources();
+  const uris = resources.map((r) => r.uri);
+  for (const file of ['dist/tokens.ts', 'dist/ViTokens.swift', 'dist/videsign_tokens.py', 'dist/tokens.dtcg.json']) {
+    assert.ok(uris.includes(`file://${file}`), file);
+  }
+  const swift = await client.readResource({ uri: 'file://dist/ViTokens.swift' });
+  assert.match(swift.contents[0].text, /public static let personaAccentXyliaBase = Color\(viHex: 0xD92B3A\)/);
+});
+
 test('reading an unknown resource is rejected', async () => {
   await assert.rejects(
     client.readResource({ uri: 'file://preview/does-not-exist.html' }),

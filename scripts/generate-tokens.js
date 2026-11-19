@@ -346,6 +346,16 @@ function emitStageArtifacts() {
   return outputs;
 }
 
+/** Persona dialects (ADR-015): the agent-surface stylesheet and the resolved values. */
+function emitDialectArtifacts(tokens) {
+  const { emitDialectCss, resolveDialects } = require('../lib/dialects');
+  const { classify } = require('./lib/token-values');
+  return {
+    'dialects.css': emitDialectCss(),
+    'dialects.json': `${JSON.stringify(resolveDialects(tokens, classify), null, 2)}\n`,
+  };
+}
+
 /**
  * Memory field primitive (ADR-018): the stylesheet as shipped and one rendered sample of each
  * figure, so a static consumer can inspect the markup without running the renderer.
@@ -383,6 +393,8 @@ function main() {
     'standard.json': standardArtifacts['standard.json'],
     'standard.md': standardArtifacts['standard.md'],
     ...emitStageArtifacts(),
+    ...require('./generate-platforms').emitPlatformArtifacts(tokens),
+    ...emitDialectArtifacts(tokens),
     ...emitMemoryFieldArtifacts(),
   };
 
@@ -421,5 +433,6 @@ module.exports = {
   emitGlassCSS,
   emitCatalogCSS,
   emitStageArtifacts,
+  emitDialectArtifacts,
   emitMemoryFieldArtifacts,
 };

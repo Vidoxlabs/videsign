@@ -26,6 +26,7 @@ videsign/
 ├── scripts/
 │   ├── generate-tokens.js        Token pipeline: DESIGN.md YAML → Tailwind config, CSS vars, JSON, themes, glass.css, catalog.css
 │   ├── generate-standard.js      Agent standard: dist/standard.json and dist/standard.md (rules + ADR index)
+│   ├── generate-platforms.js     dist/tokens.ts, ViTokens.swift, videsign_tokens.py, tokens.dtcg.json (ADR-014)
 │   ├── generate-canon-style-pack.js  dist/canon-style-pack.json: one-call canon and style reference
 │   ├── generate-stage-fragment.js    preview/stage-backdrop.html from lib/stage.js
 │   ├── lint-preview.js           Static checks for preview/ fragments
@@ -48,7 +49,7 @@ tokens stay in `DESIGN.md`. Persona images will be served from `{ASSET_BASE}/vi/
 
 ```bash
 npm install
-npm run tokens     # Generate Tailwind config, CSS vars, JSON, the agent standard and the style pack
+npm run tokens     # Generate CSS, Tailwind, TypeScript, Swift, Python and DTCG tokens, the standard and the style pack
 npm run mcp        # Start the MCP server on stdio
 npm run lint       # Validate against no-arbitrary-value rule
 npm test           # Smoke-test the MCP server, tokens, previews and canon
@@ -77,7 +78,17 @@ styled visual catalog of every component (`python3 -m http.server 8000`). The ca
    renders the ADR-013 backdrop as an SVG string (or inline `dist/stage-ambient.svg` /
    `dist/stage-hero.svg`). Import `dist/stage.css` with `dist/tokens.css`. Your pause
    control sets `data-motion="paused"` on the root element.
-5. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
+5. **Other platforms (ADR-014)**: use the generated output for your platform, never a hand copy.
+   - TypeScript: `dist/tokens.ts` (`tokens`, `cssVar`, `token("colors.persona-accent-violet-base")`).
+   - SwiftUI: add `dist/ViTokens.swift` to the target; `ViTokens.Colors.personaAccentVioletBase`,
+     `ViTokens.Transition.transitionEasingStandardBase.animation(duration: …)`.
+   - Python and Textual: `dist/videsign_tokens.py` (`COLORS["persona-accent-violet-base"]`, `token(…)`).
+   - Design tools and converters: `dist/tokens.dtcg.json` (DTCG 2025.10).
+6. **Persona dialects (ADR-015)**: on an agent surface (chat, persona console, agent panel), load
+   `dist/dialects.css` and set `class="vi-agent" data-persona="xylia"`. Render the reply sections in
+   that seat's `lead` order from `dist/dialects.json` (or `dialects` / `ViDialects` / `DIALECTS`
+   in the TypeScript, Swift and Python outputs). Never apply a dialect to page content.
+7. **Assets**: Use the `{ASSET_BASE}` placeholder in all image URLs. Resolve it at build time
    to your CDN endpoint.
 
 ## Token matrix
@@ -104,6 +115,27 @@ initialization protocol.
 
 See `AGENTS.md` for the full agent initialization protocol and `SKILL.md` for
 architectural decision records.
+
+## CI secret: `SAFETY_SCAN_SHA256_LIST`
+
+CI runs a public-safety scan (`npm run safety:scan`) that blocks private *operator handles* from
+reaching committed files: a personal login or machine name, a private hostname, an internal
+codename. The handles themselves are never stored anywhere in the repository or in CI. CI holds
+only their SHA-256 hashes, in the repository secret `SAFETY_SCAN_SHA256_LIST`; the scan hashes
+every word it reads and fails on a match. In CI the scan **fails closed**: if the secret is missing
+or empty, the job stops, so a misconfigured pipeline can never pass silently.
+
+To set it (a repository admin, once, and again whenever the handle list changes):
+
+1. Write the handles, one per line, in a file **outside** this repository, or keep them in the
+   team vault and export them to such a file. Point `HANDLES_FILE` at it. One word per line:
+   letters, digits, `.`, `_` or `-`. Split a full name into separate lines. (`*safety-handles*`
+   files are git-ignored as a backstop.)
+2. Build the value: `npm run -s safety:hashes < "$HANDLES_FILE"`. It prints only the
+   comma-separated hashes; the handles are never printed.
+3. Optional local check: `SAFETY_SCAN_SHA256_LIST="$(npm run -s safety:hashes < "$HANDLES_FILE")" npm run safety:scan`.
+4. On GitHub: **Settings → Secrets and variables → Actions → New repository secret**. Name
+   `SAFETY_SCAN_SHA256_LIST`, value: the line from step 2. Save, then re-run the failed `validate` job.
 
 ## Brand
 
