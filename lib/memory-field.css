@@ -440,3 +440,68 @@
   font-family: var(--vi-typography-typography-family-mono-base);
   font-size: var(--vi-typography-typography-size-xs-base);
 }
+
+/* --- Contrast preferences (ADR-019 item 7) ------------------------------------------------ */
+
+/* Recency is a second cue on the mark; when the visitor asks for more contrast it yields to a
+   full-strength mark, and the rest web is no longer the faintest thing on the page. */
+@media (prefers-contrast: more) {
+  .vi-mf-node[data-band] .vi-mf-node-mark,
+  .vi-mf-node[data-band] .vi-mf-node-core,
+  .vi-mf-node[data-band] .vi-mf-node-ring,
+  .vi-mf-node[data-state="dim"] {
+    opacity: 1;
+  }
+
+  .vi-mf-rest {
+    display: none;
+  }
+}
+
+/* Forced colours: SVG paint is not forced, so every meaning-bearing line and mark takes a system
+   colour. Codes stay apart by their dash and arrowhead, which forced colours do not touch. */
+@media (forced-colors: active) {
+  .vi-mf-rest {
+    display: none;
+  }
+
+  .vi-mf-link-line,
+  .vi-mp-flow-line,
+  .vi-mf-node-mark,
+  .vi-mf-node-ring,
+  .vi-mp-store,
+  .vi-mp-step,
+  .vi-mp-group-frame {
+    stroke: CanvasText;
+  }
+
+  .vi-mf-node-mark,
+  .vi-mp-store,
+  .vi-mp-step {
+    fill: Canvas;
+  }
+
+  .vi-mf-node[data-memory="organizational"] .vi-mf-node-mark,
+  .vi-mf-node-core,
+  .vi-mf-arrow path,
+  .vi-mp-arrow path,
+  .vi-mf-caption,
+  .vi-mp-stage-label,
+  .vi-mp-stage-sub,
+  .vi-mp-flow-label,
+  .vi-mp-group-label {
+    fill: CanvasText;
+  }
+
+  .vi-mf-node[data-state="lit"] .vi-mf-node-mark,
+  .vi-mf-node a:focus-visible .vi-mf-node-mark,
+  .vi-mf-node g:focus-visible .vi-mf-node-mark {
+    stroke: Highlight;
+  }
+
+  .vi-mf-node-halo,
+  .vi-mf-pulse,
+  .vi-mp-pulse {
+    display: none;
+  }
+}
