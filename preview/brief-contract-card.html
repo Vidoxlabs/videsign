@@ -1,0 +1,49 @@
+<!--
+  Nocturne Museum: Structured brief and reference contract card (ADR-023)
+  Decomposes the canvas brief aside into a standalone card: the structured brief dl
+  (archetype, theme, density, viewport) beside the Keep / Change / Do not copy
+  reference contract as real term/description pairs, with a brief-JSON copy control.
+  Solid surfaces only.
+-->
+<section aria-labelledby="brief-card-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-col gap-gap-compact-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Structured brief · reference contract</p>
+    <h2 id="brief-card-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Design brief · public-site-landing</h2>
+  </div>
+  <dl aria-label="Structured design brief" class="flex flex-col border-t border-border-separator-primary-base">
+    <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Archetype</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">public-site-landing</dd>
+    </div>
+    <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Theme</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Nocturne dark</dd>
+    </div>
+    <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Density</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Balanced</dd>
+    </div>
+    <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Viewport</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">1440px</dd>
+    </div>
+  </dl>
+  <dl aria-label="Keep, Change, and Do not copy reference contract" class="flex flex-col border-t border-border-separator-primary-base">
+    <div class="flex flex-col gap-gap-dense-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Keep</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Nocturne dark surfaces, Geist pair, 44px targets, hairline ledgers.</dd>
+    </div>
+    <div class="flex flex-col gap-gap-dense-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Change</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Center public pages on seed, bloom, videsign, and vitools for dynamic runtimes.</dd>
+    </div>
+    <div class="flex flex-col gap-gap-dense-default py-inset-compact-default">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Do not copy</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Legacy internal lexicon, arbitrary Tailwind values, or colour-only badges.</dd>
+    </div>
+  </dl>
+  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default pt-rhythm-3-base border-t border-border-separator-primary-base">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Compiled by buildDesignBrief</p>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Copy brief JSON</button>
+  </div>
+</section>

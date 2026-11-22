@@ -1,0 +1,105 @@
+<!--
+  Nocturne Museum: Neutral provider and model routing selector (ADR-021, ADR-025)
+  Neutral local and remote routing slots for seed and bloom run contracts: tabular-nums context
+  and latency readouts, availability status-dot + text pairs, an ordered fallback chain ending
+  in a typed hold at waiting_for_owner (never a simulated success), and 44px selection
+  controls. Slot IDs stay neutral: no vendor names, hostnames, or secrets render here.
+-->
+<section aria-labelledby="provider-selector-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-5-base">
+  <div class="flex flex-wrap items-end justify-between gap-gap-compact-default">
+    <div class="flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Model routing · neutral slots</p>
+      <h2 id="provider-selector-title" class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base text-balance">Choose the routing slot for this run</h2>
+    </div>
+    <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">
+      <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+      <span>2 slots listed</span>
+    </span>
+  </div>
+  <div role="radiogroup" aria-label="Model routing slots" class="flex flex-col gap-gap-compact-default">
+    <div class="flex flex-col gap-gap-compact-default border border-surface-accent-violet-base rounded-layout-radius-control-base bg-surface-background-primary-base p-layout-padding-medium-base">
+      <button type="button" role="radio" aria-checked="true" class="w-full flex items-center justify-between gap-gap-compact-default h-action-min-default px-rhythm-3-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+        <span class="flex items-center gap-gap-compact-default min-w-0">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-surface-accent-violet-base"></span>
+          <span class="truncate text-text-content-primary-base">providers.slot.remote</span>
+        </span>
+        <span class="inline-flex items-center gap-gap-compact-default shrink-0 text-text-content-primary-base">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+          <span class="whitespace-nowrap">Available</span>
+        </span>
+      </button>
+      <dl class="grid grid-cols-2 sm:grid-cols-4 gap-gap-compact-default">
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-2-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Deployment</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">hosted endpoint</dd>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-2-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Context window</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">128,000 tokens</dd>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-2-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Median first token</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">95 ms</dd>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-2-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Fallback order</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">1 of 2</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="flex flex-col gap-gap-compact-default border border-border-separator-primary-base rounded-layout-radius-control-base bg-surface-background-primary-base p-layout-padding-medium-base">
+      <button type="button" role="radio" aria-checked="false" class="w-full flex items-center justify-between gap-gap-compact-default h-action-min-default px-rhythm-3-base rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+        <span class="flex items-center gap-gap-compact-default min-w-0">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base border border-border-graph-line-base bg-transparent"></span>
+          <span class="truncate text-text-content-primary-base">providers.slot.local</span>
+        </span>
+        <span class="inline-flex items-center gap-gap-compact-default shrink-0 text-text-content-primary-base">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>
+          <span class="whitespace-nowrap">Degraded</span>
+        </span>
+      </button>
+      <dl class="grid grid-cols-2 sm:grid-cols-4 gap-gap-compact-default">
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-2-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Deployment</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">on-device weights, cold start queue</dd>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-2-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Context window</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">8,192 tokens</dd>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-2-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Median first token</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">310 ms</dd>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-2-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Fallback order</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">2 of 2</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+  <div class="flex flex-col gap-gap-compact-default border-t border-border-separator-primary-base pt-rhythm-4-base">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Ordered fallback chain</p>
+    <ol aria-label="Ordered fallback chain" class="flex flex-col list-none">
+      <li class="flex flex-wrap items-center justify-between gap-gap-compact-default border-b border-border-separator-primary-base py-rhythm-2-base">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">1</span>
+        <span class="flex-1 min-w-0 truncate font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">providers.slot.remote</span>
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Answers first</span>
+      </li>
+      <li class="flex flex-wrap items-center justify-between gap-gap-compact-default border-b border-border-separator-primary-base py-rhythm-2-base">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">2</span>
+        <span class="flex-1 min-w-0 truncate font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">providers.slot.local</span>
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Used when the remote slot misses its window</span>
+      </li>
+      <li class="flex flex-wrap items-center justify-between gap-gap-compact-default py-rhythm-2-base">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">3</span>
+        <span class="flex-1 min-w-0 truncate font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Typed hold</span>
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Run pauses at waiting_for_owner; no simulated success</span>
+      </li>
+    </ol>
+  </div>
+  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+    <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Connector bindings hold endpoint identity; slot IDs stay neutral.</p>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Apply routing</button>
+  </div>
+</section>

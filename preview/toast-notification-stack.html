@@ -1,0 +1,69 @@
+<!--
+  Nocturne Museum: Non-blocking toast notification stack (ADR-024, ADR-025)
+  Polite role="status" and assertive role="alert" rows on solid secondary surfaces: never glass,
+  zero drop shadows. Every row pairs a status dot with an explicit text label (Saved, Notice,
+  Warning, Failed), carries at most one 44px recovery action, and closes through a 44px Dismiss
+  control with a distinct accessible name.
+-->
+<section aria-labelledby="toast-stack-title" class="flex flex-col gap-rhythm-4-base">
+  <div class="flex flex-col gap-gap-dense-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Event feedback</p>
+    <h2 id="toast-stack-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base text-balance">Toast notification stack</h2>
+  </div>
+  <ul aria-label="Notification stack" class="flex flex-col gap-gap-compact-default list-none">
+    <li>
+      <div role="status" aria-live="polite" class="bg-surface-background-secondary-base border border-border-separator-primary-base border-l-2 border-l-status-indicator-success-base rounded-layout-radius-control-base px-rhythm-4-base py-rhythm-3-base flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <div class="flex items-center gap-gap-compact-default min-w-0">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+          <div class="flex flex-col gap-gap-dense-default min-w-0">
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Saved</span>
+            <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Run summary stored to the shared desktop.</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-gap-dense-default">
+          <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Undo save</button>
+          <button type="button" aria-label="Dismiss saved notification" class="inline-flex items-center justify-center h-action-min-default px-inset-compact-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Dismiss</button>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div role="status" aria-live="polite" class="bg-surface-background-secondary-base border border-border-separator-primary-base border-l-2 border-l-status-indicator-info-base rounded-layout-radius-control-base px-rhythm-4-base py-rhythm-3-base flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <div class="flex items-center gap-gap-compact-default min-w-0">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+          <div class="flex flex-col gap-gap-dense-default min-w-0">
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Notice</span>
+            <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Provider fallback engaged for this turn; latency readouts may vary.</span>
+          </div>
+        </div>
+        <button type="button" aria-label="Dismiss provider notice" class="inline-flex items-center justify-center h-action-min-default px-inset-compact-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Dismiss</button>
+      </div>
+    </li>
+    <li>
+      <div role="alert" class="bg-surface-background-secondary-base border border-border-separator-primary-base border-l-2 border-l-status-indicator-warning-base rounded-layout-radius-control-base px-rhythm-4-base py-rhythm-3-base flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <div class="flex items-center gap-gap-compact-default min-w-0">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>
+          <div class="flex flex-col gap-gap-dense-default min-w-0">
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Warning</span>
+            <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Token budget reached 80 percent of the run ceiling.</span>
+          </div>
+        </div>
+        <button type="button" aria-label="Dismiss budget warning" class="inline-flex items-center justify-center h-action-min-default px-inset-compact-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Dismiss</button>
+      </div>
+    </li>
+    <li>
+      <div role="alert" class="bg-surface-background-secondary-base border border-border-separator-primary-base border-l-2 border-l-status-indicator-error-base rounded-layout-radius-control-base px-rhythm-4-base py-rhythm-3-base flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <div class="flex items-center gap-gap-compact-default min-w-0">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span>
+          <div class="flex flex-col gap-gap-dense-default min-w-0">
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Failed</span>
+            <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Artifact write blocked at the owner gate.</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-gap-dense-default">
+          <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Retry write</button>
+          <button type="button" aria-label="Dismiss failed write notice" class="inline-flex items-center justify-center h-action-min-default px-inset-compact-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Dismiss</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</section>

@@ -15,6 +15,9 @@
  *   - no emoji (DESIGN.md imagery rule)
  *   - no text that claims verification or action authority ("verified",
  *     "signed", "authorize action") — fragments must not overclaim
+ *   - no external placeholder image services (via.placeholder.com,
+ *     picsum.photos, placehold.co, placekitten.com, unsplash) — use a local
+ *     solid-color placeholder div (SKILL.md negative constraints)
  *   - glass scope (ADR-006): `vi-glass` / `vi-glass-shell` only on elements that
  *     are controls or overlays, never on paragraphs, list items, sections,
  *     articles or table parts; never nested in another glass element; at most
@@ -122,6 +125,7 @@ function lintFragment(name, html) {
       if (/^bg-white(\/|$)/.test(cls)) problems.push(`legacy glass utility "${cls}"`);
       if (cls === 'uppercase') problems.push('uppercase (use sentence case, ADR-007)');
       if (cls === 'animate-pulse') problems.push('animate-pulse (decorative loop)');
+      if (/^(?:min-)?h-screen$/.test(cls)) problems.push(`raw viewport height "${cls}" (use min-h-dvh / h-dvh for mobile stability, ADR-025)`);
       if (/^font-(medium|semibold|bold)$/.test(cls)) {
         problems.push(`raw type utility "${cls}" (use font-typography-weight-*)`);
       }
@@ -138,13 +142,27 @@ function lintFragment(name, html) {
     if (/\sstyle\s*=/.test(bare)) problems.push('inline style attribute');
     if (/<script[\s>]/i.test(bare)) problems.push('<script> element');
     if (/<style[\s>]/i.test(bare)) problems.push('<style> element');
+    if (/\boutline-none\b/.test(bare) && !/\b(vi-glass--control|focus-within:|focus-visible:|focus:border-)/.test(bare)) {
+      problems.push('bare outline-none without visible focus-within / focus-visible / glass-control indicator (WCAG 2.4.7, ADR-025)');
+    }
   }
 
   if (/\p{Extended_Pictographic}/u.test(bare)) problems.push('emoji');
 
   const text = visibleText(html);
+  if (!isChrome && /[—–]/.test(text)) {
+    problems.push('em-dash or en-dash in visible UI copy (use punctuation, hyphen, or layout separation, ADR-025)');
+  }
+  const clicheMatch = !isChrome && text.match(/\b(elevate|seamless|unleash|next-gen|game-changer|delve|tapestry|john doe|jane smith|acme corp|lorem ipsum)\b/i);
+  if (clicheMatch) {
+    problems.push(`AI copywriting cliche "${clicheMatch[0]}" (use plain functional copy, ADR-025)`);
+  }
   for (const [re, label] of [[/\bverified\b/i, '"verified"'], [/\bsigned\b/i, '"signed"'], [/authorize action/i, '"Authorize action"']]) {
     if (re.test(text)) problems.push(`overclaiming text ${label}`);
+  }
+  const placeholderMatch = bare.match(/\b(?:via\.placeholder\.com|picsum\.photos|placehold\.co|placekitten\.com|unsplash\.com)\b/i);
+  if (placeholderMatch) {
+    problems.push(`external placeholder image service "${placeholderMatch[0]}" (use a local solid-color placeholder div, SKILL.md negative constraints)`);
   }
 
   // Glass scope: walk tags with a small stack.

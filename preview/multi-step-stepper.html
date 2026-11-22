@@ -1,0 +1,91 @@
+<!--
+  Nocturne Museum: Reusable multi-step setup stepper (ADR-024, ADR-025)
+  Neutral workflow stepper, distinct from the persona deliberation walkthrough: one ordered
+  list with tabular step numbers, status-dot + text states (Completed, In progress, Up next,
+  Blocked), meaning-bearing connectors drawn only in the >= 3:1 graph-line and accent tokens,
+  and a clean single-column collapse below the 768px breakpoint.
+-->
+<section aria-labelledby="setup-stepper-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-wrap items-end justify-between gap-gap-compact-default">
+    <div class="flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Setup workflow</p>
+      <h2 id="setup-stepper-title" class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base text-balance">Workspace setup</h2>
+    </div>
+    <p role="status" aria-live="polite" class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">2 of 5 steps complete</p>
+  </div>
+  <ol aria-label="Setup steps" class="grid grid-cols-1 md:grid-cols-5 gap-rhythm-4-base list-none">
+    <li class="flex flex-col gap-gap-compact-default">
+      <div class="flex items-center gap-gap-compact-default">
+        <span class="inline-flex items-center justify-center shrink-0 w-indicator-brand-base h-indicator-brand-base rounded-layout-radius-full-base border border-border-graph-line-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">01</span>
+        <span aria-hidden="true" class="hidden md:block flex-1 border-t border-surface-accent-violet-base"></span>
+      </div>
+      <div class="flex flex-col gap-gap-dense-default">
+        <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Connect workspace</h3>
+        <p class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+          <span>Completed</span>
+        </p>
+        <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Local checkout attached to the shared workspace.</p>
+      </div>
+    </li>
+    <li class="flex flex-col gap-gap-compact-default">
+      <div class="flex items-center gap-gap-compact-default">
+        <span class="inline-flex items-center justify-center shrink-0 w-indicator-brand-base h-indicator-brand-base rounded-layout-radius-full-base border border-border-graph-line-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">02</span>
+        <span aria-hidden="true" class="hidden md:block flex-1 border-t border-surface-accent-violet-base"></span>
+      </div>
+      <div class="flex flex-col gap-gap-dense-default">
+        <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Bind model provider</h3>
+        <p class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+          <span>Completed</span>
+        </p>
+        <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Neutral routing slots bound; no vendor names in slot IDs.</p>
+      </div>
+    </li>
+    <li aria-current="step" class="flex flex-col gap-gap-compact-default">
+      <div class="flex items-center gap-gap-compact-default">
+        <span class="inline-flex items-center justify-center shrink-0 w-indicator-brand-base h-indicator-brand-base rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">03</span>
+        <span aria-hidden="true" class="hidden md:block flex-1 border-t border-border-graph-line-base"></span>
+      </div>
+      <div class="flex flex-col gap-gap-dense-default">
+        <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Admit context files</h3>
+        <p class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+          <span>In progress</span>
+        </p>
+        <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Attach the files this run may read; the tray lists token budgets.</p>
+      </div>
+    </li>
+    <li class="flex flex-col gap-gap-compact-default">
+      <div class="flex items-center gap-gap-compact-default">
+        <span class="inline-flex items-center justify-center shrink-0 w-indicator-brand-base h-indicator-brand-base rounded-layout-radius-full-base border border-border-graph-line-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">04</span>
+        <span aria-hidden="true" class="hidden md:block flex-1 border-t border-dashed border-border-graph-line-base"></span>
+      </div>
+      <div class="flex flex-col gap-gap-dense-default">
+        <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Run safety checks</h3>
+        <p class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base border border-border-graph-line-base bg-transparent"></span>
+          <span>Up next</span>
+        </p>
+        <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Deterministic checks run on the admitted context before any tool call.</p>
+      </div>
+    </li>
+    <li class="flex flex-col gap-gap-compact-default">
+      <div class="flex items-center gap-gap-compact-default">
+        <span class="inline-flex items-center justify-center shrink-0 w-indicator-brand-base h-indicator-brand-base rounded-layout-radius-full-base border border-status-indicator-error-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">05</span>
+      </div>
+      <div class="flex flex-col gap-gap-dense-default">
+        <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Owner review gate</h3>
+        <p class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span>
+          <span>Blocked</span>
+        </p>
+        <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Pauses at waiting_for_owner until the owner responds.</p>
+      </div>
+    </li>
+  </ol>
+  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default border-t border-border-separator-primary-base pt-rhythm-4-base">
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">The owner gate holds step 5 until the blocked review clears.</p>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Continue setup</button>
+  </div>
+</section>

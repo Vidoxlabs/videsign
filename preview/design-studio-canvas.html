@@ -4,18 +4,18 @@
   multi-viewport preview stage with spatial critique pins, inline agent iteration composer,
   and deterministic token/contrast guardrail receipt. Solid panels only (never glass on canvas).
 -->
-<div role="region" aria-label="Collaborative agent design studio" class="min-h-screen bg-surface-background-primary-base text-text-content-primary-base flex flex-col">
+<div role="region" aria-label="Collaborative agent design studio" class="min-h-dvh overflow-x-hidden bg-surface-background-primary-base text-text-content-primary-base flex flex-col">
   <header class="bg-surface-background-secondary-base border-b border-border-separator-primary-base px-rhythm-6-base py-rhythm-3-base flex flex-wrap items-center justify-between gap-gap-compact-default">
     <div class="flex flex-wrap items-center gap-gap-compact-default">
       <span class="font-typography-family-sans-base text-typography-size-md-base font-typography-weight-semibold-base text-text-content-primary-base">Nocturne design studio</span>
       <span class="px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">public-site-landing</span>
     </div>
     <div role="group" aria-label="Viewport presets" class="flex flex-wrap items-center gap-gap-dense-default">
-      <button type="button" aria-pressed="true" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base tabular-nums">1440px desktop</button>
-      <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base tabular-nums">1024px tablet</button>
-      <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base tabular-nums">390px mobile</button>
+      <button type="button" aria-pressed="true" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base tabular-nums transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">1440px desktop</button>
+      <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base tabular-nums transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">1024px tablet</button>
+      <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base tabular-nums transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">390px mobile</button>
     </div>
-    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Copy page scaffold</button>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Copy page scaffold</button>
   </header>
   <div class="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-rhythm-5-base p-rhythm-6-base">
     <aside aria-label="Design brief and reference contract" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-5-base">
@@ -85,12 +85,12 @@
           </li>
         </ol>
       </div>
-      <form class="flex items-end gap-gap-compact-default p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base">
+      <form class="flex items-end gap-gap-compact-default p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base focus-within:border-surface-accent-violet-base bg-surface-background-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
         <div class="flex-1 flex flex-col gap-gap-dense-default">
           <label for="studio-revision-input" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Collaborate with design agent</label>
-          <textarea id="studio-revision-input" rows="2" placeholder="Refine spacing rhythm or swap slot 4 for browser-check-runner..." class="w-full h-action-wide-default bg-transparent font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base outline-none"></textarea>
+          <textarea id="studio-revision-input" rows="2" placeholder="Refine spacing rhythm or swap slot 4 for browser-check-runner..." class="w-full h-action-wide-default bg-transparent font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base placeholder:text-text-content-secondary-base"></textarea>
         </div>
-        <button type="submit" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base">Apply revision</button>
+        <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-secondary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Apply revision</button>
       </form>
     </main>
     <aside aria-label="Guardrail verifier and handoff receipt" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col justify-between gap-rhythm-5-base">
@@ -116,8 +116,8 @@
         </dl>
       </div>
       <div class="flex flex-col gap-gap-compact-default pt-rhythm-3-base border-t border-border-separator-primary-base">
-        <button type="button" class="w-full inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Export manifest JSON</button>
-        <a href="/standard.json" class="w-full inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Inspect standard.json</a>
+        <button type="button" class="w-full inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Export manifest JSON</button>
+        <a href="../dist/standard.json" class="w-full inline-flex items-center justify-center whitespace-nowrap h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Inspect standard.json</a>
       </div>
     </aside>
   </div>

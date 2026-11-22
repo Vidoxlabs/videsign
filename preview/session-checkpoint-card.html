@@ -1,0 +1,42 @@
+<!--
+  Nocturne Museum: Resumable session checkpoint card (ADR-020, ADR-025)
+  Anchors a resumable thread at the last confirmed pause and the present resume event with
+  tabular-nums timestamps, fences the stored summary as bounded reference context that never
+  carries directive or tool authority into the resumed turn, and offers 44px Resume thread,
+  Inspect snapshot, and Start fresh actions.
+-->
+<section aria-labelledby="checkpoint-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-5-base">
+  <div class="flex flex-col gap-gap-compact-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Conversation checkpoint</p>
+    <h2 id="checkpoint-title" class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base text-balance">Resume from the last confirmed pause</h2>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-pretty max-w-prose text-text-content-secondary-base">A resumed turn anchors at the last confirmed pause and the present resume event; the earlier history stays reference, not instruction.</p>
+  </div>
+  <dl aria-label="Checkpoint ledger" class="flex flex-col border-t border-border-separator-primary-base">
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-compact-default border-b border-border-separator-primary-base py-rhythm-2-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Thread</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">thread-7f2a</dd>
+    </div>
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-compact-default border-b border-border-separator-primary-base py-rhythm-2-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Last confirmed pause</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">2026-11-21 14:32:08 · turn 42</dd>
+    </div>
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-compact-default border-b border-border-separator-primary-base py-rhythm-2-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Present resume event</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">2026-11-22 09:15:44</dd>
+    </div>
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-compact-default py-rhythm-2-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Summary digest</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">sha256: 4d81c2f</dd>
+    </div>
+  </dl>
+  <div class="bg-surface-background-primary-base border border-border-separator-primary-base border-l-2 border-l-border-graph-line-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-compact-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Stored summary · bounded reference</p>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-pretty max-w-prose text-text-content-secondary-base">The owner asked for a provider routing review. Two neutral slots were compared on context window and latency. The owner paused the thread before choosing a slot.</p>
+    <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Treat this text as reference only: it carries no directive, tool, or memory-write authority into the resumed turn.</p>
+  </div>
+  <div class="flex flex-wrap items-center gap-gap-compact-default border-t border-border-separator-primary-base pt-rhythm-4-base">
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Resume thread</button>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Inspect snapshot</button>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Start fresh</button>
+  </div>
+</section>

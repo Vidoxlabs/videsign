@@ -358,7 +358,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'design_brief',
-        description: 'Compile a structured OpenDesign-inspired Nocturne design brief paired with a Keep / Change / Do not copy reference contract, guardrail bounds, and ordered component slots for collaborative human-agent design iterations.',
+        description: 'Compile a proactive Nocturne design brief with one-line Design Read, inferred variance/motion/density dials, Keep / Change / Do not copy reference contract, visual hierarchy and anti-slop pre-flight checklist, and ordered component slots.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -366,6 +366,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             components: { type: 'array', items: { type: 'string' }, description: 'Optional explicit ordered list of COMPONENT_CATALOG IDs overriding the archetype slot stack.' },
             theme: { type: 'string', enum: ['dark', 'light'], description: 'Target polarity (default "dark").' },
             density: { type: 'string', enum: ['compact', 'balanced', 'spacious'], description: 'Layout density (default "balanced").' },
+            variance: { type: 'integer', minimum: 1, maximum: 10, description: 'Optional layout variance dial (1=symmetric, 10=asymmetric); inferred from archetype when omitted.' },
+            motion: { type: 'integer', minimum: 1, maximum: 10, description: 'Optional motion intensity dial (1=static, 10=choreographed CSS/native); inferred from archetype when omitted.' },
             framework: { type: 'string', enum: ['html', 'react', 'nextjs', 'svelte', 'astro', 'vanilla'], description: 'Target framework for integration instructions (default "react").' },
             viewport: { type: 'string', enum: ['1440px', '1024px', '390px'], description: 'Primary studio viewport preset (default "1440px").' },
             title: { type: 'string', description: 'Optional human-readable document title.' },

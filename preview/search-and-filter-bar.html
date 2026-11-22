@@ -1,0 +1,52 @@
+<!--
+  Nocturne Museum: Standalone search and filter toolbar (ADR-024, ADR-025)
+  Decomposes the search, facet, and sorting controls out of the filterable catalog grid: one
+  visible-focus search field, five toggleable facet pills with aria-pressed state (never more
+  than seven), removable active-filter chips, a sort select, a Clear all trigger, and a polite
+  tabular-nums match counter. Solid surfaces only, no glass.
+-->
+<section aria-labelledby="search-filter-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-5-base">
+  <div class="flex flex-wrap items-end justify-between gap-gap-compact-default">
+    <div class="flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Catalog controls</p>
+      <h2 id="search-filter-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base text-balance">Search and filter</h2>
+    </div>
+    <p role="status" aria-live="polite" class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Showing 12 of 78 modules</p>
+  </div>
+  <form aria-label="Filter the catalog" class="flex flex-col gap-rhythm-4-base">
+    <div class="flex flex-col md:flex-row md:items-center gap-gap-compact-default">
+      <div class="flex flex-1 items-center gap-gap-compact-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base px-inset-compact-default focus-within:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+        <input id="catalog-filter-search" type="search" name="q" placeholder="Search modules by name, summary, or tag" aria-label="Search modules" class="flex-1 min-w-0 h-action-min-default bg-transparent font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base placeholder:text-text-content-secondary-base" />
+        <button type="submit" class="inline-flex items-center justify-center shrink-0 h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Search</button>
+      </div>
+      <div class="flex items-center gap-gap-compact-default">
+        <label for="catalog-filter-sort" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Sort</label>
+        <select id="catalog-filter-sort" name="sort" class="h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">
+          <option value="newest">Newest first</option>
+          <option value="name">Name A to Z</option>
+          <option value="referenced">Most referenced</option>
+        </select>
+      </div>
+    </div>
+    <div role="group" aria-label="Facets" class="flex flex-wrap items-center gap-gap-compact-default">
+      <button type="button" aria-pressed="true" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Design systems</button>
+      <button type="button" aria-pressed="true" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Harness contracts</button>
+      <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base hover:border-text-content-secondary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Safety checks</button>
+      <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base hover:border-text-content-secondary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Markdown and code</button>
+      <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base hover:border-text-content-secondary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Graphic maps</button>
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-gap-compact-default border-t border-border-separator-primary-base pt-rhythm-4-base">
+      <div role="group" aria-label="Active filters" class="flex flex-wrap items-center gap-gap-compact-default">
+        <span class="inline-flex items-center gap-gap-compact-default h-action-min-default pl-inset-compact-default pr-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base">
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">design systems</span>
+          <button type="button" aria-label="Remove filter: design systems" class="inline-flex items-center justify-center h-action-min-default px-inset-compact-default rounded-layout-radius-full-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Remove</button>
+        </span>
+        <span class="inline-flex items-center gap-gap-compact-default h-action-min-default pl-inset-compact-default pr-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base">
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">harness contracts</span>
+          <button type="button" aria-label="Remove filter: harness contracts" class="inline-flex items-center justify-center h-action-min-default px-inset-compact-default rounded-layout-radius-full-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Remove</button>
+        </span>
+      </div>
+      <button type="reset" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Clear all</button>
+    </div>
+  </form>
+</section>

@@ -121,7 +121,7 @@ test('accepted status is limited to ratified items and Adopted/Proposed statuses
     if (line.startsWith('**Status**:') && current) statuses.push({ id: current, status: line.slice('**Status**:'.length).trim() });
   }
   const adoptedIds = ['ADR-013', 'ADR-016', 'ADR-017', 'ADR-018', 'ADR-019'];
-  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022', 'ADR-023', 'ADR-024'];
+  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022', 'ADR-023', 'ADR-024', 'ADR-025'];
   const byId = new Map(statuses.map((adr) => [adr.id, adr.status]));
   for (const id of ['ADR-010', 'ADR-011', 'ADR-012', ...adoptedIds, ...proposedIds]) {
     assert.ok(byId.has(id), `missing **Status**: line for ${id}`);
@@ -389,19 +389,20 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
   assert.deepEqual(modularComponents.planes, ['surfaces', 'harness', 'providers', 'authority stores']);
   assert.deepEqual(modularComponents.runStates, ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete', 'stopping', 'stopped', 'failed']);
   assert.deepEqual(modularComponents.toolEffects, ['read', 'write', 'destructive', 'credential']);
-  assert.equal(modularComponents.catalog.length, 50);
+  assert.equal(modularComponents.catalog.length, 78);
   assert.deepEqual(modularComponents.catalog, COMPONENT_CATALOG);
   const expectedIds = [
-    'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips',
-    'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace',
+    'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips', 'question-bar', 'context-attachment-tray', 'session-checkpoint-card',
+    'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace',
     'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner',
-    'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'persona-companion-stage', 'evidence-exhibit-figure',
-    'design-studio-canvas', 'layout-public-site',
-    'form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'data-table',
-    'markdown-prose-renderer', 'code-and-diff-viewer',
+    'public-repo-card', 'ecosystem-plane-map', 'comparison-matrix', 'site-header-island', 'mobile-navigation-sheet', 'site-footer', 'hero-billboard', 'bento-feature-grid', 'filterable-catalog-grid', 'client-install-switcher', 'persona-companion-stage', 'evidence-exhibit-figure',
+    'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'article-toc-and-meta',
+    'form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'data-table', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'skeleton-row', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar',
+    'markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline',
     'systems-constellation-map', 'stage-backdrop', 'memory-field', 'memory-pipeline', 'evidence-lens', 'coverage-grid',
-    'persona-deliberation-stepper', 'persona-identity-badge', 'persona-dialects', 'five-bar-rule',
+    'persona-deliberation-stepper', 'persona-identity-badge', 'persona-dialects', 'five-bar-rule', 'persona-switcher',
     'instrument', 'statement-proof-row',
+    'credential-activity-ledger', 'policy-rule-matrix', 'provider-model-selector', 'locked-panel',
   ];
   assert.deepEqual(modularComponents.catalog.map((c) => c.id), expectedIds);
   for (const entry of modularComponents.catalog) {
@@ -444,6 +445,7 @@ test('ADR-021 rules and fragment references are stated in DESIGN.md prose (parit
     'preview/claim-maturity-badge.html',
     'preview/run-lifecycle-strip.html',
     'preview/tool-registry-row.html',
+    'preview/credential-activity-ledger.html',
     'preview/public-repo-card.html',
     'preview/ecosystem-plane-map.html',
   ];
@@ -507,6 +509,15 @@ test('standard carries ADR-023 design studio rules and DESIGN.md prose parity', 
   assert.deepEqual(designStudio.referenceContractSections, ['keep', 'change', 'doNotCopy']);
   assert.deepEqual(designStudio.viewports, ['1440px', '1024px', '390px']);
   assert.equal(designStudio.navMaxLinksBeforeStorefront, 6);
+  assert.equal(designStudio.critiqueFragment, 'preview/critique-thread-panel.html');
+  assert.equal(designStudio.viewportFramesFragment, 'preview/viewport-frame-set.html');
+  assert.equal(designStudio.briefFragment, 'preview/brief-contract-card.html');
+  assert.equal(designStudio.guardrailFragment, 'preview/guardrail-receipt-panel.html');
+  assert.equal(designStudio.articleRailFragment, 'preview/article-toc-and-meta.html');
+  for (const fragment of [designStudio.canvasFragment, designStudio.critiqueFragment, designStudio.viewportFramesFragment, designStudio.briefFragment, designStudio.guardrailFragment, designStudio.articleRailFragment]) {
+    assert.ok(DESIGN.includes(fragment), `DESIGN.md must reference ${fragment}`);
+    assert.ok(fs.existsSync(path.join(ROOT, fragment)), `${fragment} is missing`);
+  }
   const prose = DESIGN.toLowerCase();
   for (const phrase of [
     'public-site component suite and collaborative design studio (adr-023)',
@@ -530,7 +541,7 @@ test('standard carries ADR-024 base UI, markdown, graphic maps and chibi rules a
   assert.deepEqual(chibiCompanion.runtimeCell, { width: 463, height: 798 });
   assert.deepEqual(chibiCompanion.versions, { violet: 'v005', wisteria: 'v003', xylia: 'v003', yarrow: 'v003', zinnia: 'v003' });
   assert.deepEqual(chibiCompanion.slots, ['neutral', 'thinking', 'alert', 'success', 'happy']);
-  assert.equal(chibiCompanion.uiPrimitiveFragments.length, 6);
+  assert.equal(chibiCompanion.uiPrimitiveFragments.length, 11);
   const prose = DESIGN.toLowerCase();
   for (const phrase of [
     'base ui primitives, markdown rendering, homepage graphic maps and chibi standardization (adr-024)',
@@ -540,9 +551,40 @@ test('standard carries ADR-024 base UI, markdown, graphic maps and chibi rules a
     'complete ui primitives',
     'preview/systems-constellation-map.html',
     'preview/markdown-prose-renderer.html',
+    'preview/log-stream-viewer.html',
+    'preview/api-reference-row.html',
+    'preview/changelog-timeline.html',
     'preview/form-controls.html',
+    'preview/command-palette-dialog.html',
+    'preview/file-dropzone-upload.html',
+    'preview/kpi-metric-strip.html',
+    'preview/drawer-inspector-sheet.html',
   ]) {
     assert.ok(prose.includes(phrase), `DESIGN.md missing: ${phrase}`);
   }
   assert.ok(md.includes('## Base UI, markdown, graphic maps and chibi companions (ADR-024)'), 'standard.md missing ## Base UI, markdown, graphic maps and chibi companions (ADR-024)');
+});
+
+test('standard carries ADR-025 proactive design craft, visual hierarchy and anti-slop gate with DESIGN.md parity', () => {
+  const { standard, 'standard.md': md } = generateStandardArtifacts(TOKENS);
+  const { proactiveDesign } = standard.rules;
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-025' && a.status.startsWith('Proposed')));
+  assert.equal(proactiveDesign.adr, 'ADR-025');
+  assert.equal(proactiveDesign.hierarchyRules.maxEntitiesPerGroup, 7);
+  assert.equal(proactiveDesign.hierarchyRules.heroLineCap, 2);
+  assert.equal(proactiveDesign.hierarchyRules.heroSubcopyMaxWords, 20);
+  assert.ok(proactiveDesign.antiSlopBans.length >= 6);
+  assert.ok(proactiveDesign.preFlightChecklist.length >= 8);
+  assert.ok(proactiveDesign.archetypeDials['public-site-landing']);
+  const prose = DESIGN.toLowerCase();
+  for (const phrase of [
+    'proactive design craft, visual hierarchy and anti-slop gate (adr-025)',
+    'design read and three dials',
+    'visual hierarchy scaffolding',
+    'mechanical anti-slop checks',
+    'interactive and full-output completeness',
+  ]) {
+    assert.ok(prose.includes(phrase), `DESIGN.md missing ADR-025 phrase: ${phrase}`);
+  }
+  assert.ok(md.includes('## Proactive design craft, visual hierarchy and anti-slop gate (ADR-025)'), 'standard.md missing ADR-025 section');
 });

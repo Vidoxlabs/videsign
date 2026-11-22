@@ -1,0 +1,51 @@
+<!--
+  Nocturne Museum: Live run-log stream viewer (ADR-013, ADR-024)
+  Solid primary console inside a secondary card: hairline row separators, tabular-nums
+  timestamps, status-token severity dots always paired with a text label, and a
+  role="log" polite live region with a Pause tail toggle (WCAG 2.2.2). Fixture rows;
+  the stream never implies a live system.
+-->
+<section aria-labelledby="log-stream-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+    <div class="flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">harness · fixture rows · newest last</p>
+      <h2 id="log-stream-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Run log stream</h2>
+    </div>
+    <button type="button" aria-pressed="false" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Pause tail</button>
+  </div>
+  <div role="log" aria-live="polite" aria-relevant="additions" aria-label="Run log entries" class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base overflow-x-auto font-typography-family-mono-base text-typography-size-xs-base">
+    <div class="flex flex-col divide-y divide-border-separator-primary-base">
+      <div class="grid grid-cols-1 md:grid-cols-12 items-baseline gap-gap-dense-default md:gap-rhythm-2-base px-inset-operator-default py-rhythm-2-base">
+        <span class="md:col-span-2 tabular-nums whitespace-nowrap text-text-content-secondary-base">14:02:11.204</span>
+        <span class="md:col-span-2 inline-flex items-center gap-gap-compact-default text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>info</span></span>
+        <span class="md:col-span-3 min-w-0 break-words text-text-content-secondary-base">harness.run</span>
+        <span class="md:col-span-5 min-w-0 break-words text-text-content-primary-base">Run draft admitted · 3 stages scheduled</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-12 items-baseline gap-gap-dense-default md:gap-rhythm-2-base px-inset-operator-default py-rhythm-2-base">
+        <span class="md:col-span-2 tabular-nums whitespace-nowrap text-text-content-secondary-base">14:02:12.048</span>
+        <span class="md:col-span-2 inline-flex items-center gap-gap-compact-default text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span><span>success</span></span>
+        <span class="md:col-span-3 min-w-0 break-words text-text-content-secondary-base">tool.vcs.file.read</span>
+        <span class="md:col-span-5 min-w-0 break-words text-text-content-primary-base">Workspace snapshot read · 24 files in scope</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-12 items-baseline gap-gap-dense-default md:gap-rhythm-2-base px-inset-operator-default py-rhythm-2-base">
+        <span class="md:col-span-2 tabular-nums whitespace-nowrap text-text-content-secondary-base">14:02:15.512</span>
+        <span class="md:col-span-2 inline-flex items-center gap-gap-compact-default text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>info</span></span>
+        <span class="md:col-span-3 min-w-0 break-words text-text-content-secondary-base">tool.compute.rows.check</span>
+        <span class="md:col-span-5 min-w-0 break-words text-text-content-primary-base">Deterministic check complete · 0 mismatches</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-12 items-baseline gap-gap-dense-default md:gap-rhythm-2-base px-inset-operator-default py-rhythm-2-base">
+        <span class="md:col-span-2 tabular-nums whitespace-nowrap text-text-content-secondary-base">14:02:16.377</span>
+        <span class="md:col-span-2 inline-flex items-center gap-gap-compact-default text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span><span>warning</span></span>
+        <span class="md:col-span-3 min-w-0 break-words text-text-content-secondary-base">tool.ingest.job.create</span>
+        <span class="md:col-span-5 min-w-0 break-words text-text-content-primary-base">Write effect pauses at the owner gate</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-12 items-baseline gap-gap-dense-default md:gap-rhythm-2-base px-inset-operator-default py-rhythm-2-base">
+        <span class="md:col-span-2 tabular-nums whitespace-nowrap text-text-content-secondary-base">14:02:18.931</span>
+        <span class="md:col-span-2 inline-flex items-center gap-gap-compact-default text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span><span>error</span></span>
+        <span class="md:col-span-3 min-w-0 break-words text-text-content-secondary-base">harness.run</span>
+        <span class="md:col-span-5 min-w-0 break-words text-text-content-primary-base">Stage 2 halted · owner gate unanswered</span>
+      </div>
+    </div>
+  </div>
+  <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">New entries join the end while the tail is unpaused; pausing holds the reader in place.</p>
+</section>

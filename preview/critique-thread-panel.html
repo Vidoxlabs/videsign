@@ -1,0 +1,67 @@
+<!--
+  Nocturne Museum: Collaborative critique thread panel (ADR-023)
+  Decomposes the canvas critique pins into a standalone panel: slot-anchored critique
+  entries carrying a Keep / Change / Do not copy classification chip and an Open /
+  Resolved state (status token + text label, never colour alone), a polite live thread
+  counter, and a composer for new critiques. Solid surfaces only.
+-->
+<section aria-labelledby="critique-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+    <div class="flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Critique thread · slot-anchored</p>
+      <h2 id="critique-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Review round 4 · public-site-landing</h2>
+    </div>
+    <p aria-live="polite" class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">
+      <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+      <span>2 open · 1 resolved</span>
+    </p>
+  </div>
+  <ul aria-label="Critique entries" class="flex flex-col border-t border-border-separator-primary-base">
+    <li class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base last:border-b-0">
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">slot · hero-billboard</span>
+        <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>Change</span></span>
+      </div>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Swap the static facts rail for computed receipts before the storefront opens.</p>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Design agent · 14:06</span>
+        <div class="flex items-center gap-gap-compact-default">
+          <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>Open</span></span>
+          <button type="button" aria-label="Resolve critique on hero-billboard" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Resolve</button>
+        </div>
+      </div>
+    </li>
+    <li class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base last:border-b-0">
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">slot · site-header-island</span>
+        <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span><span>Keep</span></span>
+      </div>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Hold the six bounded links until the storefront launches.</p>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Owner · 14:09</span>
+        <div class="flex items-center gap-gap-compact-default">
+          <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>Open</span></span>
+          <button type="button" aria-label="Resolve critique on site-header-island" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Resolve</button>
+        </div>
+      </div>
+    </li>
+    <li class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base last:border-b-0">
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">slot · filterable-catalog-grid</span>
+        <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span><span>Do not copy</span></span>
+      </div>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Retire the legacy grid's colour-only filter badges; keep the four facet selectors.</p>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Design agent · 13:51</span>
+        <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span><span>Resolved · rev 8a80204</span></span>
+      </div>
+    </li>
+  </ul>
+  <form class="flex items-end gap-gap-compact-default p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base focus-within:border-surface-accent-violet-base bg-surface-background-primary-base">
+    <div class="flex-1 flex flex-col gap-gap-dense-default">
+      <label for="critique-composer-input" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Add critique</label>
+      <textarea id="critique-composer-input" rows="2" placeholder="Anchor to a slot, then classify it as Keep, Change, or Do not copy..." class="w-full h-action-wide-default bg-transparent font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base placeholder:text-text-content-secondary-base"></textarea>
+    </div>
+    <button type="submit" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Post critique</button>
+  </form>
+</section>

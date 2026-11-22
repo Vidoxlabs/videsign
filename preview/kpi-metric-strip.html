@@ -1,0 +1,46 @@
+<!--
+  Nocturne Museum: KPI metric strip (ADR-007, ADR-009, ADR-024)
+  Responsive four-card summary strip on solid secondary surfaces. Every figure uses
+  tabular-nums, pairs status dots with explicit delta text (never colour-only arrows
+  or decorative sparkline blobs), and names its measurement window.
+-->
+<section aria-labelledby="kpi-strip-title" class="flex flex-col gap-rhythm-4-base">
+  <div class="flex flex-wrap items-baseline justify-between gap-gap-compact-default">
+    <h2 id="kpi-strip-title" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base text-balance">System telemetry · fixture window 7d</h2>
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Updated 2026-11-22</span>
+  </div>
+  <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-rhythm-4-base">
+    <div class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-compact-default">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Catalog coverage</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-3xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base tabular-nums text-text-content-primary-base">78</dd>
+      <dd class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+        <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+        <span>+8 modular slots</span>
+      </dd>
+    </div>
+    <div class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-compact-default">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Minimum text ratio</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-3xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base tabular-nums text-text-content-primary-base">6.60:1</dd>
+      <dd class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+        <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+        <span>Above 4.5:1 floor</span>
+      </dd>
+    </div>
+    <div class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-compact-default">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Pending owner gates</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-3xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base tabular-nums text-text-content-primary-base">2</dd>
+      <dd class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+        <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>
+        <span>Awaiting decision</span>
+      </dd>
+    </div>
+    <div class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-compact-default">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Lint violations</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-3xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base tabular-nums text-text-content-primary-base">0</dd>
+      <dd class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+        <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+        <span>Across all fragments</span>
+      </dd>
+    </div>
+  </dl>
+</section>

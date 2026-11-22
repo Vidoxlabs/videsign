@@ -1,0 +1,62 @@
+<!--
+  Nocturne Museum: Release changelog timeline (ADR-007, ADR-024)
+  Solid reading surface for versioned release notes: semantic-version chips, tabular
+  dates, an unreleased block, and Added / Changed / Fixed / Planned entries as
+  hairline ledger rows. Entry classes read as text; no status colour is borrowed
+  for them.
+-->
+<section aria-labelledby="changelog-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base max-w-3xl">
+  <div class="flex flex-col gap-gap-compact-default pb-rhythm-4-base border-b border-border-separator-primary-base">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Fixture release notes · newest first</p>
+    <h2 id="changelog-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Changelog</h2>
+  </div>
+  <article aria-label="Unreleased changes" class="flex flex-col gap-gap-compact-default">
+    <div class="flex flex-wrap items-center gap-gap-compact-default">
+      <h3 class="font-typography-family-mono-base text-typography-size-md-base font-typography-weight-semibold-base text-text-content-primary-base">Unreleased</h3>
+      <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>Open block</span></span>
+    </div>
+    <dl aria-label="Unreleased entries" class="flex flex-col border-t border-border-separator-primary-base">
+      <div class="flex items-baseline gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
+        <dt class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Planned</dt>
+        <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Optional streaming diff filters for multi-file patch inspection.</dd>
+      </div>
+      <div class="flex items-baseline gap-gap-spacious-default py-inset-compact-default">
+        <dt class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Planned</dt>
+        <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Exportable Markdown summary bundle for repository release pages.</dd>
+      </div>
+    </dl>
+  </article>
+  <article aria-label="Version 1.2.0" class="flex flex-col gap-gap-compact-default">
+    <div class="flex flex-wrap items-center gap-gap-compact-default">
+      <h3 class="font-typography-family-mono-base text-typography-size-md-base font-typography-weight-semibold-base text-text-content-primary-base tabular-nums">v1.2.0</h3>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">2026-11-20</span>
+      <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span><span>Latest release</span></span>
+    </div>
+    <dl aria-label="Changes in version 1.2.0" class="flex flex-col border-t border-border-separator-primary-base">
+      <div class="flex items-baseline gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
+        <dt class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Added</dt>
+        <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Log stream viewer and endpoint reference rows join the markdown-and-code catalog.</dd>
+      </div>
+      <div class="flex items-baseline gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
+        <dt class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Changed</dt>
+        <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Studio archetype slots carry the critique thread panel and viewport frame set.</dd>
+      </div>
+      <div class="flex items-baseline gap-gap-spacious-default py-inset-compact-default">
+        <dt class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Changed</dt>
+        <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Catalog counts in prose and generated manifests move to the new total on every sync.</dd>
+      </div>
+    </dl>
+  </article>
+  <article aria-label="Version 1.1.4" class="flex flex-col gap-gap-compact-default">
+    <div class="flex flex-wrap items-center gap-gap-compact-default">
+      <h3 class="font-typography-family-mono-base text-typography-size-md-base font-typography-weight-semibold-base text-text-content-primary-base tabular-nums">v1.1.4</h3>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">2026-11-05</span>
+    </div>
+    <dl aria-label="Changes in version 1.1.4" class="flex flex-col border-t border-border-separator-primary-base">
+      <div class="flex items-baseline gap-gap-spacious-default py-inset-compact-default">
+        <dt class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Fixed</dt>
+        <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Persona accent text stays on the primary surface; secondary and tertiary pair it as an indicator only.</dd>
+      </div>
+    </dl>
+  </article>
+</section>

@@ -1,0 +1,55 @@
+<!--
+  Nocturne Museum: Command palette dialog (ADR-006, ADR-009, ADR-024)
+  Solid reading-surface modal dialog for keyboard-first navigation and agent actions.
+  Never glass on the command list body. Pairs a focus-visible search header, grouped
+  44px command rows with explicit keyboard shortcuts, an active violet-bordered row,
+  and a mono keyboard-hint footer.
+-->
+<div role="dialog" aria-modal="true" aria-labelledby="cmd-palette-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base overflow-hidden max-w-2xl w-full flex flex-col">
+  <div class="flex items-center gap-gap-compact-default px-layout-padding-large-base py-rhythm-3-base border-b border-border-separator-primary-base focus-within:border-surface-accent-violet-base bg-surface-background-primary-base">
+    <h2 id="cmd-palette-title" class="sr-only">Command palette</h2>
+    <label for="cmd-palette-search" class="sr-only">Filter commands and routes</label>
+    <input id="cmd-palette-search" type="search" value="catalog" placeholder="Jump to a route, component, or run action..." class="flex-1 min-w-0 h-action-min-default bg-transparent font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base placeholder:text-text-content-secondary-base" />
+    <kbd class="shrink-0 px-inset-compact-default py-rhythm-1-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Esc</kbd>
+  </div>
+  <div role="listbox" aria-label="Matching commands" class="flex flex-col p-layout-padding-medium-base gap-rhythm-4-base">
+    <div class="flex flex-col gap-gap-dense-default">
+      <p class="px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Navigate</p>
+      <button type="button" role="option" aria-selected="true" class="w-full flex items-center justify-between gap-gap-compact-default h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base text-left transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+        <span class="min-w-0 truncate font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Open component catalog</span>
+        <span class="shrink-0 inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <span>route</span>
+          <kbd class="px-inset-compact-default py-rhythm-1-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base text-text-content-primary-base">G C</kbd>
+        </span>
+      </button>
+      <button type="button" role="option" aria-selected="false" class="w-full flex items-center justify-between gap-gap-compact-default h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-secondary-base hover:bg-surface-background-tertiary-base text-left transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+        <span class="min-w-0 truncate font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Inspect research library</span>
+        <span class="shrink-0 inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <span>route</span>
+          <kbd class="px-inset-compact-default py-rhythm-1-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base text-text-content-secondary-base">G R</kbd>
+        </span>
+      </button>
+    </div>
+    <div class="flex flex-col gap-gap-dense-default pt-rhythm-3-base border-t border-border-separator-primary-base">
+      <p class="px-inset-operator-default font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Agent actions</p>
+      <button type="button" role="option" aria-selected="false" class="w-full flex items-center justify-between gap-gap-compact-default h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-secondary-base hover:bg-surface-background-tertiary-base text-left transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+        <span class="min-w-0 truncate font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Compile Nocturne design brief</span>
+        <span class="shrink-0 inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+          <span>design_brief</span>
+        </span>
+      </button>
+      <button type="button" role="option" aria-selected="false" class="w-full flex items-center justify-between gap-gap-compact-default h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-secondary-base hover:bg-surface-background-tertiary-base text-left transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+        <span class="min-w-0 truncate font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Check WCAG contrast pair</span>
+        <span class="shrink-0 inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+          <span>check_contrast</span>
+        </span>
+      </button>
+    </div>
+  </div>
+  <footer class="flex flex-wrap items-center justify-between gap-gap-compact-default px-layout-padding-large-base py-rhythm-3-base border-t border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+    <span>Up/Down navigate · Enter run · Esc close</span>
+    <span class="tabular-nums">4 commands matched</span>
+  </footer>
+</div>

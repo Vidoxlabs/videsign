@@ -88,7 +88,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'design-studio-canvas', 'layout-public-site', 'systems-constellation-map', 'persona-deliberation-stepper', 'markdown-prose-renderer', 'code-and-diff-viewer', 'form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'context-attachment-tray', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'credential-activity-ledger', 'policy-rule-matrix', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'article-toc-and-meta', 'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'systems-constellation-map', 'persona-deliberation-stepper', 'markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'form-controls', 'button-variants', 'navigation-primitives', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'feedback-and-empty-states', 'disclosure-and-modals', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar', 'mobile-navigation-sheet', 'bento-feature-grid', 'comparison-matrix', 'session-checkpoint-card', 'provider-model-selector']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });
@@ -659,11 +659,147 @@ test('chibi companion stage, homepage graphic maps, markdown and web UI primitiv
   assert.match(diff, /- removed/);
   assert.match(diff, /\+ added/);
 
+  const logStream = read('log-stream-viewer.html');
+  assert.match(logStream, /role="log" aria-live="polite" aria-relevant="additions"/);
+  assert.match(logStream, /aria-pressed="false"[^>]*>Pause tail</);
+  assert.match(logStream, /grid-cols-1 md:grid-cols-12/);
+  assert.match(logStream, /overflow-x-auto/);
+  for (const level of ['>info<', '>success<', '>warning<', '>error<']) {
+    assert.ok(logStream.includes(level), `log severity text label missing: ${level}`);
+  }
+  assert.doesNotMatch(logStream, /vi-glass/);
+
+  const apiRef = read('api-reference-row.html');
+  for (const method of ['>GET<', '>POST<', '>DELETE<']) {
+    assert.ok(apiRef.includes(method), `protocol method chip missing: ${method}`);
+  }
+  assert.doesNotMatch(apiRef, /<span[^>]*h-action-min-default[^>]*>(?:GET|POST|DELETE)<\/span>/);
+  for (const effect of ['effect · read', 'effect · write', 'effect · destructive', 'effect · credential']) {
+    assert.ok(apiRef.includes(effect), `effect text label missing: ${effect}`);
+  }
+  for (const copyName of ['Copy path \\/v1\\/runs \\(POST\\)', 'Copy path \\/v1\\/runs\\/:run_id \\(GET\\)', 'Copy path \\/v1\\/runs\\/:run_id \\(DELETE\\)', 'Copy path \\/v1\\/runs\\/:run_id\\/credentials \\(POST\\)']) {
+    assert.match(apiRef, new RegExp(`aria-label="${copyName}"`), `copy control needs a distinct accessible name: ${copyName}`);
+  }
+  assert.doesNotMatch(apiRef, /vi-glass/);
+
+  const critique = read('critique-thread-panel.html');
+  for (const chip of ['>Keep<', '>Change<', '>Do not copy<', '>Open<', '>Resolved · rev 8a80204<']) {
+    assert.ok(critique.includes(chip), `classification or state text missing: ${chip}`);
+  }
+  assert.match(critique, /aria-live="polite"[^>]*>\s*<span aria-hidden="true"[^>]*><\/span>\s*<span>2 open · 1 resolved<\/span>/s);
+  assert.match(critique, /aria-label="Resolve critique on hero-billboard"/);
+  assert.match(critique, /focus-within:border-surface-accent-violet-base/);
+  assert.doesNotMatch(critique, /outline-none/);
+  assert.doesNotMatch(critique, /vi-glass/);
+
+  const frames = read('viewport-frame-set.html');
+  for (const vp of ['1440px · desktop', '1024px · tablet', '390px · mobile']) {
+    assert.ok(frames.includes(vp), `viewport label missing: ${vp}`);
+  }
+  assert.match(frames, /border border-surface-accent-violet-base/);
+  assert.doesNotMatch(frames, /vi-glass/);
+
+  const changelog = read('changelog-timeline.html');
+  for (const entry of ['>Planned<', '>Added<', '>Changed<', '>Fixed<', '>Unreleased<', '>v1.2.0<', '>Latest release<']) {
+    assert.ok(changelog.includes(entry), `changelog label missing: ${entry}`);
+  }
+  assert.match(changelog, /tabular-nums/);
+  assert.doesNotMatch(changelog, /vi-glass/);
+
+  const credLedger = read('credential-activity-ledger.html');
+  for (const label of ['>Active<', '>Expired<', '>Revoked<']) {
+    assert.ok(credLedger.includes(label), `binding state label missing: ${label}`);
+  }
+  for (const term of ['runs\\.credentials\\.bind', 'vault\\.token\\.read', 'runs\\.credentials\\.revoke']) {
+    assert.match(credLedger, new RegExp(`<dt [^>]*>${term}</dt>`), `binding term must be a real dt: ${term}`);
+  }
+  assert.match(credLedger, /cred ···· 7f3a/);
+  assert.match(credLedger, /aria-label="Revoke binding cred 7f3a"/);
+  assert.match(credLedger, /scope <span class="text-text-content-primary-base">repo:runbooks:read<\/span>/);
+  assert.doesNotMatch(credLedger, /vi-glass/);
+
+  const briefCard = read('brief-contract-card.html');
+  for (const term of ['>Archetype<', '>Theme<', '>Density<', '>Viewport<', '>Keep<', '>Change<', '>Do not copy<']) {
+    assert.ok(briefCard.includes(term), `brief or contract term missing: ${term}`);
+  }
+  assert.match(briefCard, /<dt [^>]*>Keep<\/dt>/);
+  assert.doesNotMatch(briefCard, /vi-glass/);
+
+  const guardrail = read('guardrail-receipt-panel.html');
+  for (const row of ['>Text contrast<', '>Graph line<', '>Glass layers<', '>Arbitrary classes<', '>Scaffold tool<', '4.5:1 pass', '3.0:1 pass', '1 of 3 max']) {
+    assert.ok(guardrail.includes(row), `guardrail receipt row missing: ${row}`);
+  }
+  assert.match(guardrail, /<dl aria-live="polite" aria-label="Design guardrail receipt"/);
+  assert.match(guardrail, /href="\.\.\/dist\/standard\.json"/);
+  assert.doesNotMatch(guardrail, /href="\/standard\.json"/);
+  assert.doesNotMatch(guardrail, /vi-glass/);
+
+  const cmdPalette = read('command-palette-dialog.html');
+  assert.match(cmdPalette, /role="dialog" aria-modal="true"/);
+  assert.match(cmdPalette, /role="listbox"/);
+  assert.match(cmdPalette, /focus-within:border-surface-accent-violet-base/);
+  assert.doesNotMatch(cmdPalette, /outline-none/);
+  assert.doesNotMatch(cmdPalette, /vi-glass/);
+
+  const dropzone = read('file-dropzone-upload.html');
+  for (const state of ['>Ready<', '>Uploading · 68%<', '>Rejected · exceeds 8 MB ceiling<']) {
+    assert.ok(dropzone.includes(state), `dropzone transfer state missing: ${state}`);
+  }
+  assert.match(dropzone, /type="file"/);
+  assert.doesNotMatch(dropzone, /vi-glass/);
+
+  const kpi = read('kpi-metric-strip.html');
+  assert.match(kpi, /grid-cols-1 sm:grid-cols-2 lg:grid-cols-4/);
+  assert.match(kpi, /tabular-nums/);
+  assert.doesNotMatch(kpi, /vi-glass/);
+
+  const drawer = read('drawer-inspector-sheet.html');
+  assert.match(drawer, /role="dialog" aria-modal="true"/);
+  assert.match(drawer, /role="tablist"/);
+  assert.doesNotMatch(drawer, /vi-glass/);
+
+  const ctxTray = read('context-attachment-tray.html');
+  assert.match(ctxTray, /1,420 \/ 8,000 tokens/);
+  assert.match(ctxTray, /forgotten notes stay withheld/);
+  assert.doesNotMatch(ctxTray, /vi-glass/);
+
+  const trace = read('tool-call-trace-card.html');
+  assert.match(trace, /<details open/);
+  assert.match(trace, />Succeeded</);
+  assert.match(trace, />Blocked by policy</);
+  assert.doesNotMatch(trace, /vi-glass/);
+
+  const policy = read('policy-rule-matrix.html');
+  for (const decision of ['>Allow<', '>Ask owner<', '>Deny<']) {
+    assert.ok(policy.includes(decision), `policy decision text missing: ${decision}`);
+  }
+  assert.match(policy, /overflow-x-auto/);
+  assert.doesNotMatch(policy, /vi-glass/);
+
+  const articleRail = read('article-toc-and-meta.html');
+  assert.match(articleRail, /aria-current="location"/);
+  assert.match(articleRail, />Reviewed</);
+  assert.match(articleRail, />Observed</);
+  assert.match(articleRail, /href="\.\.\/dist\/standard\.md"/);
+  assert.doesNotMatch(articleRail, /vi-glass/);
+
   for (const file of [
     'persona-deliberation-stepper.html',
     'systems-constellation-map.html',
     'markdown-prose-renderer.html',
     'code-and-diff-viewer.html',
+    'log-stream-viewer.html',
+    'api-reference-row.html',
+    'critique-thread-panel.html',
+    'brief-contract-card.html',
+    'guardrail-receipt-panel.html',
+    'credential-activity-ledger.html',
+    'command-palette-dialog.html',
+    'file-dropzone-upload.html',
+    'drawer-inspector-sheet.html',
+    'context-attachment-tray.html',
+    'tool-call-trace-card.html',
+    'article-toc-and-meta.html',
     'form-controls.html',
     'button-variants.html',
     'navigation-primitives.html',
@@ -676,4 +812,175 @@ test('chibi companion stage, homepage graphic maps, markdown and web UI primitiv
       assert.match(cls, /h-action-(min|wide)-default/, `${file}: touch target floor on ${m[0].slice(0, 80)}`);
     }
   }
+});
+
+test('modularity and cross-surface continuity fragments follow ADR-021, ADR-023, ADR-024 and ADR-025 contracts', () => {
+  const continuityBatch = [
+    'toast-notification-stack.html',
+    'multi-step-stepper.html',
+    'search-and-filter-bar.html',
+    'mobile-navigation-sheet.html',
+    'bento-feature-grid.html',
+    'comparison-matrix.html',
+    'session-checkpoint-card.html',
+    'provider-model-selector.html',
+  ];
+
+  for (const file of continuityBatch) {
+    const html = read(file);
+    assert.doesNotMatch(html, /vi-glass/, `${file}: must stay solid (no vi-glass)`);
+    assert.doesNotMatch(html, /persona-accent-/, `${file}: must not reuse persona accents`);
+    for (const m of html.matchAll(/<(button|textarea|a|select|input)\b([^>]*)>/g)) {
+      const cls = (m[2].match(/\bclass="([^"]*)"/) || [])[1] || '';
+      assert.match(cls, /h-action-(min|wide)-default/, `${file}: touch target floor on ${m[0].slice(0, 80)}`);
+    }
+  }
+
+  // 1. toast-notification-stack.html
+  const toasts = read('toast-notification-stack.html');
+  assert.equal([...toasts.matchAll(/role="status" aria-live="polite"/g)].length, 2, 'two polite rows');
+  assert.equal([...toasts.matchAll(/<div role="alert"/g)].length, 2, 'two assertive rows');
+  for (const label of ['>Saved<', '>Notice<', '>Warning<', '>Failed<']) {
+    assert.ok(toasts.includes(label), `toast label missing: ${label}`);
+  }
+  for (const name of ['Dismiss saved notification', 'Dismiss provider notice', 'Dismiss budget warning', 'Dismiss failed write notice']) {
+    assert.ok(toasts.includes(`aria-label="${name}"`), `distinct dismiss name missing: ${name}`);
+  }
+  assert.ok(toasts.includes('>Undo save<') && toasts.includes('>Retry write<'), 'recovery actions missing');
+
+  // 2. multi-step-stepper.html
+  const stepper = read('multi-step-stepper.html');
+  assert.match(stepper, /<ol aria-label="Setup steps"/);
+  assert.equal([...stepper.matchAll(/aria-current="step"/g)].length, 1, 'exactly one current step');
+  for (const state of ['>Completed<', '>In progress<', '>Up next<', '>Blocked<']) {
+    assert.ok(stepper.includes(state), `stepper state missing: ${state}`);
+  }
+  const connectors = [...stepper.matchAll(/class="hidden md:block flex-1 border-t ([^"]*)"/g)].map((m) => m[1]);
+  assert.equal(connectors.length, 4, 'four connectors');
+  for (const cls of connectors) {
+    assert.match(cls, /border-(surface-accent-violet|border-graph-line)-base/, `connector must reach 3:1, got "${cls}"`);
+    assert.doesNotMatch(cls, /separator/, `connector must not use the hairline separator, got "${cls}"`);
+  }
+  assert.match(stepper, /grid-cols-1 md:grid-cols-5/);
+
+  // 3. search-and-filter-bar.html
+  const searchBar = read('search-and-filter-bar.html');
+  assert.match(searchBar, /focus-within:border-surface-accent-violet-base/);
+  assert.match(searchBar, /placeholder:text-text-content-secondary-base/);
+  assert.doesNotMatch(searchBar, /outline-none/);
+  const facets = searchBar.match(/<div role="group" aria-label="Facets"[\s\S]*?<\/div>/)[0];
+  const pressed = [...facets.matchAll(/aria-pressed="(true|false)"/g)];
+  assert.ok(pressed.length >= 3 && pressed.length <= 7, `facet pills within the Miller bound, got ${pressed.length}`);
+  const chips = searchBar.match(/<div role="group" aria-label="Active filters"[\s\S]*?<\/div>/)[0];
+  assert.match(chips, /aria-label="Remove filter: design systems"/);
+  assert.match(chips, /aria-label="Remove filter: harness contracts"/);
+  assert.match(searchBar, /<select id="catalog-filter-sort"/);
+  assert.ok(searchBar.includes('>Clear all<'));
+  assert.match(searchBar, /role="status" aria-live="polite" class="[^"]*tabular-nums[^"]*">Showing 12 of 78 modules</);
+
+  // 4. mobile-navigation-sheet.html
+  const sheet = read('mobile-navigation-sheet.html');
+  assert.match(sheet, /role="dialog" aria-modal="true"/);
+  assert.match(sheet, /aria-label="Close navigation"/);
+  const sheetNav = sheet.match(/<nav aria-label="Mobile primary navigation"[\s\S]*?<\/nav>/)[0];
+  const routes = [...sheetNav.matchAll(/<li><a href="([^"]*)"/g)].map((m) => m[1]);
+  assert.equal(routes.length, 6, 'six bounded routes before storefront launch');
+  assert.equal(routes.includes('/apps'), false, 'no unreleased storefront route');
+  assert.equal([...sheetNav.matchAll(/aria-current="page"/g)].length, 1, 'one current page');
+  assert.match(sheet, /aria-pressed="false"[^>]*>Pause background motion/);
+  for (const repo of ['seed', 'bloom', 'videsign', 'vitools']) {
+    assert.ok(sheet.includes(`>${repo}<`), `footer continuity link missing: ${repo}`);
+    assert.ok(sheet.includes(`href="https://github.com/Vidoxlabs/${repo}"`), `footer continuity URL missing: ${repo}`);
+  }
+
+  // 5. bento-feature-grid.html
+  const bento = read('bento-feature-grid.html');
+  assert.match(bento, /grid-cols-1 md:grid-cols-6 grid-flow-dense/);
+  assert.equal([...bento.matchAll(/<article\b/g)].length, 6, 'six bento cards');
+  assert.equal([...bento.matchAll(/md:col-span-3 md:row-span-2/g)].length, 1, 'one 3x2 anchor card');
+  assert.equal([...bento.matchAll(/md:col-span-3(?! md:row-span-2)/g)].length, 2, 'two 3x1 cards');
+  assert.equal([...bento.matchAll(/md:col-span-2(?! md:row-span)/g)].length, 3, 'three 2x1 cards close the grid');
+  // 6 + 3 + 3 + 2 + 2 + 2 = 18 cells = 6 columns x 3 rows: zero void cells.
+  assert.ok([...bento.matchAll(/text-balance/g)].length >= 6, 'balanced card headings');
+  assert.ok([...bento.matchAll(/mt-auto/g)].length >= 6, 'bottom-aligned actions');
+  assert.match(bento, /tabular-nums/);
+  assert.ok(bento.includes('>78</dd>'), 'catalog counter follows the live component count');
+
+  // 6. comparison-matrix.html
+  const matrix = read('comparison-matrix.html');
+  assert.match(matrix, /overflow-x-auto/);
+  assert.match(matrix, /<thead>/);
+  assert.equal([...matrix.matchAll(/<th scope="row"/g)].length, 6, 'six semantic row headers');
+  for (const state of ['>Supported<', '>Planned<', '>Out of scope<']) {
+    assert.ok(matrix.includes(state), `support state missing: ${state}`);
+    assert.ok([...matrix.matchAll(new RegExp(state, 'g'))].length >= 3, `${state} must appear in multiple cells`);
+  }
+  assert.ok(matrix.includes('bg-border-graph-line-base'), 'Out of scope uses the neutral graph-line dot');
+  assert.match(matrix, /tabular-nums/);
+  assert.match(matrix, /observed 2026-11-22/, 'footnote discloses observation scope');
+
+  // 7. session-checkpoint-card.html
+  const checkpoint = read('session-checkpoint-card.html');
+  assert.match(checkpoint, /tabular-nums/);
+  assert.match(checkpoint, /2026-11-21 14:32:08 · turn 42/);
+  assert.match(checkpoint, /2026-11-22 09:15:44/);
+  for (const action of ['>Resume thread<', '>Inspect snapshot<', '>Start fresh<']) {
+    assert.ok(checkpoint.includes(action), `checkpoint action missing: ${action}`);
+  }
+  assert.match(checkpoint, /Stored summary · bounded reference/);
+  assert.match(checkpoint, /no directive, tool, or memory-write authority/);
+
+  // 8. provider-model-selector.html
+  const provider = read('provider-model-selector.html');
+  assert.match(provider, /role="radiogroup" aria-label="Model routing slots"/);
+  assert.equal([...provider.matchAll(/role="radio" aria-checked="(true|false)"/g)].length, 2, 'two routing slots');
+  assert.match(provider, /providers\.slot\.remote/);
+  assert.match(provider, /providers\.slot\.local/);
+  for (const readout of ['128,000 tokens', '95 ms', '8,192 tokens', '310 ms']) {
+    assert.ok(provider.includes(readout), `routing readout missing: ${readout}`);
+  }
+  for (const state of ['>Available<', '>Degraded<']) {
+    assert.ok(provider.includes(state), `availability text missing: ${state}`);
+  }
+  assert.match(provider, /<ol aria-label="Ordered fallback chain"/);
+  assert.match(provider, /Run pauses at waiting_for_owner; no simulated success/);
+  assert.doesNotMatch(provider, /\b\d{1,3}(?:\.\d{1,3}){3}\b/, 'no IPv4 literals');
+  assert.doesNotMatch(provider, /localhost|\.lan\b|\.internal\b/, 'no internal hostnames');
+});
+
+test('ADR-025 anti-slop linter rejects em-dashes, AI cliches, h-screen, and bare outline-none', () => {
+  assert.ok(lintFragment('bad.html', '<p>Clean interface — built fast.</p>').some((p) => /em-dash/i.test(p)));
+  assert.ok(lintFragment('bad.html', '<p>Elevate your workflow seamlessly.</p>').some((p) => /cliche/i.test(p)));
+  assert.ok(lintFragment('bad.html', '<div class="min-h-screen"></div>').some((p) => /viewport height/i.test(p)));
+  assert.ok(lintFragment('bad.html', '<form><textarea class="outline-none"></textarea></form>').some((p) => /outline-none/i.test(p)));
+  assert.deepEqual(
+    lintFragment('good.html', '<form class="focus-within:border-surface-accent-violet-base"><textarea class="outline-none"></textarea></form>'),
+    [],
+  );
+  assert.deepEqual(
+    lintFragment('good-layout.html', '<div class="min-h-dvh overflow-x-hidden"><h1 class="text-balance">Plain heading</h1></div>'),
+    [],
+  );
+});
+
+test('the linter rejects external placeholder image services (SKILL.md negative constraints)', () => {
+  assert.ok(
+    lintFragment('bad-img.html', '<img src="https://picsum.photos/seed/vi/1200/800" alt="Filler">').some((p) => /placeholder image service/i.test(p)),
+  );
+  assert.ok(
+    lintFragment('bad-via.html', '<img src="https://via.placeholder.com/600x400" alt="Filler">').some((p) => /placeholder image service/i.test(p)),
+  );
+  assert.ok(
+    lintFragment('bad-unsplash.html', '<img src="https://images.unsplash.com/photo-1" alt="Filler">').some((p) => /placeholder image service/i.test(p)),
+  );
+  assert.ok(
+    lintFragment('bad-co.html', '<img src="https://placehold.co/600x400" alt="Filler">').some((p) => /placeholder image service/i.test(p)),
+  );
+  assert.ok(
+    lintFragment('bad-kitten.html', '<img src="https://placekitten.com/600/400" alt="Filler">').some((p) => /placeholder image service/i.test(p)),
+  );
+  assert.deepEqual(
+    lintFragment('good-img.html', '<img src="{ASSET_BASE}/brand/brand_mark_header_v008.svg" alt="Vidoxlabs brand mark">'),
+    [],
+  );
 });

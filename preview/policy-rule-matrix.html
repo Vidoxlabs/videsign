@@ -1,0 +1,57 @@
+<!--
+  Nocturne Museum: Permission and policy rule matrix (ADR-017, ADR-021)
+  Responsive hairline table displaying harness permission boundaries (allow, ask, deny)
+  against neutral tool patterns, ADR-021 effect classes, scope constraints, and rule
+  precedence. Every action and effect pairs a status dot with explicit text.
+-->
+<section aria-labelledby="policy-matrix-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+    <div class="flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Harness governance · last matching rule wins</p>
+      <h2 id="policy-matrix-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Policy rule matrix</h2>
+    </div>
+    <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">
+      <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+      <span>4 active rules</span>
+    </span>
+  </div>
+  <div class="overflow-x-auto bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="border-b border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+          <th scope="col" class="px-inset-operator-default py-rhythm-3-base font-typography-weight-medium-base">Tool pattern</th>
+          <th scope="col" class="px-inset-operator-default py-rhythm-3-base font-typography-weight-medium-base">Effect</th>
+          <th scope="col" class="px-inset-operator-default py-rhythm-3-base font-typography-weight-medium-base">Decision</th>
+          <th scope="col" class="px-inset-operator-default py-rhythm-3-base font-typography-weight-medium-base">Scope boundary</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base">
+        <tr>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-primary-base">vcs.file.read</td>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-secondary-base">read</td>
+          <td class="px-inset-operator-default py-rhythm-3-base"><span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span><span>Allow</span></span></td>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-secondary-base">Workspace files, excluding secret paths</td>
+        </tr>
+        <tr>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-primary-base">vcs.patch.apply</td>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-secondary-base">write</td>
+          <td class="px-inset-operator-default py-rhythm-3-base"><span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span><span>Ask owner</span></span></td>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-secondary-base">Pauses at waiting_for_owner gate</td>
+        </tr>
+        <tr>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-primary-base">runs.credentials.*</td>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-secondary-base">credential</td>
+          <td class="px-inset-operator-default py-rhythm-3-base"><span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span><span>Ask owner</span></span></td>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-secondary-base">Scoped lease only; secret never printed</td>
+        </tr>
+        <tr>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-primary-base">fs.tree.remove</td>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-secondary-base">destructive</td>
+          <td class="px-inset-operator-default py-rhythm-3-base"><span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span><span>Deny</span></span></td>
+          <td class="px-inset-operator-default py-rhythm-3-base text-text-content-secondary-base">Blocked outside disposable scratch dirs</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Rules evaluate deterministically in declared order; unsupported actions return a typed refusal.</p>
+</section>

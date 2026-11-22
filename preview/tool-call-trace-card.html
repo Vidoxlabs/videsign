@@ -1,0 +1,48 @@
+<!--
+  Nocturne Museum: Expandable tool-call trace card (ADR-017, ADR-020, ADR-021)
+  Native details/summary disclosure for inspecting individual neutral tool invocations
+  inside a multi-agent thread or workspace activity stream. Shows neutral tool ID,
+  status dot + label, tabular-nums latency, arguments JSON, and truncated output
+  receipt with a 44px Copy trace button. Solid surfaces only.
+-->
+<section aria-labelledby="tool-trace-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-4-base">
+  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Tool execution trace · neutral IDs</p>
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">2 calls · 184 ms total</span>
+  </div>
+  <h2 id="tool-trace-title" class="sr-only">Tool call traces</h2>
+  <details open class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base overflow-hidden">
+    <summary class="flex flex-wrap items-center justify-between gap-gap-compact-default min-h-11 px-inset-operator-default py-rhythm-2-base bg-surface-background-tertiary-base cursor-pointer list-none">
+      <div class="flex flex-wrap items-center gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">vcs.file.read</span>
+        <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span><span>Succeeded</span></span>
+      </div>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">effect read · 142 ms</span>
+    </summary>
+    <div class="p-layout-padding-medium-base flex flex-col gap-rhythm-4-base border-t border-border-separator-primary-base">
+      <div class="flex flex-col gap-gap-dense-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Arguments</span>
+        <pre class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base overflow-x-auto font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><code>{"path":"lib/design-studio.js","startLine":1,"endLine":80}</code></pre>
+      </div>
+      <div class="flex flex-col gap-gap-dense-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Output receipt</span>
+        <pre class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base overflow-x-auto font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base"><code>80 lines read · 3,412 bytes · digest sha256:4a91…e802</code></pre>
+      </div>
+      <div class="flex items-center justify-end">
+        <button type="button" aria-label="Copy JSON trace for vcs.file.read" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Copy trace JSON</button>
+      </div>
+    </div>
+  </details>
+  <details class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base overflow-hidden">
+    <summary class="flex flex-wrap items-center justify-between gap-gap-compact-default min-h-11 px-inset-operator-default py-rhythm-2-base bg-surface-background-tertiary-base cursor-pointer list-none">
+      <div class="flex flex-wrap items-center gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">runs.credentials.bind</span>
+        <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span><span>Blocked by policy</span></span>
+      </div>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">effect credential · 42 ms</span>
+    </summary>
+    <div class="p-layout-padding-medium-base flex flex-col gap-gap-compact-default border-t border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+      <p>Policy rule <span class="text-text-content-primary-base">deny:credential-default</span> rejected automatic admission; owner approval required.</p>
+    </div>
+  </details>
+</section>

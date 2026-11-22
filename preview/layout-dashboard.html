@@ -3,9 +3,9 @@
   Canonical composition: sidebar + toolbar + main content + stat cards.
   Demonstrates how preview/ fragments compose into a full screen.
 -->
-<div class="flex h-screen w-screen bg-surface-background-primary-base overflow-hidden">
+<div class="flex h-dvh w-screen bg-surface-background-primary-base overflow-hidden">
   <!-- Sidebar -->
-  <aside class="w-layout-width-sidebar-base min-h-screen bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-large-base flex flex-col gap-gap-section-default shrink-0 rounded-r-layout-radius-standard-base">
+  <aside class="w-layout-width-sidebar-base min-h-dvh bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-large-base flex flex-col gap-gap-section-default shrink-0 rounded-r-layout-radius-standard-base">
     <!-- Brand -->
     <div class="flex items-center gap-gap-comfortable-default">
       <img src="{ASSET_BASE}/brand/brand_favicon_px16_v008.svg" alt="Vidoxlabs" class="w-indicator-brand-base h-indicator-brand-base" />
@@ -18,10 +18,10 @@
     </div>
     <!-- Nav -->
     <nav class="flex flex-col gap-gap-dense-default">
-      <button type="button" class="flex items-center gap-gap-comfortable-default py-inset-compact-default px-inset-operator-default rounded-layout-radius-control-base bg-surface-background-tertiary-base text-text-content-primary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-typography-weight-medium-base tracking-typography-tracking-wide-base border-l-2 border-surface-accent-violet-base">
+      <button type="button" class="flex items-center gap-gap-comfortable-default py-inset-compact-default px-inset-operator-default rounded-layout-radius-control-base bg-surface-background-tertiary-base text-text-content-primary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-typography-weight-medium-base tracking-typography-tracking-wide-base border-l-2 border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
         Dashboard
       </button>
-      <button type="button" class="flex items-center gap-gap-comfortable-default py-inset-compact-default px-inset-operator-default rounded-layout-radius-control-base bg-transparent text-text-content-secondary-base hover:bg-surface-background-tertiary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-typography-weight-medium-base tracking-typography-tracking-wide-base">
+      <button type="button" class="flex items-center gap-gap-comfortable-default py-inset-compact-default px-inset-operator-default rounded-layout-radius-control-base bg-transparent text-text-content-secondary-base hover:bg-surface-background-tertiary-base text-left w-full font-typography-family-mono-base text-typography-size-xs-base font-typography-weight-medium-base tracking-typography-tracking-wide-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
         Monitors
       </button>
     </nav>
@@ -31,7 +31,7 @@
   <main class="flex-1 flex flex-col overflow-hidden">
     <!-- Toolbar -->
     <div class="flex items-center gap-gap-compact-default p-layout-padding-small-base bg-surface-background-tertiary-base border-b border-border-separator-primary-base">
-      <button type="button" class="flex items-center gap-gap-compact-default px-inset-operator-default py-1.5 bg-transparent hover:bg-surface-background-secondary-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-control-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base">
+      <button type="button" class="flex items-center gap-gap-compact-default px-inset-operator-default py-1.5 bg-transparent hover:bg-surface-background-secondary-base text-text-content-secondary-base hover:text-text-content-primary-base rounded-layout-radius-control-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
         Filter
       </button>
     </div>

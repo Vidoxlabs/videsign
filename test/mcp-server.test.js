@@ -196,8 +196,32 @@ test('component_catalog lists matching entries by consumer without html by defau
   const contractsBody = JSON.parse(contractsRes.content[0].text);
   assert.deepEqual(
     contractsBody.components.map((c) => c.id),
-    ['claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner', 'instrument', 'statement-proof-row'],
+    ['claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner', 'instrument', 'statement-proof-row', 'credential-activity-ledger', 'policy-rule-matrix', 'provider-model-selector', 'locked-panel'],
   );
+
+  const mdCodeRes = await client.callTool({
+    name: 'component_catalog',
+    arguments: { category: 'markdown-and-code' },
+  });
+  assert.notEqual(mdCodeRes.isError, true, mdCodeRes.content[0].text);
+  assert.deepEqual(
+    JSON.parse(mdCodeRes.content[0].text).components.map((c) => c.id),
+    ['markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline'],
+  );
+
+  const uiRes = await client.callTool({
+    name: 'component_catalog',
+    arguments: { category: 'ui-primitives' },
+  });
+  assert.notEqual(uiRes.isError, true, uiRes.content[0].text);
+  assert.deepEqual(
+    JSON.parse(uiRes.content[0].text).components.map((c) => c.id),
+    ['form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'data-table', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'skeleton-row', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar'],
+  );
+
+  assert.ok(siteIds.includes('api-reference-row'));
+  assert.ok(siteIds.includes('article-toc-and-meta'));
+  assert.ok(siteIds.includes('kpi-metric-strip'));
 });
 
 test('component_catalog fetches a single component with html and rejects unknown ids', async () => {
@@ -247,19 +271,22 @@ test('design_brief and scaffold_page tools plus components.manifest.json work ov
 
   const manifestRes = await client.readResource({ uri: 'file://dist/components.manifest.json' });
   const manifest = JSON.parse(manifestRes.contents[0].text);
-  assert.equal(manifest.componentCount, 50);
+  assert.equal(manifest.componentCount, 78);
   assert.ok(manifest.archetypes['public-site-landing']);
   assert.ok(manifest.archetypes['ui-primitives-kitchen-sink']);
 
   const briefRes = await client.callTool({
     name: 'design_brief',
-    arguments: { archetype: 'tool-and-skill-catalog', framework: 'nextjs', theme: 'light' },
+    arguments: { archetype: 'tool-and-skill-catalog', framework: 'nextjs', theme: 'light', variance: 6, motion: 4 },
   });
   assert.notEqual(briefRes.isError, true, briefRes.content[0].text);
   const brief = JSON.parse(briefRes.content[0].text);
   assert.equal(brief.archetype, 'tool-and-skill-catalog');
   assert.equal(brief.framework, 'nextjs');
   assert.equal(brief.theme, 'light');
+  assert.match(brief.designRead, /^Reading this as: tool-and-skill-catalog/);
+  assert.deepEqual(brief.dials, { variance: 6, motion: 4, visualDensity: 5 });
+  assert.ok(Array.isArray(brief.preFlightChecklist) && brief.preFlightChecklist.length >= 8);
   assert.ok(brief.referenceContract.keep.length > 0);
   assert.ok(brief.referenceContract.change.length > 0);
   assert.ok(brief.referenceContract.doNotCopy.length > 0);
@@ -274,7 +301,7 @@ test('design_brief and scaffold_page tools plus components.manifest.json work ov
   assert.ok(scaffold.stylesheets.includes('dist/glass.css'));
   assert.match(scaffold.html, /<!DOCTYPE html>/);
   assert.match(scaffold.html, /<!-- slot:1:site-header-island/);
-  assert.match(scaffold.html, /<!-- slot:7:site-footer/);
+  assert.match(scaffold.html, /<!-- slot:9:site-footer/);
 
   const badScaffold = await client.callTool({
     name: 'scaffold_page',

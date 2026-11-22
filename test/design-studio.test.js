@@ -63,6 +63,14 @@ describe('collaborative design studio & reference contracts', () => {
       doNotCopy: ['Never inline script tags'],
     });
     assert.equal(brief.schemaVersion, 'videsign.design-brief/v1');
+    assert.match(brief.designRead, /^Reading this as: interactive-check-lab/);
+    assert.deepEqual(brief.dials, { variance: 4, motion: 4, visualDensity: 7 });
+    assert.equal(brief.guardrails.banEmDash, true);
+    assert.equal(brief.guardrails.banRawViewportHeight, true);
+    assert.equal(brief.guardrails.banPlaceholderImageServices, true);
+    assert.equal(brief.guardrails.requireVisibleFocus, true);
+    assert.equal(brief.guardrails.maxEntitiesPerGroup, 7);
+    assert.ok(Array.isArray(brief.preFlightChecklist) && brief.preFlightChecklist.length >= 8);
     assert.equal(brief.theme, 'light');
     assert.equal(brief.density, 'compact');
     assert.equal(brief.framework, 'svelte');
@@ -73,6 +81,11 @@ describe('collaborative design studio & reference contracts', () => {
     assert.ok(brief.integrationNotes.some((note) => note.includes('dist/themes.css')));
     assert.ok(brief.integrationNotes.some((note) => note.includes('Svelte')));
 
+    const customDialBrief = buildDesignBrief({ archetype: 'public-site-landing', variance: 8, motion: 6, density: 'spacious' });
+    assert.deepEqual(customDialBrief.dials, { variance: 8, motion: 6, visualDensity: 3 });
+
+    assert.throws(() => buildDesignBrief({ variance: 11 }), (err) => err instanceof DesignStudioError && err.code === 'INVALID_DIAL');
+    assert.throws(() => buildDesignBrief({ motion: 0 }), (err) => err instanceof DesignStudioError && err.code === 'INVALID_DIAL');
     assert.throws(() => buildDesignBrief({ theme: 'sepia' }), (err) => err instanceof DesignStudioError && err.code === 'INVALID_THEME');
     assert.throws(() => buildDesignBrief({ framework: 'jquery' }), (err) => err instanceof DesignStudioError && err.code === 'INVALID_FRAMEWORK');
     assert.throws(() => buildDesignBrief({ components: ['not-a-component'] }), (err) => err instanceof DesignStudioError && err.code === 'UNKNOWN_COMPONENT');
@@ -103,7 +116,7 @@ describe('collaborative design studio & reference contracts', () => {
     const expected = buildComponentsManifest(COMPONENT_CATALOG, tokens);
     const actual = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf8'));
     assert.deepEqual(actual, expected);
-    assert.equal(actual.componentCount, 50);
+    assert.equal(actual.componentCount, 78);
     assert.deepEqual(actual.categories, CATALOG_CATEGORIES);
     assert.deepEqual(actual.consumers, CATALOG_CONSUMERS);
     assert.equal(Object.keys(actual.archetypes).length, 9);
