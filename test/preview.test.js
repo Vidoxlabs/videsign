@@ -88,7 +88,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'public-repo-card', 'ecosystem-plane-map', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });
@@ -471,4 +471,107 @@ test('modular agent-workspace and harness fragments follow ADR-020 contracts and
   assert.match(workspace, /Personas/);
   assert.match(workspace, /Notes/);
   assert.match(workspace, /Usage/);
+});
+
+test('Seed contract and public-repo continuity fragments enforce solid surfaces, lexicon, and contracts', () => {
+  const continuityFragments = [
+    'claim-maturity-badge.html',
+    'run-lifecycle-strip.html',
+    'tool-registry-row.html',
+    'public-repo-card.html',
+    'ecosystem-plane-map.html',
+  ];
+  const internalNames = new RegExp([
+    ['Vi', 'Web'].join(''),
+    ['Vi', 'App'].join(''),
+    ['Vi', 'Bot'].join(''),
+    ['Vi', 'Code'].join(''),
+    ['Vi', 'Docs'].join(''),
+    ['Vi', 'PerScale'].join(''),
+    ['ARK', 'SRRA'].join(''),
+    ['CT', '100'].join(''),
+    '\\bCT\\d+\\b',
+  ].join('|'), 'i');
+  const loopback = ['127', '0', '0', '1'].join('.');
+
+  for (const file of continuityFragments) {
+    const html = read(file);
+    assert.doesNotMatch(html, /vi-glass/, `${file}: must stay solid (no vi-glass)`);
+    assert.doesNotMatch(html, /persona-accent-/, `${file}: must not use persona-accent-*`);
+    assert.doesNotMatch(html, /bg-surface-accent-violet-base/, `${file}: must not use solid bg-surface-accent-violet-base`);
+    assert.doesNotMatch(html, internalNames, `${file}: must not contain retired or internal names`);
+    assert.equal(html.includes(loopback), false, `${file}: must not contain loopback address`);
+    assert.doesNotMatch(html, /\b\d{1,3}(?:\.\d{1,3}){3}\b/, `${file}: must not contain IPv4 addresses`);
+    for (const m of html.matchAll(/<(button|textarea|a)\b([^>]*)>/g)) {
+      const cls = (m[2].match(/\bclass="([^"]*)"/) || [])[1] || '';
+      assert.match(cls, /h-action-(min|wide)-default/, `${file}: touch target floor on ${m[0].slice(0, 80)}`);
+    }
+  }
+
+  // 1. claim-maturity-badge.html
+  const claim = read('claim-maturity-badge.html');
+  assert.match(claim, /role="group" aria-label="Claim maturity labels"/);
+  for (const [token, label, receipt] of [
+    ['bg-status-indicator-success-base', 'implemented', 'npm test'],
+    ['bg-status-indicator-info-base', 'observed', '2026-11-22 · rev 8a80204'],
+    ['bg-border-graph-line-base', 'specified', 'contract'],
+    ['bg-status-indicator-warning-base', 'planned', 'roadmap'],
+  ]) {
+    assert.match(claim, new RegExp(`${token}[^>]*><\\/span><span>${label}<\\/span>[\\s\\S]*?${receipt}`), `missing ${label} maturity badge`);
+  }
+
+  // 2. run-lifecycle-strip.html
+  const lifecycle = read('run-lifecycle-strip.html');
+  assert.match(lifecycle, /<ol aria-label="Objective and attempt lifecycle"/);
+  for (const stage of ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete']) {
+    assert.match(lifecycle, new RegExp(`>${stage}<`), `missing run stage ${stage}`);
+  }
+  assert.match(lifecycle, /border-surface-accent-violet-base[\s\S]*?>3<[\s\S]*?>running</);
+  assert.match(lifecycle, /border-status-indicator-warning-base[\s\S]*?>4<[\s\S]*?>waiting_for_owner<[\s\S]*?>Owner gate</);
+  assert.match(lifecycle, /border-status-indicator-success-base[\s\S]*?>6<[\s\S]*?>complete</);
+  assert.match(lifecycle, /border-status-indicator-warning-base[\s\S]*stopping → stopped/);
+  assert.match(lifecycle, /border-status-indicator-error-base[\s\S]*failed/);
+  assert.match(lifecycle, /<dl aria-live="polite" aria-label="Run receipt"/);
+  assert.match(lifecycle, /obj-01 · Audit token outputs/);
+  assert.match(lifecycle, /vcs\.file\.read · args sha256: 9c1d4e2 · before effect/);
+
+  // 3. tool-registry-row.html
+  const registry = read('tool-registry-row.html');
+  assert.match(registry, /role="region" aria-label="Neutral tool registry"/);
+  assert.match(registry, /Vendor identity lives in the connector binding, never in the tool ID\./);
+  for (const [toolId, connector, effect, realm] of [
+    ['vcs.file.read', 'local-git', 'read', 'workspace'],
+    ['memory.context.read', 'memory-fabric', 'read', 'team-shared'],
+    ['ingest.job.create', 'queue-adapter', 'write', 'external'],
+    ['compute.rows.check', 'deterministic-checker', 'read', 'artifact-store'],
+  ]) {
+    assert.match(registry, new RegExp(`${toolId.replace(/\./g, '\\.')}[\\s\\S]*?${connector}[\\s\\S]*?${effect}[\\s\\S]*?${realm}`));
+  }
+  assert.match(registry, /bg-status-indicator-warning-base[\s\S]*ownerGate · pauses run/);
+  assert.match(registry, /bg-status-indicator-info-base[\s\S]*No model call/);
+
+  // 4. public-repo-card.html
+  const cards = read('public-repo-card.html');
+  assert.equal([...cards.matchAll(/<article\b/g)].length, 4, 'public-repo-card must render 4 article cards');
+  for (const repo of ['seed', 'bloom', 'videsign', 'vitools']) {
+    assert.match(cards, new RegExp(`>${repo}<`), `missing repo card heading ${repo}`);
+  }
+  const cardLinks = [...cards.matchAll(/<a\b[^>]*class="([^"]*)"[^>]*>/g)];
+  assert.equal(cardLinks.length, 4, 'public-repo-card must render 4 action links');
+  for (const m of cardLinks) {
+    assert.match(m[1], /\bh-action-min-default\b/);
+  }
+
+  // 5. ecosystem-plane-map.html
+  const map = read('ecosystem-plane-map.html');
+  assert.match(map, /role="region" aria-label="Four-plane public ecosystem"/);
+  for (const plane of ['Surfaces', 'Harness', 'Providers', 'Authority stores']) {
+    assert.match(map, new RegExp(plane), `missing ecosystem plane ${plane}`);
+  }
+  for (const noun of ['seed', 'bloom', 'videsign', 'vitools']) {
+    assert.match(map, new RegExp(`\\b${noun}\\b`), `missing public proper noun ${noun}`);
+  }
+  for (const term of ['the native client', 'coding workspace', 'the memory fabric', 'the storage triangle', 'the documentation base', 'coordinator', 'model-backed specialist', 'deterministic checker', 'the local cluster']) {
+    assert.match(map, new RegExp(term), `missing generalized lexicon term ${term}`);
+  }
 });
