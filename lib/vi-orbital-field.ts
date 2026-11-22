@@ -16,7 +16,7 @@ const SHADOW_TEMPLATE = `
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
     inline-size: 100%;
-    min-block-size: clamp(22rem, 56cqb, 40rem);
+    min-block-size: clamp(22rem, 48cqb, 32rem);
     container-type: inline-size;
     isolation: isolate;
     position: relative;
@@ -26,6 +26,8 @@ const SHADOW_TEMPLATE = `
   }
   .vi-orbital-canvas {
     grid-area: 1 / 1;
+    position: absolute;
+    inset: 0;
     inline-size: 100%;
     block-size: 100%;
     display: block;
@@ -34,6 +36,8 @@ const SHADOW_TEMPLATE = `
   }
   .vi-orbital-scrim {
     grid-area: 1 / 1;
+    position: absolute;
+    inset: 0;
     inline-size: 100%;
     block-size: 100%;
     pointer-events: none;
