@@ -152,6 +152,7 @@ describe('collaborative design studio & reference contracts', () => {
     for (const width of [40, 48, 64]) {
       assert.ok(css.includes('vi-plugins-stage (min-width: ' + width + 'rem)'));
     }
+    assert.match(css, /select\.vi-plugin-input\s*\{[^}]*\bblock-size: var\(--vi-size-action-min-default\);/);
     assert.doesNotMatch(css, /#[\da-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i);
   });
 });

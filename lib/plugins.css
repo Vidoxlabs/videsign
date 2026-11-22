@@ -157,6 +157,11 @@
   opacity: 1;
 }
 
+select.vi-plugin-input {
+  block-size: var(--vi-size-action-min-default);
+  padding-block: 0;
+}
+
 .vi-plugin-search,
 .vi-plugin-field .vi-plugin-input {
   inline-size: 100%;
@@ -182,6 +187,7 @@
 .vi-plugin-policy,
 .vi-plugin-preflight {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
   gap: var(--vi-space-gap-compact-default);
   min-inline-size: 0;
@@ -189,6 +195,10 @@
   border: 1px solid var(--vi-chat-border-subtle);
   border-radius: var(--vi-spacing-layout-radius-standard-base);
   background: var(--vi-plugin-badge-bg);
+}
+
+.vi-plugin-policy > select {
+  inline-size: 100%;
 }
 
 .vi-plugin-receipt {

@@ -129,6 +129,11 @@
 }
 
 /* Specimen 2: Unified Two-Pane Settings Shell (solid surface, container-query driven) */
+.vi-settings-scope,
+.vi-settings-stage {
+  container: vi-settings-shell / inline-size;
+}
+
 .vi-settings-shell {
   container-type: inline-size;
   container-name: vi-settings-shell;
