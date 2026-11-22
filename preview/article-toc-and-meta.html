@@ -1,28 +1,28 @@
 <!--
-  Nocturne Museum: Editorial article TOC and review metadata rail (ADR-007, ADR-023)
+  Nocturne Museum: Editorial article TOC and review metadata rail (ADR-007, ADR-011, ADR-023)
   Solid reading-surface sidebar rail for research library and documentation pages.
   Separates reviewed first-party summary date (reviewedAt) from historical observation
-  date (observedAt), renders jump links at the 44px floor with active location marker,
-  and offers citation and raw-markdown controls.
+  date (observedAt), renders scroll-spy jump links at the 44px floor with active location marker,
+  and offers Copy page (.md), raw Markdown, llms.txt, BibTeX, and Ask Violet controls.
 -->
-<aside aria-labelledby="article-rail-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base w-full max-w-xs flex flex-col gap-rhythm-6-base">
+<aside aria-labelledby="article-rail-title" class="vi-docs-scope vi-docs-rail-card w-full max-w-xs">
   <div class="flex flex-col gap-gap-dense-default">
-    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Research record · editorial rail</p>
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Research record &middot; editorial rail</p>
     <h2 id="article-rail-title" class="font-typography-family-sans-base text-typography-size-md-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">On this page</h2>
   </div>
   <nav aria-label="Table of contents">
-    <ol class="flex flex-col border-l border-border-separator-primary-base">
+    <ol class="vi-docs-toc-list">
       <li>
-        <a href="#section-overview" aria-current="location" class="flex items-center h-action-min-default pl-rhythm-4-base border-l-2 border-surface-accent-violet-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">1. Architecture summary</a>
+        <a href="#section-overview" data-docs-toc-link aria-current="location" class="vi-docs-toc-link h-action-min-default">1. Architecture summary</a>
       </li>
       <li>
-        <a href="#section-bounds" class="flex items-center h-action-min-default pl-rhythm-4-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">2. Measured contrast bounds</a>
+        <a href="#section-bounds" data-docs-toc-link class="vi-docs-toc-link h-action-min-default">2. Measured contrast bounds</a>
       </li>
       <li>
-        <a href="#section-catalog" class="flex items-center h-action-min-default pl-rhythm-4-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">3. Modular component slots</a>
+        <a href="#section-catalog" data-docs-toc-link class="vi-docs-toc-link h-action-min-default">3. Modular component slots</a>
       </li>
       <li>
-        <a href="#section-holdbacks" class="flex items-center h-action-min-default pl-rhythm-4-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">4. Open unlock conditions</a>
+        <a href="#section-holdbacks" data-docs-toc-link class="vi-docs-toc-link h-action-min-default">4. Open unlock conditions</a>
       </li>
     </ol>
   </nav>
@@ -41,7 +41,25 @@
     </div>
   </dl>
   <div class="flex flex-col gap-gap-compact-default pt-rhythm-3-base border-t border-border-separator-primary-base">
-    <button type="button" class="w-full inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Copy BibTeX citation</button>
-    <a href="../dist/standard.md" class="w-full inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">View Markdown source</a>
+    <button type="button" data-docs-copy-markdown class="vi-docs-action-btn h-action-min-default">
+      <span>Copy page as Markdown</span>
+      <span aria-hidden="true">md</span>
+    </button>
+    <a href="../dist/standard.md" class="vi-docs-action-btn h-action-min-default">
+      <span>View Markdown source</span>
+      <span aria-hidden="true">&nearr;</span>
+    </a>
+    <a href="../dist/standard.json" class="vi-docs-action-btn h-action-min-default">
+      <span>llms.txt</span>
+      <span aria-hidden="true">&nearr;</span>
+    </a>
+    <button type="button" class="vi-docs-action-btn h-action-min-default">
+      <span>Copy BibTeX citation</span>
+      <span aria-hidden="true">bib</span>
+    </button>
+    <button type="button" data-docs-open-chat aria-expanded="false" class="vi-docs-action-btn vi-docs-action-btn--accent h-action-min-default">
+      <span>Ask Violet about this page</span>
+      <span aria-hidden="true">&rarr;</span>
+    </button>
   </div>
 </aside>

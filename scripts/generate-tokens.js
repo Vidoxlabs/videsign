@@ -389,6 +389,17 @@ function emitOrbitalFieldArtifacts() {
   };
 }
 
+/**
+ * Modern documentation portal layout and renderer: zero-hex oklch() container-query stylesheet
+ * plus CSP-safe vanilla JS progressive-enhancement controller.
+ */
+function emitDocsPortalArtifacts() {
+  return {
+    'docs-portal.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'docs-portal.css'), 'utf-8'),
+    'docs-portal.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'docs-portal.js'), 'utf-8'),
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -417,6 +428,7 @@ function main() {
     ...emitDialectArtifacts(tokens),
     ...emitMemoryFieldArtifacts(),
     ...emitOrbitalFieldArtifacts(),
+    ...emitDocsPortalArtifacts(),
   };
 
   if (dryRun) {
@@ -457,4 +469,5 @@ module.exports = {
   emitDialectArtifacts,
   emitMemoryFieldArtifacts,
   emitOrbitalFieldArtifacts,
+  emitDocsPortalArtifacts,
 };

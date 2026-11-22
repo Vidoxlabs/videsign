@@ -22,7 +22,9 @@
   <link rel="stylesheet" href="../dist/dialects.css" />
   <link rel="stylesheet" href="../dist/memory-field.css" />
   <link rel="stylesheet" href="../dist/vi-orbital-hero.css" />
+  <link rel="stylesheet" href="../dist/docs-portal.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
+  <script defer src="../dist/docs-portal.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
@@ -671,7 +673,8 @@
       { file: 'kpi-metric-strip.html', tier: 'primitives', label: 'KPI metric strip', desc: 'Responsive four-card summary strip with tabular-nums figures, status-dot + text deltas, and explicit measurement windows (ADR-024).' },
       { file: 'data-table.html', tier: 'primitives', label: 'Data table', desc: 'Tabular container with header row and hairline row boundaries.' },
       { file: 'skeleton-row.html', tier: 'primitives', label: 'Skeleton row', desc: 'Static loading geometry matched to the resolved row without shimmer.' },
-      { file: 'markdown-prose-renderer.html', tier: 'primitives', label: 'Markdown prose renderer', desc: 'Canonical GFM Markdown surface with breadcrumb, claim badge, inline code and kbd, boundary callout, tabular-nums table, checklist, and blockquote (ADR-007, ADR-024).' },
+      { file: 'markdown-prose-renderer.html', tier: 'primitives', label: 'Markdown prose renderer', desc: 'Upgraded GFM Markdown surface with breadcrumb, claim badge, Raw .md, heading # anchors, Note/Warning/Scope boundary callouts, synced code tabs, sticky-column table, and Prev/Next pager (ADR-007, ADR-024).' },
+      { file: 'docs-code-tabs.html', tier: 'primitives', label: 'Docs synced code tabs', desc: 'Height-stable multi-language code switcher (TypeScript, Python, cURL, CLI) with synced sibling tabs, localStorage memory, arrow-key roving, and Copy receipt (ADR-007, ADR-024).' },
       { file: 'code-and-diff-viewer.html', tier: 'primitives', label: 'Code and diff viewer', desc: 'Multi-tab code block, unified +/- diff rows with explicit status labels, and CLI receipt bar (ADR-007, ADR-024).' },
       { file: 'log-stream-viewer.html', tier: 'primitives', label: 'Log stream viewer', desc: 'Solid run-log console: polite role="log" region, tabular-nums timestamps, status-dot severity pairs with text labels, and a Pause tail toggle (ADR-013, ADR-024).' },
       { file: 'api-reference-row.html', tier: 'primitives', label: 'Endpoint reference rows', desc: 'Harness endpoint rows pairing protocol method chips and mono paths with effect classes (read, write, destructive, credential) and hairline parameter ledgers (ADR-021, ADR-024).' },
@@ -719,7 +722,10 @@
       { file: 'filterable-catalog-grid.html', tier: 'public', label: 'Filterable catalog grid', desc: 'Search input, four facet selects, polite live count, two-column skill/agent cards, and empty-filter fallback (ADR-023).' },
       { file: 'client-install-switcher.html', tier: 'public', label: 'Client install switcher', desc: 'Client selector, copyable MCP/skill snippet, unsupported-client gap row, raw markdown links, and provenance ledger (ADR-023).' },
       { file: 'evidence-exhibit-figure.html', tier: 'public', label: 'Evidence exhibit figure', desc: 'Product exhibit card with truth disclosure, non-image numbered workflow steps, claim IDs, and APA/BibTeX cite block (ADR-023).' },
-      { file: 'article-toc-and-meta.html', tier: 'public', label: 'Article TOC and metadata rail', desc: 'Editorial sidebar rail with 44px jump links, separated Reviewed vs Observed dates, read time, and BibTeX/Markdown controls (ADR-007, ADR-023).' },
+      { file: 'article-toc-and-meta.html', tier: 'public', label: 'Article TOC and metadata rail', desc: 'Editorial sidebar rail with 44px scroll-spy jump links, separated Reviewed vs Observed dates, read time, Markdown/llms.txt links, BibTeX, and Ask Violet triggers (ADR-007, ADR-023).' },
+      { file: 'docs-sidebar-nav.html', tier: 'public', label: 'Docs collapsible sidebar nav', desc: 'Solid documentation tree with collapsible sentence-case mono <details> groups, aria-current hairline indicator, 44px links, and external link markers (ADR-007, ADR-024).' },
+      { file: 'docs-quickstart-grid.html', tier: 'public', label: 'Docs faceted quickstart grid', desc: 'Mistral-inspired section hairline header with Copy section link, aria-pressed category pills, polite live count, responsive container-query cards, and completion-time footers (ADR-024, ADR-025).' },
+      { file: 'docs-page-actions.html', tier: 'public', label: 'Docs page actions rail', desc: 'Right-rail documentation actions pairing Copy page (.md), View raw .md, llms.txt discovery link, and Ask Violet about this page dock trigger (ADR-013, ADR-024).' },
       { file: 'site-footer.html', tier: 'public', label: 'Site footer', desc: 'Grouped footer navigation for public repositories, machine feeds, privacy disclosure, and WCAG 2.2.2 motion pause toggle (ADR-023).' },
       { file: 'systems-constellation-map.html', tier: 'public', label: 'Systems constellation map', desc: 'Homepage systems constellation graphic map pairing tier filters, deterministic 640x420 SVG links (3:1+), and crystal-glass evidence lens (ADR-013, ADR-024).', glass: true },
       { file: 'memory-field.html', tier: 'public', label: 'Memory field', desc: 'Deterministic memory constellation: outline shape by memory class, radius by recall count, CR/RR/LR/TR link tokens with a second cue (ADR-018).' },
@@ -731,7 +737,8 @@
       { file: 'critique-thread-panel.html', tier: 'public', label: 'Critique thread panel', desc: 'Slot-anchored critique entries with Keep / Change / Do not copy classification chips, polite open/resolved counter, and a critique composer (ADR-023).' },
       { file: 'guardrail-receipt-panel.html', tier: 'public', label: 'Guardrail receipt panel', desc: 'Polite receipt pairing text contrast, graph line, glass layers, arbitrary-class, and scaffold-tool bounds with export and inspection actions (ADR-023).' },
 
-      // Page layouts (5 full-viewport compositions)
+      // Page layouts (6 full-viewport compositions)
+      { file: 'layout-docs-portal.html', tier: 'layouts', label: 'Layout: docs portal', desc: 'Three-column responsive documentation portal uniting crystal-glass header island, Cmd+K palette, collapsible nav rail, Docs Hub + 72ch Article/API canvas, and scroll-spy TOC rail (ADR-024, ADR-025).', frame: true },
       { file: 'layout-public-site.html', tier: 'layouts', label: 'Layout: public site', desc: 'Full-page dynamic public website composition integrating the island header, hero billboard, four public repos, and footer (ADR-023).', frame: true },
       { file: 'design-studio-canvas.html', tier: 'layouts', label: 'Layout: design studio canvas', desc: 'Collaborative agent design studio with structured brief, Keep/Change/Do not copy contract, viewport presets, and guardrail check (ADR-023).', frame: true },
       { file: 'layout-agent-workspace.html', tier: 'layouts', label: 'Layout: agent workspace', desc: 'Masthead, workspaces and personas sidebar, group conversation and composer, and workspace inspector (ADR-020).', frame: true },
@@ -786,7 +793,9 @@
         '<link rel="stylesheet" href="../dist/dialects.css">' +
         '<link rel="stylesheet" href="../dist/memory-field.css">' +
         '<link rel="stylesheet" href="../dist/vi-orbital-hero.css">' +
+        '<link rel="stylesheet" href="../dist/docs-portal.css">' +
         '<script type="module" src="../dist/vi-orbital-field.js"></scr' + 'ipt>' +
+        '<script defer src="../dist/docs-portal.js"></scr' + 'ipt>' +
         '<style>body{margin:0;min-height:100dvh;background:var(--vi-colors-surface-background-primary-base);color:var(--vi-colors-text-content-primary-base);font-family:var(--vi-typography-typography-family-sans-base)}</style>' +
         '</head><body>' + html + '</body></html>';
     }
@@ -833,6 +842,9 @@
           } else {
             record.frame.innerHTML = html;
             normalizeSpecimenHeadings(record.frame);
+            if (window.ViDocsPortal && typeof window.ViDocsPortal.initDocsPortal === 'function') {
+              window.ViDocsPortal.initDocsPortal(record.frame);
+            }
             record.frame.querySelectorAll('img[data-chibi-fallback]').forEach(function (img) {
               img.addEventListener('error', function () {
                 img.classList.add('hidden');

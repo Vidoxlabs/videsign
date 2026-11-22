@@ -1,0 +1,26 @@
+<!--
+  Nocturne Museum: Documentation page actions utility block (ADR-006, ADR-011, ADR-013, ADR-024)
+  Pairs Copy page (.md), View raw .md, llms.txt discovery link, and optional Ask Violet about
+  this page trigger hooked into chat-dock on a solid secondary rail card with 44px touch targets
+  and polite status feedback.
+-->
+<section aria-labelledby="docs-actions-heading" class="vi-docs-scope vi-docs-page-actions w-full max-w-xs">
+  <h2 id="docs-actions-heading" class="vi-docs-eyebrow">Page actions</h2>
+  <button type="button" data-docs-copy-markdown class="vi-docs-action-btn h-action-min-default">
+    <span>Copy page (.md)</span>
+    <span aria-hidden="true">md</span>
+  </button>
+  <a href="../dist/standard.md" class="vi-docs-action-btn h-action-min-default">
+    <span>View raw .md</span>
+    <span aria-hidden="true">&nearr;</span>
+  </a>
+  <a href="../dist/standard.json" class="vi-docs-action-btn h-action-min-default">
+    <span>llms.txt</span>
+    <span aria-hidden="true">&nearr;</span>
+  </a>
+  <button type="button" data-docs-open-chat aria-expanded="false" class="vi-docs-action-btn vi-docs-action-btn--accent h-action-min-default">
+    <span>Ask Violet about this page</span>
+    <span aria-hidden="true">&rarr;</span>
+  </button>
+  <span role="status" aria-live="polite" data-docs-actions-status class="vi-docs-live-count">Markdown and machine feeds ready</span>
+</section>

@@ -206,7 +206,7 @@ test('component_catalog lists matching entries by consumer without html by defau
   assert.notEqual(mdCodeRes.isError, true, mdCodeRes.content[0].text);
   assert.deepEqual(
     JSON.parse(mdCodeRes.content[0].text).components.map((c) => c.id),
-    ['markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline'],
+    ['markdown-prose-renderer', 'code-and-diff-viewer', 'docs-code-tabs', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline'],
   );
 
   const uiRes = await client.callTool({
@@ -271,8 +271,9 @@ test('design_brief and scaffold_page tools plus components.manifest.json work ov
 
   const manifestRes = await client.readResource({ uri: 'file://dist/components.manifest.json' });
   const manifest = JSON.parse(manifestRes.contents[0].text);
-  assert.equal(manifest.componentCount, 79);
+  assert.equal(manifest.componentCount, 84);
   assert.ok(manifest.archetypes['public-site-landing']);
+  assert.ok(manifest.archetypes['docs-portal']);
   assert.ok(manifest.archetypes['ui-primitives-kitchen-sink']);
 
   const briefRes = await client.callTool({

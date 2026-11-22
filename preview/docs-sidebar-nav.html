@@ -1,0 +1,44 @@
+<!--
+  Nocturne Museum: Documentation collapsible sidebar navigation (ADR-006, ADR-007, ADR-011, ADR-025)
+  Solid secondary navigation rail with sentence-case Geist Mono collapsible <details> guide groups,
+  44px interactive rows, aria-current="page" active hairline indicator, and explicit external link
+  markers (&nearr;). Uses neutral ink and brand accent border only (zero VWXYZ persona tokens).
+-->
+<aside aria-label="Documentation navigation" class="vi-docs-scope vi-docs-sidebar w-full max-w-xs">
+  <details class="vi-docs-nav-group" open>
+    <summary class="vi-docs-nav-summary">
+      <span>Get started</span>
+      <span class="vi-docs-nav-chevron" aria-hidden="true">&rsaquo;</span>
+    </summary>
+    <ul class="vi-docs-nav-list">
+      <li><a href="#docs-hub" aria-current="page" class="vi-docs-nav-link h-action-min-default"><span>Portal overview</span></a></li>
+      <li><a href="#docs-quickstarts" class="vi-docs-nav-link h-action-min-default"><span>Quickstarts</span></a></li>
+      <li><a href="#docs-install" class="vi-docs-nav-link h-action-min-default"><span>Install and tokens</span></a></li>
+      <li><a href="#docs-lifecycle" class="vi-docs-nav-link h-action-min-default"><span>Developer lifecycle</span></a></li>
+    </ul>
+  </details>
+  <details class="vi-docs-nav-group" open>
+    <summary class="vi-docs-nav-summary">
+      <span>Guides and contracts</span>
+      <span class="vi-docs-nav-chevron" aria-hidden="true">&rsaquo;</span>
+    </summary>
+    <ul class="vi-docs-nav-list">
+      <li><a href="#section-overview" class="vi-docs-nav-link h-action-min-default"><span>Run lifecycle contract</span></a></li>
+      <li><a href="#section-sync-sdk" class="vi-docs-nav-link h-action-min-default"><span>Client SDK integration</span></a></li>
+      <li><a href="#section-schema-matrix" class="vi-docs-nav-link h-action-min-default"><span>Capability matrix</span></a></li>
+      <li><a href="#section-endpoints" class="vi-docs-nav-link h-action-min-default"><span>Endpoint reference</span></a></li>
+    </ul>
+  </details>
+  <details class="vi-docs-nav-group">
+    <summary class="vi-docs-nav-summary">
+      <span>Ecosystem repositories</span>
+      <span class="vi-docs-nav-chevron" aria-hidden="true">&rsaquo;</span>
+    </summary>
+    <ul class="vi-docs-nav-list">
+      <li><a href="https://github.com/Vidoxlabs/seed" target="_blank" rel="noreferrer" class="vi-docs-nav-link h-action-min-default"><span>seed harness</span><span class="vi-docs-external-mark" aria-hidden="true">&nearr;</span></a></li>
+      <li><a href="https://github.com/Vidoxlabs/bloom" target="_blank" rel="noreferrer" class="vi-docs-nav-link h-action-min-default"><span>bloom workspace</span><span class="vi-docs-external-mark" aria-hidden="true">&nearr;</span></a></li>
+      <li><a href="https://github.com/Vidoxlabs/videsign" target="_blank" rel="noreferrer" class="vi-docs-nav-link h-action-min-default"><span>videsign standard</span><span class="vi-docs-external-mark" aria-hidden="true">&nearr;</span></a></li>
+      <li><a href="https://github.com/Vidoxlabs/vitools" target="_blank" rel="noreferrer" class="vi-docs-nav-link h-action-min-default"><span>vitools catalog</span><span class="vi-docs-external-mark" aria-hidden="true">&nearr;</span></a></li>
+    </ul>
+  </details>
+</aside>

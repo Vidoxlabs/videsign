@@ -1,0 +1,132 @@
+<!--
+  Nocturne Museum: Faceted quickstart card grid (ADR-007, ADR-011, ADR-024, ADR-025)
+  Synthesizes Mistral Docs section header (eyebrow pill + hairline divider + Copy section link),
+  aria-pressed category filter pills with polite live count, responsive container-query grid of
+  solid hairline cards with category icons, 2px diagonal arrow lift (&nearr;), 2-line summaries,
+  and mono tabular-nums completion-time footers.
+-->
+<section id="docs-quickstarts" aria-labelledby="docs-qs-heading" data-docs-qs-section class="vi-docs-scope vi-docs-qs-section">
+  <div class="vi-docs-section-header">
+    <span class="vi-docs-eyebrow">Quickstarts</span>
+    <span class="vi-docs-hairline-rule" aria-hidden="true"></span>
+    <button type="button" data-docs-copy-section="docs-quickstarts" class="vi-docs-btn h-action-min-default">
+      <span>Copy section link</span>
+    </button>
+  </div>
+  <div class="vi-docs-section-title-block">
+    <h2 id="docs-qs-heading" class="vi-docs-section-title">Start from a scoped recipe</h2>
+    <p class="vi-docs-section-desc">Each guide pairs a neutral contract with copyable snippets and local gate checks across harness, surfaces, tools, and API routes.</p>
+  </div>
+  <div class="vi-docs-facet-bar">
+    <div role="group" aria-label="Filter quickstarts by category" class="vi-docs-facet-pills">
+      <button type="button" data-docs-facet="all" aria-pressed="true" class="vi-docs-pill h-action-min-default">All</button>
+      <button type="button" data-docs-facet="harness" aria-pressed="false" class="vi-docs-pill h-action-min-default">Harness</button>
+      <button type="button" data-docs-facet="surfaces" aria-pressed="false" class="vi-docs-pill h-action-min-default">Surfaces</button>
+      <button type="button" data-docs-facet="tools" aria-pressed="false" class="vi-docs-pill h-action-min-default">Tools</button>
+      <button type="button" data-docs-facet="api" aria-pressed="false" class="vi-docs-pill h-action-min-default">API</button>
+    </div>
+    <span role="status" aria-live="polite" data-docs-qs-count class="vi-docs-live-count">Showing 6 of 6 quickstarts</span>
+  </div>
+  <div class="vi-docs-qs-grid">
+    <article data-docs-qs-card data-docs-category="harness" class="vi-docs-qs-card">
+      <div class="vi-docs-qs-top">
+        <span class="vi-docs-qs-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="M5.5 8h5M8 5.5v5"/></svg>
+        </span>
+        <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+      </div>
+      <div class="vi-docs-qs-body">
+        <h3 class="vi-docs-qs-title"><a href="#section-overview" class="vi-docs-qs-link h-action-min-default">Bootstrap a seed run contract</a></h3>
+        <p class="vi-docs-qs-summary">Configure a durable nine-stage run loop with explicit owner-gate pauses on write-effect tools.</p>
+      </div>
+      <div class="vi-docs-qs-footer">
+        <span>Harness</span>
+        <span>5 min to complete</span>
+      </div>
+    </article>
+    <article data-docs-qs-card data-docs-category="surfaces" class="vi-docs-qs-card">
+      <div class="vi-docs-qs-top">
+        <span class="vi-docs-qs-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M6 3v10"/></svg>
+        </span>
+        <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+      </div>
+      <div class="vi-docs-qs-body">
+        <h3 class="vi-docs-qs-title"><a href="#section-sync-sdk" class="vi-docs-qs-link h-action-min-default">Sync Nocturne tokens and CSS</a></h3>
+        <p class="vi-docs-qs-summary">Pull generated tokens, themes, and modular fragments into Astro, Next.js, or vanilla HTML builds.</p>
+      </div>
+      <div class="vi-docs-qs-footer">
+        <span>Surfaces</span>
+        <span>4 min to complete</span>
+      </div>
+    </article>
+    <article data-docs-qs-card data-docs-category="tools" class="vi-docs-qs-card">
+      <div class="vi-docs-qs-top">
+        <span class="vi-docs-qs-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5l3 3-3 3M8 11h5"/></svg>
+        </span>
+        <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+      </div>
+      <div class="vi-docs-qs-body">
+        <h3 class="vi-docs-qs-title"><a href="#section-sync-sdk" class="vi-docs-qs-link h-action-min-default">Attach videsign MCP tools</a></h3>
+        <p class="vi-docs-qs-summary">Register component_catalog, design_brief, and scaffold_page in local coding clients over stdio.</p>
+      </div>
+      <div class="vi-docs-qs-footer">
+        <span>Tools</span>
+        <span>3 min to complete</span>
+      </div>
+    </article>
+    <article data-docs-qs-card data-docs-category="api" class="vi-docs-qs-card">
+      <div class="vi-docs-qs-top">
+        <span class="vi-docs-qs-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="4" cy="8" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><path d="M5.8 7.1l4.4-2.2M5.8 8.9l4.4 2.2"/></svg>
+        </span>
+        <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+      </div>
+      <div class="vi-docs-qs-body">
+        <h3 class="vi-docs-qs-title"><a href="#section-endpoints" class="vi-docs-qs-link h-action-min-default">Inspect run lifecycle endpoints</a></h3>
+        <p class="vi-docs-qs-summary">Call POST, GET, and DELETE run routes with explicit read, write, destructive, and credential scopes.</p>
+      </div>
+      <div class="vi-docs-qs-footer">
+        <span>API</span>
+        <span>6 min to complete</span>
+      </div>
+    </article>
+    <article data-docs-qs-card data-docs-category="harness" class="vi-docs-qs-card">
+      <div class="vi-docs-qs-top">
+        <span class="vi-docs-qs-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l5 2.5v4c0 2.7-2 4.8-5 5.5-3-.7-5-2.8-5-5.5v-4L8 2z"/></svg>
+        </span>
+        <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+      </div>
+      <div class="vi-docs-qs-body">
+        <h3 class="vi-docs-qs-title"><a href="#section-schema-matrix" class="vi-docs-qs-link h-action-min-default">Configure owner approval gates</a></h3>
+        <p class="vi-docs-qs-summary">Bind policy rules to Allow, Ask owner, or Deny so destructive actions pause with an action digest.</p>
+      </div>
+      <div class="vi-docs-qs-footer">
+        <span>Harness</span>
+        <span>7 min to complete</span>
+      </div>
+    </article>
+    <article data-docs-qs-card data-docs-category="surfaces" class="vi-docs-qs-card">
+      <div class="vi-docs-qs-top">
+        <span class="vi-docs-qs-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 11.5L6 6.5l3 3 4.5-5"/><circle cx="13.5" cy="4.5" r="1"/></svg>
+        </span>
+        <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+      </div>
+      <div class="vi-docs-qs-body">
+        <h3 class="vi-docs-qs-title"><a href="#section-schema-matrix" class="vi-docs-qs-link h-action-min-default">Run local contrast and lint gates</a></h3>
+        <p class="vi-docs-qs-summary">Validate 4.5:1 text ratios, 3.0:1 hairlines, 44px touch targets, and anti-slop rules locally.</p>
+      </div>
+      <div class="vi-docs-qs-footer">
+        <span>Surfaces</span>
+        <span>4 min to complete</span>
+      </div>
+    </article>
+  </div>
+  <div data-docs-qs-empty hidden class="vi-docs-empty-state" role="status" aria-live="polite">
+    <p class="vi-docs-section-desc">No quickstart recipes match the active category filter.</p>
+    <button type="button" data-docs-qs-reset class="vi-docs-btn vi-docs-btn--primary h-action-min-default">Reset filter</button>
+  </div>
+</section>

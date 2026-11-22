@@ -1,0 +1,685 @@
+<!--
+  Nocturne Museum: Modern three-column documentation portal layout (ADR-006, ADR-007, ADR-011, ADR-013, ADR-016, ADR-021, ADR-023, ADR-024, ADR-025)
+  Synthesizes Mistral Docs, Cursor Docs, Claude Platform Docs, and OpenAI API Docs patterns on solid
+  Nocturne reading surfaces with a single crystal-glass header island, Cmd+K command palette trigger,
+  collapsible left navigation rail (collapsing into a solid mobile drawer below 60rem), dual-mode
+  Docs Hub + 72ch Article/API canvas, synced multi-language code tabs, faceted quickstart cards,
+  4-stage lifecycle strip, and sticky right scroll-spy TOC + Page actions rail (folding into a
+  compact top disclosure below 74rem).
+-->
+<div class="vi-docs-scope vi-docs-portal">
+  <a href="#docs-main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-30 inline-flex items-center whitespace-nowrap h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Skip to documentation content</a>
+
+  <header class="vi-docs-header">
+    <div class="vi-docs-header-inner">
+      <div class="vi-glass-shell">
+        <div class="vi-glass-core vi-docs-header-bar">
+          <div class="vi-docs-brand-group">
+            <button type="button" data-docs-open-drawer aria-expanded="false" aria-controls="docs-mobile-drawer" aria-label="Open documentation navigation" class="vi-docs-btn vi-docs-mobile-menu-btn h-action-min-default">Menu</button>
+            <a href="#docs-hub" class="vi-docs-brand-link h-action-min-default">
+              <img src="{ASSET_BASE}/brand/brand_mark_header_v008.svg" alt="Vidoxlabs" class="w-icon-sm-base h-icon-sm-base shrink-0" />
+              <span>Vidoxlabs docs</span>
+            </a>
+            <nav aria-label="Documentation sections">
+              <ul class="vi-docs-section-nav">
+                <li><a href="#docs-hub" aria-current="page" class="vi-docs-section-link h-action-min-default">Overview</a></li>
+                <li><a href="#docs-quickstarts" class="vi-docs-section-link h-action-min-default">Guides</a></li>
+                <li><a href="#section-endpoints" class="vi-docs-section-link h-action-min-default">API reference</a></li>
+                <li><a href="#section-sync-sdk" class="vi-docs-section-link h-action-min-default">Tools</a></li>
+              </ul>
+            </nav>
+          </div>
+          <button type="button" data-docs-open-palette aria-expanded="false" aria-controls="docs-cmd-palette" class="vi-docs-search-trigger h-action-min-default">
+            <span>Search docs</span>
+            <kbd class="vi-docs-kbd">Cmd+K</kbd>
+          </button>
+          <div class="vi-docs-header-actions">
+            <button type="button" data-docs-toggle-theme aria-pressed="false" class="vi-docs-btn h-action-min-default">Theme: dark</button>
+            <a href="#docs-quickstarts" class="vi-docs-btn vi-docs-btn--primary h-action-min-default">Quickstart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="vi-docs-shell">
+    <aside aria-label="Documentation tree" class="vi-docs-sidebar-rail">
+      <nav aria-label="Guide hierarchy" class="vi-docs-sidebar">
+        <details class="vi-docs-nav-group" open>
+          <summary class="vi-docs-nav-summary">
+            <span>Get started</span>
+            <span class="vi-docs-nav-chevron" aria-hidden="true">&rsaquo;</span>
+          </summary>
+          <ul class="vi-docs-nav-list">
+            <li><a href="#docs-hub" aria-current="page" class="vi-docs-nav-link h-action-min-default"><span>Portal overview</span></a></li>
+            <li><a href="#docs-quickstarts" class="vi-docs-nav-link h-action-min-default"><span>Quickstarts</span></a></li>
+            <li><a href="#docs-lifecycle" class="vi-docs-nav-link h-action-min-default"><span>Developer lifecycle</span></a></li>
+          </ul>
+        </details>
+        <details class="vi-docs-nav-group" open>
+          <summary class="vi-docs-nav-summary">
+            <span>Contracts and guides</span>
+            <span class="vi-docs-nav-chevron" aria-hidden="true">&rsaquo;</span>
+          </summary>
+          <ul class="vi-docs-nav-list">
+            <li><a href="#section-overview" class="vi-docs-nav-link h-action-min-default"><span>Run lifecycle contract</span></a></li>
+            <li><a href="#section-sync-sdk" class="vi-docs-nav-link h-action-min-default"><span>Synced client SDKs</span></a></li>
+            <li><a href="#section-schema-matrix" class="vi-docs-nav-link h-action-min-default"><span>Contract surface matrix</span></a></li>
+            <li><a href="#section-endpoints" class="vi-docs-nav-link h-action-min-default"><span>Run endpoint reference</span></a></li>
+          </ul>
+        </details>
+        <details class="vi-docs-nav-group">
+          <summary class="vi-docs-nav-summary">
+            <span>Published repositories</span>
+            <span class="vi-docs-nav-chevron" aria-hidden="true">&rsaquo;</span>
+          </summary>
+          <ul class="vi-docs-nav-list">
+            <li><a href="https://github.com/Vidoxlabs/seed" target="_blank" rel="noreferrer" class="vi-docs-nav-link h-action-min-default"><span>seed</span><span class="vi-docs-external-mark" aria-hidden="true">&nearr;</span></a></li>
+            <li><a href="https://github.com/Vidoxlabs/bloom" target="_blank" rel="noreferrer" class="vi-docs-nav-link h-action-min-default"><span>bloom</span><span class="vi-docs-external-mark" aria-hidden="true">&nearr;</span></a></li>
+            <li><a href="https://github.com/Vidoxlabs/videsign" target="_blank" rel="noreferrer" class="vi-docs-nav-link h-action-min-default"><span>videsign</span><span class="vi-docs-external-mark" aria-hidden="true">&nearr;</span></a></li>
+            <li><a href="https://github.com/Vidoxlabs/vitools" target="_blank" rel="noreferrer" class="vi-docs-nav-link h-action-min-default"><span>vitools</span><span class="vi-docs-external-mark" aria-hidden="true">&nearr;</span></a></li>
+          </ul>
+        </details>
+      </nav>
+    </aside>
+
+    <main id="docs-main-content" class="vi-docs-main">
+      <div class="vi-docs-subbar" role="region" aria-label="Portal view mode">
+        <div role="group" aria-label="Select portal view" class="vi-docs-view-switch">
+          <button type="button" data-docs-view-tab="all" aria-pressed="true" class="vi-docs-btn vi-docs-btn--ghost h-action-min-default">Combined</button>
+          <button type="button" data-docs-view-tab="hub" aria-pressed="false" class="vi-docs-btn vi-docs-btn--ghost h-action-min-default">Docs hub</button>
+          <button type="button" data-docs-view-tab="article" aria-pressed="false" class="vi-docs-btn vi-docs-btn--ghost h-action-min-default">Article and API</button>
+        </div>
+        <span class="vi-docs-live-count">Nocturne docs &middot; rev 8a80204</span>
+      </div>
+
+      <div id="docs-hub" data-docs-view-panel="hub" class="vi-docs-hub">
+        <section aria-labelledby="docs-portal-hero-title" class="vi-docs-hub-hero">
+          <div class="vi-docs-hero-copy">
+            <span class="vi-docs-eyebrow">Nocturne documentation portal</span>
+            <h1 id="docs-portal-hero-title" class="vi-docs-hero-title">Build with modular tokens and run contracts</h1>
+            <p class="vi-docs-hero-lede">Inspect neutral harness interfaces, sync design tokens, and run local verification gates across every Vidoxlabs surface.</p>
+            <div class="vi-docs-cta-row">
+              <a href="#section-overview" class="vi-docs-btn vi-docs-btn--primary h-action-min-default">Read run contract</a>
+              <a href="#section-endpoints" class="vi-docs-btn h-action-min-default">Inspect API routes</a>
+            </div>
+          </div>
+
+          <div data-docs-code-tabs data-docs-sync-group="portal-lang" class="vi-docs-code-tabs">
+            <div class="vi-docs-code-bar">
+              <div role="tablist" aria-label="Quickstart SDK language" class="vi-docs-tablist">
+                <button type="button" role="tab" id="portal-hero-tab-ts" aria-selected="true" aria-controls="portal-hero-panel-ts" tabindex="0" data-docs-lang="ts" class="vi-docs-tab h-action-min-default">TypeScript</button>
+                <button type="button" role="tab" id="portal-hero-tab-py" aria-selected="false" aria-controls="portal-hero-panel-py" tabindex="-1" data-docs-lang="py" class="vi-docs-tab h-action-min-default">Python</button>
+                <button type="button" role="tab" id="portal-hero-tab-curl" aria-selected="false" aria-controls="portal-hero-panel-curl" tabindex="-1" data-docs-lang="curl" class="vi-docs-tab h-action-min-default">cURL</button>
+                <button type="button" role="tab" id="portal-hero-tab-cli" aria-selected="false" aria-controls="portal-hero-panel-cli" tabindex="-1" data-docs-lang="cli" class="vi-docs-tab h-action-min-default">CLI</button>
+              </div>
+              <div class="vi-docs-code-actions">
+                <span role="status" aria-live="polite" data-docs-code-status class="vi-docs-live-count">Ready</span>
+                <button type="button" data-docs-copy-code class="vi-docs-btn h-action-min-default">Copy</button>
+              </div>
+            </div>
+            <div role="tabpanel" id="portal-hero-panel-ts" aria-labelledby="portal-hero-tab-ts" data-docs-lang="ts" class="vi-docs-code-panel">
+              <pre class="vi-docs-code-pre"><code>import { buildDesignBrief, scaffoldPage } from '@vidoxlabs/videsign/lib/design-studio';
+
+const brief = buildDesignBrief({ archetype: 'docs-portal', theme: 'dark' });
+const out = scaffoldPage({ archetype: brief.archetype, wrapDocument: true });
+console.log(out.stylesheets.join(', '));</code></pre>
+            </div>
+            <div role="tabpanel" id="portal-hero-panel-py" aria-labelledby="portal-hero-tab-py" data-docs-lang="py" hidden class="vi-docs-code-panel">
+              <pre class="vi-docs-code-pre"><code>from videsign_tokens import COLORS, SIZE
+
+primary_bg = COLORS["surface-background-primary-base"]
+min_target = SIZE["action-min-default"]
+print(primary_bg, min_target)</code></pre>
+            </div>
+            <div role="tabpanel" id="portal-hero-panel-curl" aria-labelledby="portal-hero-tab-curl" data-docs-lang="curl" hidden class="vi-docs-code-panel">
+              <pre class="vi-docs-code-pre"><code>curl -sS -X POST "https://api.example.invalid/v1/runs" \
+  -H "Content-Type: application/json" \
+  -d '{ "contract_id": "seed.docs.audit.v1", "scratch": true }'</code></pre>
+            </div>
+            <div role="tabpanel" id="portal-hero-panel-cli" aria-labelledby="portal-hero-tab-cli" data-docs-lang="cli" hidden class="vi-docs-code-panel">
+              <pre class="vi-docs-code-pre"><code>npm run tokens
+npm run lint
+npm test</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="docs-quickstarts" aria-labelledby="portal-qs-title" data-docs-qs-section class="vi-docs-qs-section">
+          <div class="vi-docs-section-header">
+            <span class="vi-docs-eyebrow">Quickstarts</span>
+            <span class="vi-docs-hairline-rule" aria-hidden="true"></span>
+            <button type="button" data-docs-copy-section="docs-quickstarts" class="vi-docs-btn h-action-min-default">Copy section link</button>
+          </div>
+          <div class="vi-docs-section-title-block">
+            <h2 id="portal-qs-title" class="vi-docs-section-title">Focused recipes by platform layer</h2>
+            <p class="vi-docs-section-desc">Filter guides by harness, surface tokens, MCP tooling, or API routes. Every guide stays grounded in local checks.</p>
+          </div>
+          <div class="vi-docs-facet-bar">
+            <div role="group" aria-label="Filter quickstarts" class="vi-docs-facet-pills">
+              <button type="button" data-docs-facet="all" aria-pressed="true" class="vi-docs-pill h-action-min-default">All</button>
+              <button type="button" data-docs-facet="harness" aria-pressed="false" class="vi-docs-pill h-action-min-default">Harness</button>
+              <button type="button" data-docs-facet="surfaces" aria-pressed="false" class="vi-docs-pill h-action-min-default">Surfaces</button>
+              <button type="button" data-docs-facet="tools" aria-pressed="false" class="vi-docs-pill h-action-min-default">Tools</button>
+              <button type="button" data-docs-facet="api" aria-pressed="false" class="vi-docs-pill h-action-min-default">API</button>
+            </div>
+            <span role="status" aria-live="polite" data-docs-qs-count class="vi-docs-live-count">Showing 6 of 6 quickstarts</span>
+          </div>
+          <div class="vi-docs-qs-grid">
+            <article data-docs-qs-card data-docs-category="harness" class="vi-docs-qs-card">
+              <div class="vi-docs-qs-top">
+                <span class="vi-docs-qs-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="11" height="11" rx="2"/><path d="M5.5 8h5M8 5.5v5"/></svg>
+                </span>
+                <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+              </div>
+              <div class="vi-docs-qs-body">
+                <h3 class="vi-docs-qs-title"><a href="#section-overview" class="vi-docs-qs-link h-action-min-default">Author a seed run contract</a></h3>
+                <p class="vi-docs-qs-summary">Map objective states, tool effect classes, and owner pauses in one declarative schema.</p>
+              </div>
+              <div class="vi-docs-qs-footer"><span>Harness</span><span>5 min to complete</span></div>
+            </article>
+            <article data-docs-qs-card data-docs-category="surfaces" class="vi-docs-qs-card">
+              <div class="vi-docs-qs-top">
+                <span class="vi-docs-qs-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M6 3v10"/></svg>
+                </span>
+                <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+              </div>
+              <div class="vi-docs-qs-body">
+                <h3 class="vi-docs-qs-title"><a href="#section-sync-sdk" class="vi-docs-qs-link h-action-min-default">Consume Nocturne tokens</a></h3>
+                <p class="vi-docs-qs-summary">Wire tokens.css, themes.css, and docs-portal.css into dark and light product builds.</p>
+              </div>
+              <div class="vi-docs-qs-footer"><span>Surfaces</span><span>4 min to complete</span></div>
+            </article>
+            <article data-docs-qs-card data-docs-category="tools" class="vi-docs-qs-card">
+              <div class="vi-docs-qs-top">
+                <span class="vi-docs-qs-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5l3 3-3 3M8 11h5"/></svg>
+                </span>
+                <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+              </div>
+              <div class="vi-docs-qs-body">
+                <h3 class="vi-docs-qs-title"><a href="#section-sync-sdk" class="vi-docs-qs-link h-action-min-default">Query videsign via MCP</a></h3>
+                <p class="vi-docs-qs-summary">Fetch fragments, compile design briefs, and check contrast pairs without hardcoded values.</p>
+              </div>
+              <div class="vi-docs-qs-footer"><span>Tools</span><span>3 min to complete</span></div>
+            </article>
+            <article data-docs-qs-card data-docs-category="api" class="vi-docs-qs-card">
+              <div class="vi-docs-qs-top">
+                <span class="vi-docs-qs-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="4" cy="8" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><path d="M5.8 7.1l4.4-2.2M5.8 8.9l4.4 2.2"/></svg>
+                </span>
+                <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+              </div>
+              <div class="vi-docs-qs-body">
+                <h3 class="vi-docs-qs-title"><a href="#section-endpoints" class="vi-docs-qs-link h-action-min-default">Call run lifecycle routes</a></h3>
+                <p class="vi-docs-qs-summary">Create runs, poll stage receipts, and bind scoped credentials without exposing secrets.</p>
+              </div>
+              <div class="vi-docs-qs-footer"><span>API</span><span>6 min to complete</span></div>
+            </article>
+            <article data-docs-qs-card data-docs-category="harness" class="vi-docs-qs-card">
+              <div class="vi-docs-qs-top">
+                <span class="vi-docs-qs-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l5 2.5v4c0 2.7-2 4.8-5 5.5-3-.7-5-2.8-5-5.5v-4L8 2z"/></svg>
+                </span>
+                <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+              </div>
+              <div class="vi-docs-qs-body">
+                <h3 class="vi-docs-qs-title"><a href="#section-schema-matrix" class="vi-docs-qs-link h-action-min-default">Enforce policy boundaries</a></h3>
+                <p class="vi-docs-qs-summary">Define Allow, Ask owner, and Deny rules per neutral tool pattern and realm.</p>
+              </div>
+              <div class="vi-docs-qs-footer"><span>Harness</span><span>7 min to complete</span></div>
+            </article>
+            <article data-docs-qs-card data-docs-category="surfaces" class="vi-docs-qs-card">
+              <div class="vi-docs-qs-top">
+                <span class="vi-docs-qs-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 11.5L6 6.5l3 3 4.5-5"/><circle cx="13.5" cy="4.5" r="1"/></svg>
+                </span>
+                <span class="vi-docs-qs-arrow" aria-hidden="true">&nearr;</span>
+              </div>
+              <div class="vi-docs-qs-body">
+                <h3 class="vi-docs-qs-title"><a href="#section-schema-matrix" class="vi-docs-qs-link h-action-min-default">Audit WCAG and lint gates</a></h3>
+                <p class="vi-docs-qs-summary">Confirm 4.5:1 text ratios, 3.0:1 borders, 44px hit areas, and clean fragment lint locally.</p>
+              </div>
+              <div class="vi-docs-qs-footer"><span>Surfaces</span><span>4 min to complete</span></div>
+            </article>
+          </div>
+          <div data-docs-qs-empty hidden class="vi-docs-empty-state" role="status" aria-live="polite">
+            <p class="vi-docs-section-desc">No quickstart guides match the active category filter.</p>
+            <button type="button" data-docs-qs-reset class="vi-docs-btn vi-docs-btn--primary h-action-min-default">Reset filter</button>
+          </div>
+        </section>
+
+        <section id="docs-lifecycle" aria-labelledby="portal-lifecycle-title" class="vi-docs-qs-section">
+          <div class="vi-docs-section-title-block">
+            <h2 id="portal-lifecycle-title" class="vi-docs-section-title">Developer lifecycle</h2>
+            <p class="vi-docs-section-desc">Move from repository setup to audited local gates and live operations in four structured stages.</p>
+          </div>
+          <ol aria-label="Four-stage developer lifecycle" class="vi-docs-lifecycle-grid">
+            <li class="vi-docs-lifecycle-card">
+              <div class="vi-docs-lifecycle-head">
+                <span class="vi-docs-stage-num">01</span>
+                <h3 class="vi-docs-stage-title">Get started</h3>
+              </div>
+              <ul class="vi-docs-lifecycle-links">
+                <li><a href="#docs-hub" class="vi-docs-lifecycle-link h-action-min-default"><span>Install tokens</span><span aria-hidden="true">&rarr;</span></a></li>
+                <li><a href="#docs-quickstarts" class="vi-docs-lifecycle-link h-action-min-default"><span>Choose a recipe</span><span aria-hidden="true">&rarr;</span></a></li>
+                <li><a href="#section-sync-sdk" class="vi-docs-lifecycle-link h-action-min-default"><span>Connect MCP stdio</span><span aria-hidden="true">&rarr;</span></a></li>
+              </ul>
+            </li>
+            <li class="vi-docs-lifecycle-card">
+              <div class="vi-docs-lifecycle-head">
+                <span class="vi-docs-stage-num">02</span>
+                <h3 class="vi-docs-stage-title">Build</h3>
+              </div>
+              <ul class="vi-docs-lifecycle-links">
+                <li><a href="#section-overview" class="vi-docs-lifecycle-link h-action-min-default"><span>Compose fragments</span><span aria-hidden="true">&rarr;</span></a></li>
+                <li><a href="#section-sync-sdk" class="vi-docs-lifecycle-link h-action-min-default"><span>Scaffold archetypes</span><span aria-hidden="true">&rarr;</span></a></li>
+                <li><a href="#section-endpoints" class="vi-docs-lifecycle-link h-action-min-default"><span>Bind run endpoints</span><span aria-hidden="true">&rarr;</span></a></li>
+              </ul>
+            </li>
+            <li class="vi-docs-lifecycle-card">
+              <div class="vi-docs-lifecycle-head">
+                <span class="vi-docs-stage-num">03</span>
+                <h3 class="vi-docs-stage-title">Verify &amp; gate</h3>
+              </div>
+              <ul class="vi-docs-lifecycle-links">
+                <li><a href="#section-schema-matrix" class="vi-docs-lifecycle-link h-action-min-default"><span>Check contrast bounds</span><span aria-hidden="true">&rarr;</span></a></li>
+                <li><a href="#section-schema-matrix" class="vi-docs-lifecycle-link h-action-min-default"><span>Run fragment linter</span><span aria-hidden="true">&rarr;</span></a></li>
+                <li><a href="#section-overview" class="vi-docs-lifecycle-link h-action-min-default"><span>Review owner gates</span><span aria-hidden="true">&rarr;</span></a></li>
+              </ul>
+            </li>
+            <li class="vi-docs-lifecycle-card">
+              <div class="vi-docs-lifecycle-head">
+                <span class="vi-docs-stage-num">04</span>
+                <h3 class="vi-docs-stage-title">Operate</h3>
+              </div>
+              <ul class="vi-docs-lifecycle-links">
+                <li><a href="#section-endpoints" class="vi-docs-lifecycle-link h-action-min-default"><span>Inspect run receipts</span><span aria-hidden="true">&rarr;</span></a></li>
+                <li><a href="../dist/standard.md" class="vi-docs-lifecycle-link h-action-min-default"><span>Publish raw markdown</span><span aria-hidden="true">&nearr;</span></a></li>
+                <li><a href="../dist/standard.json" class="vi-docs-lifecycle-link h-action-min-default"><span>Sync standard.json</span><span aria-hidden="true">&nearr;</span></a></li>
+              </ul>
+            </li>
+          </ol>
+        </section>
+      </div>
+
+      <div data-docs-view-panel="article" class="vi-docs-article-wrap">
+        <details class="vi-docs-toc-disclosure">
+          <summary class="vi-docs-toc-disclosure-summary">
+            <span>On this page and actions</span>
+            <span aria-hidden="true">&rsaquo;</span>
+          </summary>
+          <div class="vi-docs-toc-disclosure-body">
+            <nav aria-label="Compact table of contents">
+              <ol class="vi-docs-toc-list">
+                <li><a href="#section-overview" data-docs-toc-link aria-current="location" class="vi-docs-toc-link h-action-min-default">1. Run lifecycle overview</a></li>
+                <li><a href="#section-sync-sdk" data-docs-toc-link class="vi-docs-toc-link h-action-min-default">2. Synced client integration</a></li>
+                <li><a href="#section-schema-matrix" data-docs-toc-link class="vi-docs-toc-link h-action-min-default">3. Contract surface matrix</a></li>
+                <li><a href="#section-endpoints" data-docs-toc-link class="vi-docs-toc-link h-action-min-default">4. Run endpoint reference</a></li>
+              </ol>
+            </nav>
+            <div class="vi-docs-cta-row">
+              <button type="button" data-docs-copy-markdown class="vi-docs-btn h-action-min-default">Copy page (.md)</button>
+              <a href="../dist/standard.md" class="vi-docs-btn h-action-min-default">View raw .md</a>
+              <button type="button" data-docs-open-chat aria-expanded="false" class="vi-docs-btn vi-docs-btn--primary h-action-min-default">Ask Violet</button>
+            </div>
+          </div>
+        </details>
+
+        <article data-docs-article aria-labelledby="portal-article-title" class="vi-docs-article">
+          <header class="vi-docs-article-meta">
+            <nav aria-label="Document breadcrumbs" class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+              <a href="#docs-hub" class="inline-flex items-center h-action-min-default hover:text-text-content-primary-base">docs</a>
+              <span aria-hidden="true">/</span>
+              <a href="#docs-quickstarts" class="inline-flex items-center h-action-min-default hover:text-text-content-primary-base">contracts</a>
+              <span aria-hidden="true">/</span>
+              <span class="text-text-content-primary-base">run-lifecycle.md</span>
+            </nav>
+            <div class="flex flex-wrap items-center gap-gap-compact-default">
+              <span class="vi-docs-eyebrow">
+                <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--info"></span>
+                <span class="tabular-nums">observed &middot; rev 8a80204</span>
+              </span>
+              <button type="button" data-docs-copy-markdown class="vi-docs-btn h-action-min-default">Copy markdown</button>
+              <a href="../dist/standard.md" class="vi-docs-btn h-action-min-default">Raw .md</a>
+            </div>
+          </header>
+
+          <div class="flex flex-col gap-gap-comfortable-default">
+            <h1 id="portal-article-title" class="vi-docs-section-title">Separating run contracts from visual surfaces</h1>
+            <p class="font-typography-family-sans-base text-typography-size-md-base leading-typography-leading-normal-base text-text-content-secondary-base">Documentation pages render strictly on solid Nocturne reading surfaces with neutral <code class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base bg-surface-background-tertiary-base px-rhythm-1-base rounded-layout-radius-control-base">domain.resource.verb</code> identifiers, keyboard triggers such as <kbd class="vi-docs-kbd">Cmd+K</kbd>, and anchored headings that never slide under sticky headers.</p>
+          </div>
+
+          <section aria-labelledby="section-overview" class="flex flex-col gap-gap-comfortable-default">
+            <h2 id="section-overview" class="vi-docs-heading vi-docs-heading--h2">
+              <span>Run lifecycle overview</span>
+              <button type="button" data-docs-copy-anchor="section-overview" aria-label="Copy link to Run lifecycle overview" class="vi-docs-anchor-btn h-action-min-default">#</button>
+            </h2>
+            <p class="font-typography-family-sans-base text-typography-size-md-base leading-typography-leading-normal-base text-text-content-secondary-base">Every run moves through explicit stages from draft through complete while keeping write and destructive effects behind owner confirmation.</p>
+
+            <aside aria-label="Note callout" class="vi-docs-callout vi-docs-callout--note">
+              <div class="vi-docs-callout-title">
+                <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--info"></span>
+                <span>Note</span>
+              </div>
+              <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Switching language tabs updates every synced code block on this page and stores your preference locally.</p>
+            </aside>
+
+            <aside aria-label="Warning callout" class="vi-docs-callout vi-docs-callout--warning">
+              <div class="vi-docs-callout-title">
+                <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--warning"></span>
+                <span>Warning</span>
+              </div>
+              <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Never reuse sovereign VWXYZ persona signature tokens for documentation navigation, category chips, or generic status indicators.</p>
+            </aside>
+
+            <aside aria-label="Scope boundary callout" class="vi-docs-callout vi-docs-callout--boundary">
+              <div class="vi-docs-callout-title">
+                <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--accent"></span>
+                <span>Scope boundary</span>
+              </div>
+              <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Write-effect and destructive tools pause at waiting_for_owner even when invoked from a precompiled portal scaffold.</p>
+            </aside>
+          </section>
+
+          <section aria-labelledby="section-sync-sdk" class="flex flex-col gap-gap-comfortable-default">
+            <h2 id="section-sync-sdk" class="vi-docs-heading vi-docs-heading--h2">
+              <span>Synced client integration</span>
+              <button type="button" data-docs-copy-anchor="section-sync-sdk" aria-label="Copy link to Synced client integration" class="vi-docs-anchor-btn h-action-min-default">#</button>
+            </h2>
+            <p class="font-typography-family-sans-base text-typography-size-md-base leading-typography-leading-normal-base text-text-content-secondary-base">Select a runtime tab below or in the hero above; sibling code blocks remain synchronized with height-stable panels.</p>
+
+            <div data-docs-code-tabs data-docs-sync-group="portal-lang" class="vi-docs-code-tabs">
+              <div class="vi-docs-code-bar">
+                <div role="tablist" aria-label="Article SDK language" class="vi-docs-tablist">
+                  <button type="button" role="tab" id="portal-art-tab-ts" aria-selected="true" aria-controls="portal-art-panel-ts" tabindex="0" data-docs-lang="ts" class="vi-docs-tab h-action-min-default">TypeScript</button>
+                  <button type="button" role="tab" id="portal-art-tab-py" aria-selected="false" aria-controls="portal-art-panel-py" tabindex="-1" data-docs-lang="py" class="vi-docs-tab h-action-min-default">Python</button>
+                  <button type="button" role="tab" id="portal-art-tab-curl" aria-selected="false" aria-controls="portal-art-panel-curl" tabindex="-1" data-docs-lang="curl" class="vi-docs-tab h-action-min-default">cURL</button>
+                  <button type="button" role="tab" id="portal-art-tab-cli" aria-selected="false" aria-controls="portal-art-panel-cli" tabindex="-1" data-docs-lang="cli" class="vi-docs-tab h-action-min-default">CLI</button>
+                </div>
+                <div class="vi-docs-code-actions">
+                  <span role="status" aria-live="polite" data-docs-code-status class="vi-docs-live-count">Synced</span>
+                  <button type="button" data-docs-copy-code class="vi-docs-btn h-action-min-default">Copy</button>
+                </div>
+              </div>
+              <div role="tabpanel" id="portal-art-panel-ts" aria-labelledby="portal-art-tab-ts" data-docs-lang="ts" class="vi-docs-code-panel">
+                <pre class="vi-docs-code-pre"><code>import { initDocsPortal } from '@vidoxlabs/videsign/dist/docs-portal.js';
+
+const controller = initDocsPortal(document);
+// Clean teardown on SPA route unmount:
+// controller.destroy();</code></pre>
+              </div>
+              <div role="tabpanel" id="portal-art-panel-py" aria-labelledby="portal-art-tab-py" data-docs-lang="py" hidden class="vi-docs-code-panel">
+                <pre class="vi-docs-code-pre"><code>import json
+from pathlib import Path
+
+manifest = json.loads(Path("dist/components.manifest.json").read_text())
+print(manifest["componentCount"], len(manifest["archetypes"]))</code></pre>
+              </div>
+              <div role="tabpanel" id="portal-art-panel-curl" aria-labelledby="portal-art-tab-curl" data-docs-lang="curl" hidden class="vi-docs-code-panel">
+                <pre class="vi-docs-code-pre"><code>curl -sS "https://api.example.invalid/v1/runs/run_01J9" \
+  -H "Accept: application/json"</code></pre>
+              </div>
+              <div role="tabpanel" id="portal-art-panel-cli" aria-labelledby="portal-art-tab-cli" data-docs-lang="cli" hidden class="vi-docs-code-panel">
+                <pre class="vi-docs-code-pre"><code>node scripts/lint-preview.js
+node --test test/docs-portal.test.js</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <section aria-labelledby="section-schema-matrix" class="flex flex-col gap-gap-comfortable-default">
+            <h2 id="section-schema-matrix" class="vi-docs-heading vi-docs-heading--h2">
+              <span>Contract surface matrix</span>
+              <button type="button" data-docs-copy-anchor="section-schema-matrix" aria-label="Copy link to Contract surface matrix" class="vi-docs-anchor-btn h-action-min-default">#</button>
+            </h2>
+            <p class="font-typography-family-sans-base text-typography-size-md-base leading-typography-leading-normal-base text-text-content-secondary-base">Wide reference tables keep their first column pinned during horizontal scroll on narrow screens and use tabular figures for numeric counts.</p>
+
+            <div class="vi-docs-table-wrap">
+              <table class="vi-docs-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Surface</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Contrast floor</th>
+                    <th scope="col">Touch floor</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">docs-sidebar-nav</th>
+                    <td>Collapsible left rail</td>
+                    <td>4.5:1 text / 3.4:1 border</td>
+                    <td>44px (2.75rem)</td>
+                    <td>Implemented</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">docs-quickstart-grid</th>
+                    <td>Faceted recipe grid</td>
+                    <td>4.5:1 text / 3.4:1 border</td>
+                    <td>44px (2.75rem)</td>
+                    <td>Implemented</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">docs-code-tabs</th>
+                    <td>Synced multi-lang switcher</td>
+                    <td>4.5:1 text / 3.4:1 border</td>
+                    <td>44px (2.75rem)</td>
+                    <td>Implemented</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">layout-docs-portal</th>
+                    <td>3-column docs portal</td>
+                    <td>4.5:1 text / 3.4:1 border</td>
+                    <td>44px (2.75rem)</td>
+                    <td>Implemented</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section aria-labelledby="section-endpoints" class="flex flex-col gap-gap-comfortable-default">
+            <h2 id="section-endpoints" class="vi-docs-heading vi-docs-heading--h2">
+              <span>Run endpoint reference</span>
+              <button type="button" data-docs-copy-anchor="section-endpoints" aria-label="Copy link to Run endpoint reference" class="vi-docs-anchor-btn h-action-min-default">#</button>
+            </h2>
+            <h3 id="section-endpoints-core" class="vi-docs-heading vi-docs-heading--h3">
+              <span>Lifecycle routes</span>
+              <button type="button" data-docs-copy-anchor="section-endpoints-core" aria-label="Copy link to Lifecycle routes" class="vi-docs-anchor-btn h-action-min-default">#</button>
+            </h3>
+            <ul aria-label="Portal endpoint rows" class="flex flex-col border-t border-border-separator-primary-base list-none">
+              <li class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base">
+                <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+                  <div class="flex flex-wrap items-center gap-gap-compact-default">
+                    <span class="vi-docs-kbd">POST</span>
+                    <code class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">/v1/runs</code>
+                  </div>
+                  <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+                    <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--info"></span>
+                    <span>effect &middot; write</span>
+                  </span>
+                </div>
+                <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Start a contract run; write-effect tool steps pause at waiting_for_owner.</p>
+              </li>
+              <li class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base">
+                <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+                  <div class="flex flex-wrap items-center gap-gap-compact-default">
+                    <span class="vi-docs-kbd">GET</span>
+                    <code class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">/v1/runs/:run_id</code>
+                  </div>
+                  <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+                    <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--success"></span>
+                    <span>effect &middot; read</span>
+                  </span>
+                </div>
+                <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Inspect run stage, elapsed latency, and immutable evidence receipts.</p>
+              </li>
+              <li class="flex flex-col gap-gap-compact-default py-inset-operator-default">
+                <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+                  <div class="flex flex-wrap items-center gap-gap-compact-default">
+                    <span class="vi-docs-kbd">DELETE</span>
+                    <code class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">/v1/runs/:run_id</code>
+                  </div>
+                  <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+                    <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--error"></span>
+                    <span>effect &middot; destructive</span>
+                  </span>
+                </div>
+                <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Halt execution and drop scratch state while preserving the audit ledger.</p>
+              </li>
+            </ul>
+          </section>
+
+          <nav aria-label="Article pagination" class="vi-docs-pager">
+            <a href="#docs-hub" class="vi-docs-pager-card h-action-min-default">
+              <span class="vi-docs-pager-dir">&larr; Previous</span>
+              <span class="vi-docs-pager-title">Portal overview and quickstarts</span>
+            </a>
+            <a href="#section-endpoints" class="vi-docs-pager-card vi-docs-pager-card--next h-action-min-default">
+              <span class="vi-docs-pager-dir">Next &rarr;</span>
+              <span class="vi-docs-pager-title">Policy rules and credential ledger</span>
+            </a>
+          </nav>
+        </article>
+      </div>
+    </main>
+
+    <aside aria-label="On this page and page utilities" class="vi-docs-toc-rail">
+      <div class="vi-docs-rail-card">
+        <span class="vi-docs-eyebrow">On this page</span>
+        <nav aria-label="Table of contents">
+          <ol class="vi-docs-toc-list">
+            <li><a href="#section-overview" data-docs-toc-link aria-current="location" class="vi-docs-toc-link h-action-min-default">1. Run lifecycle overview</a></li>
+            <li><a href="#section-sync-sdk" data-docs-toc-link class="vi-docs-toc-link h-action-min-default">2. Synced client integration</a></li>
+            <li><a href="#section-schema-matrix" data-docs-toc-link class="vi-docs-toc-link h-action-min-default">3. Contract surface matrix</a></li>
+            <li><a href="#section-endpoints" data-docs-toc-link class="vi-docs-toc-link h-action-min-default">4. Run endpoint reference</a></li>
+          </ol>
+        </nav>
+        <dl aria-label="Document metadata" class="flex flex-col border-t border-border-separator-primary-base">
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Reviewed</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">2026-11-22</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Observed</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">2026-11-22</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Read time</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">6 min</dd>
+          </div>
+        </dl>
+      </div>
+
+      <section aria-labelledby="portal-actions-heading" class="vi-docs-page-actions">
+        <h2 id="portal-actions-heading" class="vi-docs-eyebrow">Page actions</h2>
+        <button type="button" data-docs-copy-markdown class="vi-docs-action-btn h-action-min-default">
+          <span>Copy page (.md)</span>
+          <span aria-hidden="true">md</span>
+        </button>
+        <a href="../dist/standard.md" class="vi-docs-action-btn h-action-min-default">
+          <span>View raw .md</span>
+          <span aria-hidden="true">&nearr;</span>
+        </a>
+        <a href="../dist/standard.json" class="vi-docs-action-btn h-action-min-default">
+          <span>llms.txt</span>
+          <span aria-hidden="true">&nearr;</span>
+        </a>
+        <button type="button" data-docs-open-chat aria-expanded="false" class="vi-docs-action-btn vi-docs-action-btn--accent h-action-min-default">
+          <span>Ask Violet about this page</span>
+          <span aria-hidden="true">&rarr;</span>
+        </button>
+        <span role="status" aria-live="polite" data-docs-actions-status class="vi-docs-live-count">Ready</span>
+      </section>
+    </aside>
+  </div>
+
+  <!-- Solid Command Palette Dialog (Cmd+K / Ctrl+K) -->
+  <div id="docs-cmd-palette" data-docs-palette hidden class="vi-docs-backdrop">
+    <div role="dialog" aria-modal="true" aria-labelledby="docs-palette-title" class="vi-docs-dialog">
+      <div class="flex items-center gap-gap-compact-default px-layout-padding-large-base py-rhythm-3-base border-b border-border-separator-primary-base focus-within:border-surface-accent-violet-base bg-surface-background-primary-base">
+        <h2 id="docs-palette-title" class="sr-only">Search documentation</h2>
+        <label for="docs-palette-input" class="sr-only">Search documentation routes and headings</label>
+        <input id="docs-palette-input" data-docs-palette-input type="search" placeholder="Search guides, endpoints, or tokens..." class="flex-1 min-w-0 h-action-min-default bg-transparent font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base placeholder:text-text-content-secondary-base" />
+        <button type="button" data-docs-close-overlay class="vi-docs-btn h-action-min-default">Esc</button>
+      </div>
+      <div role="listbox" aria-label="Documentation commands" class="flex flex-col p-layout-padding-medium-base gap-gap-compact-default">
+        <button type="button" role="option" aria-selected="true" data-docs-palette-option data-docs-jump-view="hub" data-docs-jump-hash="docs-quickstarts" class="vi-docs-action-btn h-action-min-default">
+          <span>Open faceted quickstart recipes</span>
+          <span class="vi-docs-kbd">Hub</span>
+        </button>
+        <button type="button" role="option" aria-selected="false" data-docs-palette-option data-docs-jump-view="article" data-docs-jump-hash="section-overview" class="vi-docs-action-btn h-action-min-default">
+          <span>Read run lifecycle contract</span>
+          <span class="vi-docs-kbd">Guide</span>
+        </button>
+        <button type="button" role="option" aria-selected="false" data-docs-palette-option data-docs-jump-view="article" data-docs-jump-hash="section-sync-sdk" class="vi-docs-action-btn h-action-min-default">
+          <span>Inspect synced client SDK examples</span>
+          <span class="vi-docs-kbd">SDK</span>
+        </button>
+        <button type="button" role="option" aria-selected="false" data-docs-palette-option data-docs-jump-view="article" data-docs-jump-hash="section-endpoints" class="vi-docs-action-btn h-action-min-default">
+          <span>Jump to /v1/runs endpoint reference</span>
+          <span class="vi-docs-kbd">API</span>
+        </button>
+      </div>
+      <footer class="flex items-center justify-between gap-gap-compact-default px-layout-padding-large-base py-rhythm-3-base border-t border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+        <span>Up/Down navigate &middot; Enter jump &middot; Esc close</span>
+        <span data-docs-palette-count class="tabular-nums">4 commands matched</span>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Solid Mobile Navigation Drawer (< 60rem container) -->
+  <div id="docs-mobile-drawer" data-docs-drawer hidden class="vi-docs-backdrop vi-docs-backdrop--drawer">
+    <div role="dialog" aria-modal="true" aria-labelledby="docs-drawer-title" class="vi-docs-drawer">
+      <div class="flex items-center justify-between gap-gap-compact-default px-layout-padding-medium-base py-rhythm-2-base border-b border-border-separator-primary-base">
+        <h2 id="docs-drawer-title" class="vi-docs-eyebrow">Documentation navigation</h2>
+        <button type="button" data-docs-close-overlay aria-label="Close navigation drawer" class="vi-docs-btn h-action-min-default">Close</button>
+      </div>
+      <nav aria-label="Mobile documentation tree" class="p-layout-padding-medium-base flex flex-col gap-gap-comfortable-default">
+        <details class="vi-docs-nav-group" open>
+          <summary class="vi-docs-nav-summary"><span>Get started</span><span class="vi-docs-nav-chevron" aria-hidden="true">&rsaquo;</span></summary>
+          <ul class="vi-docs-nav-list">
+            <li><a href="#docs-hub" data-docs-close-overlay aria-current="page" class="vi-docs-nav-link h-action-min-default"><span>Portal overview</span></a></li>
+            <li><a href="#docs-quickstarts" data-docs-close-overlay class="vi-docs-nav-link h-action-min-default"><span>Quickstarts</span></a></li>
+            <li><a href="#docs-lifecycle" data-docs-close-overlay class="vi-docs-nav-link h-action-min-default"><span>Developer lifecycle</span></a></li>
+          </ul>
+        </details>
+        <details class="vi-docs-nav-group" open>
+          <summary class="vi-docs-nav-summary"><span>Contracts and API</span><span class="vi-docs-nav-chevron" aria-hidden="true">&rsaquo;</span></summary>
+          <ul class="vi-docs-nav-list">
+            <li><a href="#section-overview" data-docs-close-overlay class="vi-docs-nav-link h-action-min-default"><span>Run lifecycle contract</span></a></li>
+            <li><a href="#section-sync-sdk" data-docs-close-overlay class="vi-docs-nav-link h-action-min-default"><span>Synced client SDKs</span></a></li>
+            <li><a href="#section-endpoints" data-docs-close-overlay class="vi-docs-nav-link h-action-min-default"><span>Run endpoint reference</span></a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Solid Non-Modal Ask Violet Context Dock -->
+  <div id="docs-chat-sheet" data-docs-chat-sheet hidden class="vi-docs-backdrop vi-docs-backdrop--dock">
+    <div role="dialog" aria-modal="false" aria-labelledby="docs-chat-title" class="vi-docs-chat-sheet">
+      <div class="flex items-center justify-between gap-gap-compact-default pb-rhythm-2-base border-b border-border-separator-primary-base">
+        <div class="flex flex-col gap-gap-dense-default">
+          <h2 id="docs-chat-title" class="font-typography-family-sans-base text-typography-size-md-base font-typography-weight-semibold-base text-text-content-primary-base">Ask Violet about this page</h2>
+          <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Context: docs/contracts/run-lifecycle.md</p>
+        </div>
+        <button type="button" data-docs-close-overlay aria-label="Close Ask Violet panel" class="vi-docs-btn h-action-min-default">Close</button>
+      </div>
+      <div role="log" aria-live="polite" aria-relevant="additions" aria-label="Documentation Q and A" class="flex flex-col gap-gap-compact-default">
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Ask a question grounded in this documentation page. Answers cite exact section anchors and raw markdown sources.</p>
+      </div>
+      <label for="docs-chat-input" class="sr-only">Ask about this documentation page</label>
+      <textarea id="docs-chat-input" rows="2" placeholder="Ask about /v1/runs or token sync..." class="w-full h-action-wide-default p-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base placeholder:text-text-content-secondary-base"></textarea>
+      <div class="flex items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Read-only page context</span>
+        <button type="button" data-docs-close-overlay class="vi-docs-btn vi-docs-btn--primary h-action-min-default">Send question</button>
+      </div>
+    </div>
+  </div>
+
+  <div role="status" aria-live="polite" data-docs-toast hidden class="vi-docs-toast"></div>
+</div>

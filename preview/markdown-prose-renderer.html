@@ -1,41 +1,65 @@
 <!--
-  Nocturne Museum: Markdown and GFM prose renderer (ADR-007, ADR-024)
-  Provides canonical typographic cadence for agent replies, research articles, and raw documentation:
-  solid secondary article surface, hairline heading dividers, inline mono code and <kbd>,
-  callout boxes with paired status dot + label, tabular-nums GFM tables, fenced code blocks with
-  Copy control, task checklists, blockquotes, and citation source links.
+  Nocturne Museum: Upgraded Markdown and GFM prose renderer (ADR-007, ADR-011, ADR-024, ADR-025)
+  Provides canonical typographic cadence for research articles and documentation pages on solid
+  reading surfaces: breadcrumb trail + claim pill + inline Copy markdown and Raw .md actions,
+  hover/focus-visible heading anchor links (#) with scroll-margin-block-start, Note / Warning /
+  Scope boundary callouts, synced multi-language code tabs, horizontal-scroll-safe tabular-nums
+  table with sticky first column, checklist, blockquote, and Prev / Next pagination cards.
 -->
-<article aria-labelledby="md-article-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base max-w-3xl">
-  <header class="flex flex-wrap items-center justify-between gap-gap-compact-default pb-rhythm-4-base border-b border-border-separator-primary-base">
+<article data-docs-article aria-labelledby="md-article-title" class="vi-docs-scope vi-docs-article max-w-3xl">
+  <header class="vi-docs-article-meta">
     <nav aria-label="Document path" class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
       <a href="#docs" class="inline-flex items-center h-action-min-default hover:text-text-content-primary-base">research</a>
       <span aria-hidden="true">/</span>
       <span class="text-text-content-primary-base">run-contract.md</span>
     </nav>
-    <div class="flex items-center gap-gap-compact-default">
-      <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
-        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
-        <span>observed · rev 8a80204</span>
+    <div class="flex flex-wrap items-center gap-gap-compact-default">
+      <span class="vi-docs-eyebrow">
+        <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--info"></span>
+        <span class="tabular-nums">observed &middot; rev 8a80204</span>
       </span>
-      <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Copy markdown</button>
+      <button type="button" data-docs-copy-markdown class="vi-docs-btn h-action-min-default">Copy markdown</button>
+      <a href="../dist/standard.md" class="vi-docs-btn h-action-min-default">Raw .md</a>
     </div>
   </header>
+
   <div class="flex flex-col gap-gap-comfortable-default">
     <h1 id="md-article-title" class="font-typography-family-sans-base text-typography-size-2xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base leading-typography-leading-tight-base text-text-content-primary-base text-balance">Separating run contracts from visual surfaces</h1>
-    <p class="font-typography-family-sans-base text-typography-size-md-base leading-typography-leading-normal-base text-text-content-secondary-base">Markdown documents render strictly on solid reading surfaces with <code class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base bg-surface-background-tertiary-base px-rhythm-1-base rounded-layout-radius-control-base">neutral.tool.id</code> references, keyboard hints such as <kbd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base bg-surface-background-primary-base border border-border-separator-primary-base px-inset-compact-default rounded-layout-radius-control-base">Cmd+K</kbd>, and underlined links to <a href="#sources" class="h-action-min-default text-text-content-primary-base underline">source evidence</a>.</p>
+    <p class="font-typography-family-sans-base text-typography-size-md-base leading-typography-leading-normal-base text-text-content-secondary-base">Markdown documents render strictly on solid reading surfaces with <code class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base bg-surface-background-tertiary-base px-rhythm-1-base rounded-layout-radius-control-base">neutral.tool.id</code> references, keyboard hints such as <kbd class="vi-docs-kbd">Cmd+K</kbd>, and underlined links to <a href="#sources" class="inline-flex items-center h-action-min-default text-text-content-primary-base underline">source evidence</a>.</p>
   </div>
-  <aside aria-label="Important boundary callout" class="border-l-2 border-status-indicator-info-base bg-surface-background-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
-    <div class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
-      <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
-      <span>Note · Scope boundary</span>
-    </div>
-    <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Write-effect tools pause at waiting_for_owner even when invoked from a precompiled scaffold.</p>
-  </aside>
+
+  <div class="flex flex-col gap-gap-comfortable-default">
+    <aside aria-label="Note callout" class="vi-docs-callout vi-docs-callout--note">
+      <div class="vi-docs-callout-title">
+        <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--info"></span>
+        <span>Note &middot; Reading surface</span>
+      </div>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Keep long-form prose on solid Nocturne surfaces and reserve crystal glass strictly for floating navigation and overlays.</p>
+    </aside>
+    <aside aria-label="Warning callout" class="vi-docs-callout vi-docs-callout--warning">
+      <div class="vi-docs-callout-title">
+        <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--warning"></span>
+        <span>Warning &middot; Contrast floor</span>
+      </div>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Never place normal-size text on brand accent fills; pair accent hairlines and focus rings with primary ink.</p>
+    </aside>
+    <aside aria-label="Important boundary callout" class="vi-docs-callout vi-docs-callout--boundary">
+      <div class="vi-docs-callout-title">
+        <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--accent"></span>
+        <span>Scope boundary</span>
+      </div>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Write-effect tools pause at waiting_for_owner even when invoked from a precompiled scaffold.</p>
+    </aside>
+  </div>
+
   <div class="flex flex-col gap-gap-compact-default">
-    <h2 class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base pb-rhythm-2-base border-b border-border-separator-primary-base text-balance">Checklist and gate summary</h2>
+    <h2 id="md-checklist" class="vi-docs-heading vi-docs-heading--h2">
+      <span>Checklist and gate summary</span>
+      <button type="button" data-docs-copy-anchor="md-checklist" aria-label="Copy link to Checklist and gate summary" class="vi-docs-anchor-btn h-action-min-default">#</button>
+    </h2>
     <ul class="flex flex-col gap-gap-dense-default list-none">
       <li class="flex items-center gap-gap-compact-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
-        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+        <span aria-hidden="true" class="vi-docs-dot vi-docs-dot--success"></span>
         <span>[x] Validate semantic token classes against generated CSS</span>
       </li>
       <li class="flex items-center gap-gap-compact-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">
@@ -44,37 +68,71 @@
       </li>
     </ul>
   </div>
-  <div class="overflow-x-auto border border-border-separator-primary-base rounded-layout-radius-control-base bg-surface-background-primary-base">
-    <table class="w-full border-collapse font-typography-family-mono-base text-typography-size-xs-base">
-      <thead>
-        <tr class="bg-surface-background-tertiary-base border-b border-border-separator-primary-base text-text-content-secondary-base">
-          <th scope="col" class="p-inset-operator-default text-left font-typography-weight-medium-base">Package</th>
-          <th scope="col" class="p-inset-operator-default text-left font-typography-weight-medium-base">Role</th>
-          <th scope="col" class="p-inset-operator-default text-right font-typography-weight-medium-base">Count</th>
-        </tr>
-      </thead>
-      <tbody class="text-text-content-primary-base">
-        <tr class="border-b border-border-separator-primary-base">
-          <td class="p-inset-operator-default">videsign</td>
-          <td class="p-inset-operator-default text-text-content-secondary-base">Tokens &amp; components</td>
-          <td class="p-inset-operator-default text-right tabular-nums">79 components</td>
-        </tr>
-        <tr>
-          <td class="p-inset-operator-default">seed</td>
-          <td class="p-inset-operator-default text-text-content-secondary-base">Execution harness</td>
-          <td class="p-inset-operator-default text-right tabular-nums">9 states</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base overflow-hidden">
-    <div class="flex items-center justify-between px-inset-operator-default py-rhythm-1-base bg-surface-background-tertiary-base border-b border-border-separator-primary-base">
-      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">json · dist/components.manifest.json</span>
-      <button type="button" class="inline-flex items-center h-action-min-default px-inset-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:underline transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Copy block</button>
+
+  <div class="flex flex-col gap-gap-compact-default">
+    <h3 id="md-package-matrix" class="vi-docs-heading vi-docs-heading--h3">
+      <span>Package surface counts</span>
+      <button type="button" data-docs-copy-anchor="md-package-matrix" aria-label="Copy link to Package surface counts" class="vi-docs-anchor-btn h-action-min-default">#</button>
+    </h3>
+    <div class="vi-docs-table-wrap">
+      <table class="vi-docs-table">
+        <thead>
+          <tr>
+            <th scope="col">Package</th>
+            <th scope="col">Role</th>
+            <th scope="col">Count</th>
+            <th scope="col">Target floor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">videsign</th>
+            <td>Tokens &amp; components</td>
+            <td class="tabular-nums">84 components</td>
+            <td class="tabular-nums">44px</td>
+          </tr>
+          <tr>
+            <th scope="row">seed</th>
+            <td>Execution harness</td>
+            <td class="tabular-nums">9 states</td>
+            <td class="tabular-nums">44px</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <pre class="p-layout-padding-medium-base font-typography-family-mono-base text-typography-size-xs-base leading-typography-leading-normal-base text-text-content-primary-base overflow-x-auto"><code>{ "schemaVersion": "videsign.components-manifest/v1", "archetype": "research-library-article" }</code></pre>
   </div>
+
+  <div data-docs-code-tabs data-docs-sync-group="prose-demo" class="vi-docs-code-tabs">
+    <div class="vi-docs-code-bar">
+      <div role="tablist" aria-label="Manifest snippet format" class="vi-docs-tablist">
+        <button type="button" role="tab" id="md-tab-json" aria-selected="true" aria-controls="md-panel-json" tabindex="0" data-docs-lang="ts" class="vi-docs-tab h-action-min-default">JSON</button>
+        <button type="button" role="tab" id="md-tab-cli" aria-selected="false" aria-controls="md-panel-cli" tabindex="-1" data-docs-lang="cli" class="vi-docs-tab h-action-min-default">CLI</button>
+      </div>
+      <div class="vi-docs-code-actions">
+        <span role="status" aria-live="polite" data-docs-code-status class="vi-docs-live-count">dist/components.manifest.json</span>
+        <button type="button" data-docs-copy-code class="vi-docs-btn h-action-min-default">Copy block</button>
+      </div>
+    </div>
+    <div role="tabpanel" id="md-panel-json" aria-labelledby="md-tab-json" data-docs-lang="ts" class="vi-docs-code-panel">
+      <pre class="vi-docs-code-pre"><code>{ "schemaVersion": "videsign.components-manifest/v1", "archetype": "docs-portal" }</code></pre>
+    </div>
+    <div role="tabpanel" id="md-panel-cli" aria-labelledby="md-tab-cli" data-docs-lang="cli" hidden class="vi-docs-code-panel">
+      <pre class="vi-docs-code-pre"><code>npm run tokens &amp;&amp; npm run lint &amp;&amp; npm test</code></pre>
+    </div>
+  </div>
+
   <blockquote class="pl-rhythm-4-base border-l-2 border-border-graph-line-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">
     Rendered citations stay anchored to exact repository files rather than inferred summaries.
   </blockquote>
+
+  <nav aria-label="Page pagination" class="vi-docs-pager">
+    <a href="#prev-guide" class="vi-docs-pager-card h-action-min-default">
+      <span class="vi-docs-pager-dir">&larr; Previous</span>
+      <span class="vi-docs-pager-title">Nocturne token matrix</span>
+    </a>
+    <a href="#next-guide" class="vi-docs-pager-card vi-docs-pager-card--next h-action-min-default">
+      <span class="vi-docs-pager-dir">Next &rarr;</span>
+      <span class="vi-docs-pager-title">Endpoint reference rows</span>
+    </a>
+  </nav>
 </article>

@@ -1,0 +1,53 @@
+<!--
+  Nocturne Museum: Synced multi-language code switcher (ADR-007, ADR-011, ADR-024)
+  Height-stable tabbed code container supporting TypeScript, Python, cURL, and CLI tabs.
+  Synchronizes language selection across sibling blocks via data-docs-sync-group and
+  localStorage, with ArrowLeft, ArrowRight, Home, and End keyboard roving and one-click Copy receipt.
+-->
+<div data-docs-code-tabs data-docs-sync-group="quickstart" class="vi-docs-scope vi-docs-code-tabs">
+  <div class="vi-docs-code-bar">
+    <div role="tablist" aria-label="Quickstart language" class="vi-docs-tablist">
+      <button type="button" role="tab" id="docs-tab-ts" aria-selected="true" aria-controls="docs-panel-ts" tabindex="0" data-docs-lang="ts" class="vi-docs-tab h-action-min-default">TypeScript</button>
+      <button type="button" role="tab" id="docs-tab-py" aria-selected="false" aria-controls="docs-panel-py" tabindex="-1" data-docs-lang="py" class="vi-docs-tab h-action-min-default">Python</button>
+      <button type="button" role="tab" id="docs-tab-curl" aria-selected="false" aria-controls="docs-panel-curl" tabindex="-1" data-docs-lang="curl" class="vi-docs-tab h-action-min-default">cURL</button>
+      <button type="button" role="tab" id="docs-tab-cli" aria-selected="false" aria-controls="docs-panel-cli" tabindex="-1" data-docs-lang="cli" class="vi-docs-tab h-action-min-default">CLI</button>
+    </div>
+    <div class="vi-docs-code-actions">
+      <span role="status" aria-live="polite" data-docs-code-status class="vi-docs-live-count">Ready</span>
+      <button type="button" data-docs-copy-code class="vi-docs-btn h-action-min-default">Copy</button>
+    </div>
+  </div>
+  <div role="tabpanel" id="docs-panel-ts" aria-labelledby="docs-tab-ts" data-docs-lang="ts" class="vi-docs-code-panel">
+    <pre class="vi-docs-code-pre"><code>import { buildDesignBrief, scaffoldPage } from '@vidoxlabs/videsign/lib/design-studio';
+
+const brief = buildDesignBrief({
+  archetype: 'docs-portal',
+  theme: 'dark',
+  framework: 'astro',
+});
+const page = scaffoldPage({ archetype: brief.archetype, wrapDocument: true });
+console.log(page.stylesheets);</code></pre>
+  </div>
+  <div role="tabpanel" id="docs-panel-py" aria-labelledby="docs-tab-py" data-docs-lang="py" hidden class="vi-docs-code-panel">
+    <pre class="vi-docs-code-pre"><code>from videsign_tokens import COLORS, SIZE, SPACING
+
+surface = COLORS["surface-background-primary-base"]
+touch_floor = SIZE["action-min-default"]
+card_radius = SPACING["layout-radius-standard-base"]
+print(f"surface={surface} touch={touch_floor} radius={card_radius}")</code></pre>
+  </div>
+  <div role="tabpanel" id="docs-panel-curl" aria-labelledby="docs-tab-curl" data-docs-lang="curl" hidden class="vi-docs-code-panel">
+    <pre class="vi-docs-code-pre"><code>curl -sS -X POST "https://api.example.invalid/v1/runs" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contract_id": "seed.docs.audit.v1",
+    "scratch": true
+  }'</code></pre>
+  </div>
+  <div role="tabpanel" id="docs-panel-cli" aria-labelledby="docs-tab-cli" data-docs-lang="cli" hidden class="vi-docs-code-panel">
+    <pre class="vi-docs-code-pre"><code>npm run tokens
+npm run lint
+npm test
+npm run canon:check</code></pre>
+  </div>
+</div>
