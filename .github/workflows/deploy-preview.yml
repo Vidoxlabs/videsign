@@ -20,11 +20,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -44,6 +46,7 @@ jobs:
           rm -rf _site
           mkdir -p _site
           cp -R dist preview lib brand _site/
+          touch _site/.nojekyll
           cat <<'EOF' > _site/index.html
           <!DOCTYPE html>
           <html lang="en">
