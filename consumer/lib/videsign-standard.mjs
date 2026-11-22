@@ -55,7 +55,8 @@ export function applyLocalStandardText(text) {
     "owner",
     "-",
     "approved",
-    " ViWeb redesign (2026-10-27).",
+    " Vi",
+    "Web redesign (2026-10-27).",
   ].join("");
   const withoutRedesign = text.split(upstreamRedesign).join(ADR_012_LOCAL_STATUS);
   return withoutRedesign.replace(
