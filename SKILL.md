@@ -7,6 +7,12 @@ description: "Workflow, architectural decisions, and constraints for the videsig
 
 This file houses Architectural Decision Records (ADRs) and serves as the mandatory first read for any agent initializing in this repository.
 
+## Status vocabulary
+
+- **Proposed** — recorded in the ledger; awaiting a shipped first consumer and owner ratification.
+- **Adopted** — ratification pending, first consumer shipped.
+- **Accepted** — dated owner sign-off (ratification is the owner's signature, always dated).
+
 ## ADR-001: Strict Surface Layering
 
 > **Amended by ADR-006 (2026-10-05):** crystal glass is the sanctioned material for public product surfaces, limited to controls and lenses. The flat-surface, no-extraneous-shadow rules below still govern every non-glass surface.
@@ -149,21 +155,21 @@ This file houses Architectural Decision Records (ADRs) and serves as the mandato
 
 ## ADR-010: VWXYZ Character Canon and Persona Assets
 
-**Status**: Proposed (pending owner confirmation).
+**Status**: Proposed (pending owner confirmation) for items 1 and 3-5. Item 2 is Accepted 2026-11-03 (with ADR-011 item 9).
 
 **Context**: Character art and UI accents had diverged (teal and rose versus crimson and magenta). The two layers were being treated as one palette.
 
 **Decision**:
 
 1.  `canon/vwxyz/palette.json` is the source of truth for character colors.
-2.  UI persona accents in `DESIGN.md` must equal the canon signature, or be an explicitly listed text-safe variant. CI enforces this in the token-alignment change that follows this record. This record does not change token values.
+2.  **Accepted 2026-11-03 (owner ratification, with ADR-011 item 9).** UI persona accents in `DESIGN.md` equal the canon signatures, or an explicitly listed text-safe variant. CI enforces this via the live canon test (`test/persona-canon.test.js`).
 3.  Persona images follow ADR-002: they will be served from the asset service under `{ASSET_BASE}/vi/{vi}/{type}/{file}` (planned, ADR-010), with immutable versioned keys, and are never committed.
 4.  The naming standard and the vocabulary are controlled lists. New expressions are added to `canon/vwxyz/vocabulary.json` first.
 5.  Only assets that pass ViCanon review and Gavin's approval are published.
 
 **Negative guardrails**: Never generate persona art without the anchor reference. Never invent persona hex values. Never hotlink Drive.
 
-**Consequences**: Read `canon/vwxyz/` before specifying a character color or a persona image. Product UI keeps using `colors.persona-accent-*` from `DESIGN.md` until the alignment change lands. Persona images require alt text that names the persona and the expression or pose.
+**Consequences**: Read `canon/vwxyz/` before specifying a character color or a persona image. Item 2 is Accepted 2026-11-03: the accent alignment is live in `DESIGN.md` (`colors.persona-accent-*` equals `canon/vwxyz/palette.json` signatures) and enforced in `test/persona-canon.test.js`. Items 1 and 3-5 remain Proposed (pending owner confirmation). Persona images require alt text that names the persona and the expression or pose.
 
 ## Negative Constraints against Boilerplate Generation
 
@@ -211,7 +217,7 @@ Light glass uses the canonical solid light surface and rim, with blur disabled. 
 
 ## ADR-013: Stage backdrop, five-bar rule, graph line and chat dock
 
-**Status**: Proposed (awaiting owner ratification). First consumer: vidoxlabs.dev ADR 0041 and ADR 0042. Amends ADR-001 item 3 and ADR-006 item 4 (glass scope gains the chat dock dialog).
+**Status**: Adopted (ratification pending; first consumer: vidoxlabs.dev ADR 0041 and ADR 0042). Amends ADR-001 item 3 and ADR-006 item 4 (glass scope gains the chat dock dialog).
 
 **Context**: The owner supplied a reference for the Vidoxlabs background: an arc of five persona lights over a glowing stage, with rings and light planes, and the five-bar rule under the wordmark. Diagrams on the site drew meaningful lines in the hairline separator (1.26:1). The owner also asked for a persistent persona chat on every page. Research for the change: WCAG 2.2.2 (Pause, Stop, Hide) requires a pause control for motion longer than five seconds beside content; WCAG 1.4.11 requires 3:1 for graphics that carry meaning; a chat log is a labelled `role="log"` polite live region; the CSS Custom Highlight API and URL text fragments highlight text without changing markup.
 
@@ -267,7 +273,7 @@ Light glass uses the canonical solid light surface and rim, with blur disabled. 
 
 ## ADR-016: Conversation surface
 
-**Status**: Proposed (awaiting owner ratification). First consumer: the vidoxlabs.dev chat dock. Refines ADR-013 item 5: the launcher, the dialog semantics and the log's live region stay as written there; this record sets what the surface shows. Numbered 016 because 014 and 015 are held by an open proposal (platform token outputs and persona dialects).
+**Status**: Adopted (ratification pending; first consumer: the vidoxlabs.dev chat dock). Refines ADR-013 item 5: the launcher, the dialog semantics and the log's live region stay as written there; this record sets what the surface shows. Numbered 016 because 014 and 015 are held by an open proposal (platform token outputs and persona dialects).
 
 **Context**: The first chat dock opened with eighteen controls in nine stacked rows before the visitor had typed anything: a product title, a seat line, a model badge, a state label, a menu, a close button, a strip of five named pills, a message header with a copy button, eight intent chips, a second row of suggested topics, three separate composer boxes and a four-line disclosure. Each part was reasonable alone. Together they competed with the two things a chat is for: the persona and the reply. The owner asked for a clean, clutter-free chat that keeps the sprites and the smooth motion, and for one standard that every later AI chat interface follows. Research for the change: an empty chat should offer a few starters, because a blank field leaves a visitor unsure what to ask and a wall of chips reads as a menu; controls that are needed rarely belong behind the thing they act on.
 
@@ -292,7 +298,7 @@ Light glass uses the canonical solid light surface and rim, with blur disabled. 
 
 ## ADR-017: Explorable instrument
 
-**Status**: Proposed (awaiting owner ratification). First consumer: the vidoxlabs.dev research explorers. Numbered 017 for the same reason as ADR-016.
+**Status**: Adopted (ratification pending; first consumer: the vidoxlabs.dev research explorers). Numbered 017 for the same reason as ADR-016.
 
 **Context**: The research articles carry small interactive panels: sliders that compute a score, toggles that change a refusal receipt, stage pickers. A review found three recurring faults. Some controls changed nothing a reader could see (a stage picker that only rewrote one label). Controls were browser defaults, so each panel looked unfinished and unlike the next. No panel said what to try or which claim it supported, so a reader was left in a sandbox. Research for the change: an interactive explains something only when it is tied to a point the text makes and gives the reader a task with feedback; a diagram the reader cannot affect should be a figure, not a control.
 
@@ -311,7 +317,7 @@ Light glass uses the canonical solid light surface and rim, with blur disabled. 
 
 ## ADR-018: Memory field
 
-**Status**: Proposed (awaiting owner ratification). First consumers: the vidoxlabs.dev Memorix and ARKSRRA pages (pipeline and constellation figures) and the web app's CRS context view (constellation mode). Numbered 018 because 014 to 017 are held by open proposals.
+**Status**: Adopted (ratification pending; first consumers: the vidoxlabs.dev Memorix and ARKSRRA pages (pipeline and constellation figures) and the web app's CRS context view (constellation mode)). Numbered 018 because 014 to 017 are held by open proposals.
 
 **Context**: The owner asked for memory views modelled on a public memory-system architecture diagram (sources, indexes, recall lanes, an agent loop, a background worker) and its companion constellation (about 120 memory nodes with a halo and core, larger hubs, and a faint web of curved edges in four link colours). Vidoxlabs already has the parts that diagram describes: CRS ingest into messages and retrieval chunks, Memorix hybrid retrieval (semantic, lexical, authority, recency and a one-hop Neo4j boost, with abstention), ARKSRRA as the reasoning and ratification loop, and a Postgres authority with Redis, Neo4j and MinIO projections and a deletion epoch that makes Forget bypass and rebuild every projection. The web app draws a radial CRS graph whose relation colours reuse two persona hexes and the warning hex, and the site has no architecture figure at all. A faint web cannot carry meaning at WCAG 1.4.11, curved edges cannot draw in with transform alone, and nothing kept the site and the web app drawing the same picture.
 
@@ -331,7 +337,7 @@ Light glass uses the canonical solid light surface and rim, with blur disabled. 
 
 ## ADR-019: Reactive stage and accessible memory views
 
-**Status**: Proposed (awaiting owner ratification). First consumer: the vidoxlabs.dev ambient backdrop and chat dock. Extends ADR-013 item 1. Numbered 019 because 014 to 018 are held by open proposals.
+**Status**: Adopted (ratification pending; first consumer: the vidoxlabs.dev ambient backdrop and chat dock). Extends ADR-013 item 1. Numbered 019 because 014 to 018 are held by open proposals.
 
 **Context**: On 2026-11-19 the owner asked for the site background to be more fluid, modern and reactive, in step with the newer interactive parts of the site. The ADR-013 stage loops on its own clock and ignores the visitor; the site already grew one seat's light on hover, but outside the primitive. Anything reactive has to keep the ADR-013 guarantees: CSP-safe markup, transform and opacity only, every layer inside the 4.5:1 bound for secondary text, and still under reduced motion and the pause control.
 
