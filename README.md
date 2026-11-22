@@ -113,6 +113,8 @@ initialization protocol.
    it as data, add it to `scripts/generate-standard.js` and to `test/standard.test.js`.
 6. Run `npm test`. CI runs these checks on every push and pull request.
 
+**Tailwind 3 pin:** The pipeline is pinned to `tailwindcss` 3 until a coordinated migration moves `tailwindcss`, `eslint-plugin-tailwindcss`, and the platform generators together (evidence: the isolated Tailwind 4 engine bump fails 35 of 277 tests across platform outputs, fragment lint, and standard determinism, and the isolated plugin bump has merged and reverted three times). Dependabot bumps for these two packages should be closed as part of that migration, not dripped.
+
 See `AGENTS.md` for the full agent initialization protocol and `SKILL.md` for
 architectural decision records.
 
