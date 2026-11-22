@@ -34,7 +34,7 @@
           <p class="vi-settings-group-label">Agents and routing</p>
           <button type="button" role="tab" id="stab-personas" aria-selected="false" aria-controls="spanel-routing" tabindex="-1" data-settings-target="routing" data-settings-keywords="personas dialects seat violet wisteria xylia yarrow zinnia" class="vi-settings-nav-btn h-action-min-default"><span>Personas and dialects</span></button>
           <button type="button" role="tab" id="stab-routing" aria-selected="false" aria-controls="spanel-routing" tabindex="-1" data-settings-target="routing" data-settings-keywords="model routing provider slot remote local fallback" class="vi-settings-nav-btn h-action-min-default"><span>Model routing</span></button>
-          <button type="button" role="tab" id="stab-tools" aria-selected="false" aria-controls="spanel-routing" tabindex="-1" data-settings-target="routing" data-settings-anchor="settings-sec-connectors" data-settings-keywords="tools connectors registry mcp neutral" class="vi-settings-nav-btn h-action-min-default"><span>Tools and connectors</span></button>
+          <button type="button" role="tab" id="stab-tools" aria-selected="false" aria-controls="spanel-plugins" tabindex="-1" data-settings-target="plugins" data-settings-keywords="tools connectors registry mcp neutral" class="vi-settings-nav-btn h-action-min-default"><span>Tools and connectors</span></button>
           <button type="button" role="tab" id="stab-skills" aria-selected="false" aria-controls="spanel-routing" tabindex="-1" data-settings-target="routing" data-settings-anchor="settings-sec-connectors" data-settings-keywords="skills catalog vitools rules" class="vi-settings-nav-btn h-action-min-default"><span>Skills</span></button>
         </div>
 
@@ -338,6 +338,12 @@
         </section>
 
         <!-- Panel 3: Local nodes and devices -->
+        <section id="spanel-plugins" role="tabpanel" aria-labelledby="stab-tools" data-settings-panel="plugins" hidden class="vi-settings-panel">
+          <div data-plugin-embed>
+            <p class="vi-settings-row-desc" role="status">Loading plugins and connectors…</p>
+          </div>
+        </section>
+
         <section id="spanel-nodes" role="tabpanel" aria-labelledby="stab-nodes" data-settings-panel="nodes" hidden class="vi-settings-panel">
           <header class="vi-settings-panel-header">
             <div>

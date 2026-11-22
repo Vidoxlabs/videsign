@@ -1,0 +1,70 @@
+<!-- ADR-021 / ADR-024. The same manager mounts in the catalog, Settings and the agent workspace. -->
+<section class="vi-plugins-stage vi-plugin-manager" aria-labelledby="plugins-title" data-plugin-manager>
+  <header class="vi-plugin-header">
+    <div class="vi-plugin-stack">
+      <h2 class="vi-plugin-title" id="plugins-title">Plugins &amp; connectors</h2>
+      <p class="vi-plugin-muted">Manage provider bindings, bundled skills and the tools they can use.</p>
+    </div>
+    <div class="vi-plugin-header__actions">
+      <output class="vi-plugin-badge vi-plugin-counter" aria-label="Connection totals" data-plugin-totals>6 connected · 1 needs attention</output>
+      <button type="button" class="vi-plugin-action vi-plugin-action--primary" data-plugin-open-drawer>+ Custom connector</button>
+    </div>
+  </header>
+
+  <div class="vi-plugin-toolbar">
+    <div class="vi-plugin-tabs" role="tablist" aria-label="Plugin type">
+      <button type="button" class="vi-plugin-action" role="tab" id="plugins-type-all" aria-controls="plugins-results" aria-selected="true" data-plugin-type="all">All</button>
+      <button type="button" class="vi-plugin-action" role="tab" id="plugins-type-connectors" aria-controls="plugins-results" aria-selected="false" tabindex="-1" data-plugin-type="connectors">Connectors</button>
+      <button type="button" class="vi-plugin-action" role="tab" id="plugins-type-skills" aria-controls="plugins-results" aria-selected="false" tabindex="-1" data-plugin-type="skills">Skills</button>
+    </div>
+    <div class="vi-plugin-pills" role="group" aria-label="Plugin ownership">
+      <button type="button" class="vi-plugin-action vi-plugin-action--pill" aria-pressed="true" data-plugin-ownership="installed">Installed <span class="vi-plugin-count" data-plugin-count="installed">(7)</span></button>
+      <button type="button" class="vi-plugin-action vi-plugin-action--pill" aria-pressed="false" data-plugin-ownership="custom">Custom <span class="vi-plugin-count" data-plugin-count="custom">(2)</span></button>
+      <button type="button" class="vi-plugin-action vi-plugin-action--pill" aria-pressed="false" data-plugin-ownership="catalog">Catalog <span class="vi-plugin-count" data-plugin-count="catalog">(12)</span></button>
+    </div>
+    <label for="plugins-search" class="sr-only">Search plugins or neutral tool IDs</label>
+    <input type="search" class="vi-plugin-input vi-plugin-search" id="plugins-search" placeholder="Search plugins or neutral tool IDs…" data-plugin-search>
+    <div class="vi-plugin-pills" role="group" aria-label="Plugin categories">
+      <button type="button" class="vi-plugin-action vi-plugin-action--pill" aria-pressed="true" data-plugin-category="all">All</button>
+      <button type="button" class="vi-plugin-action vi-plugin-action--pill" aria-pressed="false" data-plugin-category="workspace">Workspace</button>
+      <button type="button" class="vi-plugin-action vi-plugin-action--pill" aria-pressed="false" data-plugin-category="developer">Developer</button>
+      <button type="button" class="vi-plugin-action vi-plugin-action--pill" aria-pressed="false" data-plugin-category="knowledge">Knowledge</button>
+      <button type="button" class="vi-plugin-action vi-plugin-action--pill" aria-pressed="false" data-plugin-category="custom">Custom</button>
+    </div>
+    <p class="vi-plugin-meta vi-plugin-matches" aria-live="polite" data-plugin-matches>Loading plugins…</p>
+  </div>
+
+  <div class="vi-plugin-policy">
+    <div class="vi-plugin-stack">
+      <label class="vi-plugin-label" for="plugins-default-policy">Default execution policy</label>
+      <p class="vi-plugin-muted" id="plugins-policy-help">Write and destructive tools pause at the owner gate unless an explicit policy applies.</p>
+    </div>
+    <select class="vi-plugin-input" id="plugins-default-policy" aria-describedby="plugins-policy-help" data-plugin-default-policy>
+      <option value="ask-on-write">Ask owner on write (recommended)</option>
+      <option value="read-only">Read-only automatic</option>
+      <option value="ask-all">Ask owner for all</option>
+    </select>
+  </div>
+  <p class="vi-plugin-receipt" role="status" aria-live="polite" data-plugin-receipt></p>
+
+  <div class="vi-plugin-results" role="tabpanel" id="plugins-results" aria-labelledby="plugins-type-all" data-plugin-results>
+    <section class="vi-plugin-group vi-plugin-group--attention" data-plugin-group="attention" hidden>
+      <h3 class="vi-plugin-group__title">Needs attention <span class="vi-plugin-count" data-plugin-group-count></span></h3>
+      <div class="vi-plugin-list" data-plugin-group-list></div>
+    </section>
+    <section class="vi-plugin-group" data-plugin-group="connected" hidden>
+      <h3 class="vi-plugin-group__title">Connected <span class="vi-plugin-count" data-plugin-group-count></span></h3>
+      <div class="vi-plugin-list" data-plugin-group-list></div>
+    </section>
+    <section class="vi-plugin-group" data-plugin-group="catalog" hidden>
+      <h3 class="vi-plugin-group__title">Available catalog <span class="vi-plugin-count" data-plugin-group-count></span></h3>
+      <div class="vi-plugin-list" data-plugin-group-list></div>
+    </section>
+    <div class="vi-plugin-empty" data-plugin-empty hidden>
+      <p>No plugins match these filters.</p>
+      <button type="button" class="vi-plugin-action" data-plugin-reset>Reset filters</button>
+    </div>
+    <button type="button" class="vi-plugin-action vi-plugin-browse" data-plugin-browse hidden>Browse available catalog</button>
+  </div>
+  <div data-plugin-drawer-slot></div>
+</section>

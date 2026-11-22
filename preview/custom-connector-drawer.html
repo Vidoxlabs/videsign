@@ -1,0 +1,72 @@
+<!-- ADR-021 / ADR-024. Only binding metadata enters the form. -->
+<section class="vi-plugins-stage vi-plugin-specimen" aria-label="Custom connector drawer example" data-plugin-example="drawer">
+  <button type="button" class="vi-plugin-action vi-plugin-action--primary" data-plugin-open-drawer>+ Custom connector</button>
+  <p class="vi-plugin-receipt" role="status" aria-live="polite" data-plugin-receipt></p>
+  <dialog class="vi-plugin-drawer" aria-labelledby="custom-plugin-title" data-plugin-drawer>
+    <header class="vi-plugin-drawer__header">
+      <div class="vi-plugin-stack">
+        <h2 class="vi-plugin-title" id="custom-plugin-title" data-plugin-drawer-title>Add a custom connector</h2>
+        <p class="vi-plugin-muted">Review the tools and scope before saving the connector.</p>
+      </div>
+      <button type="button" class="vi-plugin-action vi-plugin-action--icon" aria-label="Close custom connector" data-plugin-close-drawer>×</button>
+    </header>
+    <form class="vi-plugin-form" data-plugin-form>
+      <div class="vi-plugin-field">
+        <label class="vi-plugin-label" for="custom-plugin-name">Connector name</label>
+        <input class="vi-plugin-input" id="custom-plugin-name" name="name" type="text" placeholder="Custom MCP alpha" maxlength="72" required>
+      </div>
+      <div class="vi-plugin-field">
+        <label class="vi-plugin-label" for="custom-plugin-slug">Neutral slug</label>
+        <input class="vi-plugin-input" id="custom-plugin-slug" name="slug" type="text" placeholder="custom-mcp-alpha" maxlength="48" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="custom-plugin-slug-help" required>
+        <p class="vi-plugin-muted" id="custom-plugin-slug-help">Start with a letter. Use lowercase letters, numbers and single hyphens.</p>
+      </div>
+      <div class="vi-plugin-field">
+        <label class="vi-plugin-label" for="custom-plugin-transport">Transport</label>
+        <select class="vi-plugin-input" id="custom-plugin-transport" name="transport">
+          <option value="stdio">Local stdio command</option>
+          <option value="http">Remote streamable HTTP</option>
+        </select>
+      </div>
+      <div class="vi-plugin-field">
+        <label class="vi-plugin-label" for="custom-plugin-endpoint" data-plugin-endpoint-label>Local command</label>
+        <input class="vi-plugin-input" id="custom-plugin-endpoint" name="endpoint" type="text" placeholder="custom-mcp-alpha" maxlength="160" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="custom-plugin-endpoint-help" required>
+        <p class="vi-plugin-muted" id="custom-plugin-endpoint-help" data-plugin-endpoint-help>Enter a sample command name for the preview.</p>
+      </div>
+      <div class="vi-plugin-field">
+        <label class="vi-plugin-label" for="custom-plugin-auth">Authentication</label>
+        <select class="vi-plugin-input" id="custom-plugin-auth" name="auth" aria-describedby="custom-plugin-auth-help">
+          <option value="none">None</option>
+          <option value="lease">Scoped credential lease</option>
+        </select>
+        <p class="vi-plugin-muted" id="custom-plugin-auth-help">A scoped lease displays its masked reference after save.</p>
+      </div>
+      <div class="vi-plugin-field">
+        <label class="vi-plugin-label" for="custom-plugin-realm">Realm scope</label>
+        <select class="vi-plugin-input" id="custom-plugin-realm" name="realm">
+          <option value="workspace">workspace</option>
+          <option value="team-shared">team-shared</option>
+          <option value="external">external</option>
+        </select>
+      </div>
+      <div class="vi-plugin-field">
+        <label class="vi-plugin-label" for="custom-plugin-policy">Default tool policy</label>
+        <select class="vi-plugin-input" id="custom-plugin-policy" name="policy">
+          <option value="ask-on-write">Ask owner on write</option>
+          <option value="read-only">Read-only automatic</option>
+          <option value="ask-all">Ask owner for all</option>
+        </select>
+      </div>
+      <section class="vi-plugin-preflight" aria-labelledby="custom-plugin-preflight">
+        <h3 class="vi-plugin-label" id="custom-plugin-preflight">Pre-admission check</h3>
+        <p class="vi-plugin-muted">The preview checks the form and returns sample tool bindings.</p>
+        <button type="button" class="vi-plugin-action" data-plugin-test>Test connection</button>
+        <p class="vi-plugin-receipt" role="status" aria-live="polite" data-plugin-test-receipt></p>
+        <dl class="vi-plugin-tool-list" aria-label="Discovered neutral tools" tabindex="-1" data-plugin-discovered hidden></dl>
+      </section>
+      <footer class="vi-plugin-drawer__actions">
+        <button type="button" class="vi-plugin-action" data-plugin-close-drawer>Cancel</button>
+        <button type="submit" class="vi-plugin-action vi-plugin-action--primary" data-plugin-save disabled>Save connector</button>
+      </footer>
+    </form>
+  </dialog>
+</section>

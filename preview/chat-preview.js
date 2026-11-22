@@ -372,9 +372,10 @@
 
   document.addEventListener('keydown', (event) => {
     const escapeMenu = event.key === 'Escape' ? document.querySelector('.vi-chat-menu:popover-open') : null;
+    const workspaceSearch = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k';
     const root = escapeMenu?.closest(rootSelector)
       ?? event.target.closest?.(rootSelector)
-      ?? document.querySelector('[data-chat-workspace]');
+      ?? (workspaceSearch && !document.querySelector(':modal') ? document.querySelector('[data-chat-workspace]') : null);
     if (!root || event.isComposing || event.defaultPrevented) return;
     const stage = stageFor(root);
     const panels = panelState.get(root);
@@ -394,7 +395,7 @@
       }
       return;
     }
-    if (panels && (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+    if (panels && workspaceSearch) {
       event.preventDefault();
       const trigger = root.querySelector('[data-chat-search-trigger]');
       if (!trigger.getClientRects().length) setPanel(root, 'rail', true);

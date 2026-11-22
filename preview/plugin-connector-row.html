@@ -1,0 +1,48 @@
+<!-- ADR-017 / ADR-021. Provider identity and neutral tool bindings occupy separate fields. -->
+<section class="vi-plugins-stage vi-plugin-specimen" aria-label="Plugin and connector row examples" data-plugin-example="rows">
+  <p class="vi-plugin-muted" role="status" data-plugin-load>Loading row examples…</p>
+  <p class="vi-plugin-receipt" role="status" aria-live="polite" data-plugin-receipt></p>
+  <div class="vi-plugin-list" data-plugin-example-list></div>
+  <template data-plugin-row-template>
+    <article class="vi-plugin-row" data-plugin-row>
+      <span aria-hidden="true" class="vi-plugin-mark" data-plugin-mark></span>
+      <div class="vi-plugin-row__identity">
+        <div class="vi-plugin-row__heading">
+          <h3 class="vi-plugin-row__title" data-plugin-name></h3>
+          <span class="vi-plugin-badge" data-plugin-provenance></span>
+        </div>
+        <p class="vi-plugin-row__description" data-plugin-description></p>
+        <p class="vi-plugin-meta vi-plugin-row__metadata">
+          <code data-plugin-binding></code>
+          <span class="vi-plugin-badge" data-plugin-transport hidden></span>
+          <span data-plugin-realm></span>
+          <span data-plugin-mask hidden></span>
+        </p>
+      </div>
+      <div class="vi-plugin-row__actions">
+        <span class="vi-plugin-status"><span aria-hidden="true" class="vi-plugin-dot"></span><span data-plugin-status></span></span>
+        <select class="vi-plugin-input" data-plugin-permission hidden>
+          <option value="default">Use default policy</option>
+          <option value="read-only">Allow read-only</option>
+          <option value="ask">Ask owner</option>
+          <option value="deny">Deny</option>
+        </select>
+        <button type="button" class="vi-plugin-action vi-plugin-action--primary" data-plugin-action hidden></button>
+        <button type="button" class="vi-plugin-action vi-plugin-action--icon" data-plugin-overflow aria-expanded="false" hidden>…</button>
+        <div class="vi-plugin-menu" popover data-plugin-menu>
+          <button type="button" class="vi-plugin-action" data-plugin-inspect>Inspect tools</button>
+          <button type="button" class="vi-plugin-action" data-plugin-edit hidden>Edit connector</button>
+          <button type="button" class="vi-plugin-action" data-plugin-disconnect>Disconnect</button>
+        </div>
+      </div>
+      <details class="vi-plugin-scope" data-plugin-tools hidden>
+        <summary class="vi-plugin-summary">Tools and scope</summary>
+        <div class="vi-plugin-scope__body">
+          <p class="vi-plugin-meta" data-plugin-scope></p>
+          <dl class="vi-plugin-tool-list" aria-label="Neutral tool bindings" data-plugin-tool-list></dl>
+          <span class="vi-plugin-badge" data-plugin-bundled hidden></span>
+        </div>
+      </details>
+    </article>
+  </template>
+</section>

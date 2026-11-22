@@ -21,7 +21,7 @@
           <button type="button" class="vi-chat-action" popovertarget="workspace-rail-skills">Skills</button>
           <button type="button" class="vi-chat-action" data-chat-inspect="workspace-team">Agents</button>
           <button type="button" class="vi-chat-action" data-chat-inspect="workspace-notes">Knowledge</button>
-          <button type="button" class="vi-chat-action" popovertarget="workspace-connectors">Connectors</button>
+          <button type="button" class="vi-chat-action" aria-haspopup="dialog" data-plugin-launch>Tools and connectors</button>
         </nav>
       </details>
       <nav class="vi-chat-workspace__nav" aria-label="Pinned">
@@ -44,10 +44,6 @@
         <button type="button" class="vi-chat-action" data-chat-session="active" data-chat-search-result>Token migration</button>
         <button type="button" class="vi-chat-action" data-chat-session="active" data-chat-search-result>Migration review</button>
         <p class="vi-chat-meta" data-chat-search-empty hidden>No matching sessions</p>
-      </div>
-      <div id="workspace-connectors" class="vi-chat-menu" popover aria-label="Connectors">
-        <p class="vi-chat-meta">Connectors</p>
-        <p class="text-typography-size-sm-base"><code>providers.slot.local</code> · Available in the preview</p>
       </div>
       <div id="workspace-rail-skills" class="vi-chat-menu" popover aria-label="Skills">
         <p class="vi-chat-meta">Skills</p>

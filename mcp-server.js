@@ -149,6 +149,7 @@ const STANDARD_RESOURCES = [
   { file: 'dist/tokens.dtcg.json', name: 'Tokens in DTCG 2025.10 format', mimeType: 'application/json', description: 'W3C Design Tokens Community Group format for design tools and converters.' },
   { file: 'dist/components.manifest.json', name: 'Component Studio Manifest', mimeType: 'application/json', description: 'Deterministic index of modular components, page archetypes, reference contract rules, and token entrypoints (ADR-023).' },
   { file: 'dist/chat.css', name: 'Chat and agent workspace', mimeType: 'text/css', description: 'Container-query chat canvas, shared floating composer and agent workspace (ADR-016, ADR-020, ADR-021).' },
+  { file: 'dist/plugins.css', name: 'Plugins and connectors', mimeType: 'text/css', description: 'Shared solid connector rows, management surface and custom connector drawer (ADR-021, ADR-024).' },
 ];
 
 /** Title-case a kebab-case filename into a human-readable resource name. */

@@ -109,6 +109,26 @@ test('chat surfaces clear text and control contrast in both themes', () => {
   }
 });
 
+test('connector triage surfaces and borders meet both theme contrast floors', () => {
+  const css = emitCSS(TOKENS);
+  for (const name of ['surface', 'row-hover', 'attention-border', 'attention-bg', 'badge-bg']) {
+    assert.ok(css.includes('--vi-plugin-' + name + ': var('), name);
+  }
+  for (const theme of ['base', 'light']) {
+    const palette = TOKENS.colors;
+    for (const surface of ['surface', 'row-hover', 'attention-bg', 'badge-bg']) {
+      const background = palette['surface-plugin-' + surface + '-' + theme];
+      assert.match(background, /^oklch\(/);
+      for (const text of ['primary', 'secondary']) {
+        assert.ok(contrastRatio(palette['text-content-' + text + '-' + theme], background) >= 4.5, text + ' on ' + surface + ' ' + theme);
+      }
+      for (const border of ['border-plugin-attention-', 'border-chat-subtle-', 'border-chat-focus-']) {
+        assert.ok(contrastRatio(palette[border + theme], background) >= 3, border + ' on ' + surface + ' ' + theme);
+      }
+    }
+  }
+});
+
 // --- ADR-007: typography -------------------------------------------------
 
 test('Geist and Geist Mono are the sans and mono families', () => {

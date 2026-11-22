@@ -27,7 +27,7 @@ let css = '';
 
 before(() => {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'generate-tokens.js')], { cwd: ROOT, stdio: 'ignore' });
-  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css', 'chat.css', 'settings-surface.css']
+  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css', 'chat.css', 'settings-surface.css', 'plugins.css']
     .map((f) => fs.readFileSync(path.join(ROOT, 'dist', f), 'utf-8'))
     .join('\n');
 });
@@ -81,7 +81,7 @@ test('every class used by a fragment resolves to generated CSS', () => {
 
 test('the catalog loads the generated stylesheets and lists every fragment', () => {
   const index = fs.readFileSync(path.join(PREVIEW, 'index.html'), 'utf-8');
-  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css', '../dist/chat.css', '../dist/settings-surface.css']) {
+  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css', '../dist/chat.css', '../dist/settings-surface.css', '../dist/plugins.css']) {
     assert.ok(index.includes(`href="${sheet}"`), `catalog must load ${sheet}`);
   }
   const unlisted = FRAGMENTS.filter((f) => f !== 'index.html' && !index.includes(`'${f}'`) && !index.includes(`"${f}"`));
@@ -261,6 +261,23 @@ test('the workspace uses the shared conversation composer and neutral harness id
   assertSharedComposer(html);
   assert.doesNotMatch(html, /persona-accent-|vi-glass/);
   assert.match(html, /href="#workspace-chat">Skip to conversation/);
+});
+
+test('connector specimens expose accessible controls and mount the same manager from Settings and Workspace', () => {
+  for (const name of ['plugin-connector-row.html', 'plugins-connectors-surface.html', 'custom-connector-drawer.html']) {
+    const html = read(name);
+    assert.match(html, /\bvi-plugins-stage\b/);
+    assert.doesNotMatch(html, /vi-glass|persona-accent-|#[\da-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i);
+  }
+  const manager = read('plugins-connectors-surface.html');
+  assert.equal([...manager.matchAll(/role="tab"[^>]*aria-selected=/g)].length, 3);
+  assert.match(manager, /role="tabpanel"[^>]*aria-labelledby=/);
+  assert.match(manager, /aria-live="polite" data-plugin-matches/);
+  assert.match(read('custom-connector-drawer.html'), /data-plugin-save disabled/);
+  for (const file of ['settings-surface.html', 'layout-settings.html']) {
+    assert.match(read(file), /data-settings-panel="plugins"[\s\S]*?<div data-plugin-embed>/);
+  }
+  assert.match(read('layout-agent-workspace.html'), /data-plugin-launch>Tools and connectors/);
 });
 
 test('modular conversation components follow ADR-016 and ADR-017 budgets and aria', () => {
@@ -826,7 +843,7 @@ test('modularity and cross-surface continuity fragments follow ADR-021, ADR-023,
   assert.match(chips, /aria-label="Remove filter: harness contracts"/);
   assert.match(searchBar, /<select id="catalog-filter-sort"/);
   assert.ok(searchBar.includes('>Clear all<'));
-  assert.match(searchBar, /role="status" aria-live="polite" class="[^"]*tabular-nums[^"]*">Showing 12 of 87 modules</);
+  assert.match(searchBar, /role="status" aria-live="polite" class="[^"]*tabular-nums[^"]*">Showing 12 of 90 modules</);
 
   // 4. mobile-navigation-sheet.html
   const sheet = read('mobile-navigation-sheet.html');
@@ -854,7 +871,7 @@ test('modularity and cross-surface continuity fragments follow ADR-021, ADR-023,
   assert.ok([...bento.matchAll(/text-balance/g)].length >= 6, 'balanced card headings');
   assert.ok([...bento.matchAll(/mt-auto/g)].length >= 6, 'bottom-aligned actions');
   assert.match(bento, /tabular-nums/);
-  assert.ok(bento.includes('>87</dd>'), 'catalog counter follows the live component count');
+  assert.ok(bento.includes('>90</dd>'), 'catalog counter follows the live component count');
 
   // 6. comparison-matrix.html
   const matrix = read('comparison-matrix.html');

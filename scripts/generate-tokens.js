@@ -42,6 +42,13 @@ const CHAT_VARS = {
   'radius-composer': 'spacing-layout-radius-standard-base',
   'radius-bubble': 'spacing-layout-radius-standard-base',
 };
+const PLUGIN_VARS = {
+  surface: 'colors-surface-plugin-surface-base',
+  'row-hover': 'colors-surface-plugin-row-hover-base',
+  'attention-border': 'colors-border-plugin-attention-base',
+  'attention-bg': 'colors-surface-plugin-attention-bg-base',
+  'badge-bg': 'colors-surface-plugin-badge-bg-base',
+};
 
 // --- Minimal YAML parser (handles the flat key: "value" format in DESIGN.md) ---
 
@@ -168,6 +175,9 @@ function emitCSS(tokens) {
   lines.push('}', '', ':root, [data-theme] {');
   for (const [name, token] of Object.entries(CHAT_VARS)) {
     lines.push(`  --vi-chat-${name}: var(--vi-${token});`);
+  }
+  for (const [name, token] of Object.entries(PLUGIN_VARS)) {
+    lines.push('  --vi-plugin-' + name + ': var(--vi-' + token + ');');
   }
   lines.push('}');
   return lines.join('\n') + '\n';
@@ -450,6 +460,7 @@ function main() {
     'tokens.json': emitJSON(tokens),
     'glass.css': emitGlassCSS(tokens),
     'chat.css': fs.readFileSync(path.join(ROOT, 'lib', 'chat.css'), 'utf-8'),
+    'plugins.css': fs.readFileSync(path.join(ROOT, 'lib', 'plugins.css'), 'utf-8'),
     'standard.json': standardArtifacts['standard.json'],
     'standard.md': standardArtifacts['standard.md'],
     'components.manifest.json': `${JSON.stringify(buildComponentsManifest(COMPONENT_CATALOG, tokens), null, 2)}\n`,

@@ -20,7 +20,8 @@ design system — the shared visual language for all Vidoxlabs products and appl
   front-matter and emits `dist/tailwind.config.js`, `dist/tokens.css`,
   `dist/tokens.json`, `dist/themes.css` (product light theme mappings under
   `[data-theme="light"]`, ADR-012), `dist/chat.css` (solid chat canvas, composer and responsive
-  workspace, ADR-016/020/021), `dist/glass.css` (crystal glass with literal Safari-safe
+  workspace, ADR-016/020/021), `dist/plugins.css` (solid plugin and connector components,
+  ADR-021/024), `dist/glass.css` (crystal glass with literal Safari-safe
   declarations, ADR-006) and `dist/catalog.css` (Tailwind utilities for the preview
   catalog only). Run `npm run tokens` to regenerate.
 - **scripts/lint-preview.js**: Static checks for `preview/*.html` (arbitrary values,
@@ -93,7 +94,7 @@ Within the `videsign` repository, agents are restricted to the following command
 - `npm run mcp`: Starts the local MCP server for cross-repo communication.
 - `npm run tokens`: Parses `DESIGN.md` and regenerates `dist/tailwind.config.js`,
   `dist/tokens.css`, `dist/tokens.json`, `dist/themes.css`, `dist/glass.css`, `dist/chat.css`,
-  `dist/catalog.css`, `dist/standard.json`, `dist/standard.md`, `dist/stage.css`,
+  `dist/plugins.css`, `dist/catalog.css`, `dist/standard.json`, `dist/standard.md`, `dist/stage.css`,
   `dist/stage-ambient.svg`, `dist/stage-hero.svg`, `dist/memory-field.css`,
   `dist/memory-field-sample.svg`, `dist/memory-pipeline-sample.svg`, `dist/tokens.ts`,
   `dist/ViTokens.swift`, `dist/videsign_tokens.py`, `dist/tokens.dtcg.json`, `dist/dialects.css`,

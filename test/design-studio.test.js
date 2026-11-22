@@ -119,8 +119,9 @@ describe('collaborative design studio & reference contracts', () => {
     const expected = buildComponentsManifest(COMPONENT_CATALOG, tokens);
     const actual = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf8'));
     assert.deepEqual(actual, expected);
-    assert.equal(actual.componentCount, 87);
+    assert.equal(actual.componentCount, 90);
     assert.equal(actual.files.chatCss, 'dist/chat.css');
+    assert.equal(actual.files.pluginsCss, 'dist/plugins.css');
     assert.deepEqual(actual.categories, CATALOG_CATEGORIES);
     assert.deepEqual(actual.consumers, CATALOG_CONSUMERS);
     assert.equal(Object.keys(actual.archetypes).length, 11);
@@ -137,6 +138,19 @@ describe('collaborative design studio & reference contracts', () => {
     assert.match(css, /@container vi-chat-stage \(min-width: 40rem\)/);
     assert.match(css, /@container vi-chat-stage \(min-width: 64rem\)/);
     assert.match(css, /\.vi-chat-action,\s*\.vi-chat-summary\s*\{[^}]*min-inline-size: var\(--vi-size-action-min-default\);[^}]*min-block-size: var\(--vi-size-action-min-default\);/);
+    assert.doesNotMatch(css, /#[\da-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i);
+  });
+
+  test('connector specimens scaffold the same named-container stylesheet', () => {
+    for (const id of ['plugin-connector-row', 'plugins-connectors-surface', 'custom-connector-drawer']) {
+      const scaffold = scaffoldPage({ components: [id] }, ROOT);
+      assert.ok(scaffold.stylesheets.includes('dist/plugins.css'), id);
+      assert.match(scaffold.html, /href="dist\/plugins\.css"/);
+    }
+    const css = fs.readFileSync(path.join(ROOT, 'dist', 'plugins.css'), 'utf8');
+    for (const width of [40, 48, 64]) {
+      assert.ok(css.includes('vi-plugins-stage (min-width: ' + width + 'rem)'));
+    }
     assert.doesNotMatch(css, /#[\da-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i);
   });
 });

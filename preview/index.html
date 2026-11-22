@@ -25,10 +25,12 @@
   <link rel="stylesheet" href="../dist/docs-portal.css" />
   <link rel="stylesheet" href="../dist/chat.css" />
   <link rel="stylesheet" href="../dist/settings-surface.css" />
+  <link rel="stylesheet" href="../dist/plugins.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
   <script defer src="../dist/settings-surface.js"></script>
   <script src="chat-preview.js" defer></script>
+  <script src="plugins-preview.js" defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
@@ -648,7 +650,7 @@
     var TIERS = [
       { id: 'foundations', label: 'Foundations and persona canon', shortLabel: 'Foundations', summary: 'VWXYZ persona marks, dialects, chibi companion stage, deliberation stepper, and quarantined stage backdrop.' },
       { id: 'primitives', label: 'UI primitives and code', shortLabel: 'Primitives', summary: 'Core controls, forms, navigation, overlays, KPI strips, GFM markdown, diffs, run logs, and changelogs.' },
-      { id: 'workspace', label: 'Conversation, workspace and harness', shortLabel: 'Workspace', summary: 'Single and group conversations, approval gates, tool traces, memory notes, handoffs, usage meters, and harness contracts.' },
+      { id: 'workspace', label: 'Conversation, workspace and harness', shortLabel: 'Workspace', summary: 'Conversations, settings, plugins and connectors, approval gates, tool traces, and harness contracts.' },
       { id: 'public', label: 'Public site, maps and studio', shortLabel: 'Public site', summary: 'Public navigation island, mobile drawer, hero, bento grids, graphic constellation maps, and design studio review surfaces.' },
       { id: 'layouts', label: 'Page layouts', shortLabel: 'Layouts', summary: 'Full-viewport compositions lazy-loaded in resizable 1440px, 1024px, and 390px frames.' },
       { id: 'legacy', label: 'Atomic and legacy reference', shortLabel: 'Legacy', summary: 'Superseded single-component specimens and atomic sub-parts retained for backwards compatibility.', collapsed: true }
@@ -687,10 +689,13 @@
       { file: 'api-reference-row.html', tier: 'primitives', label: 'Endpoint reference rows', desc: 'Harness endpoint rows pairing protocol method chips and mono paths with effect classes (read, write, destructive, credential) and hairline parameter ledgers (ADR-021, ADR-024).' },
       { file: 'changelog-timeline.html', tier: 'primitives', label: 'Changelog timeline', desc: 'Release notes with version chips, tabular dates, an unreleased block, and Added / Changed / Fixed / Planned hairline ledger rows (ADR-007, ADR-024).' },
 
-      // Conversation, workspace and harness (29)
+      // Conversation, workspace and harness
       { file: 'conversation-surface.html', tier: 'workspace', label: 'Conversation surface', desc: 'Empty and active sessions share one solid canvas and floating composer (ADR-016).' },
       { file: 'chat-dock.html', tier: 'workspace', label: 'Chat dock', desc: 'A compact chat dialog with the shared composer and a five-bar launcher (ADR-013, ADR-016).' },
       { file: 'group-conversation.html', tier: 'workspace', label: 'Group conversation surface', desc: 'Multi-agent thread with expandable tool traces, artifact cards and an owner approval gate (ADR-020).' },
+      { file: 'plugin-connector-row.html', tier: 'workspace', label: 'Plugin and connector row', desc: 'Four connector health and provenance examples with tool bindings (ADR-021).' },
+      { file: 'plugins-connectors-surface.html', tier: 'workspace', label: 'Plugins and connectors', desc: 'Search and filter plugins, set policy, and manage synthetic connector bindings (ADR-021).', frame: true },
+      { file: 'custom-connector-drawer.html', tier: 'workspace', label: 'Custom connector drawer', desc: 'Test a sample connector configuration before saving it (ADR-024).' },
       { file: 'context-attachment-tray.html', tier: 'workspace', label: 'Context attachment tray', desc: 'Composer-adjacent tray listing admitted files, recalled notes, and selections with tabular token budget and 44px Remove/Clear actions (ADR-016, ADR-020).' },
       { file: 'session-checkpoint-card.html', tier: 'workspace', label: 'Session checkpoint card', desc: 'Resumable thread checkpoint anchoring the last confirmed pause with tabular timestamps, a bounded-reference summary fence, and 44px resume actions (ADR-020).' },
       { file: 'speaker-marker.html', tier: 'workspace', label: 'Speaker marker', desc: 'Five-segment marker and seat name; heads a reply only when the speaker changes (ADR-016).' },
@@ -806,10 +811,12 @@
         '<link rel="stylesheet" href="../dist/docs-portal.css">' +
         '<link rel="stylesheet" href="../dist/chat.css">' +
         '<link rel="stylesheet" href="../dist/settings-surface.css">' +
+        '<link rel="stylesheet" href="../dist/plugins.css">' +
         '<script type="module" src="../dist/vi-orbital-field.js"></scr' + 'ipt>' +
         '<script defer src="../dist/docs-portal.js"></scr' + 'ipt>' +
         '<script defer src="../dist/settings-surface.js"></scr' + 'ipt>' +
         (html.includes('data-chat-preview') ? '<script src="chat-preview.js" defer></scr' + 'ipt>' : '') +
+        (html.includes('data-plugin-') ? '<script src="plugins-preview.js" defer></scr' + 'ipt>' : '') +
         '<style>body{margin:0;min-height:100dvh;background:var(--vi-colors-surface-background-primary-base);color:var(--vi-colors-text-content-primary-base);font-family:var(--vi-typography-typography-family-sans-base)}</style>' +
         '</head><body>' + html + '</body></html>';
     }

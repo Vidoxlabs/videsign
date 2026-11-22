@@ -1,0 +1,556 @@
+/* Solid plugin and connector components. Load after tokens.css. */
+.vi-plugins-stage {
+  container: vi-plugins-stage / inline-size;
+  min-inline-size: 0;
+  background: var(--vi-plugin-surface);
+  color: var(--vi-colors-text-content-primary-base);
+  font-family: var(--vi-typography-typography-family-sans-base);
+  font-size: var(--vi-typography-typography-size-sm-base);
+  line-height: var(--vi-typography-typography-leading-normal-base);
+}
+
+.vi-plugin-manager,
+.vi-plugin-specimen {
+  padding: clamp(var(--vi-space-rhythm-3-base), 3vi, var(--vi-space-rhythm-6-base));
+  border: 1px solid var(--vi-chat-border-subtle);
+  border-radius: var(--vi-spacing-layout-radius-standard-base);
+}
+
+.vi-plugin-manager,
+.vi-plugin-toolbar,
+.vi-plugin-header,
+.vi-plugin-results {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--vi-space-rhythm-4-base);
+}
+
+.vi-plugin-stack,
+.vi-plugin-field {
+  display: grid;
+  min-inline-size: 0;
+  align-content: start;
+  gap: var(--vi-space-gap-dense-default);
+}
+
+.vi-plugin-title {
+  font-size: var(--vi-typography-typography-size-xl-base);
+  font-weight: var(--vi-typography-typography-weight-semibold-base);
+  letter-spacing: var(--vi-typography-typography-tracking-tight-base);
+  line-height: var(--vi-typography-typography-leading-tight-base);
+  text-wrap: balance;
+}
+
+.vi-plugin-muted,
+.vi-plugin-row__description,
+.vi-plugin-meta,
+.vi-plugin-receipt {
+  color: var(--vi-colors-text-content-secondary-base);
+}
+
+.vi-plugin-meta,
+.vi-plugin-counter,
+.vi-plugin-count,
+.vi-plugin-tool-list,
+.vi-plugin-matches {
+  font-family: var(--vi-typography-typography-family-mono-base);
+  font-size: var(--vi-typography-typography-size-xs-base);
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-plugin-label,
+.vi-plugin-group__title,
+.vi-plugin-row__title {
+  color: var(--vi-colors-text-content-primary-base);
+  font-weight: var(--vi-typography-typography-weight-semibold-base);
+}
+
+.vi-plugin-header__actions,
+.vi-plugin-tabs,
+.vi-plugin-pills,
+.vi-plugin-row__heading,
+.vi-plugin-row__metadata,
+.vi-plugin-row__actions,
+.vi-plugin-drawer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--vi-space-gap-compact-default);
+}
+
+.vi-plugin-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-inline-size: 100%;
+  padding: var(--vi-space-rhythm-1-base) var(--vi-space-rhythm-2-base);
+  background: var(--vi-plugin-badge-bg);
+  border: 1px solid var(--vi-chat-border-subtle);
+  border-radius: var(--vi-spacing-layout-radius-full-base);
+  color: var(--vi-colors-text-content-primary-base);
+  font-family: var(--vi-typography-typography-family-mono-base);
+  font-size: var(--vi-typography-typography-size-xs-base);
+  overflow-wrap: anywhere;
+}
+
+.vi-plugin-action,
+.vi-plugin-input,
+.vi-plugin-summary {
+  min-inline-size: var(--vi-size-action-min-default);
+  min-block-size: var(--vi-size-action-min-default);
+  max-inline-size: 100%;
+  padding-inline: var(--vi-space-rhythm-3-base);
+  background: var(--vi-plugin-surface);
+  border: 1px solid var(--vi-chat-border-subtle);
+  border-radius: var(--vi-spacing-layout-radius-control-base);
+  color: var(--vi-colors-text-content-primary-base);
+  font: inherit;
+}
+
+.vi-plugin-action,
+.vi-plugin-summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--vi-space-gap-dense-default);
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
+}
+
+.vi-plugin-action--primary {
+  border-color: var(--vi-chat-focus-ring);
+  font-weight: var(--vi-typography-typography-weight-semibold-base);
+}
+
+.vi-plugin-action--pill,
+.vi-plugin-summary {
+  border-radius: var(--vi-spacing-layout-radius-full-base);
+}
+
+.vi-plugin-action--icon {
+  padding-inline: var(--vi-space-rhythm-2-base);
+  font-size: var(--vi-typography-typography-size-lg-base);
+}
+
+.vi-plugin-action[aria-selected="true"],
+.vi-plugin-action[aria-pressed="true"] {
+  background: var(--vi-plugin-badge-bg);
+  border-color: var(--vi-chat-focus-ring);
+  font-weight: var(--vi-typography-typography-weight-semibold-base);
+}
+
+.vi-plugin-action:not(:disabled):hover,
+.vi-plugin-summary:hover,
+.vi-plugin-row:hover,
+.vi-plugin-row:focus-within {
+  background: var(--vi-plugin-row-hover);
+}
+
+.vi-plugin-action:disabled {
+  color: var(--vi-colors-text-content-secondary-base);
+  cursor: not-allowed;
+}
+
+.vi-plugin-input::placeholder {
+  color: var(--vi-colors-text-content-secondary-base);
+  opacity: 1;
+}
+
+.vi-plugin-search,
+.vi-plugin-field .vi-plugin-input {
+  inline-size: 100%;
+}
+
+.vi-plugin-tabs {
+  gap: var(--vi-space-gap-dense-default);
+}
+
+.vi-plugin-pills {
+  gap: var(--vi-space-gap-dense-default);
+}
+
+.vi-plugin-pills > .vi-plugin-action {
+  padding-inline: var(--vi-space-rhythm-2-base);
+  font-size: var(--vi-typography-typography-size-xs-base);
+}
+
+.vi-plugin-toolbar {
+  gap: var(--vi-space-rhythm-2-base);
+}
+
+.vi-plugin-policy,
+.vi-plugin-preflight {
+  display: grid;
+  align-items: start;
+  gap: var(--vi-space-gap-compact-default);
+  min-inline-size: 0;
+  padding: var(--vi-space-rhythm-3-base);
+  border: 1px solid var(--vi-chat-border-subtle);
+  border-radius: var(--vi-spacing-layout-radius-standard-base);
+  background: var(--vi-plugin-badge-bg);
+}
+
+.vi-plugin-receipt {
+  overflow-wrap: anywhere;
+}
+
+.vi-plugin-receipt:empty {
+  block-size: 0;
+  margin-block-start: calc(-1 * var(--vi-space-rhythm-4-base));
+}
+
+.vi-plugin-group {
+  border-block-start: 1px solid var(--vi-chat-border-subtle);
+}
+
+.vi-plugin-group__title {
+  padding: var(--vi-space-rhythm-3-base);
+}
+
+.vi-plugin-group--attention {
+  background: var(--vi-plugin-attention-bg);
+  border: 1px solid var(--vi-plugin-attention-border);
+  border-radius: var(--vi-spacing-layout-radius-standard-base);
+}
+
+.vi-plugin-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--vi-space-rhythm-2-base) var(--vi-space-rhythm-3-base);
+  min-inline-size: 0;
+  padding: var(--vi-space-rhythm-3-base);
+  border-block-end: 1px solid var(--vi-chat-border-subtle);
+}
+
+.vi-plugin-row:last-child {
+  border-block-end: 0;
+}
+
+.vi-plugin-mark {
+  display: inline-grid;
+  place-items: center;
+  align-self: start;
+  inline-size: var(--vi-size-icon-lg-base);
+  aspect-ratio: 1;
+  border: 1px solid var(--vi-chat-border-strong);
+  border-radius: var(--vi-spacing-layout-radius-control-base);
+  background: var(--vi-plugin-badge-bg);
+  font-family: var(--vi-typography-typography-family-mono-base);
+  font-weight: var(--vi-typography-typography-weight-semibold-base);
+}
+
+.vi-plugin-row__identity {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--vi-space-gap-dense-default);
+  overflow-wrap: anywhere;
+}
+
+.vi-plugin-row__actions {
+  grid-column: 1 / -1;
+  align-self: start;
+  min-inline-size: 0;
+}
+
+.vi-plugin-row__actions select {
+  inline-size: auto;
+  max-inline-size: min(100%, 15rem);
+}
+
+.vi-plugin-status {
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: 0;
+  gap: var(--vi-space-gap-compact-default);
+  font-size: var(--vi-typography-typography-size-xs-base);
+  font-weight: var(--vi-typography-typography-weight-medium-base);
+}
+
+.vi-plugin-dot {
+  flex-shrink: 0;
+  inline-size: var(--vi-size-indicator-dot-base);
+  aspect-ratio: 1;
+  border: 1px solid var(--vi-chat-border-strong);
+  border-radius: var(--vi-spacing-layout-radius-full-base);
+  background: var(--vi-colors-text-content-secondary-base);
+}
+
+.vi-plugin-row[data-health="connected"] .vi-plugin-dot {
+  background: var(--vi-colors-status-indicator-success-base);
+}
+
+.vi-plugin-row[data-health="attention"] .vi-plugin-dot {
+  background: var(--vi-plugin-attention-border);
+}
+
+.vi-plugin-scope {
+  grid-column: 1 / -1;
+  min-inline-size: 0;
+}
+
+.vi-plugin-summary {
+  justify-content: start;
+  list-style: none;
+  text-align: start;
+}
+
+.vi-plugin-summary::-webkit-details-marker {
+  display: none;
+}
+
+.vi-plugin-summary::before {
+  content: '›';
+  margin-inline-end: var(--vi-space-gap-dense-default);
+  font-size: var(--vi-typography-typography-size-lg-base);
+}
+
+.vi-plugin-scope[open] > .vi-plugin-summary::before {
+  rotate: 90deg;
+}
+
+.vi-plugin-scope__body {
+  display: grid;
+  justify-items: start;
+  gap: var(--vi-space-gap-compact-default);
+  margin-block-start: var(--vi-space-rhythm-2-base);
+  padding-block-start: var(--vi-space-rhythm-2-base);
+  border-block-start: 1px solid var(--vi-chat-border-subtle);
+}
+
+.vi-plugin-tool-list {
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.vi-plugin-tool-list > div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--vi-space-gap-compact-default);
+  padding-block: var(--vi-space-rhythm-2-base);
+  border-block-end: 1px solid var(--vi-chat-border-subtle);
+}
+
+.vi-plugin-tool-list dd {
+  color: var(--vi-colors-text-content-secondary-base);
+}
+
+.vi-plugin-empty,
+.vi-plugin-browse {
+  justify-self: start;
+}
+
+.vi-plugin-empty {
+  display: grid;
+  justify-items: start;
+  gap: var(--vi-space-gap-compact-default);
+}
+
+.vi-plugin-menu,
+.vi-plugin-drawer,
+.vi-plugin-manager-dialog {
+  color: var(--vi-colors-text-content-primary-base);
+  background: var(--vi-plugin-surface);
+  border: 1px solid var(--vi-chat-border-subtle);
+  font-family: var(--vi-typography-typography-family-sans-base);
+  font-size: var(--vi-typography-typography-size-sm-base);
+  line-height: var(--vi-typography-typography-leading-normal-base);
+}
+
+.vi-plugin-menu {
+  position: fixed;
+  inset: auto;
+  inset-block-start: var(--vi-plugin-menu-top);
+  inset-inline-start: clamp(var(--vi-space-rhythm-2-base), var(--vi-plugin-menu-left), calc(100% - min(14rem, 100% - var(--vi-space-rhythm-4-base)) - var(--vi-space-rhythm-2-base)));
+  inline-size: min(14rem, 100% - var(--vi-space-rhythm-4-base));
+  max-block-size: min(45dvh, 100% - var(--vi-space-rhythm-4-base));
+  margin: 0;
+  overflow: auto;
+  padding: var(--vi-space-rhythm-2-base);
+  border-radius: var(--vi-spacing-layout-radius-control-base);
+}
+
+.vi-plugin-menu:popover-open {
+  display: grid;
+  gap: var(--vi-space-gap-dense-default);
+}
+
+.vi-plugin-menu[data-above] {
+  translate: 0 -100%;
+}
+
+.vi-plugin-menu .vi-plugin-action {
+  justify-content: start;
+  text-align: start;
+}
+
+.vi-plugin-drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  inline-size: min(100%, 30rem);
+  max-inline-size: 100%;
+  block-size: 100dvh;
+  max-block-size: 100%;
+  margin: 0;
+  padding: var(--vi-space-rhythm-4-base);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-block-end: var(--vi-size-action-wide-default);
+}
+
+.vi-plugin-manager-dialog {
+  inline-size: min(100% - var(--vi-space-rhythm-4-base), 68rem);
+  max-inline-size: 100%;
+  max-block-size: calc(100% - var(--vi-space-rhythm-4-base));
+  margin: auto;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--vi-space-rhythm-2-base);
+  border-radius: var(--vi-spacing-layout-radius-standard-base);
+}
+
+.vi-plugin-manager-dialog > header,
+.vi-plugin-drawer__header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--vi-space-gap-compact-default);
+  padding-block-end: var(--vi-space-rhythm-3-base);
+}
+
+.vi-plugin-manager-dialog > header {
+  justify-content: end;
+}
+
+.vi-plugin-manager-dialog > .vi-plugin-manager {
+  border: 0;
+}
+
+.vi-plugin-drawer[open],
+.vi-plugin-manager-dialog[open] {
+  animation: vi-plugin-enter var(--vi-transition-transition-duration-normal-base) var(--vi-transition-transition-easing-standard-base);
+}
+
+.vi-plugin-drawer::backdrop,
+.vi-plugin-manager-dialog::backdrop {
+  background: color-mix(in oklch, var(--vi-plugin-surface) 82%, transparent);
+}
+
+.vi-plugin-form {
+  display: grid;
+  gap: var(--vi-space-rhythm-3-base);
+}
+
+.vi-plugin-preflight .vi-plugin-action {
+  justify-self: start;
+}
+
+.vi-plugin-drawer__actions {
+  position: sticky;
+  inset-block-end: 0;
+  justify-content: end;
+  padding-block: var(--vi-space-rhythm-2-base);
+  border-block-start: 1px solid var(--vi-chat-border-subtle);
+  background: var(--vi-plugin-surface);
+}
+
+:is(.vi-plugins-stage, .vi-plugin-drawer, .vi-plugin-manager-dialog) [hidden] {
+  display: none;
+}
+
+:is(.vi-plugins-stage, .vi-plugin-drawer, .vi-plugin-manager-dialog) :focus-visible {
+  outline: 2px solid var(--vi-chat-focus-ring);
+  outline-offset: 2px;
+}
+
+@container vi-plugins-stage (min-width: 40rem) {
+  .vi-plugin-header,
+  .vi-plugin-policy {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .vi-plugin-search {
+    max-inline-size: 36rem;
+  }
+
+  .vi-plugin-toolbar {
+    gap: var(--vi-space-rhythm-3-base);
+  }
+
+  .vi-plugin-pills {
+    gap: var(--vi-space-gap-compact-default);
+  }
+
+  .vi-plugin-pills > .vi-plugin-action {
+    padding-inline: var(--vi-space-rhythm-3-base);
+    font-size: inherit;
+  }
+}
+
+@container vi-plugins-stage (min-width: 48rem) {
+  .vi-plugin-list {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .vi-plugin-row {
+    grid-column: 1 / -1;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  @supports (grid-template-columns: subgrid) {
+    .vi-plugin-row {
+      grid-template-columns: subgrid;
+    }
+  }
+
+  .vi-plugin-row__actions {
+    grid-column: 3;
+    justify-content: end;
+  }
+
+  .vi-plugin-scope {
+    grid-column: 2 / -1;
+  }
+}
+
+@container vi-plugins-stage (min-width: 64rem) {
+  .vi-plugin-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .vi-plugin-matches {
+    grid-column: 1 / -1;
+  }
+}
+
+@keyframes vi-plugin-enter {
+  from { opacity: 0; translate: var(--vi-space-rhythm-2-base) 0; }
+  to { opacity: 1; translate: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.vi-plugins-stage, .vi-plugin-drawer, .vi-plugin-manager-dialog),
+  :is(.vi-plugins-stage, .vi-plugin-drawer, .vi-plugin-manager-dialog) * {
+    transition: none;
+    animation: none;
+    scroll-behavior: auto;
+  }
+}
+
+[data-motion="paused"] :is(.vi-plugins-stage, .vi-plugin-drawer, .vi-plugin-manager-dialog),
+[data-motion="paused"] :is(.vi-plugins-stage, .vi-plugin-drawer, .vi-plugin-manager-dialog) * {
+  transition: none;
+  animation: none;
+}
+
+@media (forced-colors: active) {
+  :is(.vi-plugins-stage, .vi-plugin-drawer, .vi-plugin-manager-dialog) :focus-visible {
+    outline-color: Highlight;
+  }
+}
