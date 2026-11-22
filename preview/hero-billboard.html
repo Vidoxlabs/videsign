@@ -1,0 +1,78 @@
+<!--
+  Nocturne Museum: Deslopped hero billboard with five-bar signature rule, facts rail, and four-plane overview (ADR-005, ADR-013, ADR-023)
+  Uses typography-size-4xl-base / typography-size-5xl-base on the landing heading, the five-bar rule in canon order,
+  a solid secondary facts rail computed from site metadata, and the four generalized ecosystem planes.
+-->
+<section aria-labelledby="hero-billboard-title" class="bg-surface-background-primary-base p-rhythm-6-base flex flex-col gap-rhythm-8-base">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-rhythm-6-base items-start">
+    <div class="lg:col-span-2 flex flex-col gap-gap-comfortable-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Local-first agent ecosystem</p>
+      <h1 id="hero-billboard-title" class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-4xl-base lg:text-typography-size-5xl-base tracking-typography-tracking-tight-base leading-typography-leading-tight-base text-text-content-primary-base">Modular agent harnesses and visual contracts</h1>
+      <div aria-hidden="true" class="flex w-layout-width-sidebar-base overflow-hidden rounded-layout-radius-full-base">
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-xylia-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-yarrow-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-zinnia-base"></span>
+      </div>
+      <p class="font-typography-family-sans-base text-typography-size-lg-base leading-typography-leading-normal-base text-text-content-secondary-base">Four public repositories separating surfaces, run harnesses, model providers, and durable authority stores without speculative claims.</p>
+      <div class="flex flex-wrap items-center gap-gap-comfortable-default pt-rhythm-2-base">
+        <a href="#published-repos" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-secondary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+          <span>Inspect repositories</span>
+          <span aria-hidden="true">&#8594;</span>
+        </a>
+        <a href="#catalog-grid" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+          <span>Open component catalog</span>
+          <span aria-hidden="true">&#8594;</span>
+        </a>
+      </div>
+    </div>
+    <aside aria-label="Ecosystem facts" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-comfortable-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Published metrics</p>
+      <dl class="grid grid-cols-2 gap-rhythm-4-base">
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-3-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Public repos</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-2xl-base tabular-nums text-text-content-primary-base">4</dd>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default border-b border-border-separator-primary-base pb-rhythm-3-base">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">UI fragments</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-2xl-base tabular-nums text-text-content-primary-base">30</dd>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Text floor</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-2xl-base tabular-nums text-text-content-primary-base">4.5:1</dd>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default">
+          <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Touch min</dt>
+          <dd class="font-typography-family-mono-base text-typography-size-2xl-base tabular-nums text-text-content-primary-base">44px</dd>
+        </div>
+      </dl>
+      <ul class="flex flex-col border-t border-border-separator-primary-base pt-rhythm-2-base list-none">
+        <li><a href="/standard.json" class="flex items-center justify-between h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base"><span>Standard JSON digest</span><span aria-hidden="true">&#8594;</span></a></li>
+        <li><a href="/checks" class="flex items-center justify-between h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base"><span>Run browser checks</span><span aria-hidden="true">&#8594;</span></a></li>
+      </ul>
+    </aside>
+  </div>
+  <ol aria-label="Architecture planes" class="grid grid-cols-1 md:grid-cols-4 gap-rhythm-4-base list-none">
+    <li class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">01</p>
+      <h2 class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base">Surfaces</h2>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">bloom, videsign, and the native client share one visual standard.</p>
+    </li>
+    <li class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">02</p>
+      <h2 class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base">Harness</h2>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">seed owns durable runs, owner gates, and vitools skill resolution.</p>
+    </li>
+    <li class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">03</p>
+      <h2 class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base">Providers</h2>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Replaceable model endpoints behind one explicit generate seam.</p>
+    </li>
+    <li class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">04</p>
+      <h2 class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base">Authority stores</h2>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Governed memory fabric, relational storage triangle, and local cluster.</p>
+    </li>
+  </ol>
+</section>

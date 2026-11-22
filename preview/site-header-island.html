@@ -1,0 +1,33 @@
+<!--
+  Nocturne Museum: Deslopped crystal-glass island site header (ADR-006, ADR-023)
+  One glass layer at rest: vi-glass-shell around vi-glass-core with pill geometry.
+  Six bounded links (omitting unreleased storefront routes), 44px touch targets,
+  a compact Chat trigger bordered in the brand accent, and a mobile Menu toggle.
+-->
+<header class="sticky top-0 z-20 px-rhythm-6-base py-rhythm-3-base">
+  <div class="max-w-7xl mx-auto vi-glass-shell vi-glass-shell--pill">
+    <nav aria-label="Primary navigation" class="vi-glass-core vi-glass-core--pill flex items-center justify-between gap-gap-compact-default px-rhythm-2-base py-rhythm-1-base">
+      <a href="/" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-rhythm-3-base rounded-layout-radius-full-base font-typography-family-sans-base text-typography-size-md-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base">
+        <img src="{ASSET_BASE}/brand/brand_mark_header_v008.svg" alt="" class="w-icon-sm-base h-icon-sm-base shrink-0" />
+        <span>Vidoxlabs</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-gap-dense-default list-none">
+        <li><a href="/" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Overview</a></li>
+        <li><a href="/repositories" aria-current="page" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Repositories</a></li>
+        <li><a href="/catalog" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Catalog</a></li>
+        <li><a href="/checks" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Checks</a></li>
+        <li><a href="/research" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Research</a></li>
+        <li><a href="https://github.com/Vidoxlabs" target="_blank" rel="noreferrer" class="inline-flex items-center gap-gap-dense-default h-action-min-default px-inset-operator-default rounded-layout-radius-full-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">GitHub<span aria-hidden="true">&#8599;</span></a></li>
+      </ul>
+      <div class="flex items-center gap-gap-compact-default">
+        <a href="#chat-dock" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-rhythm-4-base rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-secondary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+          <span>Chat</span>
+          <span aria-hidden="true">&#8594;</span>
+        </a>
+        <button type="button" aria-expanded="false" aria-controls="site-nav-sheet" aria-label="Toggle navigation" class="md:hidden inline-flex items-center gap-gap-compact-default h-action-min-default px-rhythm-3-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
+          <span>Menu</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>

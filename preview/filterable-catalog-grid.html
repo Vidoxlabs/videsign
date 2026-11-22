@@ -1,0 +1,128 @@
+<!--
+  Nocturne Museum: Deslopped filterable catalog grid for skills, agents, and public modules (ADR-023)
+  Derived from the vidoxlabs.dev ViTools catalog: solid search + multi-select filter bar,
+  polite live result count, two-column metadata card grid, and dashed empty-state fallback.
+-->
+<section aria-labelledby="catalog-grid-heading" class="bg-surface-background-primary-base p-rhythm-6-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-col gap-gap-dense-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Modular index</p>
+    <h2 id="catalog-grid-heading" class="font-typography-family-sans-base text-typography-size-2xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base">Skills, agents, and UI modules</h2>
+  </div>
+  <form aria-label="Filter catalog" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-spacious-default">
+    <div class="flex flex-col gap-gap-compact-default">
+      <label for="catalog-search-input" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Search</label>
+      <input id="catalog-search-input" type="search" name="q" placeholder="Search name, summary, or tags..." class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base" />
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-rhythm-4-base">
+      <div class="flex flex-col gap-gap-compact-default">
+        <label for="catalog-kind-select" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Kind</label>
+        <select id="catalog-kind-select" name="kind" class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">
+          <option value="">All kinds</option>
+          <option value="skill">Skills</option>
+          <option value="agent">Agents</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-gap-compact-default">
+        <label for="catalog-category-select" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Category</label>
+        <select id="catalog-category-select" name="category" class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">
+          <option value="">All categories</option>
+          <option value="design-systems">Design systems</option>
+          <option value="harness-contracts">Harness contracts</option>
+          <option value="safety-checks">Safety checks</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-gap-compact-default">
+        <label for="catalog-platform-select" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Platform</label>
+        <select id="catalog-platform-select" name="platform" class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">
+          <option value="">All platforms</option>
+          <option value="macos">macOS</option>
+          <option value="linux">Linux</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-gap-compact-default">
+        <label for="catalog-repo-select" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Repository</label>
+        <select id="catalog-repo-select" name="repo" class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">
+          <option value="">All repositories</option>
+          <option value="seed">seed</option>
+          <option value="bloom">bloom</option>
+          <option value="videsign">videsign</option>
+          <option value="vitools">vitools</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex justify-end pt-rhythm-4-base border-t border-border-separator-primary-base">
+      <button type="reset" class="inline-flex items-center justify-center h-action-min-default px-rhythm-5-base rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Reset</button>
+    </div>
+  </form>
+  <p role="status" aria-live="polite" class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Showing 4 of 4 items</p>
+  <ul aria-label="Catalog items" class="grid grid-cols-1 md:grid-cols-2 gap-rhythm-4-base list-none">
+    <li class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col justify-between gap-gap-comfortable-default">
+      <div class="flex flex-col gap-gap-compact-default">
+        <div class="flex items-center justify-between gap-gap-compact-default">
+          <span class="inline-flex items-center px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Skill</span>
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">videsign</span>
+        </div>
+        <h3 class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base text-text-content-primary-base">
+          <a href="/catalog/skills/videsign-continuity" class="inline-flex items-center h-action-min-default hover:underline">videsign-continuity</a>
+        </h3>
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Fetches canonical tokens, contrast bounds, and modular fragments over MCP before generating UI markup.</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default pt-rhythm-3-base border-t border-border-separator-primary-base">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">MIT · Claude · Cursor · Codex</span>
+        <a href="/catalog/raw/skills/videsign-continuity.md" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:underline">Raw markdown</a>
+      </div>
+    </li>
+    <li class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col justify-between gap-gap-comfortable-default">
+      <div class="flex flex-col gap-gap-compact-default">
+        <div class="flex items-center justify-between gap-gap-compact-default">
+          <span class="inline-flex items-center px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Skill</span>
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">seed</span>
+        </div>
+        <h3 class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base text-text-content-primary-base">
+          <a href="/catalog/skills/seed-run-lifecycle" class="inline-flex items-center h-action-min-default hover:underline">seed-run-lifecycle</a>
+        </h3>
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Validates objective and attempt state transitions, owner gates, and neutral tool IDs before merge.</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default pt-rhythm-3-base border-t border-border-separator-primary-base">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">MIT · Antigravity · Codex</span>
+        <a href="/catalog/raw/skills/seed-run-lifecycle.md" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:underline">Raw markdown</a>
+      </div>
+    </li>
+    <li class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col justify-between gap-gap-comfortable-default">
+      <div class="flex flex-col gap-gap-compact-default">
+        <div class="flex items-center justify-between gap-gap-compact-default">
+          <span class="inline-flex items-center px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Skill</span>
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">vitools</span>
+        </div>
+        <h3 class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base text-text-content-primary-base">
+          <a href="/catalog/skills/safety-command-guard" class="inline-flex items-center h-action-min-default hover:underline">safety-command-guard</a>
+        </h3>
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Detects wrapped shell deletion, destructive SQL drops, and forced pushes before execution.</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default pt-rhythm-3-base border-t border-border-separator-primary-base">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">MIT · Claude · OpenCode</span>
+        <a href="/catalog/raw/skills/safety-command-guard.md" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:underline">Raw markdown</a>
+      </div>
+    </li>
+    <li class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col justify-between gap-gap-comfortable-default">
+      <div class="flex flex-col gap-gap-compact-default">
+        <div class="flex items-center justify-between gap-gap-compact-default">
+          <span class="inline-flex items-center px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-graph-line-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Agent</span>
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">bloom</span>
+        </div>
+        <h3 class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base text-text-content-primary-base">
+          <a href="/catalog/agents/harness-review-auditor" class="inline-flex items-center h-action-min-default hover:underline">harness-review-auditor</a>
+        </h3>
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Deterministic specialist auditing artifact digests, token budgets, and contrast floors prior to handoff.</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default pt-rhythm-3-base border-t border-border-separator-primary-base">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">MIT · Antigravity · bloom</span>
+        <a href="/catalog/raw/agents/harness-review-auditor.md" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:underline">Raw markdown</a>
+      </div>
+    </li>
+  </ul>
+  <div class="border border-dashed border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col items-center gap-gap-compact-default">
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">No items match these filters.</p>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Reset filters</button>
+  </div>
+</section>

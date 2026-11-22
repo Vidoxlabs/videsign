@@ -1,0 +1,52 @@
+<!--
+  Nocturne Museum: Browser check runner panel (ADR-017, ADR-023)
+  Solid secondary panel combining what-it-shows / try-it framing, textarea with character output,
+  44px preset buttons, whole-row switch filter, polite live status readout, and hairline result items.
+-->
+<section aria-labelledby="check-runner-heading" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-spacious-default">
+  <div class="flex flex-col gap-gap-compact-default">
+    <h2 id="check-runner-heading" class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base">Destructive command check</h2>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Shows deterministic matches against filesystem, SQL, and git halt rules (including shell wrappers) inside this browser session.</p>
+    <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Try it: compare the safe read-only preset against the destructive wrapper preset, then filter to flagged lines.</p>
+  </div>
+  <div class="flex flex-col gap-gap-compact-default">
+    <div class="flex items-baseline justify-between gap-gap-compact-default">
+      <label for="check-runner-input" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-primary-base">Commands to check</label>
+      <output for="check-runner-input" class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">45 / 4,000</output>
+    </div>
+    <textarea id="check-runner-input" rows="4" aria-describedby="check-runner-help" class="w-full h-action-wide-default p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">sudo sh -c &quot;rm -rf ./tmp-cache&quot;
+git status</textarea>
+    <p id="check-runner-help" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Runs in your browser with sample data; pasted text is never sent, stored, or logged.</p>
+  </div>
+  <div class="flex flex-wrap items-center gap-gap-compact-default">
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-primary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base">Run check</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Safe read-only preset</button>
+    <button type="button" aria-pressed="true" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Destructive wrapper preset</button>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Clear</button>
+  </div>
+  <div class="border-t border-border-separator-primary-base pt-rhythm-3-base">
+    <button type="button" role="switch" aria-checked="false" class="w-full h-action-min-default px-inset-operator-default flex items-center justify-between gap-gap-compact-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base text-text-content-primary-base font-typography-family-mono-base text-typography-size-xs-base">
+      <span>Show flagged lines only</span>
+      <span class="text-text-content-secondary-base">Off</span>
+    </button>
+  </div>
+  <p role="status" aria-live="polite" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">1 of 2 commands matched a halt rule. The guard halts for explicit confirmation before running wrapped deletes.</p>
+  <ol aria-label="Check results" class="flex flex-col gap-gap-compact-default list-none">
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <div class="flex items-center justify-between gap-gap-compact-default">
+        <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span><span>Matched a rule</span></span>
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Line 1</span>
+      </div>
+      <code class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">sudo sh -c &quot;rm -rf ./tmp-cache&quot;</code>
+      <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Wrapped recursive deletion matches rule recursive-delete across sudo and shell subcommands.</p>
+    </li>
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <div class="flex items-center justify-between gap-gap-compact-default">
+        <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span><span>No rule matched</span></span>
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Line 2</span>
+      </div>
+      <code class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">git status</code>
+      <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Clean read-only inspection check. Absence of a rule match does not guarantee safety.</p>
+    </li>
+  </ol>
+</section>

@@ -1,0 +1,50 @@
+<!--
+  Nocturne Museum: Site footer with grouped repository navigation and WCAG 2.2.2 motion pause control (ADR-023)
+  Solid primary surface separated by hairline borders, 44px link and button targets,
+  explicit public-repo navigation (seed, bloom, videsign, vitools), and persistent motion toggle.
+-->
+<footer aria-label="Site footer" class="bg-surface-background-primary-base border-t border-border-separator-primary-base px-rhythm-6-base py-rhythm-10-base">
+  <div class="max-w-7xl mx-auto flex flex-col gap-rhythm-8-base">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-rhythm-8-base items-start">
+      <div class="flex flex-col gap-gap-compact-default">
+        <a href="/" class="inline-flex items-center h-action-min-default font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base">Vidoxlabs</a>
+        <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Local-first agent harness contracts, team collaboration surfaces, design tokens, and neutral tool catalogs.</p>
+      </div>
+      <nav aria-label="Footer navigation" class="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-rhythm-6-base">
+        <div class="flex flex-col gap-gap-compact-default">
+          <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Repositories</p>
+          <ul class="flex flex-col list-none">
+            <li><a href="https://github.com/Vidoxlabs/seed" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">seed</a></li>
+            <li><a href="https://github.com/Vidoxlabs/bloom" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">bloom</a></li>
+            <li><a href="https://github.com/Vidoxlabs/videsign" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">videsign</a></li>
+            <li><a href="https://github.com/Vidoxlabs/vitools" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">vitools</a></li>
+          </ul>
+        </div>
+        <div class="flex flex-col gap-gap-compact-default">
+          <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Surfaces and tools</p>
+          <ul class="flex flex-col list-none">
+            <li><a href="/catalog" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Component catalog</a></li>
+            <li><a href="/checks" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Browser checks</a></li>
+            <li><a href="/research" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Research library</a></li>
+          </ul>
+        </div>
+        <div class="flex flex-col gap-gap-compact-default">
+          <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Machine feeds</p>
+          <ul class="flex flex-col list-none">
+            <li><a href="/feed.xml" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Atom feed</a></li>
+            <li><a href="/feed.json" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">JSON feed</a></li>
+            <li><a href="/standard.json" class="inline-flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Standard digest</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-gap-spacious-default pt-rhythm-5-base border-t border-border-separator-primary-base">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Public portfolio routes store no cookies or analytics. Chat routes send typed messages to a model endpoint.</p>
+      <button type="button" aria-pressed="false" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+        <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+        <span>Pause background motion</span>
+      </button>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">&copy; 2026 Vidoxlabs</p>
+    </div>
+  </div>
+</footer>

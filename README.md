@@ -21,6 +21,7 @@ videsign/
 │   ├── memory-field.js   Memory field constellation renderer and table builder (ADR-018)
 │   ├── stage.js          Stage backdrop primitive: geometry, SVG renderer, contrast report (ADR-013)
 │   ├── stage.css         Stage colour and motion from emitted tokens
+│   ├── design-studio.js  Collaborative studio briefs, archetypes, manifest, and page scaffolding (ADR-023)
 │   └── asset-service.js  Phase 0 read-only VI persona asset service Worker logic (ADR-022)
 ├── preview/         Pure, flat, semantic, state-free HTML component fragments + layout compositions
 ├── preview/index.html  Visual catalog (open in a browser)
@@ -37,7 +38,7 @@ videsign/
 │   ├── check-public-safety.js    Fail-closed public-safety scan (CI)
 │   └── canon-tool.js             VWXYZ candidate validator and sidecar generator
 ├── test/            node --test contracts: tokens, themes, preview, standard, brand, canon, MCP
-├── mcp-server.js    Read-only MCP server: docs, canon, standard, style pack, fragments; tools resolve_token, style_pack, check_contrast, memory_field, stage_backdrop, component_catalog
+├── mcp-server.js    Read-only MCP server: docs, canon, standard, style pack, manifest, fragments; tools resolve_token, style_pack, check_contrast, memory_field, stage_backdrop, component_catalog, design_brief, scaffold_page
 ├── assets/          Local-only design images (gitignored, never committed)
 ├── dist/            Generated artifacts (gitignored, run `npm run tokens` to regenerate)
 ├── eslint.config.js AST validation: enforces no-arbitrary-value rule
@@ -74,13 +75,14 @@ styled visual catalog of every component (`python3 -m http.server 8000`). The ca
    Import `dist/themes.css` as well to opt into the product light theme, which
    remaps the base variables.
 3. **MCP**: Run `npm run mcp` and query resources/tools from your product repo's agent.
-   Use `component_catalog` (or read `file://preview/<id>.html` directly) to pull pure HTML
-   fragments for agent workspaces, harness contracts and public-repository continuity.
+   Use `component_catalog` (or read `file://preview/<id>.html` directly), `design_brief`, and
+   `scaffold_page` to compile structured briefs and assemble pure HTML page scaffolds for agent
+   workspaces, harness contracts, and dynamic public websites (`dist/components.manifest.json`).
    `dist/standard.json` is the machine-readable rule set (glass, type, motion, stage
    backdrop, five-bar rule, graph line, chat dock, conversation surface, group conversation,
-   modular components in `rules.modularComponents`, explorable instrument, accessibility) with
-   the ADR index. Sync it into a product with the product's own token sync script, pinned to
-   a videsign SHA.
+   modular components in `rules.modularComponents`, studio rules in `rules.designStudio`,
+   explorable instrument, accessibility) with the ADR index. Sync it into a product with the
+   product's own token sync script, pinned to a videsign SHA.
 4. **Stage backdrop**: `const { renderStageSvg, stageContrastReport } = require('@vidoxlabs/videsign/lib/stage.js')`
    renders the ADR-013 backdrop as an SVG string (or inline `dist/stage-ambient.svg` /
    `dist/stage-hero.svg`). Import `dist/stage.css` with `dist/tokens.css`. Your pause

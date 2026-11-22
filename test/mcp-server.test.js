@@ -158,7 +158,7 @@ test('component_catalog lists matching entries by consumer without html by defau
   assert.notEqual(bloomRes.isError, true, bloomRes.content[0].text);
   const bloomBody = JSON.parse(bloomRes.content[0].text);
   assert.ok(bloomBody.count > 0);
-  assert.deepEqual(bloomBody.categories, ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity']);
+  assert.deepEqual(bloomBody.categories, ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity', 'design-studio']);
   assert.ok(bloomBody.components.some((c) => c.id === 'layout-agent-workspace'));
   for (const item of bloomBody.components) {
     assert.ok(item.consumers.includes('bloom'), `expected bloom consumer on ${item.id}`);
@@ -173,6 +173,8 @@ test('component_catalog lists matching entries by consumer without html by defau
   const siteIds = JSON.parse(siteRes.content[0].text).components.map((c) => c.id);
   assert.ok(siteIds.includes('public-repo-card'));
   assert.ok(siteIds.includes('ecosystem-plane-map'));
+  assert.ok(siteIds.includes('site-header-island'));
+  assert.ok(siteIds.includes('hero-billboard'));
 
   const contractsRes = await client.callTool({
     name: 'component_catalog',
@@ -182,7 +184,7 @@ test('component_catalog lists matching entries by consumer without html by defau
   const contractsBody = JSON.parse(contractsRes.content[0].text);
   assert.deepEqual(
     contractsBody.components.map((c) => c.id),
-    ['claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row'],
+    ['claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner'],
   );
 });
 
@@ -224,4 +226,47 @@ test('component_catalog fetches a single component with html and rejects unknown
   });
   assert.equal(missing.isError, true);
   assert.match(missing.content[0].text, /not found/i);
+});
+
+test('design_brief and scaffold_page tools plus components.manifest.json work over MCP', async () => {
+  const { tools } = await client.listTools();
+  assert.ok(tools.some((t) => t.name === 'design_brief'));
+  assert.ok(tools.some((t) => t.name === 'scaffold_page'));
+
+  const manifestRes = await client.readResource({ uri: 'file://dist/components.manifest.json' });
+  const manifest = JSON.parse(manifestRes.contents[0].text);
+  assert.equal(manifest.componentCount, 30);
+  assert.ok(manifest.archetypes['public-site-landing']);
+
+  const briefRes = await client.callTool({
+    name: 'design_brief',
+    arguments: { archetype: 'tool-and-skill-catalog', framework: 'nextjs', theme: 'light' },
+  });
+  assert.notEqual(briefRes.isError, true, briefRes.content[0].text);
+  const brief = JSON.parse(briefRes.content[0].text);
+  assert.equal(brief.archetype, 'tool-and-skill-catalog');
+  assert.equal(brief.framework, 'nextjs');
+  assert.equal(brief.theme, 'light');
+  assert.ok(brief.referenceContract.keep.length > 0);
+  assert.ok(brief.referenceContract.change.length > 0);
+  assert.ok(brief.referenceContract.doNotCopy.length > 0);
+
+  const scaffoldRes = await client.callTool({
+    name: 'scaffold_page',
+    arguments: { archetype: 'public-site-landing', framework: 'react', title: 'Vidoxlabs — Rebuilt' },
+  });
+  assert.notEqual(scaffoldRes.isError, true, scaffoldRes.content[0].text);
+  const scaffold = JSON.parse(scaffoldRes.content[0].text);
+  assert.equal(scaffold.title, 'Vidoxlabs — Rebuilt');
+  assert.ok(scaffold.stylesheets.includes('dist/glass.css'));
+  assert.match(scaffold.html, /<!DOCTYPE html>/);
+  assert.match(scaffold.html, /<!-- slot:1:site-header-island/);
+  assert.match(scaffold.html, /<!-- slot:6:site-footer/);
+
+  const badScaffold = await client.callTool({
+    name: 'scaffold_page',
+    arguments: { archetype: 'nonexistent-archetype' },
+  });
+  assert.equal(badScaffold.isError, true);
+  assert.match(badScaffold.content[0].text, /UNKNOWN_ARCHETYPE/);
 });

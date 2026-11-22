@@ -88,7 +88,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'public-repo-card', 'ecosystem-plane-map', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'design-studio-canvas', 'layout-public-site', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });
@@ -573,5 +573,66 @@ test('Seed contract and public-repo continuity fragments enforce solid surfaces,
   }
   for (const term of ['the native client', 'coding workspace', 'the memory fabric', 'the storage triangle', 'the documentation base', 'coordinator', 'model-backed specialist', 'deterministic checker', 'the local cluster']) {
     assert.match(map, new RegExp(term), `missing generalized lexicon term ${term}`);
+  }
+});
+
+test('deslopped public-site and design-studio fragments follow ADR-023 contracts', () => {
+  const siteFragments = [
+    'site-header-island.html',
+    'site-footer.html',
+    'hero-billboard.html',
+    'filterable-catalog-grid.html',
+    'client-install-switcher.html',
+    'browser-check-runner.html',
+    'persona-companion-stage.html',
+    'evidence-exhibit-figure.html',
+    'design-studio-canvas.html',
+    'layout-public-site.html',
+  ];
+  const internalNames = new RegExp([
+    ['Vi', 'Web'].join(''),
+    ['Vi', 'App'].join(''),
+    ['Vi', 'Bot'].join(''),
+    ['Vi', 'Code'].join(''),
+    ['Vi', 'Docs'].join(''),
+    ['Vi', 'PerScale'].join(''),
+    ['ARK', 'SRRA'].join(''),
+    '\\bCT\\d+\\b',
+  ].join('|'), 'i');
+
+  for (const file of siteFragments) {
+    const html = read(file);
+    assert.doesNotMatch(html, internalNames, `${file}: must not contain retired internal names`);
+    assert.doesNotMatch(html, /\b\d{1,3}(?:\.\d{1,3}){3}\b/, `${file}: must not contain IPv4 literals`);
+    assert.doesNotMatch(html, /\/apps\b/, `${file}: must omit unreleased storefront routes`);
+    for (const m of html.matchAll(/<(button|textarea|a)\b([^>]*)>/g)) {
+      const cls = (m[2].match(/\bclass="([^"]*)"/) || [])[1] || '';
+      assert.match(cls, /h-action-(min|wide)-default/, `${file}: touch target floor on ${m[0].slice(0, 80)}`);
+    }
+    const usesGlass = /vi-glass/.test(html);
+    if (file === 'site-header-island.html' || file === 'layout-public-site.html') {
+      assert.equal(usesGlass, true, `${file}: expected crystal glass on header island`);
+    } else {
+      assert.equal(usesGlass, false, `${file}: must stay solid (no vi-glass)`);
+    }
+  }
+
+  const header = read('site-header-island.html');
+  assert.equal([...header.matchAll(/<li\b/g)].length, 6, 'site header holds 6 nav items');
+  assert.match(header, />Chat</);
+  assert.match(header, /aria-label="Toggle navigation"/);
+
+  const footer = read('site-footer.html');
+  for (const repo of ['seed', 'bloom', 'videsign', 'vitools']) assert.match(footer, new RegExp(`>${repo}<`));
+  assert.match(footer, /aria-pressed="false"[\s\S]*>Pause background motion</);
+
+  const hero = read('hero-billboard.html');
+  assert.match(hero, /text-typography-size-4xl-base lg:text-typography-size-5xl-base/);
+  assert.ok(fiveBars(hero).length >= 1, 'hero billboard carries canon five-bar rule');
+  for (const plane of ['Surfaces', 'Harness', 'Providers', 'Authority stores']) assert.match(hero, new RegExp(`>${plane}<`));
+
+  const studio = read('design-studio-canvas.html');
+  for (const marker of ['Structured brief', 'Reference contract', '>Keep<', '>Change<', '>Do not copy<', '1440px desktop', '1024px tablet', '390px mobile', 'scaffold_page']) {
+    assert.ok(studio.includes(marker), `design-studio-canvas missing ${marker}`);
   }
 });

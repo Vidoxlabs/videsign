@@ -304,6 +304,16 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 
 > [!IMPORTANT]
 >
+> ### Public-site component suite and collaborative design studio (ADR-023)
+>
+> Extends ADR-016, ADR-017 and ADR-021 for rebuilding public web surfaces dynamically and collaborating with design agents in an OpenDesign-inspired workflow (`lib/design-studio.js`).
+>
+> - **Deslopped public-site modules.** Public website chrome, catalogs, checks, exhibits, and companion stages live as pure token fragments: `preview/site-header-island.html` (one glass shell+core pill, six bounded nav links before storefront launch plus Chat trigger), `preview/site-footer.html` (public-repo navigation + WCAG 2.2.2 motion pause toggle), `preview/hero-billboard.html` (`{typography.typography-fluid-hero-base}` + five-bar rule + facts rail + four architecture planes), `preview/filterable-catalog-grid.html`, `preview/client-install-switcher.html`, `preview/browser-check-runner.html`, `preview/persona-companion-stage.html`, `preview/evidence-exhibit-figure.html`, and `preview/layout-public-site.html`.
+> - **Structured briefs and Keep / Change / Do not copy contracts.** The collaborative studio canvas (`preview/design-studio-canvas.html`) and `buildDesignBrief` enforce explicit keep, change, and do-not-copy boundaries across eight archetypes (`public-site-landing`, `repository-showcase`, `tool-and-skill-catalog`, `interactive-check-lab`, `research-library-article`, `persona-companion-showcase`, `agent-harness-workstation`, `collaborative-design-studio`) and three standard viewports (`1440px`, `1024px`, `390px`).
+> - **MCP scaffolding and manifest.** `npm run tokens` writes `dist/components.manifest.json`, and `mcp-server.js` exposes `design_brief`, `scaffold_page`, and `component_catalog` so target repos (`vidoxlabs.dev`, `seed`, `bloom`, `vitools`) pull verified multi-slot scaffolds with exact stylesheets and token entrypoints rather than inventing layouts.
+
+> [!IMPORTANT]
+>
 > ### Explorable instrument (ADR-017)
 >
 > The standard for interactive panels inside articles and proofs.

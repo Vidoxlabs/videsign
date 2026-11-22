@@ -1,0 +1,124 @@
+<!--
+  Nocturne Museum: OpenDesign-inspired collaborative agent design studio canvas (ADR-023)
+  Unites structured I-Lang/JSON design briefs, Keep / Change / Do not copy reference contracts,
+  multi-viewport preview stage with spatial critique pins, inline agent iteration composer,
+  and deterministic token/contrast guardrail receipt. Solid panels only (never glass on canvas).
+-->
+<div role="region" aria-label="Collaborative agent design studio" class="min-h-screen bg-surface-background-primary-base text-text-content-primary-base flex flex-col">
+  <header class="bg-surface-background-secondary-base border-b border-border-separator-primary-base px-rhythm-6-base py-rhythm-3-base flex flex-wrap items-center justify-between gap-gap-compact-default">
+    <div class="flex flex-wrap items-center gap-gap-compact-default">
+      <span class="font-typography-family-sans-base text-typography-size-md-base font-typography-weight-semibold-base text-text-content-primary-base">Nocturne design studio</span>
+      <span class="px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">public-site-landing</span>
+    </div>
+    <div role="group" aria-label="Viewport presets" class="flex flex-wrap items-center gap-gap-dense-default">
+      <button type="button" aria-pressed="true" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base tabular-nums">1440px desktop</button>
+      <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base tabular-nums">1024px tablet</button>
+      <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base tabular-nums">390px mobile</button>
+    </div>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Copy page scaffold</button>
+  </header>
+  <div class="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-rhythm-5-base p-rhythm-6-base">
+    <aside aria-label="Design brief and reference contract" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-5-base">
+      <div class="flex flex-col gap-gap-compact-default">
+        <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Structured brief</p>
+        <dl aria-label="Structured design brief" class="flex flex-col border-t border-border-separator-primary-base">
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Archetype</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">public-site-landing</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Theme</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Nocturne dark</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Density</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Balanced</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Glass layers</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">1 of 3 max</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="flex flex-col gap-gap-comfortable-default pt-rhythm-3-base border-t border-border-separator-primary-base">
+        <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Reference contract</p>
+        <div class="flex flex-col gap-gap-dense-default">
+          <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Keep</p>
+          <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Nocturne dark surfaces, Geist pair, 44px targets, hairline ledgers.</p>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default">
+          <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Change</p>
+          <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Center public pages on seed, bloom, videsign, and vitools for dynamic runtimes.</p>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default">
+          <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Do not copy</p>
+          <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Legacy internal lexicon, arbitrary Tailwind values, or colour-only badges.</p>
+        </div>
+      </div>
+    </aside>
+    <main aria-label="Prototype canvas and critique thread" class="lg:col-span-2 bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col justify-between gap-rhythm-5-base">
+      <div class="flex flex-col gap-gap-comfortable-default">
+        <div class="flex items-center justify-between gap-gap-compact-default">
+          <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Composed slot stack · 1440px frame</p>
+          <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>sync ready</span></span>
+        </div>
+        <ol aria-label="Composed layout slots" class="flex flex-col gap-gap-compact-default list-none">
+          <li class="p-layout-padding-medium-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-primary-base flex items-center justify-between gap-gap-compact-default">
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">1. site-header-island</span>
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Pin 1: Keep 6 nav links</span>
+          </li>
+          <li class="p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base flex items-center justify-between gap-gap-compact-default">
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">2. hero-billboard</span>
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Fluid display + 4 planes</span>
+          </li>
+          <li class="p-layout-padding-medium-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-primary-base flex items-center justify-between gap-gap-compact-default">
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">3. public-repo-card</span>
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Pin 2: Status dot + text label</span>
+          </li>
+          <li class="p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base flex items-center justify-between gap-gap-compact-default">
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">4. filterable-catalog-grid</span>
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Search + 4 facet selectors</span>
+          </li>
+          <li class="p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base flex items-center justify-between gap-gap-compact-default">
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">5. site-footer</span>
+            <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Pause motion + 4 repos</span>
+          </li>
+        </ol>
+      </div>
+      <form class="flex items-end gap-gap-compact-default p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base">
+        <div class="flex-1 flex flex-col gap-gap-dense-default">
+          <label for="studio-revision-input" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Collaborate with design agent</label>
+          <textarea id="studio-revision-input" rows="2" placeholder="Refine spacing rhythm or swap slot 4 for browser-check-runner..." class="w-full h-action-wide-default bg-transparent font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base outline-none"></textarea>
+        </div>
+        <button type="submit" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base">Apply revision</button>
+      </form>
+    </main>
+    <aside aria-label="Guardrail verifier and handoff receipt" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col justify-between gap-rhythm-5-base">
+      <div class="flex flex-col gap-gap-comfortable-default">
+        <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Guardrail check</p>
+        <dl aria-live="polite" aria-label="Design guardrail receipt" class="flex flex-col border-t border-border-separator-primary-base">
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Text contrast</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">4.5:1 pass</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Graph line</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">3.0:1 pass</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default border-b border-border-separator-primary-base">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Arbitrary classes</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">0</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-gap-compact-default py-inset-compact-default">
+            <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Scaffold tool</dt>
+            <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">scaffold_page</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="flex flex-col gap-gap-compact-default pt-rhythm-3-base border-t border-border-separator-primary-base">
+        <button type="button" class="w-full inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Export manifest JSON</button>
+        <a href="/standard.json" class="w-full inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Inspect standard.json</a>
+      </div>
+    </aside>
+  </div>
+</div>

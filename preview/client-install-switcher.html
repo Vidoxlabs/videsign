@@ -1,0 +1,60 @@
+<!--
+  Nocturne Museum: Client install switcher and pinned provenance ledger (ADR-023)
+  Extracted from vitools install + provenance views: solid secondary panel with client selector,
+  copyable snippet, explicit unsupported-client gap row, raw markdown links, and provenance ledger.
+-->
+<section aria-labelledby="install-switcher-heading" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-gap-spacious-default">
+  <div class="flex flex-col gap-gap-compact-default">
+    <h2 id="install-switcher-heading" class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base">Install</h2>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Inspect the raw markdown artifact before adding anything to your environment. This surface copies inert instructions only and never executes commands.</p>
+  </div>
+  <div class="flex flex-col gap-gap-compact-default">
+    <label for="install-client-select" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Supported client</label>
+    <select id="install-client-select" aria-controls="install-command-list" class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
+      <option value="claude">Claude Code</option>
+      <option value="cursor">Cursor</option>
+      <option value="codex">Codex CLI</option>
+      <option value="antigravity">Antigravity</option>
+      <option value="opencode">OpenCode</option>
+    </select>
+  </div>
+  <ul id="install-command-list" class="flex flex-col gap-gap-comfortable-default list-none">
+    <li class="flex flex-col gap-gap-compact-default">
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Antigravity / Claude Code MCP</span>
+        <button type="button" aria-label="Copy Antigravity and Claude Code MCP install instruction" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Copy</button>
+      </div>
+      <pre class="p-layout-padding-medium-base overflow-x-auto rounded-layout-radius-standard-base border border-border-separator-primary-base bg-surface-background-primary-base font-typography-family-mono-base text-typography-size-xs-base leading-typography-leading-normal-base text-text-content-primary-base"><code>npx @vidoxlabs/videsign-mcp --stdio</code></pre>
+      <span role="status" aria-live="polite" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Ready to copy</span>
+    </li>
+    <li class="flex flex-wrap items-baseline justify-between gap-gap-compact-default pt-rhythm-3-base border-t border-dashed border-border-separator-primary-base">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Browser extension host</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Not supported for this client</span>
+    </li>
+  </ul>
+  <div class="flex flex-wrap items-center gap-gap-comfortable-default">
+    <a href="/catalog/raw/skills/videsign-continuity.md" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">View raw markdown</a>
+    <a href="/catalog/raw/skills/videsign-continuity.md" download class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Download markdown</a>
+  </div>
+  <div class="flex flex-col gap-gap-compact-default pt-rhythm-4-base border-t border-border-separator-primary-base">
+    <h3 class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base">Provenance</h3>
+    <dl aria-label="Artifact provenance" class="flex flex-col border-t border-border-separator-primary-base">
+      <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
+        <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">License</dt>
+        <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">MIT</dd>
+      </div>
+      <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
+        <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Origin</dt>
+        <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Vidoxlabs/vitools</dd>
+      </div>
+      <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
+        <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Source revision</dt>
+        <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">da481bd</dd>
+      </div>
+      <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
+        <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Content digest</dt>
+        <dd class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">sha256: 6814573</dd>
+      </div>
+    </dl>
+  </div>
+</section>
