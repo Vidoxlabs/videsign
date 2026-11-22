@@ -33,10 +33,15 @@ const { contrastRatio, wcagLevels } = require('./lib/contrast');
 const stage = require('./lib/stage');
 const memoryField = require('./lib/memory-field');
 const { COMPONENT_CATALOG } = require('./scripts/generate-standard');
+const {
+  CATALOG_CATEGORIES,
+  CATALOG_CONSUMERS,
+  STUDIO_ARCHETYPES,
+  DesignStudioError,
+  buildDesignBrief,
+  scaffoldPage,
+} = require('./lib/design-studio');
 const BRAND_TOKENS = JSON.parse(fs.readFileSync(path.join(__dirname, 'brand', 'tokens.json'), 'utf-8'));
-
-const CATALOG_CATEGORIES = ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity'];
-const CATALOG_CONSUMERS = ['seed', 'bloom', 'vidoxlabs.dev'];
 
 /** A `#RRGGBB` literal, or a `colors.<key>` token path resolved from DESIGN.md. */
 function resolveColour(input) {
@@ -143,6 +148,7 @@ const STANDARD_RESOURCES = [
   { file: 'dist/dialects.css', name: 'Persona dialects (CSS)', mimeType: 'text/css', description: 'Agent-surface dialects for the five seats (ADR-015): .vi-agent[data-persona].' },
   { file: 'dist/dialects.json', name: 'Persona dialects (resolved)', mimeType: 'application/json', description: 'Each seat\'s tempo, density, label type, motif and lead order, resolved to seconds and points.' },
   { file: 'dist/tokens.dtcg.json', name: 'Tokens in DTCG 2025.10 format', mimeType: 'application/json', description: 'W3C Design Tokens Community Group format for design tools and converters.' },
+  { file: 'dist/components.manifest.json', name: 'Component Studio Manifest', mimeType: 'application/json', description: 'Deterministic index of modular components, page archetypes, reference contract rules, and token entrypoints (ADR-023).' },
 ];
 
 /** Title-case a kebab-case filename into a human-readable resource name. */
@@ -339,7 +345,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'component_catalog',
-        description: 'Discover and fetch modular Nocturne HTML components by id, category (conversation, agent-workspace, harness-contracts, public-continuity) or target consumer (seed, bloom, vidoxlabs.dev). Pass "name" to retrieve one component with its pure HTML fragment.',
+        description: 'Discover and fetch modular Nocturne HTML components by id, category (conversation, agent-workspace, harness-contracts, public-continuity, design-studio) or target consumer (seed, bloom, vidoxlabs.dev, vitools, videsign). Pass "name" to retrieve one component with its pure HTML fragment.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -347,6 +353,40 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             category: { type: 'string', enum: CATALOG_CATEGORIES, description: 'Optional category filter when listing components.' },
             consumer: { type: 'string', enum: CATALOG_CONSUMERS, description: 'Optional target consumer filter when listing components.' },
             includeHtml: { type: 'boolean', description: 'Include raw HTML fragment markup (default true when "name" is supplied, false when listing).' },
+          },
+        },
+      },
+      {
+        name: 'design_brief',
+        description: 'Compile a structured OpenDesign-inspired Nocturne design brief paired with a Keep / Change / Do not copy reference contract, guardrail bounds, and ordered component slots for collaborative human-agent design iterations.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            archetype: { type: 'string', enum: Object.keys(STUDIO_ARCHETYPES), description: 'Target page or app archetype (default "public-site-landing").' },
+            components: { type: 'array', items: { type: 'string' }, description: 'Optional explicit ordered list of COMPONENT_CATALOG IDs overriding the archetype slot stack.' },
+            theme: { type: 'string', enum: ['dark', 'light'], description: 'Target polarity (default "dark").' },
+            density: { type: 'string', enum: ['compact', 'balanced', 'spacious'], description: 'Layout density (default "balanced").' },
+            framework: { type: 'string', enum: ['html', 'react', 'nextjs', 'svelte', 'astro', 'vanilla'], description: 'Target framework for integration instructions (default "react").' },
+            viewport: { type: 'string', enum: ['1440px', '1024px', '390px'], description: 'Primary studio viewport preset (default "1440px").' },
+            title: { type: 'string', description: 'Optional human-readable document title.' },
+            keep: { type: 'array', items: { type: 'string' }, description: 'Additional Keep boundaries merged into the reference contract.' },
+            change: { type: 'array', items: { type: 'string' }, description: 'Additional Change directives merged into the reference contract.' },
+            doNotCopy: { type: 'array', items: { type: 'string' }, description: 'Additional Do-not-copy prohibitions merged into the reference contract.' },
+          },
+        },
+      },
+      {
+        name: 'scaffold_page',
+        description: 'Compose a multi-slot Nocturne page or workstation HTML scaffold directly from verified COMPONENT_CATALOG fragments alongside required stylesheets, platform token outputs, and framework porting instructions.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            archetype: { type: 'string', enum: Object.keys(STUDIO_ARCHETYPES), description: 'Preset page archetype (default "public-site-landing").' },
+            components: { type: 'array', items: { type: 'string' }, description: 'Optional explicit ordered list of COMPONENT_CATALOG IDs.' },
+            theme: { type: 'string', enum: ['dark', 'light'], description: 'Target polarity (default "dark").' },
+            framework: { type: 'string', enum: ['html', 'react', 'nextjs', 'svelte', 'astro', 'vanilla'], description: 'Target framework for integration notes (default "react").' },
+            title: { type: 'string', description: 'Page <title> (default derived from archetype).' },
+            wrapDocument: { type: 'boolean', description: 'Wrap assembled slots in a full <!DOCTYPE html> shell with stylesheet links (default true).' },
           },
         },
       },
@@ -463,6 +503,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       categories: CATALOG_CATEGORIES,
       components: items,
     }, null, 2));
+  }
+  if (name === 'design_brief') {
+    try {
+      const brief = buildDesignBrief(args || {}, COMPONENT_CATALOG);
+      return textResult(JSON.stringify(brief, null, 2));
+    } catch (err) {
+      if (err instanceof DesignStudioError) return textResult(`Error [${err.code}]: ${err.message}`, true);
+      throw err;
+    }
+  }
+  if (name === 'scaffold_page') {
+    try {
+      const scaffold = scaffoldPage(args || {}, __dirname, COMPONENT_CATALOG);
+      return textResult(JSON.stringify(scaffold, null, 2));
+    } catch (err) {
+      if (err instanceof DesignStudioError) return textResult(`Error [${err.code}]: ${err.message}`, true);
+      throw err;
+    }
   }
   if (name === 'resolve_token') {
     const tokenPath = args?.path;

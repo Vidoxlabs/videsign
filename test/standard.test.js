@@ -121,7 +121,7 @@ test('accepted status is limited to ratified items and Adopted/Proposed statuses
     if (line.startsWith('**Status**:') && current) statuses.push({ id: current, status: line.slice('**Status**:'.length).trim() });
   }
   const adoptedIds = ['ADR-013', 'ADR-016', 'ADR-017', 'ADR-018', 'ADR-019'];
-  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022'];
+  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022', 'ADR-023'];
   const byId = new Map(statuses.map((adr) => [adr.id, adr.status]));
   for (const id of ['ADR-010', 'ADR-011', 'ADR-012', ...adoptedIds, ...proposedIds]) {
     assert.ok(byId.has(id), `missing **Status**: line for ${id}`);
@@ -373,19 +373,20 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
   assert.equal(modularComponents.adr, 'ADR-021');
   assert.deepEqual(modularComponents.extends, ['ADR-016', 'ADR-017', 'ADR-020']);
   assert.equal(modularComponents.mcpTool, 'component_catalog');
-  assert.deepEqual(modularComponents.categories, ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity']);
+  assert.deepEqual(modularComponents.categories, ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity', 'design-studio']);
   assert.deepEqual(modularComponents.claimLabels, ['implemented', 'specified', 'planned', 'observed']);
   assert.deepEqual(modularComponents.publicProperNouns, ['seed', 'bloom', 'videsign', 'vitools']);
   assert.deepEqual(modularComponents.planes, ['surfaces', 'harness', 'providers', 'authority stores']);
   assert.deepEqual(modularComponents.runStates, ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete', 'stopping', 'stopped', 'failed']);
   assert.deepEqual(modularComponents.toolEffects, ['read', 'write', 'destructive', 'credential']);
-  assert.equal(modularComponents.catalog.length, 20);
+  assert.equal(modularComponents.catalog.length, 30);
   assert.deepEqual(modularComponents.catalog, COMPONENT_CATALOG);
   const expectedIds = [
     'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips',
     'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace',
-    'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row',
-    'public-repo-card', 'ecosystem-plane-map',
+    'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner',
+    'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'persona-companion-stage', 'evidence-exhibit-figure',
+    'design-studio-canvas', 'layout-public-site',
   ];
   assert.deepEqual(modularComponents.catalog.map((c) => c.id), expectedIds);
   for (const entry of modularComponents.catalog) {
@@ -478,4 +479,30 @@ test('standard carries the ADR-022 asset service rules and consolidated files ex
   assert.ok(prose.includes('auth_fail_windows') || DESIGN.includes('pipeline/service/worker.js'), 'DESIGN.md missing pipeline/service/worker.js');
   const md = generateStandardArtifacts(TOKENS)['standard.md'];
   assert.ok(md.includes('## Persona asset service (ADR-022)'), 'standard.md missing ## Persona asset service (ADR-022)');
+});
+
+test('standard carries ADR-023 design studio rules and DESIGN.md prose parity', () => {
+  const { standard, 'standard.md': md } = generateStandardArtifacts(TOKENS);
+  const { designStudio } = standard.rules;
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-023' && a.status.startsWith('Proposed')));
+  assert.equal(designStudio.adr, 'ADR-023');
+  assert.equal(designStudio.primitive, 'lib/design-studio.js');
+  assert.equal(designStudio.manifestOutput, 'dist/components.manifest.json');
+  assert.deepEqual(designStudio.mcpTools, ['design_brief', 'scaffold_page', 'component_catalog']);
+  assert.deepEqual(designStudio.referenceContractSections, ['keep', 'change', 'doNotCopy']);
+  assert.deepEqual(designStudio.viewports, ['1440px', '1024px', '390px']);
+  assert.equal(designStudio.navMaxLinksBeforeStorefront, 6);
+  const prose = DESIGN.toLowerCase();
+  for (const phrase of [
+    'public-site component suite and collaborative design studio (adr-023)',
+    'deslopped public-site modules',
+    'structured briefs and keep / change / do not copy contracts',
+    'mcp scaffolding and manifest',
+    'dist/components.manifest.json',
+    'scaffold_page',
+    'design_brief',
+  ]) {
+    assert.ok(prose.includes(phrase), `DESIGN.md missing: ${phrase}`);
+  }
+  assert.ok(md.includes('## Collaborative design studio and site scaffolding (ADR-023)'), 'standard.md missing ## Collaborative design studio and site scaffolding (ADR-023)');
 });

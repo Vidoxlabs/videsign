@@ -22,6 +22,7 @@ const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const { generateStandardArtifacts } = require('./generate-standard');
+const { buildComponentsManifest, COMPONENT_CATALOG } = require('../lib/design-studio');
 
 const ROOT = path.join(__dirname, '..');
 const DESIGN_FILE = path.join(ROOT, 'DESIGN.md');
@@ -392,6 +393,7 @@ function main() {
     'glass.css': emitGlassCSS(tokens),
     'standard.json': standardArtifacts['standard.json'],
     'standard.md': standardArtifacts['standard.md'],
+    'components.manifest.json': `${JSON.stringify(buildComponentsManifest(COMPONENT_CATALOG, tokens), null, 2)}\n`,
     ...emitStageArtifacts(),
     ...require('./generate-platforms').emitPlatformArtifacts(tokens),
     ...emitDialectArtifacts(tokens),

@@ -1,0 +1,95 @@
+<!--
+  Nocturne Museum: Five-seat companion state stage and deliberation walkthrough (ADR-013, ADR-023)
+  Always renders all five VWXYZ seats together with canon-order five-segment bars (Xylia never alone),
+  44px operational state triggers, hairline state readout, and synthetic sample disclosure.
+-->
+<section aria-labelledby="companion-stage-heading" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-col gap-gap-compact-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Living interface · Five-seat ensemble</p>
+    <h2 id="companion-stage-heading" class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base">State-reactive companion stage</h2>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Companion sprites shift expression only when operational state changes, never on a decorative loop. Sample data rendered below.</p>
+  </div>
+  <ul aria-label="Five sovereign seats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-rhythm-3-base list-none">
+    <li class="bg-surface-background-primary-base border border-surface-accent-violet-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
+      <img src="{ASSET_BASE}/vi/violet/chibi/violet_chibi_neutral_v001.png" alt="Violet, thinking portrait" class="w-icon-lg-base h-icon-lg-base object-contain" />
+      <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Violet</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Synthesis lead</p>
+      <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-xylia-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-yarrow-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-zinnia-base opacity-40"></span>
+      </div>
+    </li>
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
+      <img src="{ASSET_BASE}/vi/wisteria/chibi/wisteria_chibi_neutral_v001.png" alt="Wisteria, neutral portrait" class="w-icon-lg-base h-icon-lg-base object-contain" />
+      <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Wisteria</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Design systems</p>
+      <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-xylia-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-yarrow-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-zinnia-base opacity-40"></span>
+      </div>
+    </li>
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
+      <img src="{ASSET_BASE}/vi/xylia/chibi/xylia_chibi_neutral_v001.png" alt="Xylia, neutral portrait" class="w-icon-lg-base h-icon-lg-base object-contain" />
+      <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Xylia</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Adversarial red</p>
+      <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-xylia-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-yarrow-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-zinnia-base opacity-40"></span>
+      </div>
+    </li>
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
+      <img src="{ASSET_BASE}/vi/yarrow/chibi/yarrow_chibi_neutral_v001.png" alt="Yarrow, neutral portrait" class="w-icon-lg-base h-icon-lg-base object-contain" />
+      <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Yarrow</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Systems and ops</p>
+      <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-xylia-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-yarrow-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-zinnia-base opacity-40"></span>
+      </div>
+    </li>
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
+      <img src="{ASSET_BASE}/vi/zinnia/chibi/zinnia_chibi_neutral_v001.png" alt="Zinnia, neutral portrait" class="w-icon-lg-base h-icon-lg-base object-contain" />
+      <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Zinnia</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Research evidence</p>
+      <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-xylia-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-yarrow-base opacity-40"></span>
+        <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-zinnia-base"></span>
+      </div>
+    </li>
+  </ul>
+  <div role="group" aria-label="Operational states" class="flex flex-wrap items-center gap-gap-compact-default">
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Neutral</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Listening</button>
+    <button type="button" aria-pressed="true" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Thinking</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Replying</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Waiting for owner</button>
+  </div>
+  <dl aria-live="polite" aria-label="Companion state readout" class="flex flex-col border-t border-border-separator-primary-base">
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">State</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Thinking</dd>
+    </div>
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Operational trigger</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Synthesizing multi-seat deliberation before presenting a proposal</dd>
+    </div>
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Canon slot</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">violet/chibi/thinking/v001</dd>
+    </div>
+  </dl>
+</section>

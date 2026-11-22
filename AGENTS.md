@@ -43,13 +43,16 @@ design system — the shared visual language for all Vidoxlabs products and appl
   deterministic constellation layout, SVG, text equivalent, link contrast report and the memory
   pipeline figure. After changing `lib/memory-field.js`, run `npm run memory-field:fragment`.
   `lib/asset-service.js` implements the consolidated Phase 0 read-only persona asset Worker logic (ADR-022).
+  `lib/design-studio.js` owns the modular component catalog, collaborative studio brief compiler, reference contract, `dist/components.manifest.json` generator, and multi-slot page scaffolder (ADR-023).
 - **pipeline/**: Persona asset pipeline (`animation/`, `audit/`, `templates/`) and `pipeline/service/` (`worker.js`, `wrangler.toml`, `migrations/` D1 SQL schema + SHA-256 `manifest.json`, `README.md`) consolidated from `vi-assets` under ADR-022.
 - **mcp-server.js**: The MCP server that exposes this design system to product
   repositories for cross-repo token and fragment fetching. Tools: `resolve_token` (one token
   value), `style_pack`, `check_contrast` (WCAG ratio of two colours or tokens),
   `memory_field` (memory field SVG, text equivalent and contrast report),
-  `stage_backdrop` (stage SVG plus its contrast report) and
-  `component_catalog` (discover and retrieve modular `preview/` components by ID, category, or consumer).
+  `stage_backdrop` (stage SVG plus its contrast report),
+  `component_catalog` (discover and retrieve modular `preview/` components by ID, category, or consumer),
+  `design_brief` (compile structured design briefs + Keep/Change/Do not copy reference contracts), and
+  `scaffold_page` (assemble multi-slot Nocturne page scaffolds with required stylesheets and framework notes).
 - **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
   naming convention. Raster binaries are not committed. Text-only SVG under `brand/`
   is a proposed exception (ADR-011, awaiting ratification).
@@ -85,7 +88,7 @@ Within the `videsign` repository, agents are restricted to the following command
   `dist/stage-ambient.svg`, `dist/stage-hero.svg`, `dist/memory-field.css`,
   `dist/memory-field-sample.svg`, `dist/memory-pipeline-sample.svg`, `dist/tokens.ts`,
   `dist/ViTokens.swift`, `dist/videsign_tokens.py`, `dist/tokens.dtcg.json`, `dist/dialects.css`,
-  `dist/dialects.json` and `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
+  `dist/dialects.json`, `dist/components.manifest.json` and `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
 - `npm test`: Runs `node --test test/*.test.js`: the MCP stdio smoke test
   (`test/mcp-server.test.js`), the token contract (`test/tokens.test.js`),
   the theme contract (`test/themes.test.js`), the preview fragment contract
@@ -94,6 +97,7 @@ Within the `videsign` repository, agents are restricted to the following command
   contract (`test/persona-canon.test.js`), the canon tool contract
   (`test/canon-tool.test.js`), the pipeline pack contract (`test/pipeline-packs.test.js`),
   the asset service contract (`test/asset-service.test.js`),
+  the collaborative design studio contract (`test/design-studio.test.js`),
   the stage primitive contract (`test/stage.test.js`), the memory field contract
   (`test/memory-field.test.js`), the platform token contract (`test/platforms.test.js`),
   the persona dialect contract (`test/dialects.test.js`), and the safety hash builder
