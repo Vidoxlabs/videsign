@@ -88,7 +88,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });
@@ -270,4 +270,47 @@ test('the instrument fragment follows ADR-017', () => {
   assert.match(html, /<dl aria-live="polite" aria-label="Receipt"/);
   // No seat colour: a single stage is never painted in one seat's colour.
   assert.doesNotMatch(html, /persona-accent-/);
+});
+
+test('the group-conversation fragment follows ADR-020', () => {
+  const html = read('group-conversation.html');
+  // Persona accent ban and no solid violet fill (rings use border-surface-accent-violet-base).
+  assert.doesNotMatch(html, /persona-accent-/);
+  assert.doesNotMatch(html, /bg-surface-accent-violet-base/);
+  // Dialog, glass shell + core, one header, one log, one composer, one disclosure.
+  assert.match(html, /role="dialog" aria-modal="false" aria-label="Agent harness thread"/);
+  assert.match(html, /\bvi-glass-shell\b[\s\S]*\bw-layout-width-conversation-base\b/);
+  assert.match(html, /\bvi-glass-core\b/);
+  assert.equal([...html.matchAll(/<header\b/g)].length, 1);
+  assert.match(html, /role="log" aria-live="polite" aria-relevant="additions" aria-label="Group conversation"/);
+  assert.equal([...html.matchAll(/<form\b/g)].length, 1);
+  assert.equal([...html.matchAll(/<details\b/g)].length, 1);
+  // Deterministic monogram badges: head agent CA uses surface-accent-violet ring, specialist SA uses graph-line outline.
+  assert.match(html, /border-surface-accent-violet-base[^>]*>CA</);
+  assert.match(html, /border-border-graph-line-base[^>]*>SA</);
+  // Speaker rhythm: two consecutive turns from SA render only one Schema auditor header; visitor turn is the only bubble.
+  const log = html.match(/role="log"[\s\S]*?<form/)[0];
+  assert.equal([...log.matchAll(/Schema auditor/g)].length, 1);
+  assert.equal([...log.matchAll(/Coordinator/g)].length, 1);
+  assert.match(log, /justify-end[\s\S]*bg-surface-background-tertiary-base[^>]*><span class="sr-only">You said: <\/span>/);
+  // Hairline receipt-ledger rows in polite live regions for handoffs, usage and budget.
+  const ledgers = [...log.matchAll(/<dl aria-live="polite"[^>]*>([\s\S]*?)<\/dl>/g)];
+  assert.ok(ledgers.length >= 2);
+  assert.match(log, /border-border-separator-primary-base/);
+  assert.match(log, /Handoff/);
+  assert.match(log, /Usage[\s\S]*tabular-nums/);
+  assert.match(log, /Budget[\s\S]*tabular-nums/);
+  // Solid artifact card: secondary surface, standard radius, filename and mono micro-line (hash + author), no inline preview pane.
+  assert.match(log, /bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base[\s\S]*token-audit-report\.md[\s\S]*sha256: [0-9a-f]{7} · author: SA/);
+  assert.doesNotMatch(log, /<pre|<code|vi-glass/);
+  // All four turn-state status tokens paired with text labels, plus one retry control on failure.
+  assert.match(html, /bg-status-indicator-info-base[\s\S]*?running/);
+  assert.match(html, /bg-status-indicator-warning-base[\s\S]*?stopping/);
+  assert.match(html, /bg-status-indicator-success-base[\s\S]*?finished/);
+  assert.match(html, /bg-status-indicator-error-base[\s\S]*?failed[\s\S]*?>Retry<\/button>/);
+  // Hover/focus message actions and touch target floors.
+  assert.match(log, /group-hover:opacity-100 focus:opacity-100[^>]*>Copy<\/button>/);
+  for (const m of html.matchAll(/<(button|textarea)\b[^>]*class="([^"]*)"/g)) {
+    assert.match(m[2], /h-action-(min|wide)-default/, m[0].slice(0, 80));
+  }
 });

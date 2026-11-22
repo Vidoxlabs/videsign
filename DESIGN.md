@@ -273,6 +273,22 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 
 > [!IMPORTANT]
 >
+> ### Group conversation surface (ADR-020)
+>
+> Extends ADR-016 for agent-harness group threads (a coordinating head agent plus dynamic, runtime-created specialists).
+>
+> - **Persona accent ban.** The five persona signature tokens (`{colors.persona-accent-violet-base}` through `{colors.persona-accent-zinnia-base}`) belong exclusively to the five sovereign VWXYZ seats and are never reused for dynamic, non-persona agents or specialist roles.
+> - **Deterministic monogram identity.** Every runtime agent is identified by a deterministic one- or two-letter monogram in `{typography.typography-family-mono-base}` inside a circular badge (`{spacing.layout-radius-full-base}`) with a neutral fill (`{colors.surface-background-tertiary-base}` or `{colors.surface-background-secondary-base}`) and a `{colors.border-graph-line-base}` outline (at least 3:1). The coordinating head agent reserves a `{colors.surface-accent-violet-base}` ring (at least 3:1 non-text indicator).
+> - **Mono role micro-labels.** Each agent's role sits beside its name as a sentence-case micro-label in `{typography.typography-family-mono-base}` (`{typography.typography-size-xs-base}`, `{typography.typography-tracking-wide-base}`, `{colors.text-content-secondary-base}`), never uppercase-transformed.
+> - **Speaker rhythm.** The monogram badge, agent name and role micro-label head a turn only when the speaker changes, and on the first agent turn; consecutive turns from one agent carry no repeated header. The visitor's turn is the only bubble (`{colors.surface-background-tertiary-base}`, aligned to the end); agent replies are text on the core with no card around prose.
+> - **Receipt-ledger rows.** Handoffs, tool activity, and token/cost usage and budget readouts render as hairline-separated rows (`{colors.border-separator-primary-base}`, per ADR-017): a mono micro-label paired with a `tabular-nums` mono value inside a polite live region.
+> - **Artifact and file cards.** Shared files and produced artifacts render as solid cards on `{colors.surface-background-secondary-base}` (never glass) with `{spacing.layout-radius-standard-base}` radius and a `{colors.border-separator-primary-base}` border, showing filename and a mono micro-line with the short content hash and authoring agent. Inline preview panes, nested code viewers and drop shadows are banned.
+> - **Turn-state grammar.** States pair a status token with a text label: `running` (`{colors.status-indicator-info-base}`), `stopping` (`{colors.status-indicator-warning-base}`), `finished` (`{colors.status-indicator-success-base}`) and `failed` (`{colors.status-indicator-error-base}`, one plain sentence with one retry control). A thinking pulse is the only loop (static under reduced motion); spinners and skeleton bubbles are banned.
+> - **Message actions.** Copy and per-turn commands appear on hover and keyboard focus inside the message (`{size.action-min-default}` hit target), or on the latest reply where hover is unavailable.
+> - Reference: `preview/group-conversation.html`.
+
+> [!IMPORTANT]
+>
 > ### Explorable instrument (ADR-017)
 >
 > The standard for interactive panels inside articles and proofs.
