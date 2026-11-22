@@ -88,7 +88,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'group-conversation', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });
@@ -313,4 +313,67 @@ test('the group-conversation fragment follows ADR-020', () => {
   for (const m of html.matchAll(/<(button|textarea)\b[^>]*class="([^"]*)"/g)) {
     assert.match(m[2], /h-action-(min|wide)-default/, m[0].slice(0, 80));
   }
+});
+
+test('modular conversation components follow ADR-016 and ADR-017 budgets and aria', () => {
+  // 1. speaker-marker.html (ADR-016 item 5)
+  const speaker = read('speaker-marker.html');
+  const segmentGroup = speaker.match(/<div aria-hidden="true" class="[^"]*">([\s\S]*?)<\/div>/);
+  assert.ok(segmentGroup, 'speaker-marker segment container must carry aria-hidden="true"');
+  const segments = [...segmentGroup[1].matchAll(/<span class="([^"]*)"><\/span>/g)].map((m) => m[1]);
+  assert.equal(segments.length, 5, 'speaker-marker must have five segments');
+  assert.deepEqual(
+    segments.map((cls) => (cls.match(/bg-persona-accent-([a-z]+)-base/) || [])[1]),
+    CANON,
+    'speaker-marker segments must follow CANON order',
+  );
+  const lit = segments.filter((cls) => /\bw-indicator-mark-base\b/.test(cls));
+  const dimmed = segments.filter((cls) => /\bw-indicator-dot-base\b/.test(cls) && /\bopacity-40\b/.test(cls));
+  assert.equal(lit.length, 1, 'speaker-marker must have exactly one lit segment');
+  assert.equal(dimmed.length, 4, 'speaker-marker must have four dimmed segments');
+  assert.doesNotMatch(speaker, /text-persona-accent-/);
+
+  // 2. receipt-ledger-row.html (ADR-017 item 6, ADR-020 item 5)
+  const receipt = read('receipt-ledger-row.html');
+  assert.match(receipt, /<dl aria-live="polite" aria-label="Receipt"/);
+  assert.match(receipt, /border-border-separator-primary-base/);
+  const terms = [...receipt.matchAll(/<dt class="([^"]*)">/g)];
+  const details = [...receipt.matchAll(/<dd class="([^"]*)">/g)];
+  assert.ok(terms.length >= 2 && terms.length === details.length, 'receipt ledger must pair <dt> and <dd> rows');
+  for (const m of terms) {
+    assert.match(m[1], /font-typography-family-mono-base/);
+    assert.match(m[1], /tracking-typography-tracking-wide-base/);
+  }
+  for (const m of details) {
+    assert.match(m[1], /font-typography-family-mono-base/);
+    assert.match(m[1], /tabular-nums/);
+  }
+  assert.doesNotMatch(receipt, /vi-glass|persona-accent-/);
+
+  // 3. turn-state-chip.html (ADR-020 item 7)
+  const turnStates = read('turn-state-chip.html');
+  assert.match(turnStates, /role="status"/);
+  assert.match(turnStates, /aria-live="polite"/);
+  for (const [token, label] of [
+    ['bg-status-indicator-info-base', 'running'],
+    ['bg-status-indicator-warning-base', 'stopping'],
+    ['bg-status-indicator-success-base', 'finished'],
+    ['bg-status-indicator-error-base', 'failed'],
+  ]) {
+    assert.match(turnStates, new RegExp(`${token}[^>]*><\\/span>${label}<`), `missing ${token} paired with ${label}`);
+  }
+  assert.doesNotMatch(turnStates, /persona-accent-|animate-pulse/);
+
+  // 4. starter-chips.html (ADR-016 item 8)
+  const starters = read('starter-chips.html');
+  const starterGroup = starters.match(/<div role="group" aria-label="Starters"[^>]*>([\s\S]*?)<\/div>/);
+  assert.ok(starterGroup, 'starter-chips must wrap buttons in role="group" aria-label="Starters"');
+  const starterButtons = [...starterGroup[1].matchAll(/<button\b[^>]*class="([^"]*)"[^>]*>/g)];
+  assert.equal(starterButtons.length, 4, 'starter-chips fixture must show 4 buttons');
+  assert.ok(starterButtons.length >= 1 && starterButtons.length <= 4, 'at most 4 starter buttons');
+  for (const m of starterButtons) {
+    assert.match(m[1], /\bh-action-min-default\b/);
+    assert.match(m[1], /\brounded-layout-radius-full-base\b/);
+  }
+  assert.doesNotMatch(starters, /bg-surface-accent-violet-base/);
 });
