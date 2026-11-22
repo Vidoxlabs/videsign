@@ -488,10 +488,11 @@
     }
     .layout-viewport {
       width: 100%;
-      height: 560px;
+      height: 640px;
       border: 0;
       border-radius: 0;
       overflow: hidden;
+      position: relative;
       background: var(--vi-colors-surface-background-primary-base);
       transition: width var(--vi-transition-transition-duration-normal-base) var(--vi-transition-transition-easing-standard-base);
     }
@@ -510,6 +511,7 @@
       width: 100%;
       height: 100%;
       border: 0;
+      transform-origin: top left;
     }
 
     .legacy-drawer {
@@ -819,6 +821,25 @@
         .replace(/\{ASSET_BASE\}/g, '..');
     }
 
+    function applyViewportScale(viewport) {
+      if (!viewport) return;
+      var iframe = viewport.querySelector('iframe');
+      if (!iframe) return;
+      var targetW = Number(viewport.dataset.width || '1440');
+      var availW = viewport.clientWidth || targetW;
+      var availH = viewport.clientHeight || 640;
+      var scale = availW < targetW ? availW / targetW : 1;
+      iframe.style.width = targetW + 'px';
+      iframe.style.height = Math.round(availH / scale) + 'px';
+      iframe.style.transform = scale < 1 ? 'scale(' + scale.toFixed(4) + ')' : '';
+    }
+
+    var viewportResizeObserver = 'ResizeObserver' in window
+      ? new ResizeObserver(function (entries) {
+          entries.forEach(function (entry) { applyViewportScale(entry.target); });
+        })
+      : null;
+
     function loadFragment(record) {
       if (record.loaded) return;
       record.loaded = true;
@@ -839,6 +860,12 @@
             record.viewport.innerHTML = '';
             record.viewport.appendChild(iframe);
             mountedIframes.push(iframe);
+            applyViewportScale(record.viewport);
+            if (viewportResizeObserver) viewportResizeObserver.observe(record.viewport);
+            if (record.openLink) {
+              var blob = new Blob([framedDocument(html)], { type: 'text/html' });
+              record.openLink.href = URL.createObjectURL(blob);
+            }
           } else {
             record.frame.innerHTML = html;
             normalizeSpecimenHeadings(record.frame);
@@ -1015,6 +1042,7 @@
           (f.frame ? ' layout-frame' : '');
 
         var viewport = null;
+        var openLink = null;
         if (f.frame) {
           var controls = document.createElement('div');
           controls.className = 'specimen-controls';
@@ -1036,32 +1064,19 @@
               controls.querySelectorAll('[data-vp]').forEach(function (b) {
                 b.setAttribute('aria-pressed', b === vpBtn ? 'true' : 'false');
               });
+              requestAnimationFrame(function () { applyViewportScale(viewport); });
             });
             vpBtn.dataset.vp = w;
             controls.appendChild(vpBtn);
           });
 
-          var openBtn = document.createElement('button');
-          openBtn.type = 'button';
-          openBtn.className = 'ctl-btn';
-          openBtn.textContent = 'Open isolated';
-          openBtn.addEventListener('click', function () {
-            var openDoc = function (html) {
-              var blob = new Blob([framedDocument(html)], { type: 'text/html' });
-              var url = URL.createObjectURL(blob);
-              window.open(url, '_blank', 'noopener');
-            };
-            if (fragmentHtmlCache[f.file]) {
-              openDoc(fragmentHtmlCache[f.file]);
-            } else {
-              fetch(f.file).then(function (r) { return r.text(); }).then(function (raw) {
-                var html = resolveAssets(raw);
-                fragmentHtmlCache[f.file] = html;
-                openDoc(html);
-              });
-            }
-          });
-          controls.appendChild(openBtn);
+          openLink = document.createElement('a');
+          openLink.className = 'ctl-btn';
+          openLink.textContent = 'Open isolated';
+          openLink.target = '_blank';
+          openLink.rel = 'noopener';
+          openLink.href = f.file;
+          controls.appendChild(openLink);
           head.appendChild(controls);
         }
 
@@ -1110,6 +1125,7 @@
           card: card,
           frame: frame,
           viewport: viewport,
+          openLink: typeof openLink !== 'undefined' ? openLink : null,
           link: link,
           loaded: false,
           haystack: (f.label + ' ' + f.file + ' ' + f.desc + ' ' + (f.note || '') + ' ' + f.tier).toLowerCase()

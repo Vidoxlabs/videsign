@@ -98,12 +98,17 @@ test('docs-portal.css enforces container queries, zero px units, scroll-margin, 
     '@container docs-portal (max-width: 74rem)',
     '@container docs-portal (max-width: 60rem)',
     '@container docs-portal (max-width: 36rem)',
-    '@container docs-main (max-width: 48rem)',
+    '@container docs-main (max-width: 44rem)',
+    '.vi-docs-btn.vi-docs-mobile-menu-btn',
     '@media (prefers-reduced-motion: reduce)',
     '@media (forced-colors: active)',
   ]) {
     assert.ok(css.includes(token), `docs-portal.css missing required rule/token: ${token}`);
   }
+  assert.ok(
+    css.indexOf('.vi-docs-btn.vi-docs-mobile-menu-btn') > css.indexOf('.vi-docs-btn {'),
+    'mobile menu button display:none rule must follow .vi-docs-btn in the cascade',
+  );
   const emitted = emitDocsPortalArtifacts();
   assert.equal(emitted['docs-portal.css'], css);
   assert.equal(emitted['docs-portal.js'], fs.readFileSync(path.join(ROOT, 'lib', 'docs-portal.js'), 'utf-8'));
@@ -272,6 +277,10 @@ test('lib/docs-portal.js drives synced code tabs, facet filtering, Cmd+K palette
   }
 
   function matchSingle(node, sel) {
+    if (sel === 'a[href^="#"]') {
+      const href = node.getAttribute('href') || '';
+      return node.tagName === 'A' && href.startsWith('#');
+    }
     if (sel === 'input, button, a[href], textarea') {
       return ['INPUT', 'BUTTON', 'A', 'TEXTAREA'].includes(node.tagName);
     }
@@ -482,7 +491,14 @@ test('lib/docs-portal.js drives synced code tabs, facet filtering, Cmd+K palette
   mockDoc.dispatch('keydown', { key: 'Escape' });
   assert.equal(chatSheet.hidden, true);
 
-  // 5. Scroll-spy TOC via IntersectionObserver
+  // 5. Scroll-spy TOC via IntersectionObserver + same-document #hash click interception
+  const hashEv = toc2.click();
+  assert.equal(hashEv.defaultPrevented, true, 'same-document #hash link must preventDefault to stay inside srcdoc iframes');
+  assert.equal(h2.scrolledIntoView, true);
+  assert.equal(toc2.getAttribute('aria-current'), 'location');
+  spyCb([{ isIntersecting: true, target: h1 }]);
+  assert.equal(toc1.getAttribute('aria-current'), 'location');
+  assert.equal(toc2.getAttribute('aria-current'), null);
   spyCb([{ isIntersecting: true, target: h2 }]);
   assert.equal(toc1.getAttribute('aria-current'), null);
   assert.equal(toc2.getAttribute('aria-current'), 'location');
