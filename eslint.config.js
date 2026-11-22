@@ -28,4 +28,12 @@ module.exports = [
       'tailwindcss/no-arbitrary-value': 'error',
     },
   },
+  {
+    // The consumer toolkit is ES modules, unlike the CommonJS scripts above.
+    files: ['consumer/**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+    },
+  },
 ];

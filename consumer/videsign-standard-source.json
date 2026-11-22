@@ -1,0 +1,576 @@
+{
+  "meta": {
+    "designSystem": "Nocturne Museum",
+    "version": "1.1.0",
+    "canonicalProvenance": "Vidoxlabs/videsign",
+    "authorityFiles": [
+      "DESIGN.md",
+      "SKILL.md"
+    ],
+    "generatedBy": "scripts/generate-standard.js",
+    "pinnedSha": "eb9a67def80c9f0ecbf28a33a31319247ead31b6"
+  },
+  "tokens": {
+    "colors": {
+      "surface-background-primary-base": "#0A0A0E",
+      "surface-background-secondary-base": "#12121A",
+      "surface-background-tertiary-base": "#1C1C24",
+      "surface-accent-violet-base": "#8B5CF6",
+      "surface-accent-violet-hover": "#6D28D9",
+      "surface-accent-violet-active": "#5B21B6",
+      "text-content-primary-base": "#FFFFFF",
+      "text-content-secondary-base": "#A1A1AA",
+      "border-separator-primary-base": "#27272A",
+      "text-content-on-accent-base": "#FFFFFF",
+      "surface-background-primary-light": "#F8F9FA",
+      "surface-background-secondary-light": "#FFFFFF",
+      "surface-background-tertiary-light": "#F1F3F5",
+      "text-content-primary-light": "#0F172A",
+      "text-content-secondary-light": "#475569",
+      "border-separator-primary-light": "#CBD5E1",
+      "border-graph-line-base": "#80808A",
+      "border-graph-line-light": "#64748B",
+      "status-indicator-success-base": "#10B981",
+      "status-indicator-warning-base": "#F59E0B",
+      "status-indicator-error-base": "#F43F5E",
+      "status-indicator-info-base": "#06B6D4",
+      "persona-accent-violet-base": "#8B5CF6",
+      "persona-accent-wisteria-base": "#B4A7F2",
+      "persona-accent-xylia-base": "#D92B3A",
+      "persona-accent-yarrow-base": "#F0A020",
+      "persona-accent-zinnia-base": "#E13D9E"
+    },
+    "typography": {
+      "typography-family-sans-base": "Geist, ui-sans-serif, system-ui, sans-serif",
+      "typography-family-mono-base": "Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace",
+      "typography-weight-regular-base": "400",
+      "typography-weight-medium-base": "500",
+      "typography-weight-semibold-base": "600",
+      "typography-weight-bold-base": "700",
+      "typography-tracking-tight-base": "-0.02em",
+      "typography-tracking-normal-base": "0",
+      "typography-tracking-wide-base": "0.04em",
+      "typography-tracking-widest-base": "0.08em",
+      "typography-leading-none-base": "1",
+      "typography-leading-tight-base": "1.25",
+      "typography-leading-normal-base": "1.5",
+      "typography-size-xs-base": "0.75rem",
+      "typography-size-sm-base": "0.875rem",
+      "typography-size-md-base": "1rem",
+      "typography-size-lg-base": "1.125rem",
+      "typography-size-xl-base": "1.25rem",
+      "typography-size-2xl-base": "1.5rem",
+      "typography-size-3xl-base": "1.875rem",
+      "typography-size-4xl-base": "2.5rem",
+      "typography-size-5xl-base": "3.5rem",
+      "typography-fluid-display-base": "clamp(2rem, 1.5rem + 2vw, 3.5rem)",
+      "typography-fluid-h1-base": "clamp(2rem, 1.5rem + 2vw, 3.5rem)",
+      "typography-fluid-h2-base": "clamp(1.5rem, 1.25rem + 1vw, 2.5rem)",
+      "typography-fluid-h3-base": "clamp(1.25rem, 1.1rem + 0.6vw, 2rem)",
+      "typography-fluid-lede-base": "clamp(1rem, 0.95rem + 0.2vw, 1.25rem)",
+      "typography-fluid-body-base": "clamp(1rem, 0.96rem + 0.15vw, 1.0625rem)",
+      "typography-fluid-caption-base": "clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem)",
+      "typography-fluid-hero-base": "clamp(2.75rem, 6vw + 0.5rem, 5.25rem)"
+    },
+    "effects": {
+      "glass-crystal-surface-base": "rgba(255, 255, 255, 0.035)",
+      "glass-crystal-surface-hover": "rgba(255, 255, 255, 0.07)",
+      "glass-crystal-rim-base": "rgba(255, 255, 255, 0.26)",
+      "glass-crystal-rim-hover": "rgba(255, 255, 255, 0.4)",
+      "glass-crystal-highlight-base": "inset 0 1px 0 rgba(255, 255, 255, 0.32), inset 0 0 0 1px rgba(255, 255, 255, 0.03)",
+      "glass-crystal-sheen-base": "linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 35%)",
+      "glass-crystal-shadow-base": "0 12px 30px rgba(0, 0, 0, 0.3)",
+      "glass-crystal-backdrop-base": "blur(14px) brightness(0.5) saturate(150%)",
+      "glass-crystal-core-base": "rgba(10, 10, 14, 0.85)",
+      "glass-crystal-solid-base": "#12121A",
+      "glass-crystal-solid-light": "#FFFFFF",
+      "glass-crystal-rim-light": "rgba(15, 23, 42, 0.24)",
+      "ambient-glow-violet-base": "rgba(124, 58, 237, 0.30)",
+      "ambient-glow-teal-base": "rgba(45, 212, 191, 0.16)",
+      "ambient-dots-base": "rgba(161, 161, 170, 0.14)"
+    },
+    "spacing": {
+      "layout-radius-standard-base": "14px",
+      "layout-radius-control-base": "10px",
+      "layout-radius-full-base": "9999px",
+      "layout-radius-glass-base": "20px",
+      "layout-padding-small-base": "8px",
+      "layout-padding-medium-base": "16px",
+      "layout-padding-large-base": "24px",
+      "layout-padding-bezel-base": "6px"
+    },
+    "size": {
+      "action-min-default": "2.75rem",
+      "action-dense-default": "3rem",
+      "action-wide-default": "3.5rem",
+      "layout-width-sidebar-base": "16rem",
+      "layout-width-inspector-base": "20rem",
+      "layout-width-conversation-base": "27.5rem",
+      "layout-width-content-base": "80rem",
+      "icon-xs-base": "1rem",
+      "icon-sm-base": "1.5rem",
+      "icon-md-base": "2rem",
+      "icon-lg-base": "2.75rem",
+      "indicator-dot-base": "0.5rem",
+      "indicator-mark-base": "0.75rem",
+      "indicator-brand-base": "1.75rem",
+      "indicator-fivebar-base": "3px"
+    },
+    "space": {
+      "gap-dense-default": "0.25rem",
+      "gap-compact-default": "0.5rem",
+      "gap-comfortable-default": "0.75rem",
+      "gap-spacious-default": "1rem",
+      "gap-section-default": "1.25rem",
+      "inset-compact-default": "0.5rem",
+      "inset-operator-default": "0.75rem",
+      "layout-stack-default": "1rem",
+      "rhythm-1-base": "0.25rem",
+      "rhythm-2-base": "0.5rem",
+      "rhythm-3-base": "0.75rem",
+      "rhythm-4-base": "1rem",
+      "rhythm-5-base": "1.25rem",
+      "rhythm-6-base": "1.5rem",
+      "rhythm-8-base": "2rem",
+      "rhythm-10-base": "2.5rem",
+      "rhythm-12-base": "3rem",
+      "rhythm-16-base": "4rem",
+      "rhythm-20-base": "5rem",
+      "rhythm-24-base": "6rem",
+      "rhythm-page-gutter-base": "1.5rem",
+      "rhythm-section-y-base": "4rem",
+      "rhythm-macro-base": "6rem"
+    },
+    "transition": {
+      "transition-duration-fast-base": "150ms",
+      "transition-duration-normal-base": "200ms",
+      "transition-duration-slow-base": "300ms",
+      "transition-duration-entrance-base": "500ms",
+      "transition-duration-ambient-drift-base": "32s",
+      "transition-duration-ambient-pulse-base": "6s",
+      "transition-easing-standard-base": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "transition-easing-spring-base": "cubic-bezier(0.32, 0.72, 0, 1)"
+    }
+  },
+  "rules": {
+    "glass": {
+      "material": "crystal",
+      "scope": [
+        "island navigation",
+        "overlays and popovers",
+        "question bar",
+        "persona switcher",
+        "evidence lens",
+        "chat dock"
+      ],
+      "neverOn": [
+        "paragraphs",
+        "cards",
+        "section containers",
+        "sidebars"
+      ],
+      "maxLayersPerViewport": 3,
+      "neverGlassOnGlass": true,
+      "neverBackdropBlurOnScrollingContainers": true,
+      "neverAnimateBlur": true,
+      "textBearing": "shell+core",
+      "classes": {
+        "single": "vi-glass",
+        "shell": "vi-glass-shell",
+        "core": "vi-glass-core",
+        "shellPill": "vi-glass-shell--pill",
+        "corePill": "vi-glass-core--pill",
+        "control": "vi-glass--control"
+      },
+      "legibilityFloor": 4.5,
+      "fallbacks": [
+        "prefers-reduced-transparency: reduce",
+        "prefers-contrast: more",
+        "forced-colors: active",
+        "@supports not backdrop-filter"
+      ],
+      "banLegacyUtilities": [
+        "backdrop-blur-*",
+        "bg-white/*"
+      ]
+    },
+    "typography": {
+      "sans": "Geist, ui-sans-serif, system-ui, sans-serif",
+      "mono": "Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace",
+      "displayWeight": "600",
+      "bodyWeight": "400",
+      "displayTracking": "-0.02em",
+      "labelTracking": "0.04em",
+      "sentenceCase": true,
+      "banUppercaseUtility": true,
+      "banTitleCase": true,
+      "monoFor": [
+        "nav",
+        "labels",
+        "status",
+        "eyebrows",
+        "table headers"
+      ],
+      "sansFor": [
+        "section titles",
+        "descriptions",
+        "body"
+      ]
+    },
+    "copy": {
+      "sentenceCase": true,
+      "noLoremIpsum": true,
+      "noEmoji": true,
+      "noOverclaim": [
+        "verified",
+        "signed",
+        "Authorize action"
+      ]
+    },
+    "geometry": {
+      "radiusStandard": "14px",
+      "radiusControl": "10px",
+      "radiusGlass": "20px",
+      "radiusFull": "9999px",
+      "bezel": "6px",
+      "banRadius32px": true,
+      "concentricShell": "20 = 6 + 14 (rim as inset box-shadow)"
+    },
+    "motion": {
+      "durationsMs": {
+        "fast": "150ms",
+        "normal": "200ms",
+        "slow": "300ms",
+        "entrance": "500ms"
+      },
+      "easing": {
+        "standard": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "spring": "cubic-bezier(0.32, 0.72, 0, 1)"
+      },
+      "animateOnly": [
+        "transform",
+        "opacity"
+      ],
+      "zeroBounce": true,
+      "reducedMotion": "final state under prefers-reduced-motion: reduce",
+      "ambient": {
+        "drift": "32s",
+        "pulse": "6s",
+        "scope": "ambient loops only (the stage backdrop), never interactions",
+        "pauseControl": "visible control in every product (WCAG 2.2.2)"
+      }
+    },
+    "stage": {
+      "adr": "ADR-013",
+      "lights": [
+        "violet",
+        "wisteria",
+        "xylia",
+        "yarrow",
+        "zinnia"
+      ],
+      "crown": "xylia",
+      "ringSegmentsCanonCycle": true,
+      "oneSignatureColourPerGradient": true,
+      "noGridPattern": true,
+      "dotGridRetired": true,
+      "readingTextBound": "every layer keeps secondary text at 4.5:1; full strength only behind a scrim",
+      "stopsUnder": [
+        "prefers-reduced-motion: reduce",
+        "pause control"
+      ],
+      "primitive": "lib/stage.js",
+      "stylesheet": "dist/stage.css",
+      "ambientOpacity": 0.26,
+      "narrowAmbientOpacity": 0.16,
+      "heroTextScrim": 0.72,
+      "contrastOver": "page field only; opaque surfaces cover the stage"
+    },
+    "fiveBar": {
+      "adr": "ADR-013",
+      "order": [
+        "violet",
+        "wisteria",
+        "xylia",
+        "yarrow",
+        "zinnia"
+      ],
+      "height": "3px",
+      "hardSegments": true,
+      "usedOn": [
+        "under the wordmark or a hero headline",
+        "top of bezelled fact panels",
+        "foot of the chat launcher"
+      ]
+    },
+    "graphLine": {
+      "adr": "ADR-013",
+      "dark": "#80808A",
+      "light": "#64748B",
+      "minContrast": 3,
+      "hairlineForSeparatorsOnly": "#27272A"
+    },
+    "chatDock": {
+      "adr": "ADR-013",
+      "launcher": "fixed bottom right, at least the touch target, mark or five seat dots plus a label, five-bar foot",
+      "dialog": {
+        "role": "dialog",
+        "ariaModal": false,
+        "closesOn": "Escape",
+        "material": "glass shell + core"
+      },
+      "log": {
+        "role": "log",
+        "ariaLive": "polite",
+        "ariaRelevant": "additions",
+        "labelled": true
+      },
+      "personaSwitcher": {
+        "seats": [
+          "violet",
+          "wisteria",
+          "xylia",
+          "yarrow",
+          "zinnia"
+        ],
+        "pressedState": "aria-pressed"
+      },
+      "seatNamesInPrimaryText": true,
+      "composer": "Enter sends, Shift+Enter adds a line",
+      "disclosureRequired": true,
+      "neverDrawTheMark": true
+    },
+    "conversation": {
+      "adr": "ADR-016",
+      "appliesTo": [
+        "chat dock",
+        "full-page chat",
+        "native product panels"
+      ],
+      "atRest": [
+        "one header row",
+        "the conversation",
+        "one composer field",
+        "one disclosure line"
+      ],
+      "header": {
+        "rows": 1,
+        "firstLine": [
+          "seat name",
+          "seat role",
+          "overflow menu",
+          "close"
+        ],
+        "secondLine": [
+          "seat dots"
+        ],
+        "heightSetBy": "avatar",
+        "narrow": "the role is dropped; nothing wraps",
+        "notPrinted": [
+          "product title",
+          "model badge",
+          "state label"
+        ],
+        "overflowMenus": 1
+      },
+      "seatDots": {
+        "seats": [
+          "violet",
+          "wisteria",
+          "xylia",
+          "yarrow",
+          "zinnia"
+        ],
+        "pressedState": "aria-pressed",
+        "namedBy": "accessible name",
+        "minTarget": "2.75rem",
+        "printsNames": false
+      },
+      "messages": {
+        "guide": "text on the core, no card",
+        "visitor": "the only bubble, tertiary surface, aligned to the end",
+        "speakerMarker": "five-segment marker and seat name, only when the speaker changes",
+        "actions": "on hover and keyboard focus; on the latest reply where hover is unavailable",
+        "provenance": "labelled only off the default path"
+      },
+      "starters": {
+        "max": 4,
+        "sources": 1,
+        "leaveAfterFirstTurn": true
+      },
+      "followUps": {
+        "max": 3,
+        "latestReplyOnly": true
+      },
+      "composer": {
+        "fields": 1,
+        "sendInsideField": true,
+        "optionalModeOnlyWhileEmpty": true,
+        "keys": "Enter sends, Shift+Enter adds a line"
+      },
+      "disclosure": {
+        "linesAtRest": 1,
+        "detail": "expands in place",
+        "beforeFirstTurn": "the full statement stands where typed text is sent to a service"
+      },
+      "states": [
+        "idle",
+        "composing",
+        "thinking",
+        "streaming",
+        "settled",
+        "failed"
+      ],
+      "motion": {
+        "open": "300ms",
+        "openEasing": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "turnEnter": "200ms",
+        "onlyLoop": "thinking pulse"
+      },
+      "fullPageMeasure": "65ch"
+    },
+    "instrument": {
+      "adr": "ADR-017",
+      "everyControlHasConsequence": true,
+      "opensWith": [
+        "what it shows",
+        "what to try"
+      ],
+      "anatomy": [
+        "diagram as readout",
+        "controls",
+        "receipt"
+      ],
+      "surface": "solid panel on the secondary surface, never glass",
+      "controls": {
+        "boolean": "switch row, whole row is the hit area",
+        "number": "labelled range with a tabular mono value",
+        "presets": "one segmented control",
+        "banned": [
+          "bordered fieldset",
+          "default checkbox",
+          "duplicate heading and legend"
+        ],
+        "minTarget": "2.75rem"
+      },
+      "diagram": {
+        "line": "#80808A",
+        "current": "accent outline",
+        "blocked": "#F43F5E",
+        "blockedNeedsTextLabel": true,
+        "labelsNeverOverlap": true
+      },
+      "receipt": {
+        "form": "hairline-separated ledger rows",
+        "ariaLive": "polite"
+      },
+      "syntheticStatedOnce": true,
+      "seatColoursOnlyAsSetOfFive": true
+    },
+    "spacing": {
+      "rhythmBasePx": 4,
+      "pageGutter": "1.5rem",
+      "sectionY": "4rem",
+      "macroWhitespace": "6rem"
+    },
+    "accessibility": {
+      "minTouchTarget": "2.75rem",
+      "contrastFloorText": 4.5,
+      "contrastFloorNonText": 3,
+      "personaVioletAccentTextSurfaces": [
+        "primary"
+      ],
+      "xyliaNeverText": true,
+      "xyliaNeverAlone": true,
+      "pauseControlForAmbientMotion": true
+    },
+    "personaAccents": {
+      "violet": "#8B5CF6",
+      "wisteria": "#B4A7F2",
+      "xylia": "#D92B3A",
+      "yarrow": "#F0A020",
+      "zinnia": "#E13D9E",
+      "brandAccent": "#8B5CF6",
+      "note": "Persona accents are identity markers only; never status."
+    }
+  },
+  "adrs": [
+    {
+      "id": "ADR-001",
+      "title": "Strict Surface Layering",
+      "status": "Accepted"
+    },
+    {
+      "id": "ADR-002",
+      "title": "Asset & Media Hosting",
+      "status": "Accepted"
+    },
+    {
+      "id": "ADR-003",
+      "title": "Continuous Interaction via Browser Primitives",
+      "status": "Accepted"
+    },
+    {
+      "id": "ADR-004",
+      "title": "Persona Identity Accents",
+      "status": "Accepted"
+    },
+    {
+      "id": "ADR-005",
+      "title": "Hero Billboard Exception",
+      "status": "Accepted"
+    },
+    {
+      "id": "ADR-006",
+      "title": "Crystal Glass Material",
+      "status": "Proposed (awaiting owner ratification). Amends ADR-001."
+    },
+    {
+      "id": "ADR-007",
+      "title": "Typography (Geist and Geist Mono)",
+      "status": "Proposed (awaiting owner ratification). Supersedes the Inter and JetBrains Mono family values in the token matrix, and the font choice in vidoxlabs.dev ADR 0029 on PR #8."
+    },
+    {
+      "id": "ADR-008",
+      "title": "Motion and Radii",
+      "status": "Proposed (awaiting owner ratification). Extends ADR-003 and the Nocturne motion budget."
+    },
+    {
+      "id": "ADR-009",
+      "title": "Spacing Rhythm",
+      "status": "Proposed (awaiting owner ratification)."
+    },
+    {
+      "id": "ADR-010",
+      "title": "VWXYZ Character Canon and Persona Assets",
+      "status": "Proposed (pending owner confirmation)."
+    },
+    {
+      "id": "ADR-011",
+      "title": "Brand identity (brand v1)",
+      "status": "Items 7 and 10 Accepted (2026-10-28). Items 1-6, 8 and 9 Proposed. Amends ADR-002."
+    },
+    {
+      "id": "ADR-012",
+      "title": "Product light theme and semantic foregrounds",
+      "status": "Accepted 2026-10-27. Used by the web app redesign."
+    },
+    {
+      "id": "ADR-013",
+      "title": "Stage backdrop, five-bar rule, graph line and chat dock",
+      "status": "Proposed (awaiting owner ratification). First consumer: vidoxlabs.dev ADR 0041 and ADR 0042. Amends ADR-001 item 3 and ADR-006 item 4 (glass scope gains the chat dock dialog)."
+    },
+    {
+      "id": "ADR-016",
+      "title": "Conversation surface",
+      "status": "Proposed (awaiting owner ratification). First consumer: the vidoxlabs.dev chat dock. Refines ADR-013 item 5: the launcher, the dialog semantics and the log's live region stay as written there; this record sets what the surface shows. Numbered 016 because 014 and 015 are held by an open proposal (platform token outputs and persona dialects)."
+    },
+    {
+      "id": "ADR-017",
+      "title": "Explorable instrument",
+      "status": "Proposed (awaiting owner ratification). First consumer: the vidoxlabs.dev research explorers. Numbered 017 for the same reason as ADR-016."
+    }
+  ],
+  "designBodySha256": "2a7f18b8ef36b4f1546cf25021e1ca6e5fe5fc865c5bbb6576d240aaecd577ce",
+  "skillBodySha256": "1552ea0f2d9886b197ccf0101399e0314c001d3ecdcd0c2b3bd3b4eeb0642599"
+}

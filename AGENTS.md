@@ -65,6 +65,13 @@ design system — the shared visual language for all Vidoxlabs products and appl
   is an explicit opt-in that remaps those variables for the product light theme.
 - **brand/**: Brand v1 mark C masters (text-only SVG, ADR-011). See `brand/README.md`
   and `brand/MANIFEST.json`. Do not redraw the mark.
+- **consumer/**: The token sync that product repositories run to turn published artifacts
+  into their own tracked stylesheets, plus its pinned sources and contract test. Moved here
+  from the site repository so the canon owns its own consumption path. `SITE_ROOT` resolves
+  to `consumer/`. Fail-closed by contract: it refuses a missing source, a missing SHA, an
+  out-of-ceiling fluid token, a wrong hero size, and glass without literal backdrop
+  declarations. The pinned sources are at videsign `eb9a67d` and are 30 commits stale; do
+  not treat them as the pin a rebuild should ship. See `consumer/README.md`.
 
 ## AI Agent Initialization, Ephemeral Data & Cross-Repo Fetching
 
@@ -111,6 +118,11 @@ Within the `videsign` repository, agents are restricted to the following command
 - `npm run safety:scan`: Runs the public-safety scan. `npm run safety:hashes` reads handles on
   stdin and prints the `SAFETY_SCAN_SHA256_LIST` value (README, "CI secret"). Never put a handle in
   a command argument, a committed file or a log.
+- `npm run consumer:sync`: Runs the consumer token sync from `consumer/`. Requires
+  `--source`, `--glass` and `--sha`; see `consumer/README.md`.
+- `npm run consumer:test`: Runs the consumer contract test,
+  `node --test consumer/test/*.test.mjs`. Prove the fail-closed behaviours after any change
+  to the sync or its pinned sources.
 
 ## `{ASSET_BASE}` resolution
 

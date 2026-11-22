@@ -16,7 +16,9 @@
     "memory-field:fragment": "node scripts/generate-memory-field-fragment.js",
     "dialects:fragment": "node scripts/generate-dialect-fragment.js",
     "safety:hashes": "node scripts/safety-hashes.js",
-    "safety:scan": "node scripts/check-public-safety.js"
+    "safety:scan": "node scripts/check-public-safety.js",
+    "consumer:sync": "node consumer/sync-videsign-tokens.mjs",
+    "consumer:test": "node --test consumer/test/*.test.mjs"
   },
   "devDependencies": {
     "eslint": "10.13.0",
