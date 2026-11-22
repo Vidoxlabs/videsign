@@ -1,0 +1,12 @@
+<!--
+  Nocturne Museum: Turn-state chip (ADR-020)
+  Status-token turn-state chips in a polite status region. Each status dot pairs with
+  a visible text label (never colour alone), uses no animate-pulse loop, and never
+  reuses persona-accent-* tokens.
+-->
+<div role="status" aria-live="polite" aria-label="Turn states" class="flex flex-wrap items-center gap-gap-compact-default">
+  <span class="inline-flex items-center gap-gap-compact-default px-inset-operator-default py-inset-compact-default rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-primary-base"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>running</span>
+  <span class="inline-flex items-center gap-gap-compact-default px-inset-operator-default py-inset-compact-default rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-primary-base"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>stopping</span>
+  <span class="inline-flex items-center gap-gap-compact-default px-inset-operator-default py-inset-compact-default rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-primary-base"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>finished</span>
+  <span class="inline-flex items-center gap-gap-compact-default px-inset-operator-default py-inset-compact-default rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-primary-base"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span>failed</span>
+</div>
