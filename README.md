@@ -34,7 +34,7 @@ videsign/
 │   ├── check-public-safety.js    Fail-closed public-safety scan (CI)
 │   └── canon-tool.js             VWXYZ candidate validator and sidecar generator
 ├── test/            node --test contracts: tokens, themes, preview, standard, brand, canon, MCP
-├── mcp-server.js    Read-only MCP server: docs, canon, standard, style pack, fragments; tools resolve_token, style_pack, check_contrast, stage_backdrop
+├── mcp-server.js    Read-only MCP server: docs, canon, standard, style pack, fragments; tools resolve_token, style_pack, check_contrast, memory_field, stage_backdrop
 ├── assets/          Local-only design images (gitignored, never committed)
 ├── dist/            Generated artifacts (gitignored, run `npm run tokens` to regenerate)
 ├── eslint.config.js AST validation: enforces no-arbitrary-value rule

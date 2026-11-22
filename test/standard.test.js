@@ -111,7 +111,7 @@ test('ADR-012 status stays neutral in shipped and generated files', () => {
   assert.deepEqual(hits, []);
 });
 
-test('accepted status is limited to items 7 and 10 and the light theme', () => {
+test('accepted status is limited to ratified items and Adopted/Proposed statuses are tracked', () => {
   const lines = SKILL.split('\n');
   let current = '';
   const statuses = [];
@@ -120,14 +120,28 @@ test('accepted status is limited to items 7 and 10 and the light theme', () => {
     if (heading) current = heading[1];
     if (line.startsWith('**Status**:') && current) statuses.push({ id: current, status: line.slice('**Status**:'.length).trim() });
   }
+  const adoptedIds = ['ADR-013', 'ADR-016', 'ADR-017', 'ADR-018', 'ADR-019'];
+  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020'];
+  const byId = new Map(statuses.map((adr) => [adr.id, adr.status]));
+  for (const id of ['ADR-010', 'ADR-011', 'ADR-012', ...adoptedIds, ...proposedIds]) {
+    assert.ok(byId.has(id), `missing **Status**: line for ${id}`);
+  }
   for (const adr of statuses) {
     if (adr.id === 'ADR-012') {
       assert.equal(adr.status, 'Accepted 2026-10-27. Used by the web app redesign.');
     } else if (adr.id === 'ADR-011') {
       assert.equal(adr.status, 'Proposed for items 1-6 and 8. Items 7, 9 and 10 are Accepted (7 and 10 on 2026-10-28; 9 on 2026-11-03). Amends ADR-002.');
+    } else if (adr.id === 'ADR-010') {
+      assert.equal(adr.status, 'Proposed (pending owner confirmation) for items 1 and 3-5. Item 2 is Accepted 2026-11-03 (with ADR-011 item 9).');
     } else {
       assert.equal(adr.status.startsWith('Accepted'), false, adr.id);
       assert.equal(adr.status.includes('are Accepted'), false, adr.id);
+      if (adoptedIds.includes(adr.id)) {
+        assert.equal(adr.status.startsWith('Adopted (ratification pending; first consumer'), true, adr.id);
+      } else {
+        assert.equal(proposedIds.includes(adr.id), true, `unexpected ADR status entry: ${adr.id}`);
+        assert.equal(adr.status.startsWith('Proposed'), true, adr.id);
+      }
     }
   }
   assert.equal(/items 1-6, 8 and 9 are Accepted/i.test(SKILL), false);
@@ -153,7 +167,7 @@ test('standard carries the ADR-013 rules and they match the tokens', () => {
   const { standard } = generateStandardArtifacts(TOKENS);
   const { rules } = standard;
   const canon = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
-  assert.ok(standard.adrs.some((a) => a.id === 'ADR-013' && a.status.startsWith('Proposed')));
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-013' && a.status.startsWith('Adopted')));
   assert.ok(rules.glass.scope.includes('chat dock'));
   assert.equal(rules.motion.ambient.drift, TOKENS.transition['transition-duration-ambient-drift-base']);
   assert.equal(rules.motion.ambient.pulse, TOKENS.transition['transition-duration-ambient-pulse-base']);
@@ -226,7 +240,7 @@ test('the standard carries the stage primitive values from lib/stage.js', () => 
 test('standard carries the ADR-016 conversation rules and they match the tokens', () => {
   const { standard } = generateStandardArtifacts(TOKENS);
   const { conversation, chatDock } = standard.rules;
-  assert.ok(standard.adrs.some((a) => a.id === 'ADR-016' && a.status.startsWith('Proposed')));
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-016' && a.status.startsWith('Adopted')));
   assert.equal(conversation.adr, 'ADR-016');
   assert.equal(conversation.atRest.length, 4);
   assert.equal(conversation.header.rows, 1);
@@ -250,7 +264,7 @@ test('standard carries the ADR-016 conversation rules and they match the tokens'
 test('standard carries the ADR-017 instrument rules and they match the tokens', () => {
   const { standard } = generateStandardArtifacts(TOKENS);
   const { instrument, graphLine, accessibility } = standard.rules;
-  assert.ok(standard.adrs.some((a) => a.id === 'ADR-017' && a.status.startsWith('Proposed')));
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-017' && a.status.startsWith('Adopted')));
   assert.equal(instrument.everyControlHasConsequence, true);
   assert.equal(instrument.controls.minTarget, accessibility.minTouchTarget);
   assert.equal(instrument.diagram.line, graphLine.dark);
