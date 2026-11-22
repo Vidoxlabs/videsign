@@ -121,7 +121,7 @@ test('accepted status is limited to ratified items and Adopted/Proposed statuses
     if (line.startsWith('**Status**:') && current) statuses.push({ id: current, status: line.slice('**Status**:'.length).trim() });
   }
   const adoptedIds = ['ADR-013', 'ADR-016', 'ADR-017', 'ADR-018', 'ADR-019'];
-  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021'];
+  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022'];
   const byId = new Map(statuses.map((adr) => [adr.id, adr.status]));
   for (const id of ['ADR-010', 'ADR-011', 'ADR-012', ...adoptedIds, ...proposedIds]) {
     assert.ok(byId.has(id), `missing **Status**: line for ${id}`);
@@ -440,4 +440,42 @@ test('ADR-021 rules and fragment references are stated in DESIGN.md prose (parit
     md.includes('## Modular workspace and public-repo components (ADR-021)'),
     'standard.md is missing ## Modular workspace and public-repo components (ADR-021)',
   );
+});
+
+test('standard carries the ADR-022 asset service rules and consolidated files exist', () => {
+  const { standard } = generateStandardArtifacts(TOKENS);
+  const { assetService } = standard.rules;
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-022' && a.status.startsWith('Proposed')));
+  assert.equal(assetService.adr, 'ADR-022');
+  assert.equal(assetService.status, 'Proposed');
+  assert.deepEqual(assetService.extends, ['ADR-002', 'ADR-010']);
+  assert.equal(assetService.allowedAssetHost, 'assets.vidoxlabs.dev');
+  assert.equal(assetService.workerEntry, 'pipeline/service/worker.js');
+  assert.equal(assetService.serviceLibrary, 'lib/asset-service.js');
+  assert.equal(assetService.wranglerConfig, 'pipeline/service/wrangler.toml');
+  assert.deepEqual(assetService.visibleStatuses, ['published', 'superseded', 'needs-regen', 'legacy']);
+  assert.deepEqual(assetService.hiddenStatuses, ['withdrawn', 'deleted']);
+  assert.deepEqual(assetService.noCorsPrefixes, ['/v1/admin', '/v1/review', '/v1/candidates']);
+  assert.deepEqual(assetService.throttleLimits, {
+    perMinute: 10,
+    perHour: 100,
+    retentionHours: 2,
+    buckets: ['ip (/24 or /64)', 'credential (8-char prefix)'],
+  });
+  assert.deepEqual(assetService.allowedEventDetailKeys, ['token_id', 'scope', 'asset_id', 'status', 'reason_code']);
+  for (const rel of [
+    assetService.workerEntry,
+    assetService.serviceLibrary,
+    assetService.wranglerConfig,
+    assetService.migrationsManifest,
+    'pipeline/service/README.md',
+    ...assetService.migrations.map((name) => `${assetService.migrationsDir}/${name}`),
+  ]) {
+    assert.ok(fs.existsSync(path.join(ROOT, rel)), `missing consolidated asset-service file: ${rel}`);
+  }
+  const prose = DESIGN.toLowerCase();
+  assert.ok(prose.includes('consolidated phase 0 asset service (adr-022)'), 'DESIGN.md missing ADR-022 prose');
+  assert.ok(prose.includes('auth_fail_windows') || DESIGN.includes('pipeline/service/worker.js'), 'DESIGN.md missing pipeline/service/worker.js');
+  const md = generateStandardArtifacts(TOKENS)['standard.md'];
+  assert.ok(md.includes('## Persona asset service (ADR-022)'), 'standard.md missing ## Persona asset service (ADR-022)');
 });

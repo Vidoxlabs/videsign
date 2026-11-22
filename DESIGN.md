@@ -201,6 +201,7 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > - Character art for Violet, Wisteria, Xylia, Yarrow and Zinnia follows ADR-010. Character colors come from `canon/vwxyz/palette.json`. The `colors` matrix in this file is unchanged.
 > - Persona images are never stored in the repository (ADR-002). They will be served at `{ASSET_BASE}/vi/{vi}/{type}/{file}` (planned, ADR-010).
 > - Every persona image has alt text naming the persona and the expression or pose, for example `alt="Violet, confused"`.
+> - **Consolidated Phase 0 asset service (ADR-022).** The read-only Cloudflare Worker (`pipeline/service/worker.js`, `lib/asset-service.js`, `pipeline/service/wrangler.toml`) and D1 SQL migrations (`pipeline/service/migrations/0001_init.sql` through `0004_auth_fail_windows.sql`) serve `GET /healthz`, `GET /v1/assets`, `GET /v1/assets/:id`, `GET /v1/assets/:vi/:type/:slot/latest` (`302` redirect with `Cache-Control: public, max-age=300`), and `OPTIONS` preflight for visible statuses (`published`, `superseded`, `needs-regen`, `legacy`; hiding `withdrawn` and `deleted`). It pins `ASSET_BASE` to `https://assets.vidoxlabs.dev` (fail-closed `503`), enforces exact `https:` `CORS_ORIGINS` allow-listing with `Vary: Origin` (omitted on `/v1/admin`, `/v1/review`, `/v1/candidates`), throttles `Authorization` attempts across two HMAC-SHA256 buckets (`ip` `/24` or `/64` and 8-character `credential` prefix; 10/min and 100/hr; 2-hour trigger purge), and redacts headers, query secrets, and client addresses from logs.
 
 > [!IMPORTANT]
 >

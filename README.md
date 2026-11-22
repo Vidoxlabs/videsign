@@ -16,13 +16,16 @@ videsign/
 ├── canon/
 │   └── vwxyz/       VWXYZ character canon v1: palette, vocabulary, schema, checklist
 ├── lib/
-│   ├── contrast.js  WCAG contrast and alpha compositing, shared by tests, primitives and MCP
-│   ├── stage.js     Stage backdrop primitive: geometry, SVG renderer, contrast report (ADR-013)
-│   └── stage.css    Stage colour and motion from emitted tokens
-├── preview/         Pure, flat, state-free HTML component fragments + layout compositions
+│   ├── contrast.js       WCAG contrast and alpha compositing, shared by tests, primitives and MCP
+│   ├── dialects.js       Persona dialect token definitions and stylesheet builder (ADR-015)
+│   ├── memory-field.js   Memory field constellation renderer and table builder (ADR-018)
+│   ├── stage.js          Stage backdrop primitive: geometry, SVG renderer, contrast report (ADR-013)
+│   ├── stage.css         Stage colour and motion from emitted tokens
+│   └── asset-service.js  Phase 0 read-only VI persona asset service Worker logic (ADR-022)
+├── preview/         Pure, flat, semantic, state-free HTML component fragments + layout compositions
 ├── preview/index.html  Visual catalog (open in a browser)
 ├── brand/           Brand v1 masters (text-only SVG) and MANIFEST.json digests (ADR-011)
-├── pipeline/        Persona asset pipeline: animation spec, audit records, templates
+├── pipeline/        Persona asset pipeline: animation spec, audit records, templates, and service/ (Phase 0 Worker + D1 migrations)
 ├── scripts/
 │   ├── generate-tokens.js        Token pipeline: DESIGN.md YAML → Tailwind config, CSS vars, JSON, themes, glass.css, catalog.css
 │   ├── generate-standard.js      Agent standard: dist/standard.json and dist/standard.md (rules + ADR index)
