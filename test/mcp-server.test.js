@@ -158,7 +158,17 @@ test('component_catalog lists matching entries by consumer without html by defau
   assert.notEqual(bloomRes.isError, true, bloomRes.content[0].text);
   const bloomBody = JSON.parse(bloomRes.content[0].text);
   assert.ok(bloomBody.count > 0);
-  assert.deepEqual(bloomBody.categories, ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity', 'design-studio']);
+  assert.deepEqual(bloomBody.categories, [
+    'ui-primitives',
+    'markdown-and-code',
+    'graphic-maps',
+    'persona-canon',
+    'conversation',
+    'agent-workspace',
+    'harness-contracts',
+    'public-continuity',
+    'design-studio',
+  ]);
   assert.ok(bloomBody.components.some((c) => c.id === 'layout-agent-workspace'));
   for (const item of bloomBody.components) {
     assert.ok(item.consumers.includes('bloom'), `expected bloom consumer on ${item.id}`);
@@ -175,6 +185,8 @@ test('component_catalog lists matching entries by consumer without html by defau
   assert.ok(siteIds.includes('ecosystem-plane-map'));
   assert.ok(siteIds.includes('site-header-island'));
   assert.ok(siteIds.includes('hero-billboard'));
+  assert.ok(siteIds.includes('systems-constellation-map'));
+  assert.ok(siteIds.includes('markdown-prose-renderer'));
 
   const contractsRes = await client.callTool({
     name: 'component_catalog',
@@ -184,7 +196,7 @@ test('component_catalog lists matching entries by consumer without html by defau
   const contractsBody = JSON.parse(contractsRes.content[0].text);
   assert.deepEqual(
     contractsBody.components.map((c) => c.id),
-    ['claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner'],
+    ['claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner', 'instrument', 'statement-proof-row'],
   );
 });
 
@@ -235,8 +247,9 @@ test('design_brief and scaffold_page tools plus components.manifest.json work ov
 
   const manifestRes = await client.readResource({ uri: 'file://dist/components.manifest.json' });
   const manifest = JSON.parse(manifestRes.contents[0].text);
-  assert.equal(manifest.componentCount, 30);
+  assert.equal(manifest.componentCount, 50);
   assert.ok(manifest.archetypes['public-site-landing']);
+  assert.ok(manifest.archetypes['ui-primitives-kitchen-sink']);
 
   const briefRes = await client.callTool({
     name: 'design_brief',
@@ -261,7 +274,7 @@ test('design_brief and scaffold_page tools plus components.manifest.json work ov
   assert.ok(scaffold.stylesheets.includes('dist/glass.css'));
   assert.match(scaffold.html, /<!DOCTYPE html>/);
   assert.match(scaffold.html, /<!-- slot:1:site-header-island/);
-  assert.match(scaffold.html, /<!-- slot:6:site-footer/);
+  assert.match(scaffold.html, /<!-- slot:7:site-footer/);
 
   const badScaffold = await client.callTool({
     name: 'scaffold_page',

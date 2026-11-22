@@ -88,7 +88,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'design-studio-canvas', 'layout-public-site', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'design-studio-canvas', 'layout-public-site', 'systems-constellation-map', 'persona-deliberation-stepper', 'markdown-prose-renderer', 'code-and-diff-viewer', 'form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });
@@ -634,5 +634,46 @@ test('deslopped public-site and design-studio fragments follow ADR-023 contracts
   const studio = read('design-studio-canvas.html');
   for (const marker of ['Structured brief', 'Reference contract', '>Keep<', '>Change<', '>Do not copy<', '1440px desktop', '1024px tablet', '390px mobile', 'scaffold_page']) {
     assert.ok(studio.includes(marker), `design-studio-canvas missing ${marker}`);
+  }
+});
+
+test('chibi companion stage, homepage graphic maps, markdown and web UI primitive fragments follow ADR-024 contracts', () => {
+  const companion = read('persona-companion-stage.html');
+  for (const [vi, ver] of [['violet', 'v005'], ['wisteria', 'v003'], ['xylia', 'v003'], ['yarrow', 'v003'], ['zinnia', 'v003']]) {
+    assert.match(companion, new RegExp(`\\{ASSET_BASE\\}/vi/${vi}/chibi/${vi}_chibi_neutral_${ver}\\.png`));
+    assert.match(companion, new RegExp(`width="463" height="798"[^>]*alt="${vi[0].toUpperCase() + vi.slice(1)}, neutral"`));
+  }
+  assert.match(companion, /violet\/chibi\/thinking\/v005/);
+
+  const map = read('systems-constellation-map.html');
+  assert.match(map, /role="group" aria-label="Eleven ecosystem nodes and published edges"/);
+  assert.match(map, /stroke-border-graph-line-base/);
+  assert.match(map, /class="vi-glass-shell"/);
+
+  const md = read('markdown-prose-renderer.html');
+  assert.match(md, /<table\b/);
+  assert.match(md, /<pre\b/);
+  assert.match(md, /<blockquote\b/);
+
+  const diff = read('code-and-diff-viewer.html');
+  assert.match(diff, /- removed/);
+  assert.match(diff, /\+ added/);
+
+  for (const file of [
+    'persona-deliberation-stepper.html',
+    'systems-constellation-map.html',
+    'markdown-prose-renderer.html',
+    'code-and-diff-viewer.html',
+    'form-controls.html',
+    'button-variants.html',
+    'navigation-primitives.html',
+    'feedback-and-empty-states.html',
+    'disclosure-and-modals.html',
+  ]) {
+    const html = read(file);
+    for (const m of html.matchAll(/<(button|textarea|a)\b([^>]*)>/g)) {
+      const cls = (m[2].match(/\bclass="([^"]*)"/) || [])[1] || '';
+      assert.match(cls, /h-action-(min|wide)-default/, `${file}: touch target floor on ${m[0].slice(0, 80)}`);
+    }
   }
 });

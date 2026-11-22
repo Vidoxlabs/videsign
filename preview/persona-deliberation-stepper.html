@@ -1,0 +1,81 @@
+<!--
+  Nocturne Museum: Six-stage persona deliberation walkthrough (ADR-013, ADR-024)
+  Deslopped from the homepage SeatScenarioSwitcher: traces one request through all five seats
+  (Violet, Wisteria, Xylia, Yarrow, Zinnia) and the owner gate before write execution.
+  Rendered on solid surfaces with four 44px preset pills, paired signature dots, and outcome receipt.
+-->
+<section aria-labelledby="delib-stepper-heading" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-col gap-gap-compact-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Deliberation walkthrough · Synthetic example</p>
+    <h2 id="delib-stepper-heading" class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base">See how a request moves through all five seats</h2>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Trace six ordered stages across the five VWXYZ voices and observe where risk or ambiguity pauses execution at the owner gate.</p>
+  </div>
+  <div role="radiogroup" aria-label="Gate scenarios" class="flex flex-wrap items-center gap-gap-compact-default">
+    <button type="button" aria-pressed="true" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Standard approval</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Missing evidence</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Policy conflict</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Owner pause</button>
+  </div>
+  <ol aria-label="Six deliberation stages" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-rhythm-3-base list-none">
+    <li class="bg-surface-background-primary-base border border-surface-accent-violet-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <div class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>
+        <span class="tabular-nums text-text-content-secondary-base">01</span>
+        <span class="text-text-content-primary-base">Violet</span>
+      </div>
+      <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Frame request</h3>
+      <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Scopes objective, permitted tools, and active workspace constraints.</p>
+    </li>
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <div class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span>
+        <span class="tabular-nums text-text-content-secondary-base">02</span>
+        <span class="text-text-content-primary-base">Wisteria</span>
+      </div>
+      <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Structure options</h3>
+      <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Maps candidate design paths to existing token and schema contracts.</p>
+    </li>
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <div class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span>
+        <span class="tabular-nums text-text-content-secondary-base">03</span>
+        <span class="text-text-content-primary-base">Xylia</span>
+      </div>
+      <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Challenge limits</h3>
+      <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Flags unestablished assumptions, contrast hazards, and missing gates.</p>
+    </li>
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <div class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span>
+        <span class="tabular-nums text-text-content-secondary-base">04</span>
+        <span class="text-text-content-primary-base">Yarrow</span>
+      </div>
+      <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Check runtime path</h3>
+      <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Verifies local filesystem, build, and rollback pre-conditions.</p>
+    </li>
+    <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <div class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span>
+        <span class="tabular-nums text-text-content-secondary-base">05</span>
+        <span class="text-text-content-primary-base">Zinnia</span>
+      </div>
+      <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Attach evidence</h3>
+      <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Pairs every proposed claim with its concrete command or source pointer.</p>
+    </li>
+    <li class="bg-surface-background-primary-base border border-status-indicator-warning-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+      <div class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>
+        <span class="tabular-nums text-text-content-secondary-base">06</span>
+        <span class="text-text-content-primary-base">Owner gate</span>
+      </div>
+      <h3 class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Awaits confirmation</h3>
+      <p class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">Write effects pause until a human grants once or rejects the action.</p>
+    </li>
+  </ol>
+  <dl aria-live="polite" aria-label="Deliberation outcome receipt" class="flex flex-col border-t border-border-separator-primary-base">
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Outcome</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Reaches sign-off (owner confirms before write effect runs)</dd>
+    </div>
+  </dl>
+</section>

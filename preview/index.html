@@ -153,6 +153,15 @@
       { file: 'evidence-exhibit-figure.html', label: 'Evidence exhibit figure', desc: 'Product exhibit card with truth disclosure, non-image numbered workflow steps, claim IDs, and APA/BibTeX cite block (ADR-023).' },
       { file: 'design-studio-canvas.html', label: 'Layout: design studio canvas', desc: 'OpenDesign-inspired collaborative agent design studio with structured brief, Keep/Change/Do not copy contract, viewport presets, and guardrail check (ADR-023).', frame: true },
       { file: 'layout-public-site.html', label: 'Layout: public site', desc: 'Full-page dynamic public website composition integrating the island header, hero billboard, four public repos, and footer (ADR-023).', frame: true },
+      { file: 'systems-constellation-map.html', label: 'Systems constellation map', desc: 'Deslopped homepage systems constellation graphic map pairing tier filters, deterministic 640x420 SVG links (>=3:1), and crystal-glass evidence lens (ADR-013, ADR-024).', stage: true },
+      { file: 'persona-deliberation-stepper.html', label: 'Persona deliberation stepper', desc: 'Six-stage VWXYZ request and deliberation walkthrough with scenario presets and owner-gate outcome receipt (ADR-013, ADR-024).' },
+      { file: 'markdown-prose-renderer.html', label: 'Markdown prose renderer', desc: 'Canonical GFM Markdown surface with breadcrumb, claim badge, inline code and kbd, boundary callout, tabular-nums table, checklist, and blockquote (ADR-007, ADR-024).' },
+      { file: 'code-and-diff-viewer.html', label: 'Code and diff viewer', desc: 'Multi-tab code block, unified +/- diff rows with explicit status labels, and CLI receipt bar (ADR-007, ADR-024).' },
+      { file: 'form-controls.html', label: 'Form controls', desc: 'Standardized text inputs (default, focus, error, disabled), textarea, select, checkbox, toggle switch, and range slider on solid surfaces (ADR-024).' },
+      { file: 'button-variants.html', label: 'Button variants', desc: 'Large solid violet CTA (bold xl+), accent-bordered primary, secondary hairline, ghost, destructive, disabled, and segmented group (ADR-011, ADR-024).' },
+      { file: 'navigation-primitives.html', label: 'Navigation primitives', desc: 'Horizontal tablist, breadcrumb trail, tabular-nums pagination, and Cmd+K command launcher with 44px hit areas (ADR-024).' },
+      { file: 'feedback-and-empty-states.html', label: 'Feedback and empty states', desc: 'Status-paired polite banners (success, error), progress bar, and dashed zero-match empty state with reset control (ADR-024).' },
+      { file: 'disclosure-and-modals.html', label: 'Disclosure and modals', desc: 'Native <details> accordion rows, solid secondary modal confirm dialog, and role="menu" action rows (ADR-024).' },
       { file: 'starter-chips.html', label: 'Starter chips', desc: 'At most four starter prompts on an empty conversation with 44px touch targets; they leave after the first turn (ADR-016).' },
       { file: 'instrument.html', label: 'Explorable instrument', desc: 'Interactive panel for articles and proofs: readout diagram, switch rows, range, segmented presets and a ledger receipt (ADR-017).' },
       { file: 'five-bar-rule.html', label: 'Five-bar rule', desc: 'Five hard segments in canon order; never a blended gradient (ADR-013).' },
@@ -229,7 +238,9 @@
       fetch(f.file)
         .then(function (r) { return r.text(); })
         .then(function (raw) {
-          var html = raw.replace(/\{ASSET_BASE\}/g, '..');
+          var html = raw
+            .replace(/\{ASSET_BASE\}\/vi\/([^/]+)\/chibi\//g, '../assets/quarantine/run_20261103-snap/')
+            .replace(/\{ASSET_BASE\}/g, '..');
           if (f.frame) {
             var iframe = document.createElement('iframe');
             iframe.title = f.label;
@@ -246,6 +257,11 @@
           } else {
             frame.innerHTML = html;
           }
+          frame.querySelectorAll('img[data-chibi-fallback]').forEach(function (img) {
+            img.addEventListener('error', function () {
+              img.classList.add('hidden');
+            }, { once: true });
+          });
         })
         .catch(function () { frame.textContent = 'Could not load ' + f.file; });
     });

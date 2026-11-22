@@ -1,0 +1,80 @@
+<!--
+  Nocturne Museum: Markdown and GFM prose renderer (ADR-007, ADR-024)
+  Provides canonical typographic cadence for agent replies, research articles, and raw documentation:
+  solid secondary article surface, hairline heading dividers, inline mono code and <kbd>,
+  callout boxes with paired status dot + label, tabular-nums GFM tables, fenced code blocks with
+  Copy control, task checklists, blockquotes, and citation source links.
+-->
+<article aria-labelledby="md-article-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base max-w-3xl">
+  <header class="flex flex-wrap items-center justify-between gap-gap-compact-default pb-rhythm-4-base border-b border-border-separator-primary-base">
+    <nav aria-label="Document path" class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+      <a href="#docs" class="inline-flex items-center h-action-min-default hover:text-text-content-primary-base">research</a>
+      <span aria-hidden="true">/</span>
+      <span class="text-text-content-primary-base">run-contract.md</span>
+    </nav>
+    <div class="flex items-center gap-gap-compact-default">
+      <span class="inline-flex items-center gap-gap-compact-default px-inset-compact-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+        <span>observed · rev 8a80204</span>
+      </span>
+      <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Copy markdown</button>
+    </div>
+  </header>
+  <div class="flex flex-col gap-gap-comfortable-default">
+    <h1 id="md-article-title" class="font-typography-family-sans-base text-typography-size-2xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base leading-typography-leading-tight-base text-text-content-primary-base">Separating run contracts from visual surfaces</h1>
+    <p class="font-typography-family-sans-base text-typography-size-md-base leading-typography-leading-normal-base text-text-content-secondary-base">Markdown documents render strictly on solid reading surfaces with <code class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base bg-surface-background-tertiary-base px-rhythm-1-base rounded-layout-radius-control-base">neutral.tool.id</code> references, keyboard hints such as <kbd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base bg-surface-background-primary-base border border-border-separator-primary-base px-inset-compact-default rounded-layout-radius-control-base">Cmd+K</kbd>, and underlined links to <a href="#sources" class="h-action-min-default text-text-content-primary-base underline">source evidence</a>.</p>
+  </div>
+  <aside aria-label="Important boundary callout" class="border-l-2 border-status-indicator-info-base bg-surface-background-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-dense-default">
+    <div class="flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
+      <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+      <span>Note · Scope boundary</span>
+    </div>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base leading-typography-leading-normal-base text-text-content-secondary-base">Write-effect tools pause at waiting_for_owner even when invoked from a precompiled scaffold.</p>
+  </aside>
+  <div class="flex flex-col gap-gap-compact-default">
+    <h2 class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base pb-rhythm-2-base border-b border-border-separator-primary-base">Checklist and gate summary</h2>
+    <ul class="flex flex-col gap-gap-dense-default list-none">
+      <li class="flex items-center gap-gap-compact-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+        <span>[x] Validate semantic token classes against generated CSS</span>
+      </li>
+      <li class="flex items-center gap-gap-compact-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base border border-border-graph-line-base"></span>
+        <span>[ ] Record owner ratification date on ADR ledger</span>
+      </li>
+    </ul>
+  </div>
+  <div class="overflow-x-auto border border-border-separator-primary-base rounded-layout-radius-control-base bg-surface-background-primary-base">
+    <table class="w-full border-collapse font-typography-family-mono-base text-typography-size-xs-base">
+      <thead>
+        <tr class="bg-surface-background-tertiary-base border-b border-border-separator-primary-base text-text-content-secondary-base">
+          <th scope="col" class="p-inset-operator-default text-left font-typography-weight-medium-base">Package</th>
+          <th scope="col" class="p-inset-operator-default text-left font-typography-weight-medium-base">Role</th>
+          <th scope="col" class="p-inset-operator-default text-right font-typography-weight-medium-base">Tokens</th>
+        </tr>
+      </thead>
+      <tbody class="text-text-content-primary-base">
+        <tr class="border-b border-border-separator-primary-base">
+          <td class="p-inset-operator-default">videsign</td>
+          <td class="p-inset-operator-default text-text-content-secondary-base">Tokens &amp; components</td>
+          <td class="p-inset-operator-default text-right tabular-nums">75</td>
+        </tr>
+        <tr>
+          <td class="p-inset-operator-default">seed</td>
+          <td class="p-inset-operator-default text-text-content-secondary-base">Execution harness</td>
+          <td class="p-inset-operator-default text-right tabular-nums">9 states</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base overflow-hidden">
+    <div class="flex items-center justify-between px-inset-operator-default py-rhythm-1-base bg-surface-background-tertiary-base border-b border-border-separator-primary-base">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">json · dist/components.manifest.json</span>
+      <button type="button" class="inline-flex items-center h-action-min-default px-inset-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:underline">Copy block</button>
+    </div>
+    <pre class="p-layout-padding-medium-base font-typography-family-mono-base text-typography-size-xs-base leading-typography-leading-normal-base text-text-content-primary-base overflow-x-auto"><code>{ "schemaVersion": "videsign.components-manifest/v1", "archetype": "research-library-article" }</code></pre>
+  </div>
+  <blockquote class="pl-rhythm-4-base border-l-2 border-border-graph-line-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">
+    Rendered citations stay anchored to exact repository files rather than inferred summaries.
+  </blockquote>
+</article>

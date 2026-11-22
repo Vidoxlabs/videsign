@@ -1,0 +1,37 @@
+<!--
+  Nocturne Museum: Disclosures, accordion rows, contextual menu, and solid modal dialog (ADR-024)
+  Keeps content surfaces solid secondary without blur overlays while providing accessible <details>
+  accordions, role="dialog" confirm sheets, and keyboard-navigable menu rows.
+-->
+<section aria-labelledby="disclosure-modals-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <h2 id="disclosure-modals-title" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Accordions, action menu, and dialog</h2>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-rhythm-6-base items-start">
+    <div class="flex flex-col border border-border-separator-primary-base rounded-layout-radius-control-base bg-surface-background-primary-base divide-y divide-border-separator-primary-base">
+      <details open class="p-layout-padding-medium-base">
+        <summary class="cursor-pointer font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">When do components use crystal glass vs solid surfaces?</summary>
+        <p class="pt-rhythm-2-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Reading content, tables, markdown prose, and dialogs stay solid secondary or primary. Crystal glass marks floating navigation pills and evidence lenses only.</p>
+      </details>
+      <details class="p-layout-padding-medium-base">
+        <summary class="cursor-pointer font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Why keep VWXYZ colors isolated from runtime workers?</summary>
+        <p class="pt-rhythm-2-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">The five signature hexes belong solely to the five sovereign persona seats as a full set, whereas runtime specialists use neutral graph-line monograms.</p>
+      </details>
+    </div>
+    <div class="flex flex-col gap-rhythm-4-base">
+      <div role="dialog" aria-modal="true" aria-labelledby="modal-confirm-heading" class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-medium-base flex flex-col gap-gap-comfortable-default">
+        <div class="flex items-center justify-between">
+          <h3 id="modal-confirm-heading" class="font-typography-family-sans-base text-typography-size-md-base font-typography-weight-semibold-base text-text-content-primary-base">Export static preview</h3>
+          <button type="button" aria-label="Close modal" class="inline-flex items-center justify-center w-action-min-default h-action-min-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Close</button>
+        </div>
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Generates dist/tokens.css, dist/catalog.css, and dist/components.manifest.json for consumer sync.</p>
+        <div class="flex flex-wrap items-center justify-end gap-gap-compact-default">
+          <button type="button" class="inline-flex items-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Cancel</button>
+          <button type="button" class="inline-flex items-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base">Stage bundle</button>
+        </div>
+      </div>
+      <div role="menu" aria-label="Row actions" class="w-layout-width-sidebar-base bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-rhythm-1-base flex flex-col">
+        <button type="button" role="menuitem" class="flex items-center justify-between h-action-min-default px-inset-operator-default rounded-layout-radius-control-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span>Copy token CSS</span><span class="text-text-content-secondary-base">Cmd+C</span></button>
+        <button type="button" role="menuitem" class="flex items-center justify-between h-action-min-default px-inset-operator-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base"><span>Open fragment source</span><span>file://</span></button>
+      </div>
+    </div>
+  </div>
+</section>
