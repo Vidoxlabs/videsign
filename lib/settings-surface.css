@@ -1,0 +1,965 @@
+/* Nocturne Museum: Modernized settings architecture stylesheet (zero-hex oklch tokens).
+   Encapsulates --vi-settings-* tokens, container-query responsive two-pane shell (@container
+   vi-settings-shell at 48rem), stacking hairline key-value rows (@container vi-settings-pane
+   at 32rem), quick-settings popover menu, accessible 2.75rem switches, local nodes ledger,
+   sovereign data export, and fenced danger zone. Honors ADR-006, ADR-007, ADR-011, ADR-013,
+   ADR-017, ADR-020, ADR-021, ADR-024, and ADR-025. */
+
+:root,
+.vi-settings-scope {
+  --vi-settings-bg: var(--vi-colors-surface-background-primary-base, oklch(0.145 0.014 285));
+  --vi-settings-rail-bg: var(--vi-colors-surface-background-secondary-base, oklch(0.186 0.022 285));
+  --vi-settings-pane-bg: var(--vi-colors-surface-background-primary-base, oklch(0.145 0.014 285));
+  --vi-settings-card-bg: var(--vi-colors-surface-background-secondary-base, oklch(0.186 0.022 285));
+  --vi-settings-row-hover: var(--vi-colors-surface-background-tertiary-base, oklch(0.228 0.020 285));
+  --vi-settings-ink: var(--vi-colors-text-content-primary-base, oklch(1 0 0));
+  --vi-settings-ink-muted: var(--vi-colors-text-content-secondary-base, oklch(0.712 0.013 286));
+  --vi-settings-border: oklch(0.545 0.014 286);
+  --vi-settings-border-strong: var(--vi-colors-border-graph-line-base, oklch(0.602 0.015 286));
+  --vi-settings-accent: var(--vi-colors-surface-accent-violet-base, oklch(0.606 0.25 292.7));
+  --vi-settings-accent-soft: oklch(0.606 0.25 292.7 / 0.14);
+  --vi-settings-danger-border: oklch(0.645 0.246 16.4);
+  --vi-settings-danger-bg: oklch(0.205 0.036 16.4);
+  --vi-settings-status-success: oklch(0.696 0.17 162.5);
+  --vi-settings-status-warning: oklch(0.769 0.188 70.1);
+  --vi-settings-status-error: oklch(0.645 0.246 16.4);
+  --vi-settings-status-info: oklch(0.715 0.143 215.2);
+  --vi-settings-scrim: oklch(0.12 0.012 285 / 0.72);
+
+  --vi-settings-touch-min: var(--vi-size-action-min-default, 2.75rem);
+  --vi-settings-radius-card: var(--vi-spacing-layout-radius-standard-base, 0.875rem);
+  --vi-settings-radius-control: var(--vi-spacing-layout-radius-control-base, 0.625rem);
+  --vi-settings-radius-pill: var(--vi-spacing-layout-radius-full-base, 9999rem);
+  --vi-settings-font-sans: var(--vi-typography-typography-family-sans-base, Geist, ui-sans-serif, system-ui, sans-serif);
+  --vi-settings-font-mono: var(--vi-typography-typography-family-mono-base, Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  --vi-settings-duration-fast: var(--vi-transition-transition-duration-fast-base, 150ms);
+  --vi-settings-easing: var(--vi-transition-transition-easing-standard-base, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+[data-theme="light"],
+[data-theme="light"] .vi-settings-scope,
+.vi-settings-scope[data-theme="light"] {
+  --vi-settings-bg: var(--vi-colors-surface-background-primary-base, oklch(0.984 0.003 247));
+  --vi-settings-rail-bg: var(--vi-colors-surface-background-secondary-base, oklch(1 0 0));
+  --vi-settings-pane-bg: var(--vi-colors-surface-background-primary-base, oklch(0.984 0.003 247));
+  --vi-settings-card-bg: var(--vi-colors-surface-background-secondary-base, oklch(1 0 0));
+  --vi-settings-row-hover: var(--vi-colors-surface-background-tertiary-base, oklch(0.961 0.005 247));
+  --vi-settings-ink: var(--vi-colors-text-content-primary-base, oklch(0.208 0.042 265.7));
+  --vi-settings-ink-muted: var(--vi-colors-text-content-secondary-base, oklch(0.446 0.043 257.3));
+  --vi-settings-border: oklch(0.555 0.024 260);
+  --vi-settings-border-strong: oklch(0.495 0.032 260);
+  --vi-settings-accent: oklch(0.491 0.27 292.6);
+  --vi-settings-accent-soft: oklch(0.491 0.27 292.6 / 0.09);
+  --vi-settings-danger-border: oklch(0.50 0.21 16.4);
+  --vi-settings-danger-bg: oklch(0.965 0.016 16.4);
+  --vi-settings-status-success: oklch(0.48 0.14 162);
+  --vi-settings-status-warning: oklch(0.51 0.15 70);
+  --vi-settings-status-error: oklch(0.50 0.21 16.4);
+  --vi-settings-status-info: oklch(0.48 0.13 215);
+  --vi-settings-scrim: oklch(0.20 0.02 265 / 0.45);
+}
+
+.vi-settings-scope {
+  font-family: var(--vi-settings-font-sans);
+  color: var(--vi-settings-ink);
+  box-sizing: border-box;
+}
+
+.vi-settings-scope *,
+.vi-settings-scope *::before,
+.vi-settings-scope *::after {
+  box-sizing: border-box;
+}
+
+.vi-settings-scope :focus-visible {
+  outline: 0.125rem solid var(--vi-settings-accent);
+  outline-offset: 0.125rem;
+}
+
+/* Full-viewport layout host */
+.vi-settings-viewport {
+  min-block-size: 100dvh;
+  inline-size: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--vi-settings-bg);
+  color: var(--vi-settings-ink);
+  overflow-x: clip;
+}
+
+.vi-settings-topbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-block: 0.625rem;
+  padding-inline: clamp(0.75rem, 2.5cqi, 1.5rem);
+  background-color: var(--vi-settings-rail-bg);
+  border-block-end: 0.0625rem solid var(--vi-settings-border);
+}
+
+.vi-settings-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-inline-size: 0;
+}
+
+.vi-settings-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.vi-settings-stage {
+  flex: 1;
+  inline-size: 100%;
+  max-inline-size: 74rem;
+  margin-inline: auto;
+  padding-block: clamp(0.75rem, 2.5cqi, 1.75rem);
+  padding-inline: clamp(0.5rem, 2.5cqi, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Specimen 2: Unified Two-Pane Settings Shell (solid surface, container-query driven) */
+.vi-settings-shell {
+  container-type: inline-size;
+  container-name: vi-settings-shell;
+  inline-size: 100%;
+  display: grid;
+  grid-template-columns: minmax(13.5rem, 16.5rem) minmax(0, 1fr);
+  background-color: var(--vi-settings-pane-bg);
+  border: 0.0625rem solid var(--vi-settings-border);
+  border-radius: var(--vi-settings-radius-card);
+  overflow: hidden;
+  min-block-size: clamp(28rem, 70dvh, 48rem);
+}
+
+.vi-settings-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--vi-settings-rail-bg);
+  border-inline-end: 0.0625rem solid var(--vi-settings-border);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.vi-settings-rail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.vi-settings-title {
+  margin: 0;
+  font-family: var(--vi-settings-font-sans);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--vi-settings-ink);
+}
+
+.vi-settings-search-wrap {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding-block-end: 0.5rem;
+  background-color: var(--vi-settings-rail-bg);
+}
+
+.vi-settings-search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: var(--vi-settings-touch-min);
+  padding-inline: 0.75rem;
+  background-color: var(--vi-settings-pane-bg);
+  border: 0.0625rem solid var(--vi-settings-border);
+  border-radius: var(--vi-settings-radius-control);
+  transition: border-color var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-search-box:focus-within {
+  border-color: var(--vi-settings-accent);
+}
+
+.vi-settings-search-input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--vi-settings-touch-min);
+  border: 0;
+  background: transparent;
+  color: var(--vi-settings-ink);
+  font-family: var(--vi-settings-font-sans);
+  font-size: 0.875rem;
+}
+
+.vi-settings-search-input::placeholder {
+  color: var(--vi-settings-ink-muted);
+}
+
+.vi-settings-meta {
+  margin: 0;
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-settings-ink-muted);
+}
+
+.vi-settings-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.vi-settings-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+  padding-block-end: 0.625rem;
+  border-block-end: 0.0625rem solid var(--vi-settings-border);
+}
+
+.vi-settings-nav-group:last-child {
+  border-block-end: 0;
+  padding-block-end: 0;
+}
+
+.vi-settings-nav-group[hidden] {
+  display: none;
+}
+
+.vi-settings-group-label {
+  margin: 0 0 0.25rem;
+  padding-inline: 0.625rem;
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--vi-settings-ink-muted);
+}
+
+.vi-settings-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  inline-size: 100%;
+  min-block-size: var(--vi-settings-touch-min);
+  padding-inline: 0.625rem;
+  border: 0.0625rem solid transparent;
+  border-inline-start-width: 0.125rem;
+  border-radius: var(--vi-settings-radius-control);
+  background-color: transparent;
+  color: var(--vi-settings-ink-muted);
+  font-family: var(--vi-settings-font-sans);
+  font-size: 0.875rem;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--vi-settings-duration-fast) var(--vi-settings-easing),
+    color var(--vi-settings-duration-fast) var(--vi-settings-easing),
+    border-color var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-nav-btn:hover {
+  background-color: var(--vi-settings-row-hover);
+  color: var(--vi-settings-ink);
+}
+
+.vi-settings-nav-btn[aria-selected="true"],
+.vi-settings-nav-btn[aria-current="page"] {
+  border-inline-start-color: var(--vi-settings-accent);
+  background-color: var(--vi-settings-row-hover);
+  color: var(--vi-settings-ink);
+  font-weight: 500;
+}
+
+.vi-settings-nav-btn[hidden] {
+  display: none;
+}
+
+.vi-settings-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 1rem;
+  border: 0.0625rem dashed var(--vi-settings-border);
+  border-radius: var(--vi-settings-radius-control);
+  background-color: var(--vi-settings-pane-bg);
+}
+
+.vi-settings-empty[hidden] {
+  display: none;
+}
+
+/* Right Detail Pane */
+.vi-settings-pane {
+  container-type: inline-size;
+  container-name: vi-settings-pane;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--vi-settings-pane-bg);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.vi-settings-mobile-bar {
+  display: none;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 5;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  background-color: var(--vi-settings-rail-bg);
+  border-block-end: 0.0625rem solid var(--vi-settings-border);
+}
+
+.vi-settings-pane-inner {
+  inline-size: 100%;
+  max-inline-size: 46rem;
+  padding: clamp(1rem, 3cqi, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.vi-settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.vi-settings-panel[hidden] {
+  display: none;
+}
+
+.vi-settings-panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-block-end: 1rem;
+  border-block-end: 0.0625rem solid var(--vi-settings-border);
+}
+
+.vi-settings-panel-title {
+  margin: 0;
+  font-family: var(--vi-settings-font-sans);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  text-wrap: balance;
+  color: var(--vi-settings-ink);
+}
+
+.vi-settings-panel-desc {
+  margin: 0.25rem 0 0;
+  max-inline-size: 58ch;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--vi-settings-ink-muted);
+}
+
+/* Section cards & hairline rows */
+.vi-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vi-settings-section-title {
+  margin: 0;
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--vi-settings-ink-muted);
+}
+
+.vi-settings-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--vi-settings-card-bg);
+  border: 0.0625rem solid var(--vi-settings-border);
+  border-radius: var(--vi-settings-radius-card);
+  overflow: hidden;
+}
+
+.vi-settings-identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--vi-settings-card-bg);
+  border: 0.0625rem solid var(--vi-settings-border);
+  border-radius: var(--vi-settings-radius-card);
+}
+
+.vi-settings-identity-main {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-inline-size: 0;
+}
+
+.vi-settings-avatar {
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border-radius: var(--vi-settings-radius-pill);
+  border: 0.0625rem solid var(--vi-settings-accent);
+  background-color: var(--vi-settings-row-hover);
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--vi-settings-ink);
+  flex-shrink: 0;
+}
+
+.vi-settings-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem;
+  border-block-end: 0.0625rem solid var(--vi-settings-border);
+  transition: background-color var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-row:last-child {
+  border-block-end: 0;
+}
+
+.vi-settings-row:hover {
+  background-color: var(--vi-settings-row-hover);
+}
+
+.vi-settings-row-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+  min-inline-size: 0;
+}
+
+.vi-settings-row-label {
+  font-family: var(--vi-settings-font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--vi-settings-ink);
+}
+
+.vi-settings-row-desc {
+  margin: 0;
+  font-family: var(--vi-settings-font-sans);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--vi-settings-ink-muted);
+}
+
+.vi-settings-row-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+/* Controls: buttons, inputs, selects, segmented groups, switches */
+.vi-settings-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-block-size: var(--vi-settings-touch-min);
+  padding-inline: 0.875rem;
+  border-radius: var(--vi-settings-radius-control);
+  border: 0.0625rem solid var(--vi-settings-border);
+  background-color: var(--vi-settings-pane-bg);
+  color: var(--vi-settings-ink);
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.75rem;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color var(--vi-settings-duration-fast) var(--vi-settings-easing),
+    background-color var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-btn:hover {
+  border-color: var(--vi-settings-accent);
+  background-color: var(--vi-settings-row-hover);
+}
+
+.vi-settings-btn--primary {
+  border-color: var(--vi-settings-accent);
+  background-color: var(--vi-settings-row-hover);
+}
+
+.vi-settings-btn--danger {
+  border-color: var(--vi-settings-danger-border);
+  background-color: var(--vi-settings-pane-bg);
+  color: var(--vi-settings-ink);
+}
+
+.vi-settings-btn--danger:hover {
+  background-color: var(--vi-settings-danger-bg);
+}
+
+.vi-settings-btn[aria-pressed="true"] {
+  border-color: var(--vi-settings-accent);
+  background-color: var(--vi-settings-accent-soft);
+}
+
+.vi-settings-input,
+.vi-settings-select {
+  min-block-size: var(--vi-settings-touch-min);
+  min-inline-size: 11.5rem;
+  max-inline-size: 100%;
+  padding-inline: 0.75rem;
+  border-radius: var(--vi-settings-radius-control);
+  border: 0.0625rem solid var(--vi-settings-border);
+  background-color: var(--vi-settings-pane-bg);
+  color: var(--vi-settings-ink);
+  font-family: var(--vi-settings-font-sans);
+  font-size: 0.875rem;
+  transition: border-color var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-input:focus,
+.vi-settings-select:focus {
+  border-color: var(--vi-settings-accent);
+}
+
+.vi-settings-segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1875rem;
+  border-radius: var(--vi-settings-radius-control);
+  border: 0.0625rem solid var(--vi-settings-border);
+  background-color: var(--vi-settings-pane-bg);
+}
+
+.vi-settings-seg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--vi-settings-touch-min);
+  padding-inline: 0.75rem;
+  border-radius: 0.4375rem;
+  border: 0.0625rem solid transparent;
+  background-color: transparent;
+  color: var(--vi-settings-ink-muted);
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--vi-settings-duration-fast) var(--vi-settings-easing),
+    background-color var(--vi-settings-duration-fast) var(--vi-settings-easing),
+    color var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-seg-btn:hover {
+  color: var(--vi-settings-ink);
+}
+
+.vi-settings-seg-btn[aria-pressed="true"] {
+  border-color: var(--vi-settings-accent);
+  background-color: var(--vi-settings-row-hover);
+  color: var(--vi-settings-ink);
+}
+
+/* Accessible 2.75rem toggle switch (paired with explicit text state) */
+.vi-settings-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: var(--vi-settings-touch-min);
+  min-inline-size: var(--vi-settings-touch-min);
+  padding-inline: 0.5rem;
+  border-radius: var(--vi-settings-radius-control);
+  border: 0.0625rem solid var(--vi-settings-border);
+  background-color: var(--vi-settings-pane-bg);
+  color: var(--vi-settings-ink);
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-switch:hover {
+  border-color: var(--vi-settings-accent);
+}
+
+.vi-settings-switch-track {
+  position: relative;
+  inline-size: 2.25rem;
+  block-size: 1.25rem;
+  border-radius: var(--vi-settings-radius-pill);
+  border: 0.0625rem solid var(--vi-settings-border-strong);
+  background-color: var(--vi-settings-card-bg);
+  flex-shrink: 0;
+  transition: background-color var(--vi-settings-duration-fast) var(--vi-settings-easing),
+    border-color var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-switch-thumb {
+  position: absolute;
+  inset-block-start: 0.125rem;
+  inset-inline-start: 0.125rem;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  border-radius: var(--vi-settings-radius-pill);
+  background-color: var(--vi-settings-ink);
+  transition: transform var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-switch[aria-checked="true"] .vi-settings-switch-track {
+  background-color: var(--vi-settings-accent);
+  border-color: var(--vi-settings-accent);
+}
+
+.vi-settings-switch[aria-checked="true"] .vi-settings-switch-thumb {
+  transform: translateX(1rem);
+}
+
+/* Status dots (always paired with visible text labels) */
+.vi-settings-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-settings-ink);
+  white-space: nowrap;
+}
+
+.vi-settings-dot {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--vi-settings-radius-pill);
+  flex-shrink: 0;
+}
+
+.vi-settings-dot--success {
+  background-color: var(--vi-settings-status-success);
+}
+
+.vi-settings-dot--warning {
+  background-color: var(--vi-settings-status-warning);
+}
+
+.vi-settings-dot--error {
+  background-color: var(--vi-settings-status-error);
+}
+
+.vi-settings-dot--info {
+  background-color: var(--vi-settings-status-info);
+}
+
+.vi-settings-dot--accent {
+  background-color: var(--vi-settings-accent);
+}
+
+/* Fenced Danger Zone (Mistral pattern) */
+.vi-settings-danger-zone {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--vi-settings-danger-bg);
+  border: 0.0625rem solid var(--vi-settings-danger-border);
+  border-radius: var(--vi-settings-radius-card);
+  overflow: hidden;
+}
+
+.vi-settings-danger-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  border-block-end: 0.0625rem solid var(--vi-settings-danger-border);
+}
+
+.vi-settings-danger-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem;
+  border-block-end: 0.0625rem solid var(--vi-settings-danger-border);
+}
+
+.vi-settings-danger-row:last-child {
+  border-block-end: 0;
+}
+
+/* Local nodes / policy / credentials bounded hairline table */
+.vi-settings-table-wrap {
+  inline-size: 100%;
+  overflow-x: auto;
+  background-color: var(--vi-settings-card-bg);
+  border: 0.0625rem solid var(--vi-settings-border);
+  border-radius: var(--vi-settings-radius-card);
+}
+
+.vi-settings-table {
+  inline-size: 100%;
+  min-inline-size: 34rem;
+  border-collapse: collapse;
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-settings-table th,
+.vi-settings-table td {
+  padding-block: 0.625rem;
+  padding-inline: 0.875rem;
+  text-align: start;
+  border-block-end: 0.0625rem solid var(--vi-settings-border);
+  vertical-align: middle;
+}
+
+.vi-settings-table thead th {
+  background-color: var(--vi-settings-row-hover);
+  color: var(--vi-settings-ink-muted);
+  font-weight: 500;
+}
+
+.vi-settings-table tbody tr:last-child th,
+.vi-settings-table tbody tr:last-child td {
+  border-block-end: 0;
+}
+
+/* Model routing radio slots inside settings pane */
+.vi-settings-slot {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--vi-settings-card-bg);
+  border: 0.0625rem solid var(--vi-settings-border);
+  border-radius: var(--vi-settings-radius-card);
+  overflow: hidden;
+}
+
+.vi-settings-slot[data-selected="true"] {
+  border-color: var(--vi-settings-accent);
+}
+
+.vi-settings-slot-trigger {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  inline-size: 100%;
+  min-block-size: var(--vi-settings-touch-min);
+  padding-inline: 1rem;
+  border: 0;
+  border-block-end: 0.0625rem solid var(--vi-settings-border);
+  background-color: var(--vi-settings-row-hover);
+  color: var(--vi-settings-ink);
+  cursor: pointer;
+  text-align: start;
+}
+
+.vi-settings-slot-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.875rem 1rem;
+}
+
+/* Specimen 1: Quick Settings Popover (Gemini pattern, crystal glass shell+core) */
+.vi-settings-quick {
+  inline-size: min(100%, 22rem);
+}
+
+.vi-settings-quick-core {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  gap: 0.25rem;
+}
+
+.vi-settings-quick-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-block: 0.375rem;
+  border-block-end: 0.0625rem solid var(--vi-settings-border);
+}
+
+.vi-settings-quick-group:last-child {
+  border-block-end: 0;
+  padding-block-end: 0;
+}
+
+.vi-settings-quick-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625rem;
+  inline-size: 100%;
+  min-block-size: var(--vi-settings-touch-min);
+  padding-inline: 0.625rem;
+  border-radius: var(--vi-settings-radius-control);
+  border: 0.0625rem solid transparent;
+  background-color: transparent;
+  color: var(--vi-settings-ink);
+  font-family: var(--vi-settings-font-sans);
+  font-size: 0.875rem;
+  text-decoration: none;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--vi-settings-duration-fast) var(--vi-settings-easing),
+    border-color var(--vi-settings-duration-fast) var(--vi-settings-easing);
+}
+
+.vi-settings-quick-item:hover {
+  background-color: var(--vi-settings-row-hover);
+  border-color: var(--vi-settings-border);
+}
+
+.vi-settings-quick-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-block-size: var(--vi-settings-touch-min);
+  padding-inline: 0.625rem;
+}
+
+/* Save receipt bar (polite live region) */
+.vi-settings-receipt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  border-radius: var(--vi-settings-radius-control);
+  border: 0.0625rem solid var(--vi-settings-border);
+  background-color: var(--vi-settings-card-bg);
+  font-family: var(--vi-settings-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-settings-ink-muted);
+}
+
+/* Modal backdrop for dialog integration */
+.vi-settings-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: clamp(0.5rem, 3cqi, 1.5rem);
+  background-color: var(--vi-settings-scrim);
+}
+
+.vi-settings-backdrop[hidden] {
+  display: none;
+}
+
+.vi-settings-modal-frame {
+  inline-size: min(100%, 66rem);
+  max-block-size: 90dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Container queries: 48rem two-pane -> mobile single column; 32rem row stack */
+@container vi-settings-shell (max-width: 48rem) {
+  .vi-settings-shell {
+    grid-template-columns: minmax(0, 1fr);
+    min-block-size: auto;
+  }
+
+  .vi-settings-rail {
+    border-inline-end: 0;
+    border-block-end: 0.0625rem solid var(--vi-settings-border);
+  }
+
+  .vi-settings-mobile-bar {
+    display: flex;
+  }
+
+  .vi-settings-shell[data-mobile-view="pane"] .vi-settings-rail {
+    display: none;
+  }
+
+  .vi-settings-shell[data-mobile-view="nav"] .vi-settings-pane {
+    display: none;
+  }
+}
+
+@container vi-settings-pane (max-width: 32rem) {
+  .vi-settings-row,
+  .vi-settings-danger-row {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 0.625rem;
+  }
+
+  .vi-settings-row-control {
+    justify-content: flex-start;
+  }
+}
+
+/* Reduced motion & high contrast safeguards */
+@media (prefers-reduced-motion: reduce) {
+  .vi-settings-scope *,
+  .vi-settings-scope *::before,
+  .vi-settings-scope *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .vi-settings-shell,
+  .vi-settings-rail,
+  .vi-settings-pane,
+  .vi-settings-card,
+  .vi-settings-identity,
+  .vi-settings-danger-zone,
+  .vi-settings-table-wrap,
+  .vi-settings-slot {
+    background-color: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+  }
+
+  .vi-settings-nav-btn[aria-selected="true"],
+  .vi-settings-seg-btn[aria-pressed="true"],
+  .vi-settings-switch[aria-checked="true"] .vi-settings-switch-track {
+    border-color: Highlight;
+  }
+}

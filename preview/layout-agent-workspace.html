@@ -54,6 +54,19 @@
         <button type="button" class="vi-chat-action" data-chat-prompt="Review the token changes."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12m12-6v12M3 7l3-4 3 4m6 10 3 4 3-4M11 12h2"/></svg>Review changes</button>
         <button type="button" class="vi-chat-action" data-chat-prompt="Summarize the attached context."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Summarize context</button>
       </div>
+      <div class="mt-auto flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+        <div class="flex items-center gap-gap-compact-default min-w-0">
+          <span aria-hidden="true" class="grid place-items-center shrink-0 w-icon-md-base h-icon-md-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">OP</span>
+          <div class="flex flex-col min-w-0">
+            <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base truncate">operator-local</span>
+            <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base truncate">14,280 / 50,000 tokens</span>
+          </div>
+        </div>
+        <button type="button" data-settings-open-modal aria-expanded="false" class="inline-flex items-center justify-between w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base hover:border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">
+          <span>Settings</span>
+          <span aria-hidden="true">Cmd+,</span>
+        </button>
+      </div>
     </aside>
     <main id="workspace-chat" tabindex="-1" class="vi-chat-stage" data-chat-stage data-chat-skills="workspace-skills" data-empty="false">
       <header class="vi-chat-topbar">

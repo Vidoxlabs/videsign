@@ -1,0 +1,396 @@
+<!--
+  Nocturne Museum: Full-viewport responsive Settings layout (ADR-006, ADR-007, ADR-011, ADR-017, ADR-021, ADR-024, ADR-025)
+  Dedicated layout frame demonstrating desktop two-pane settings (1440px), tablet split (1024px),
+  and mobile single-column drill-down with sticky section switcher (390px) inside the Nocturne
+  Museum viewport harness. 100% solid surfaces, zero persona accents, 44px touch targets.
+-->
+<div class="vi-settings-scope vi-settings-viewport">
+  <a href="#layout-settings-main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-30 inline-flex items-center whitespace-nowrap h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Skip to settings</a>
+
+  <header class="vi-settings-topbar">
+    <div class="vi-settings-topbar-brand">
+      <span class="font-typography-family-mono-base font-typography-weight-semibold-base text-typography-size-md-base tracking-typography-tracking-tight-base text-text-content-primary-base">bloom</span>
+      <span class="vi-settings-meta">Workspace settings &middot; operator-local</span>
+    </div>
+    <div class="vi-settings-topbar-actions">
+      <div role="group" aria-label="Switch theme" class="vi-settings-segmented">
+        <button type="button" data-settings-theme="dark" aria-pressed="true" class="vi-settings-seg-btn h-action-min-default">Dark</button>
+        <button type="button" data-settings-theme="light" aria-pressed="false" class="vi-settings-seg-btn h-action-min-default">Light</button>
+      </div>
+      <a href="#workspace" class="vi-settings-btn h-action-min-default">&larr; Workspace</a>
+    </div>
+  </header>
+
+  <main id="layout-settings-main" class="vi-settings-stage">
+    <div data-settings-shell data-mobile-view="pane" class="vi-settings-shell">
+      <aside aria-label="Settings sections" class="vi-settings-rail">
+        <div class="vi-settings-rail-head">
+          <h1 class="vi-settings-title">Settings</h1>
+          <span class="vi-settings-meta">ws_01j9k4m2</span>
+        </div>
+
+        <div class="vi-settings-search-wrap">
+          <label for="layout-settings-search" class="sr-only">Search settings</label>
+          <div class="vi-settings-search-box">
+            <input id="layout-settings-search" data-settings-search type="search" placeholder="Search settings" class="vi-settings-search-input" />
+          </div>
+          <p role="status" aria-live="polite" data-settings-search-count class="vi-settings-meta">12 of 12 sections shown</p>
+        </div>
+
+        <div role="tablist" aria-label="Settings categories" aria-orientation="vertical" class="vi-settings-nav">
+          <div data-settings-group class="vi-settings-nav-group">
+            <p class="vi-settings-group-label">Workspace</p>
+            <button type="button" role="tab" id="ltab-general" aria-selected="true" aria-controls="lpanel-general" tabindex="0" data-settings-target="general" data-settings-keywords="general profile identity handle seat export danger reset" class="vi-settings-nav-btn h-action-min-default"><span>General and profile</span></button>
+            <button type="button" role="tab" id="ltab-appearance" aria-selected="false" aria-controls="lpanel-general" tabindex="-1" data-settings-target="general" data-settings-anchor="lsec-prefs" data-settings-keywords="appearance theme dark light motion density" class="vi-settings-nav-btn h-action-min-default"><span>Appearance and motion</span></button>
+            <button type="button" role="tab" id="ltab-keyboard" aria-selected="false" aria-controls="lpanel-general" tabindex="-1" data-settings-target="general" data-settings-anchor="lsec-prefs" data-settings-keywords="keyboard shortcuts bindings focus" class="vi-settings-nav-btn h-action-min-default"><span>Keyboard</span></button>
+          </div>
+
+          <div data-settings-group class="vi-settings-nav-group">
+            <p class="vi-settings-group-label">Agents and routing</p>
+            <button type="button" role="tab" id="ltab-personas" aria-selected="false" aria-controls="lpanel-routing" tabindex="-1" data-settings-target="routing" data-settings-keywords="personas dialects seat violet wisteria xylia yarrow zinnia" class="vi-settings-nav-btn h-action-min-default"><span>Personas and dialects</span></button>
+            <button type="button" role="tab" id="ltab-routing" aria-selected="false" aria-controls="lpanel-routing" tabindex="-1" data-settings-target="routing" data-settings-keywords="model routing provider slot remote local fallback" class="vi-settings-nav-btn h-action-min-default"><span>Model routing</span></button>
+            <button type="button" role="tab" id="ltab-tools" aria-selected="false" aria-controls="lpanel-routing" tabindex="-1" data-settings-target="routing" data-settings-anchor="lsec-connectors" data-settings-keywords="tools connectors registry mcp neutral" class="vi-settings-nav-btn h-action-min-default"><span>Tools and connectors</span></button>
+            <button type="button" role="tab" id="ltab-skills" aria-selected="false" aria-controls="lpanel-routing" tabindex="-1" data-settings-target="routing" data-settings-anchor="lsec-connectors" data-settings-keywords="skills catalog vitools rules" class="vi-settings-nav-btn h-action-min-default"><span>Skills</span></button>
+          </div>
+
+          <div data-settings-group class="vi-settings-nav-group">
+            <p class="vi-settings-group-label">Trust and sovereignty</p>
+            <button type="button" role="tab" id="ltab-policy" aria-selected="false" aria-controls="lpanel-trust" tabindex="-1" data-settings-target="trust" data-settings-keywords="policy approvals owner gate allow deny" class="vi-settings-nav-btn h-action-min-default"><span>Policy and approvals</span></button>
+            <button type="button" role="tab" id="ltab-credentials" aria-selected="false" aria-controls="lpanel-trust" tabindex="-1" data-settings-target="trust" data-settings-anchor="lsec-credentials" data-settings-keywords="credentials leases tokens revoke masked" class="vi-settings-nav-btn h-action-min-default"><span>Credentials and leases</span></button>
+            <button type="button" role="tab" id="ltab-nodes" aria-selected="false" aria-controls="lpanel-nodes" tabindex="-1" data-settings-target="nodes" data-settings-keywords="local nodes devices cluster compute mcp host" class="vi-settings-nav-btn h-action-min-default"><span>Local nodes and devices</span></button>
+            <button type="button" role="tab" id="ltab-memory" aria-selected="false" aria-controls="lpanel-trust" tabindex="-1" data-settings-target="trust" data-settings-anchor="lsec-memory" data-settings-keywords="memory data retention forget epoch export" class="vi-settings-nav-btn h-action-min-default"><span>Memory and data</span></button>
+          </div>
+
+          <div data-settings-group class="vi-settings-nav-group">
+            <p class="vi-settings-group-label">Telemetry</p>
+            <button type="button" role="tab" id="ltab-usage" aria-selected="false" aria-controls="lpanel-trust" tabindex="-1" data-settings-target="trust" data-settings-anchor="lsec-memory" data-settings-keywords="usage budgets telemetry tokens calls limits" class="vi-settings-nav-btn h-action-min-default"><span>Usage and budgets</span></button>
+          </div>
+        </div>
+
+        <div data-settings-search-empty hidden class="vi-settings-empty" role="status" aria-live="polite">
+          <p class="vi-settings-row-desc">No matching settings sections found.</p>
+          <button type="button" data-settings-search-reset class="vi-settings-btn vi-settings-btn--primary h-action-min-default">Reset search</button>
+        </div>
+      </aside>
+
+      <div class="vi-settings-pane">
+        <div class="vi-settings-mobile-bar">
+          <button type="button" data-settings-mobile-back class="vi-settings-btn h-action-min-default">&larr; Sections</button>
+          <span data-settings-mobile-heading class="vi-settings-meta">General and profile</span>
+        </div>
+
+        <div class="vi-settings-pane-inner">
+          <div class="vi-settings-receipt">
+            <span>Status</span>
+            <span role="status" aria-live="polite" data-settings-receipt>Workspace configuration ready</span>
+          </div>
+
+          <section id="lpanel-general" role="tabpanel" aria-labelledby="ltab-general" data-settings-panel="general" class="vi-settings-panel">
+            <header class="vi-settings-panel-header">
+              <div>
+                <h2 class="vi-settings-panel-title">General and profile</h2>
+                <p class="vi-settings-panel-desc">Workspace identity, default starting seat, sovereign exports, and fenced owner-gated reset controls.</p>
+              </div>
+            </header>
+
+            <div class="vi-settings-identity">
+              <div class="vi-settings-identity-main">
+                <span aria-hidden="true" class="vi-settings-avatar">OP</span>
+                <div class="vi-settings-row-copy">
+                  <span class="vi-settings-row-label">operator-local</span>
+                  <span class="vi-settings-meta">Workspace owner &middot; id ws_01j9k4m2</span>
+                </div>
+              </div>
+              <button type="button" data-settings-copy="ws_01j9k4m2" aria-label="Copy workspace ID ws_01j9k4m2" class="vi-settings-btn h-action-min-default">Copy workspace ID</button>
+            </div>
+
+            <div id="lsec-prefs" class="vi-settings-section">
+              <h3 class="vi-settings-section-title">Workspace preferences</h3>
+              <div class="vi-settings-card">
+                <div class="vi-settings-row">
+                  <div class="vi-settings-row-copy">
+                    <label for="lsettings-name" class="vi-settings-row-label">Display name</label>
+                    <p class="vi-settings-row-desc">Printed on local audit receipts and cross-team handoffs.</p>
+                  </div>
+                  <div class="vi-settings-row-control">
+                    <input id="lsettings-name" type="text" value="operator-local" class="vi-settings-input" />
+                  </div>
+                </div>
+                <div class="vi-settings-row">
+                  <div class="vi-settings-row-copy">
+                    <label for="lsettings-seat" class="vi-settings-row-label">Default starting seat</label>
+                    <p class="vi-settings-row-desc">Sovereign persona addressed first on new direct threads.</p>
+                  </div>
+                  <div class="vi-settings-row-control">
+                    <select id="lsettings-seat" class="vi-settings-select">
+                      <option value="violet" selected>Violet</option>
+                      <option value="wisteria">Wisteria</option>
+                      <option value="xylia">Xylia</option>
+                      <option value="yarrow">Yarrow</option>
+                      <option value="zinnia">Zinnia</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="vi-settings-row">
+                  <div class="vi-settings-row-copy">
+                    <span class="vi-settings-row-label">Response density</span>
+                    <p class="vi-settings-row-desc">Adjusts vertical spacing across receipts and inspectors.</p>
+                  </div>
+                  <div class="vi-settings-row-control">
+                    <div role="group" aria-label="Response density" data-settings-segmented="Response density" class="vi-settings-segmented">
+                      <button type="button" aria-pressed="false" class="vi-settings-seg-btn h-action-min-default">Compact</button>
+                      <button type="button" aria-pressed="true" class="vi-settings-seg-btn h-action-min-default">Balanced</button>
+                      <button type="button" aria-pressed="false" class="vi-settings-seg-btn h-action-min-default">Spacious</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="vi-settings-row">
+                  <div class="vi-settings-row-copy">
+                    <label for="lsettings-tz" class="vi-settings-row-label">Timezone</label>
+                    <p class="vi-settings-row-desc">Used for tabular timestamps across runs and checkpoints.</p>
+                  </div>
+                  <div class="vi-settings-row-control">
+                    <select id="lsettings-tz" class="vi-settings-select">
+                      <option value="UTC">UTC</option>
+                      <option value="America/New_York" selected>America/New_York</option>
+                      <option value="America/Los_Angeles">America/Los_Angeles</option>
+                      <option value="Europe/Berlin">Europe/Berlin</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="vi-settings-section">
+              <h3 class="vi-settings-section-title">Sovereign data export</h3>
+              <div class="vi-settings-card">
+                <div class="vi-settings-row">
+                  <div class="vi-settings-row-copy">
+                    <span class="vi-settings-row-label">Conversation transcripts</span>
+                    <p class="vi-settings-row-desc">Export threads and tool receipts as deterministic JSON.</p>
+                  </div>
+                  <div class="vi-settings-row-control">
+                    <button type="button" data-settings-export="conversations JSON" class="vi-settings-btn h-action-min-default">Export conversations JSON</button>
+                  </div>
+                </div>
+                <div class="vi-settings-row">
+                  <div class="vi-settings-row-copy">
+                    <span class="vi-settings-row-label">Memory epoch bundle</span>
+                    <p class="vi-settings-row-desc">Export confirmed personal notes and active epoch boundary.</p>
+                  </div>
+                  <div class="vi-settings-row-control">
+                    <button type="button" data-settings-export="memory epoch bundle" class="vi-settings-btn h-action-min-default">Export memory epoch bundle</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="vi-settings-section">
+              <div class="vi-settings-danger-zone">
+                <div class="vi-settings-danger-head">
+                  <h3 class="vi-settings-row-label">Danger zone</h3>
+                  <span class="vi-settings-status">
+                    <span aria-hidden="true" class="vi-settings-dot vi-settings-dot--error"></span>
+                    <span>Destructive &middot; owner gated</span>
+                  </span>
+                </div>
+                <div class="vi-settings-danger-row">
+                  <div class="vi-settings-row-copy">
+                    <span class="vi-settings-row-label">Reset workspace memory</span>
+                    <p class="vi-settings-row-desc">Requires explicit confirmation and pauses at waiting_for_owner.</p>
+                  </div>
+                  <div class="vi-settings-row-control">
+                    <button type="button" data-settings-danger-action="Reset workspace memory" class="vi-settings-btn vi-settings-btn--danger h-action-min-default">Reset workspace memory</button>
+                  </div>
+                </div>
+                <div class="vi-settings-danger-row">
+                  <div class="vi-settings-row-copy">
+                    <span class="vi-settings-row-label">Revoke all active leases</span>
+                    <p class="vi-settings-row-desc">Requires explicit confirmation and pauses at waiting_for_owner.</p>
+                  </div>
+                  <div class="vi-settings-row-control">
+                    <button type="button" data-settings-danger-action="Revoke all active leases" class="vi-settings-btn vi-settings-btn--danger h-action-min-default">Revoke all active leases</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="lpanel-routing" role="tabpanel" aria-labelledby="ltab-routing" data-settings-panel="routing" hidden class="vi-settings-panel">
+            <header class="vi-settings-panel-header">
+              <div>
+                <h2 class="vi-settings-panel-title">Model routing and tools</h2>
+                <p class="vi-settings-panel-desc">Neutral provider slots, ordered fallback chain ending in typed hold, and tool connector toggles.</p>
+              </div>
+            </header>
+            <div role="radiogroup" aria-label="Workspace model routing slots" data-settings-routing class="flex flex-col gap-gap-comfortable-default">
+              <div data-selected="true" class="vi-settings-slot">
+                <button type="button" role="radio" aria-checked="true" data-settings-slot="providers.slot.remote" class="vi-settings-slot-trigger h-action-min-default">
+                  <span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--accent"></span><span>providers.slot.remote</span></span>
+                  <span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--success"></span><span>Available</span></span>
+                </button>
+                <dl class="vi-settings-slot-metrics">
+                  <div><dt class="vi-settings-row-desc">Context</dt><dd class="vi-settings-meta">128,000 tokens</dd></div>
+                  <div><dt class="vi-settings-row-desc">Median latency</dt><dd class="vi-settings-meta">95 ms</dd></div>
+                  <div><dt class="vi-settings-row-desc">Fallback</dt><dd class="vi-settings-meta">1 of 2</dd></div>
+                </dl>
+              </div>
+              <div data-selected="false" class="vi-settings-slot">
+                <button type="button" role="radio" aria-checked="false" data-settings-slot="providers.slot.local" class="vi-settings-slot-trigger h-action-min-default">
+                  <span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--info"></span><span>providers.slot.local</span></span>
+                  <span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--warning"></span><span>Degraded</span></span>
+                </button>
+                <dl class="vi-settings-slot-metrics">
+                  <div><dt class="vi-settings-row-desc">Context</dt><dd class="vi-settings-meta">8,192 tokens</dd></div>
+                  <div><dt class="vi-settings-row-desc">Median latency</dt><dd class="vi-settings-meta">310 ms</dd></div>
+                  <div><dt class="vi-settings-row-desc">Fallback</dt><dd class="vi-settings-meta">2 of 2</dd></div>
+                </dl>
+              </div>
+            </div>
+            <div id="lsec-connectors" class="vi-settings-card">
+              <div class="vi-settings-row">
+                <div class="vi-settings-row-copy">
+                  <span id="lconn-read" class="vi-settings-row-label">vcs.file.read</span>
+                  <p class="vi-settings-row-desc">effect: read &middot; Neutral repository file reader.</p>
+                </div>
+                <button type="button" role="switch" aria-labelledby="lconn-read" aria-checked="true" data-settings-switch="vcs.file.read" class="vi-settings-switch h-action-min-default">
+                  <span class="vi-settings-switch-track" aria-hidden="true"><span class="vi-settings-switch-thumb"></span></span>
+                  <span data-settings-switch-label>On</span>
+                </button>
+              </div>
+              <div class="vi-settings-row">
+                <div class="vi-settings-row-copy">
+                  <span id="lconn-write" class="vi-settings-row-label">vcs.patch.apply</span>
+                  <p class="vi-settings-row-desc">effect: write &middot; Pauses at waiting_for_owner.</p>
+                </div>
+                <button type="button" role="switch" aria-labelledby="lconn-write" aria-checked="true" data-settings-switch="vcs.patch.apply" class="vi-settings-switch h-action-min-default">
+                  <span class="vi-settings-switch-track" aria-hidden="true"><span class="vi-settings-switch-thumb"></span></span>
+                  <span data-settings-switch-label>On</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section id="lpanel-nodes" role="tabpanel" aria-labelledby="ltab-nodes" data-settings-panel="nodes" hidden class="vi-settings-panel">
+            <header class="vi-settings-panel-header">
+              <div>
+                <h2 class="vi-settings-panel-title">Local nodes and devices</h2>
+                <p class="vi-settings-panel-desc">Connected local compute and MCP broker hosts with explicit owner enrollment gating.</p>
+              </div>
+            </header>
+            <div class="vi-settings-card">
+              <div class="vi-settings-row">
+                <div class="vi-settings-row-copy">
+                  <span id="lnode-confirm" class="vi-settings-row-label">Require explicit confirmation for new nodes</span>
+                  <p class="vi-settings-row-desc">Hold new device requests until digest approval.</p>
+                </div>
+                <button type="button" role="switch" aria-labelledby="lnode-confirm" aria-checked="true" data-settings-switch="Require explicit confirmation for new nodes" class="vi-settings-switch h-action-min-default">
+                  <span class="vi-settings-switch-track" aria-hidden="true"><span class="vi-settings-switch-thumb"></span></span>
+                  <span data-settings-switch-label>On</span>
+                </button>
+              </div>
+            </div>
+            <div class="vi-settings-table-wrap">
+              <table class="vi-settings-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Node / Device</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Last seen</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">node-workstation-01</th>
+                    <td>Local compute host</td>
+                    <td><span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--success"></span><span>Connected</span></span></td>
+                    <td>2026-11-22 17:40:12</td>
+                    <td><button type="button" data-settings-revoke="node-workstation-01" aria-label="Revoke node-workstation-01" class="vi-settings-btn vi-settings-btn--danger h-action-min-default">Revoke</button></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">node-broker-02</th>
+                    <td>MCP tool broker</td>
+                    <td><span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--warning"></span><span>Idle</span></span></td>
+                    <td>2026-11-22 16:12:04</td>
+                    <td><button type="button" data-settings-revoke="node-broker-02" aria-label="Revoke node-broker-02" class="vi-settings-btn vi-settings-btn--danger h-action-min-default">Revoke</button></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">node-runner-03</th>
+                    <td>Sandbox check runner</td>
+                    <td><span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--error"></span><span>Revoked</span></span></td>
+                    <td>2026-11-21 09:05:41</td>
+                    <td><span class="vi-settings-meta">Held</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="lpanel-trust" role="tabpanel" aria-labelledby="ltab-policy" data-settings-panel="trust" hidden class="vi-settings-panel">
+            <header class="vi-settings-panel-header">
+              <div>
+                <h2 class="vi-settings-panel-title">Policy, credentials and memory</h2>
+                <p class="vi-settings-panel-desc">Deterministic Allow / Ask owner / Deny rules, masked credential leases, and epoch-fenced retention.</p>
+              </div>
+            </header>
+            <div class="vi-settings-table-wrap">
+              <table class="vi-settings-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Tool pattern</th>
+                    <th scope="col">Effect</th>
+                    <th scope="col">Decision</th>
+                    <th scope="col">Boundary</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">vcs.file.read</th>
+                    <td>read</td>
+                    <td><span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--success"></span><span>Allow</span></span></td>
+                    <td>Workspace files excluding secrets</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">vcs.patch.apply</th>
+                    <td>write</td>
+                    <td><span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--warning"></span><span>Ask owner</span></span></td>
+                    <td>Pauses at waiting_for_owner</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">fs.tree.remove</th>
+                    <td>destructive</td>
+                    <td><span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--error"></span><span>Deny</span></span></td>
+                    <td>Blocked outside disposable scratch</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="lsec-credentials" class="vi-settings-card">
+              <div class="vi-settings-row">
+                <div class="vi-settings-row-copy">
+                  <span class="vi-settings-row-label">runs.credentials.bind &middot; cred &middot;&middot;&middot;&middot; 7f3a</span>
+                  <p class="vi-settings-row-desc">scope repo:runbooks:read &middot; rotates 1h</p>
+                </div>
+                <div class="vi-settings-row-control">
+                  <span class="vi-settings-status"><span aria-hidden="true" class="vi-settings-dot vi-settings-dot--success"></span><span>Active</span></span>
+                  <button type="button" data-settings-revoke="cred 7f3a" aria-label="Revoke lease cred 7f3a" class="vi-settings-btn vi-settings-btn--danger h-action-min-default">Revoke</button>
+                </div>
+              </div>
+            </div>
+            <div id="lsec-memory" class="vi-settings-card">
+              <div class="vi-settings-row">
+                <div class="vi-settings-row-copy">
+                  <span class="vi-settings-row-label">Current window usage</span>
+                  <p class="vi-settings-row-desc">3/6 model calls &middot; 14,280 / 50,000 measured tokens</p>
+                </div>
+                <button type="button" data-settings-danger-action="Advance deletion epoch" class="vi-settings-btn vi-settings-btn--danger h-action-min-default">Forget and advance epoch</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

@@ -283,9 +283,10 @@ test('design_brief and scaffold_page tools plus components.manifest.json work ov
 
   const manifestRes = await client.readResource({ uri: 'file://dist/components.manifest.json' });
   const manifest = JSON.parse(manifestRes.contents[0].text);
-  assert.equal(manifest.componentCount, 84);
+  assert.equal(manifest.componentCount, 87);
   assert.ok(manifest.archetypes['public-site-landing']);
   assert.ok(manifest.archetypes['docs-portal']);
+  assert.ok(manifest.archetypes['settings-workspace']);
   assert.ok(manifest.archetypes['ui-primitives-kitchen-sink']);
 
   const briefRes = await client.callTool({

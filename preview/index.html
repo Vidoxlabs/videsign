@@ -24,8 +24,10 @@
   <link rel="stylesheet" href="../dist/vi-orbital-hero.css" />
   <link rel="stylesheet" href="../dist/docs-portal.css" />
   <link rel="stylesheet" href="../dist/chat.css" />
+  <link rel="stylesheet" href="../dist/settings-surface.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
+  <script defer src="../dist/settings-surface.js"></script>
   <script src="chat-preview.js" defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -704,6 +706,8 @@
       { file: 'team-memory-notes.html', tier: 'workspace', label: 'Team memory notes', desc: 'Confirmed team notes (Always used / Used when relevant), pending agent suggestions requiring Keep/Dismiss confirmation, and recall disclosure (ADR-020).' },
       { file: 'cross-team-handoff.html', tier: 'workspace', label: 'Cross-team handoff and review gate', desc: 'Outgoing and incoming cross-team handoff blocks paired with Review approved and Changes requested stage gate statuses (ADR-020).' },
       { file: 'usage-budget-meter.html', tier: 'workspace', label: 'Usage and limits meter', desc: 'Polite live region with tabular mono call/token totals, collapsible per-actor breakdowns, and unreported-tokens fallback receipt (ADR-020).' },
+      { file: 'settings-quick-menu.html', tier: 'workspace', label: 'Quick settings popover', desc: 'Compact crystal-glass sidebar popover grouping token usage, Dark/Light theme switcher, motion and developer receipt switches, workspace shortcuts, and All settings trigger (ADR-006, ADR-024).', glass: true },
+      { file: 'settings-surface.html', tier: 'workspace', label: 'Unified settings dialog', desc: 'Solid two-pane Settings dialog with searchable four-group left rail, General/Export/Danger Zone, neutral model routing and tool connectors, local nodes ledger, and policy/credential/memory panes (ADR-017, ADR-021, ADR-024).' },
       { file: 'claim-maturity-badge.html', tier: 'workspace', label: 'Claim maturity badge', desc: 'Four canonical claim maturity pills (implemented, observed, specified, planned) pairing status indicators with short receipts.' },
       { file: 'run-lifecycle-strip.html', tier: 'workspace', label: 'Run lifecycle strip', desc: 'Solid card showing the six objective/attempt stages, owner gate, terminal branches, and hairline-separated run receipt.' },
       { file: 'tool-registry-row.html', tier: 'workspace', label: 'Neutral tool registry', desc: 'Hairline-separated neutral tool entries showing connector bindings, effect classes, realms, and owner-gate or deterministic-check states.' },
@@ -742,8 +746,9 @@
       { file: 'critique-thread-panel.html', tier: 'public', label: 'Critique thread panel', desc: 'Slot-anchored critique entries with Keep / Change / Do not copy classification chips, polite open/resolved counter, and a critique composer (ADR-023).' },
       { file: 'guardrail-receipt-panel.html', tier: 'public', label: 'Guardrail receipt panel', desc: 'Polite receipt pairing text contrast, graph line, glass layers, arbitrary-class, and scaffold-tool bounds with export and inspection actions (ADR-023).' },
 
-      // Page layouts (6 full-viewport compositions)
+      // Page layouts (7 full-viewport compositions)
       { file: 'layout-docs-portal.html', tier: 'layouts', label: 'Layout: docs portal', desc: 'Three-column responsive documentation portal uniting crystal-glass header island, Cmd+K palette, collapsible nav rail, Docs Hub + 72ch Article/API canvas, and scroll-spy TOC rail (ADR-024, ADR-025).', frame: true },
+      { file: 'layout-settings.html', tier: 'layouts', label: 'Layout: workspace settings', desc: 'Full-viewport responsive Settings workstation recomposing between desktop two-pane (1440px), tablet split (1024px), and mobile single-column drill-down (390px) (ADR-024, ADR-025).', frame: true },
       { file: 'layout-public-site.html', tier: 'layouts', label: 'Layout: public site', desc: 'Full-page dynamic public website composition integrating the island header, hero billboard, four public repos, and footer (ADR-023).', frame: true },
       { file: 'design-studio-canvas.html', tier: 'layouts', label: 'Layout: design studio canvas', desc: 'Collaborative agent design studio with structured brief, Keep/Change/Do not copy contract, viewport presets, and guardrail check (ADR-023).', frame: true },
       { file: 'layout-agent-workspace.html', tier: 'layouts', label: 'Layout: agent workspace', desc: 'Responsive session rail, conversation canvas and inspector (ADR-020, ADR-021).', frame: true },
@@ -800,8 +805,10 @@
         '<link rel="stylesheet" href="../dist/vi-orbital-hero.css">' +
         '<link rel="stylesheet" href="../dist/docs-portal.css">' +
         '<link rel="stylesheet" href="../dist/chat.css">' +
+        '<link rel="stylesheet" href="../dist/settings-surface.css">' +
         '<script type="module" src="../dist/vi-orbital-field.js"></scr' + 'ipt>' +
         '<script defer src="../dist/docs-portal.js"></scr' + 'ipt>' +
+        '<script defer src="../dist/settings-surface.js"></scr' + 'ipt>' +
         (html.includes('data-chat-preview') ? '<script src="chat-preview.js" defer></scr' + 'ipt>' : '') +
         '<style>body{margin:0;min-height:100dvh;background:var(--vi-colors-surface-background-primary-base);color:var(--vi-colors-text-content-primary-base);font-family:var(--vi-typography-typography-family-sans-base)}</style>' +
         '</head><body>' + html + '</body></html>';
@@ -876,6 +883,9 @@
             normalizeSpecimenHeadings(record.frame);
             if (window.ViDocsPortal && typeof window.ViDocsPortal.initDocsPortal === 'function') {
               window.ViDocsPortal.initDocsPortal(record.frame);
+            }
+            if (window.ViSettingsSurface && typeof window.ViSettingsSurface.initSettingsSurface === 'function') {
+              window.ViSettingsSurface.initSettingsSurface(record.frame);
             }
             record.frame.querySelectorAll('img[data-chibi-fallback]').forEach(function (img) {
               img.addEventListener('error', function () {
