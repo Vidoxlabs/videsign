@@ -11,7 +11,12 @@ const assert = require('node:assert/strict');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { DatabaseSync } = require('node:sqlite');
+let DatabaseSync = null;
+try {
+  ({ DatabaseSync } = require('node:sqlite'));
+} catch {
+  DatabaseSync = null;
+}
 
 const worker = require('../pipeline/service/worker');
 const {
@@ -345,7 +350,7 @@ describe('consolidated migration files and public-safe wrangler config', () => {
   });
 });
 
-describe('Phase 0 asset service routes and security', () => {
+describe('Phase 0 asset service routes and security', { skip: !DatabaseSync && 'node:sqlite requires Node 22.5+' }, () => {
   let db;
 
   beforeEach(async () => {
