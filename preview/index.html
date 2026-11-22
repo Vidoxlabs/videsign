@@ -24,9 +24,11 @@
   <link rel="stylesheet" href="../dist/vi-orbital-hero.css" />
   <link rel="stylesheet" href="../dist/docs-portal.css" />
   <link rel="stylesheet" href="../dist/settings-surface.css" />
+  <link rel="stylesheet" href="../dist/library-surface.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
   <script defer src="../dist/settings-surface.js"></script>
+  <script defer src="../dist/library-surface.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
@@ -684,7 +686,10 @@
       { file: 'api-reference-row.html', tier: 'primitives', label: 'Endpoint reference rows', desc: 'Harness endpoint rows pairing protocol method chips and mono paths with effect classes (read, write, destructive, credential) and hairline parameter ledgers (ADR-021, ADR-024).' },
       { file: 'changelog-timeline.html', tier: 'primitives', label: 'Changelog timeline', desc: 'Release notes with version chips, tabular dates, an unreleased block, and Added / Changed / Fixed / Planned hairline ledger rows (ADR-007, ADR-024).' },
 
-      // Conversation, workspace and harness (29)
+      // Conversation, workspace and harness (34)
+      { file: 'skills-library-surface.html', tier: 'workspace', label: 'Skills library', desc: 'Canvas-first Skills catalog with JIT token index budget, ownership tabs, category pills, Subgrid cards, Auto-trigger vs Manual only switches, and a solid SKILL.md inspector drawer (ADR-011, ADR-020, ADR-024).' },
+      { file: 'agents-library-surface.html', tier: 'workspace', label: 'Agents and routines roster', desc: 'Separates the five quarantined sovereign VWXYZ persona seats from on-demand specialist agents and scheduled routines with explicit approval posture and handoff tags (ADR-013, ADR-020, ADR-024).' },
+      { file: 'projects-library-surface.html', tier: 'workspace', label: 'Projects directory and workspace', desc: 'Interactive Directory table/cards switcher and two-zone Project Detail split pairing Threads/Sources/Activity + scoped composer with stacked instructions, immutable sources meter, and memory isolation (ADR-016, ADR-024).' },
       { file: 'conversation-surface.html', tier: 'workspace', label: 'Conversation surface', desc: 'Standard AI chat empty state: one header row with seat dots, at most four starters, one composer field, and a one-line disclosure (ADR-016).', glass: true },
       { file: 'chat-dock.html', tier: 'workspace', label: 'Chat dock', desc: 'Persistent persona chat in progress: launcher with five-bar foot and a glass dialog following the conversation surface (ADR-013, ADR-016).', glass: true },
       { file: 'group-conversation.html', tier: 'workspace', label: 'Group conversation surface', desc: 'Multi-agent harness thread: monogram badges, head-agent violet ring, mono role labels, handoff and budget receipts, solid artifact card, and status-token turn states (ADR-020).', glass: true },
@@ -802,9 +807,11 @@
         '<link rel="stylesheet" href="../dist/vi-orbital-hero.css">' +
         '<link rel="stylesheet" href="../dist/docs-portal.css">' +
         '<link rel="stylesheet" href="../dist/settings-surface.css">' +
+        '<link rel="stylesheet" href="../dist/library-surface.css">' +
         '<script type="module" src="../dist/vi-orbital-field.js"></scr' + 'ipt>' +
         '<script defer src="../dist/docs-portal.js"></scr' + 'ipt>' +
         '<script defer src="../dist/settings-surface.js"></scr' + 'ipt>' +
+        '<script defer src="../dist/library-surface.js"></scr' + 'ipt>' +
         '<style>body{margin:0;min-height:100dvh;background:var(--vi-colors-surface-background-primary-base);color:var(--vi-colors-text-content-primary-base);font-family:var(--vi-typography-typography-family-sans-base)}</style>' +
         '</head><body>' + html + '</body></html>';
     }
@@ -881,6 +888,9 @@
             }
             if (window.ViSettingsSurface && typeof window.ViSettingsSurface.initSettingsSurface === 'function') {
               window.ViSettingsSurface.initSettingsSurface(record.frame);
+            }
+            if (window.ViLibrarySurface && typeof window.ViLibrarySurface.initLibrarySurface === 'function') {
+              window.ViLibrarySurface.initLibrarySurface(record.frame);
             }
             record.frame.querySelectorAll('img[data-chibi-fallback]').forEach(function (img) {
               img.addEventListener('error', function () {

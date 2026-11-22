@@ -411,6 +411,17 @@ function emitSettingsSurfaceArtifacts() {
   };
 }
 
+/**
+ * Modernized Skills, Agents, and Projects Library surfaces: zero-hex oklch() container-query
+ * stylesheet plus CSP-safe vanilla JS progressive-enhancement controller.
+ */
+function emitLibrarySurfaceArtifacts() {
+  return {
+    'library-surface.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'library-surface.css'), 'utf-8'),
+    'library-surface.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'library-surface.js'), 'utf-8'),
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -441,6 +452,7 @@ function main() {
     ...emitOrbitalFieldArtifacts(),
     ...emitDocsPortalArtifacts(),
     ...emitSettingsSurfaceArtifacts(),
+    ...emitLibrarySurfaceArtifacts(),
   };
 
   if (dryRun) {
@@ -483,4 +495,5 @@ module.exports = {
   emitOrbitalFieldArtifacts,
   emitDocsPortalArtifacts,
   emitSettingsSurfaceArtifacts,
+  emitLibrarySurfaceArtifacts,
 };

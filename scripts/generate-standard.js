@@ -61,7 +61,7 @@ function buildStandard(tokens, designMd, skillMd) {
       authorityFiles: ['DESIGN.md', 'SKILL.md'],
       generatedBy: 'scripts/generate-standard.js',
       platformOutputs: {
-        css: ['dist/tokens.css', 'dist/themes.css', 'dist/glass.css', 'dist/stage.css', 'dist/docs-portal.css', 'dist/settings-surface.css'],
+        css: ['dist/tokens.css', 'dist/themes.css', 'dist/glass.css', 'dist/stage.css', 'dist/docs-portal.css', 'dist/settings-surface.css', 'dist/library-surface.css'],
         tailwind: 'dist/tailwind.config.js',
         typescript: 'dist/tokens.ts',
         swift: 'dist/ViTokens.swift',
