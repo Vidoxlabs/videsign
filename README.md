@@ -34,7 +34,7 @@ videsign/
 │   ├── check-public-safety.js    Fail-closed public-safety scan (CI)
 │   └── canon-tool.js             VWXYZ candidate validator and sidecar generator
 ├── test/            node --test contracts: tokens, themes, preview, standard, brand, canon, MCP
-├── mcp-server.js    Read-only MCP server: docs, canon, standard, style pack, fragments; tools resolve_token, style_pack, check_contrast, memory_field, stage_backdrop
+├── mcp-server.js    Read-only MCP server: docs, canon, standard, style pack, fragments; tools resolve_token, style_pack, check_contrast, memory_field, stage_backdrop, component_catalog
 ├── assets/          Local-only design images (gitignored, never committed)
 ├── dist/            Generated artifacts (gitignored, run `npm run tokens` to regenerate)
 ├── eslint.config.js AST validation: enforces no-arbitrary-value rule
@@ -71,9 +71,13 @@ styled visual catalog of every component (`python3 -m http.server 8000`). The ca
    Import `dist/themes.css` as well to opt into the product light theme, which
    remaps the base variables.
 3. **MCP**: Run `npm run mcp` and query resources/tools from your product repo's agent.
+   Use `component_catalog` (or read `file://preview/<id>.html` directly) to pull pure HTML
+   fragments for agent workspaces, harness contracts and public-repository continuity.
    `dist/standard.json` is the machine-readable rule set (glass, type, motion, stage
-   backdrop, five-bar rule, graph line, chat dock, conversation surface, explorable instrument, accessibility) with the ADR index.
-   Sync it into a product with the product's own token sync script, pinned to a videsign SHA.
+   backdrop, five-bar rule, graph line, chat dock, conversation surface, group conversation,
+   modular components in `rules.modularComponents`, explorable instrument, accessibility) with
+   the ADR index. Sync it into a product with the product's own token sync script, pinned to
+   a videsign SHA.
 4. **Stage backdrop**: `const { renderStageSvg, stageContrastReport } = require('@vidoxlabs/videsign/lib/stage.js')`
    renders the ADR-013 backdrop as an SVG string (or inline `dist/stage-ambient.svg` /
    `dist/stage-hero.svg`). Import `dist/stage.css` with `dist/tokens.css`. Your pause

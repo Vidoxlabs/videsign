@@ -146,3 +146,82 @@ test('memory_field refuses invalid data with a typed error', async () => {
   assert.equal(result.isError, true);
   assert.match(result.content[0].text, /MEMORY_FIELD_INVALID/);
 });
+
+test('component_catalog lists matching entries by consumer without html by default', async () => {
+  const { tools } = await client.listTools();
+  assert.ok(tools.some((t) => t.name === 'component_catalog'));
+
+  const bloomRes = await client.callTool({
+    name: 'component_catalog',
+    arguments: { consumer: 'bloom' },
+  });
+  assert.notEqual(bloomRes.isError, true, bloomRes.content[0].text);
+  const bloomBody = JSON.parse(bloomRes.content[0].text);
+  assert.ok(bloomBody.count > 0);
+  assert.deepEqual(bloomBody.categories, ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity']);
+  assert.ok(bloomBody.components.some((c) => c.id === 'layout-agent-workspace'));
+  for (const item of bloomBody.components) {
+    assert.ok(item.consumers.includes('bloom'), `expected bloom consumer on ${item.id}`);
+    assert.equal(item.html, undefined, `html should be omitted by default for ${item.id}`);
+  }
+
+  const siteRes = await client.callTool({
+    name: 'component_catalog',
+    arguments: { consumer: 'vidoxlabs.dev' },
+  });
+  assert.notEqual(siteRes.isError, true, siteRes.content[0].text);
+  const siteIds = JSON.parse(siteRes.content[0].text).components.map((c) => c.id);
+  assert.ok(siteIds.includes('public-repo-card'));
+  assert.ok(siteIds.includes('ecosystem-plane-map'));
+
+  const contractsRes = await client.callTool({
+    name: 'component_catalog',
+    arguments: { category: 'harness-contracts' },
+  });
+  assert.notEqual(contractsRes.isError, true, contractsRes.content[0].text);
+  const contractsBody = JSON.parse(contractsRes.content[0].text);
+  assert.deepEqual(
+    contractsBody.components.map((c) => c.id),
+    ['claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row'],
+  );
+});
+
+test('component_catalog fetches a single component with html and rejects unknown ids', async () => {
+  const found = await client.callTool({
+    name: 'component_catalog',
+    arguments: { name: 'owner-approval-gate' },
+  });
+  assert.notEqual(found.isError, true, found.content[0].text);
+  const body = JSON.parse(found.content[0].text);
+  assert.equal(body.id, 'owner-approval-gate');
+  assert.equal(body.file, 'preview/owner-approval-gate.html');
+  assert.equal(body.uri, 'file://preview/owner-approval-gate.html');
+  assert.equal(body.adr, 'ADR-021');
+  assert.match(body.html, /Approval needed/);
+
+  const normalized = await client.callTool({
+    name: 'component_catalog',
+    arguments: { name: 'preview/owner-approval-gate.html', includeHtml: false },
+  });
+  assert.notEqual(normalized.isError, true, normalized.content[0].text);
+  const normalizedBody = JSON.parse(normalized.content[0].text);
+  assert.equal(normalizedBody.id, 'owner-approval-gate');
+  assert.equal(normalizedBody.html, undefined);
+
+  const fallback = await client.callTool({
+    name: 'component_catalog',
+    arguments: { name: 'island-nav' },
+  });
+  assert.notEqual(fallback.isError, true, fallback.content[0].text);
+  const fallbackBody = JSON.parse(fallback.content[0].text);
+  assert.equal(fallbackBody.id, 'island-nav');
+  assert.equal(fallbackBody.uri, 'file://preview/island-nav.html');
+  assert.match(fallbackBody.html, /vi-glass-shell/);
+
+  const missing = await client.callTool({
+    name: 'component_catalog',
+    arguments: { name: 'does-not-exist' },
+  });
+  assert.equal(missing.isError, true);
+  assert.match(missing.content[0].text, /not found/i);
+});

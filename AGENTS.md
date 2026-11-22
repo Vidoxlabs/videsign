@@ -45,8 +45,9 @@ design system — the shared visual language for all Vidoxlabs products and appl
 - **mcp-server.js**: The MCP server that exposes this design system to product
   repositories for cross-repo token and fragment fetching. Tools: `resolve_token` (one token
   value), `style_pack`, `check_contrast` (WCAG ratio of two colours or tokens),
-  `memory_field` (memory field SVG, text equivalent and contrast report) and
-  `stage_backdrop` (stage SVG plus its contrast report).
+  `memory_field` (memory field SVG, text equivalent and contrast report),
+  `stage_backdrop` (stage SVG plus its contrast report) and
+  `component_catalog` (discover and retrieve modular `preview/` components by ID, category, or consumer).
 - **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
   naming convention. Raster binaries are not committed. Text-only SVG under `brand/`
   is a proposed exception (ADR-011, awaiting ratification).

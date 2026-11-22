@@ -8,9 +8,10 @@
  * Fragments are auto-discovered at startup — no manual resource list to maintain.
  *
  * Tools: `resolve_token` (one token value), `style_pack` (the canon style pack),
- * `check_contrast` (WCAG ratio of two colours or tokens) and `memory_field` (the ADR-018 memory field SVG, text equivalent and contrast report) and
- * `stage_backdrop` (the ADR-013 stage
- * SVG with its contrast report). All tools compute or read; none writes.
+ * `check_contrast` (WCAG ratio of two colours or tokens), `memory_field` (the ADR-018
+ * memory field SVG, text equivalent and contrast report), `stage_backdrop` (the ADR-013
+ * stage SVG with its contrast report) and `component_catalog` (discover and fetch
+ * modular Nocturne HTML components). All tools compute or read; none writes.
  */
 
 const { Server } = require('@modelcontextprotocol/sdk/server');
@@ -31,7 +32,11 @@ const TOKENS = parseFrontMatter(DESIGN_CONTENT);
 const { contrastRatio, wcagLevels } = require('./lib/contrast');
 const stage = require('./lib/stage');
 const memoryField = require('./lib/memory-field');
+const { COMPONENT_CATALOG } = require('./scripts/generate-standard');
 const BRAND_TOKENS = JSON.parse(fs.readFileSync(path.join(__dirname, 'brand', 'tokens.json'), 'utf-8'));
+
+const CATALOG_CATEGORIES = ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity'];
+const CATALOG_CONSUMERS = ['seed', 'bloom', 'vidoxlabs.dev'];
 
 /** A `#RRGGBB` literal, or a `colors.<key>` token path resolved from DESIGN.md. */
 function resolveColour(input) {
@@ -44,6 +49,20 @@ function resolveColour(input) {
 }
 
 const textResult = (text, isError = false) => ({ content: [{ type: 'text', text }], ...(isError ? { isError: true } : {}) });
+
+/** Format a COMPONENT_CATALOG entry or fallback preview resource for component_catalog. */
+function serializeCatalogEntry(entry, includeHtml) {
+  return {
+    id: entry.id,
+    file: entry.file,
+    uri: `file://${entry.file}`,
+    category: entry.category,
+    adr: entry.adr,
+    consumers: entry.consumers,
+    summary: entry.summary,
+    ...(includeHtml ? { html: fs.readFileSync(path.join(__dirname, entry.file), 'utf-8') } : {}),
+  };
+}
 
 // --- Resource discovery -------------------------------------------------
 
@@ -318,6 +337,19 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         description: 'Returns the canon style pack (single deterministic JSON): persona accents, character canon palette + signals via canon/vwxyz/palette.json, naming/asset-id/review-threshold rules, motion budget, negative guardrails, burned-run pointers and the executable workflow. Use this for one-call style retrieval instead of reading multiple canon files.',
         inputSchema: { type: 'object', properties: {} },
       },
+      {
+        name: 'component_catalog',
+        description: 'Discover and fetch modular Nocturne HTML components by id, category (conversation, agent-workspace, harness-contracts, public-continuity) or target consumer (seed, bloom, vidoxlabs.dev). Pass "name" to retrieve one component with its pure HTML fragment.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', description: 'Optional component id (e.g., "owner-approval-gate").' },
+            category: { type: 'string', enum: CATALOG_CATEGORIES, description: 'Optional category filter when listing components.' },
+            consumer: { type: 'string', enum: CATALOG_CONSUMERS, description: 'Optional target consumer filter when listing components.' },
+            includeHtml: { type: 'boolean', description: 'Include raw HTML fragment markup (default true when "name" is supplied, false when listing).' },
+          },
+        },
+      },
     ],
   };
 });
@@ -396,6 +428,41 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     return {
       content: [{ type: 'text', text: fs.readFileSync(packPath, 'utf-8') }],
     };
+  }
+  if (name === 'component_catalog') {
+    if (args?.name !== undefined && args?.name !== null) {
+      const normalized = String(args.name).trim().replace(/^file:\/\//, '').replace(/^preview\//, '').replace(/\.html$/, '');
+      const catalogEntry = COMPONENT_CATALOG.find((c) => c.id === normalized);
+      const resource = RESOURCES.find((r) => r.uri === `file://preview/${normalized}.html`);
+      if (!catalogEntry && !resource) {
+        return textResult(
+          `Error: component "${args.name}" not found. Available catalog IDs: ${COMPONENT_CATALOG.map((c) => c.id).join(', ')}`,
+          true,
+        );
+      }
+      const resolved = catalogEntry || {
+        id: normalized,
+        file: `preview/${resource.file}`,
+        category: null,
+        adr: null,
+        consumers: [],
+        summary: resource.description,
+      };
+      return textResult(JSON.stringify(serializeCatalogEntry(resolved, args?.includeHtml !== false), null, 2));
+    }
+    let matches = COMPONENT_CATALOG;
+    if (args?.category) {
+      matches = matches.filter((c) => c.category === args.category);
+    }
+    if (args?.consumer) {
+      matches = matches.filter((c) => c.consumers.includes(args.consumer));
+    }
+    const items = matches.map((entry) => serializeCatalogEntry(entry, args?.includeHtml === true));
+    return textResult(JSON.stringify({
+      count: items.length,
+      categories: CATALOG_CATEGORIES,
+      components: items,
+    }, null, 2));
   }
   if (name === 'resolve_token') {
     const tokenPath = args?.path;
