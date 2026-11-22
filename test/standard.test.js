@@ -293,3 +293,60 @@ test('ADR-016 and ADR-017 rules are stated in DESIGN.md prose (parity guard)', (
     assert.ok(fs.existsSync(path.join(ROOT, fragment)), `${fragment} is missing`);
   }
 });
+
+test('standard carries the ADR-020 group-conversation rules and they match the tokens', () => {
+  const { standard } = generateStandardArtifacts(TOKENS);
+  const { groupConversation } = standard.rules;
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-020' && a.status.startsWith('Proposed')));
+  assert.equal(groupConversation.adr, 'ADR-020');
+  assert.equal(groupConversation.extends, 'ADR-016');
+  assert.equal(groupConversation.banPersonaAccentsOnNonPersonaAgents, true);
+  assert.equal(groupConversation.identity.outline, TOKENS.colors['border-graph-line-base']);
+  assert.equal(groupConversation.identity.fill, TOKENS.colors['surface-background-tertiary-base']);
+  assert.equal(groupConversation.identity.headAgentRing, TOKENS.colors['surface-accent-violet-base']);
+  assert.equal(groupConversation.identity.minContrast, 3);
+  assert.equal(groupConversation.roleLabel.family, TOKENS.typography['typography-family-mono-base']);
+  assert.equal(groupConversation.roleLabel.size, TOKENS.typography['typography-size-xs-base']);
+  assert.equal(groupConversation.roleLabel.tracking, TOKENS.typography['typography-tracking-wide-base']);
+  assert.equal(groupConversation.roleLabel.sentenceCase, true);
+  assert.equal(groupConversation.activityAndBudgetRows.separator, TOKENS.colors['border-separator-primary-base']);
+  assert.equal(groupConversation.artifactCard.surface, TOKENS.colors['surface-background-secondary-base']);
+  assert.equal(groupConversation.artifactCard.radius, TOKENS.spacing['layout-radius-standard-base']);
+  assert.equal(groupConversation.artifactCard.noPreviewPanes, true);
+  assert.equal(groupConversation.artifactCard.neverGlass, true);
+  assert.equal(groupConversation.turnStates.running, TOKENS.colors['status-indicator-info-base']);
+  assert.equal(groupConversation.turnStates.stopping, TOKENS.colors['status-indicator-warning-base']);
+  assert.equal(groupConversation.turnStates.finished, TOKENS.colors['status-indicator-success-base']);
+  assert.equal(groupConversation.turnStates.failed, TOKENS.colors['status-indicator-error-base']);
+  assert.equal(groupConversation.turnStates.needsTextLabel, true);
+  assert.equal(groupConversation.turnStates.onlyLoop, 'thinking pulse');
+  assert.deepEqual(groupConversation.turnStates.banned, ['spinners', 'skeleton bubbles']);
+});
+
+test('ADR-020 rules are stated in DESIGN.md prose (parity guard)', () => {
+  const prose = DESIGN.toLowerCase();
+  for (const phrase of [
+    'group conversation surface (adr-020)',
+    'persona accent ban',
+    'deterministic monogram identity',
+    'mono role micro-labels',
+    'speaker rhythm',
+    'receipt-ledger rows',
+    'artifact and file cards',
+    'turn-state grammar',
+    'message actions',
+    '{colors.border-graph-line-base}',
+    '{colors.surface-accent-violet-base}',
+    '{colors.surface-background-secondary-base}',
+    '{colors.status-indicator-info-base}',
+    '{colors.status-indicator-warning-base}',
+    '{colors.status-indicator-success-base}',
+    '{colors.status-indicator-error-base}',
+  ]) {
+    assert.ok(prose.includes(phrase), `DESIGN.md is missing: ${phrase}`);
+  }
+  const md = generateStandardArtifacts(TOKENS)['standard.md'];
+  assert.ok(md.includes('## Group conversation surface (ADR-020)'), 'standard.md is missing ## Group conversation surface (ADR-020)');
+  assert.ok(DESIGN.includes('preview/group-conversation.html'), 'DESIGN.md must reference preview/group-conversation.html');
+  assert.ok(fs.existsSync(path.join(ROOT, 'preview/group-conversation.html')), 'preview/group-conversation.html is missing');
+});
