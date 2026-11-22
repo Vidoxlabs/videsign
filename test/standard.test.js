@@ -121,7 +121,7 @@ test('accepted status is limited to ratified items and Adopted/Proposed statuses
     if (line.startsWith('**Status**:') && current) statuses.push({ id: current, status: line.slice('**Status**:'.length).trim() });
   }
   const adoptedIds = ['ADR-013', 'ADR-016', 'ADR-017', 'ADR-018', 'ADR-019'];
-  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020'];
+  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021'];
   const byId = new Map(statuses.map((adr) => [adr.id, adr.status]));
   for (const id of ['ADR-010', 'ADR-011', 'ADR-012', ...adoptedIds, ...proposedIds]) {
     assert.ok(byId.has(id), `missing **Status**: line for ${id}`);
@@ -363,4 +363,81 @@ test('ADR-020 rules are stated in DESIGN.md prose (parity guard)', () => {
   assert.ok(md.includes('## Group conversation surface (ADR-020)'), 'standard.md is missing ## Group conversation surface (ADR-020)');
   assert.ok(DESIGN.includes('preview/group-conversation.html'), 'DESIGN.md must reference preview/group-conversation.html');
   assert.ok(fs.existsSync(path.join(ROOT, 'preview/group-conversation.html')), 'preview/group-conversation.html is missing');
+});
+
+test('standard carries the ADR-021 modular component catalog and every fragment exists', () => {
+  const { COMPONENT_CATALOG } = require('../scripts/generate-standard');
+  const { standard } = generateStandardArtifacts(TOKENS);
+  const { modularComponents } = standard.rules;
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-021' && a.status.startsWith('Proposed')));
+  assert.equal(modularComponents.adr, 'ADR-021');
+  assert.deepEqual(modularComponents.extends, ['ADR-016', 'ADR-017', 'ADR-020']);
+  assert.equal(modularComponents.mcpTool, 'component_catalog');
+  assert.deepEqual(modularComponents.categories, ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity']);
+  assert.deepEqual(modularComponents.claimLabels, ['implemented', 'specified', 'planned', 'observed']);
+  assert.deepEqual(modularComponents.publicProperNouns, ['seed', 'bloom', 'videsign', 'vitools']);
+  assert.deepEqual(modularComponents.planes, ['surfaces', 'harness', 'providers', 'authority stores']);
+  assert.deepEqual(modularComponents.runStates, ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete', 'stopping', 'stopped', 'failed']);
+  assert.deepEqual(modularComponents.toolEffects, ['read', 'write', 'destructive', 'credential']);
+  assert.equal(modularComponents.catalog.length, 20);
+  assert.deepEqual(modularComponents.catalog, COMPONENT_CATALOG);
+  const expectedIds = [
+    'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips',
+    'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace',
+    'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row',
+    'public-repo-card', 'ecosystem-plane-map',
+  ];
+  assert.deepEqual(modularComponents.catalog.map((c) => c.id), expectedIds);
+  for (const entry of modularComponents.catalog) {
+    assert.equal(entry.file, `preview/${entry.id}.html`);
+    assert.ok(fs.existsSync(path.join(ROOT, entry.file)), `missing fragment on disk: ${entry.file}`);
+    assert.ok(modularComponents.categories.includes(entry.category), `unexpected category on ${entry.id}`);
+    assert.ok(entry.adr && entry.adr.startsWith('ADR-'), `missing ADR on ${entry.id}`);
+    assert.ok(Array.isArray(entry.consumers) && entry.consumers.length > 0, `missing consumers on ${entry.id}`);
+    assert.ok(typeof entry.summary === 'string' && entry.summary.length > 0, `missing summary on ${entry.id}`);
+  }
+});
+
+test('ADR-021 rules and fragment references are stated in DESIGN.md prose (parity guard)', () => {
+  const prose = DESIGN.toLowerCase();
+  for (const phrase of [
+    'agent workspace, harness contracts and public-repository components (adr-021)',
+    'three-column workstation',
+    'owner approval gates and artifact lineage',
+    'team roster, governed notes and cross-team handoffs',
+    'harness contracts and neutral tool registry',
+    'public-repository continuity and claim maturity',
+    'pull-first component catalog',
+    'component_catalog',
+    'rules.modularcomponents',
+    'waiting_for_owner',
+    'review approved',
+    'changes requested',
+  ]) {
+    assert.ok(prose.includes(phrase), `DESIGN.md is missing: ${phrase}`);
+  }
+  const adr021Fragments = [
+    'preview/owner-approval-gate.html',
+    'preview/shared-desktop-catalog.html',
+    'preview/artifact-lineage-reader.html',
+    'preview/agent-roster-card.html',
+    'preview/team-memory-notes.html',
+    'preview/cross-team-handoff.html',
+    'preview/usage-budget-meter.html',
+    'preview/layout-agent-workspace.html',
+    'preview/claim-maturity-badge.html',
+    'preview/run-lifecycle-strip.html',
+    'preview/tool-registry-row.html',
+    'preview/public-repo-card.html',
+    'preview/ecosystem-plane-map.html',
+  ];
+  for (const fragment of adr021Fragments) {
+    assert.ok(DESIGN.includes(fragment), `DESIGN.md must reference ${fragment}`);
+    assert.ok(fs.existsSync(path.join(ROOT, fragment)), `${fragment} is missing`);
+  }
+  const md = generateStandardArtifacts(TOKENS)['standard.md'];
+  assert.ok(
+    md.includes('## Modular workspace and public-repo components (ADR-021)'),
+    'standard.md is missing ## Modular workspace and public-repo components (ADR-021)',
+  );
 });
