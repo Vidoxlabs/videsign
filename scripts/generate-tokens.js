@@ -371,6 +371,24 @@ function emitMemoryFieldArtifacts() {
   };
 }
 
+/**
+ * Orbital chromatic capsule field primitive: zero-hex oklch() stylesheet plus browser-ready
+ * ES modules stripped natively from the TypeScript engine and Web Component sources.
+ */
+function emitOrbitalFieldArtifacts() {
+  const { stripTypeScriptTypes } = require('module');
+  const engineTs = fs.readFileSync(path.join(__dirname, '..', 'lib', 'orbital-field-engine.ts'), 'utf-8');
+  const componentTs = fs.readFileSync(path.join(__dirname, '..', 'lib', 'vi-orbital-field.ts'), 'utf-8');
+  const engineJs = stripTypeScriptTypes(engineTs, { mode: 'strip' });
+  const componentJs = stripTypeScriptTypes(componentTs, { mode: 'strip' })
+    .replace(/\.\/orbital-field-engine\.ts/g, './orbital-field-engine.js');
+  return {
+    'vi-orbital-hero.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'vi-orbital-hero.css'), 'utf-8'),
+    'orbital-field-engine.js': engineJs,
+    'vi-orbital-field.js': componentJs,
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -398,6 +416,7 @@ function main() {
     ...require('./generate-platforms').emitPlatformArtifacts(tokens),
     ...emitDialectArtifacts(tokens),
     ...emitMemoryFieldArtifacts(),
+    ...emitOrbitalFieldArtifacts(),
   };
 
   if (dryRun) {
@@ -437,4 +456,5 @@ module.exports = {
   emitStageArtifacts,
   emitDialectArtifacts,
   emitMemoryFieldArtifacts,
+  emitOrbitalFieldArtifacts,
 };

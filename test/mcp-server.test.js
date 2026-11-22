@@ -271,7 +271,7 @@ test('design_brief and scaffold_page tools plus components.manifest.json work ov
 
   const manifestRes = await client.readResource({ uri: 'file://dist/components.manifest.json' });
   const manifest = JSON.parse(manifestRes.contents[0].text);
-  assert.equal(manifest.componentCount, 78);
+  assert.equal(manifest.componentCount, 79);
   assert.ok(manifest.archetypes['public-site-landing']);
   assert.ok(manifest.archetypes['ui-primitives-kitchen-sink']);
 

@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="../dist/stage.css" />
   <link rel="stylesheet" href="../dist/dialects.css" />
   <link rel="stylesheet" href="../dist/memory-field.css" />
+  <link rel="stylesheet" href="../dist/vi-orbital-hero.css" />
+  <script type="module" src="../dist/vi-orbital-field.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
@@ -652,6 +654,7 @@
       { file: 'persona-companion-stage.html', tier: 'foundations', label: 'Persona companion stage', desc: 'Five-seat Living Interface ensemble with canon-order five-bar indicators and operational state switcher (ADR-013, ADR-023, ADR-024).' },
       { file: 'persona-deliberation-stepper.html', tier: 'foundations', label: 'Persona deliberation stepper', desc: 'Six-stage VWXYZ request and deliberation walkthrough with scenario presets and owner-gate outcome receipt (ADR-013, ADR-024).' },
       { file: 'stage-backdrop.html', tier: 'foundations', label: 'Stage backdrop', desc: 'Quarantined arc of persona lights over a five-segment stage ring from lib/stage.js; paused by default in catalog view (ADR-013).', stageSpecimen: true },
+      { file: 'vi-orbital-field.html', tier: 'foundations', label: 'Orbital hero field', desc: 'Zero-hex oklch() Canvas 2D orbital capsule field with 6-state agentic modulation, smooth pointer repulsion wake, radial clarity scrim, and deterministic reduced-motion fallback.', orbitalControls: true },
 
       // UI primitives and code (19)
       { file: 'button-variants.html', tier: 'primitives', label: 'Button variants', desc: 'Large solid violet CTA (bold xl+), accent-bordered primary, secondary hairline, ghost, destructive, disabled, and segmented group (ADR-011, ADR-024).' },
@@ -782,6 +785,8 @@
         '<link rel="stylesheet" href="../dist/stage.css">' +
         '<link rel="stylesheet" href="../dist/dialects.css">' +
         '<link rel="stylesheet" href="../dist/memory-field.css">' +
+        '<link rel="stylesheet" href="../dist/vi-orbital-hero.css">' +
+        '<script type="module" src="../dist/vi-orbital-field.js"></scr' + 'ipt>' +
         '<style>body{margin:0;min-height:100dvh;background:var(--vi-colors-surface-background-primary-base);color:var(--vi-colors-text-content-primary-base);font-family:var(--vi-typography-typography-family-sans-base)}</style>' +
         '</head><body>' + html + '</body></html>';
     }
@@ -1046,6 +1051,33 @@
           });
           controls.appendChild(openBtn);
           head.appendChild(controls);
+        }
+
+        if (f.orbitalControls) {
+          var orbControls = document.createElement('div');
+          orbControls.className = 'specimen-controls';
+          orbControls.setAttribute('role', 'group');
+          orbControls.setAttribute('aria-label', 'Orbital agentic state modulation');
+          ['start', 'send', 'waiting', 'streaming', 'finish', 'failure'].forEach(function (st) {
+            var stBtn = document.createElement('button');
+            stBtn.type = 'button';
+            stBtn.className = 'ctl-btn';
+            stBtn.textContent = st;
+            stBtn.setAttribute('aria-pressed', st === 'start' ? 'true' : 'false');
+            stBtn.addEventListener('click', function () {
+              var hostEl = frame.querySelector('vi-orbital-field');
+              if (hostEl) {
+                hostEl.setAttribute('data-motion', 'running');
+                hostEl.setAttribute('data-agent-state', st);
+              }
+              orbControls.querySelectorAll('[data-orb-state]').forEach(function (b) {
+                b.setAttribute('aria-pressed', b === stBtn ? 'true' : 'false');
+              });
+            });
+            stBtn.dataset.orbState = st;
+            orbControls.appendChild(stBtn);
+          });
+          head.appendChild(orbControls);
         }
 
         card.append(head, frame);

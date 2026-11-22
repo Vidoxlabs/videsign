@@ -101,13 +101,14 @@ describe('collaborative design studio & reference contracts', () => {
     assert.deepEqual(plain.stylesheets, ['dist/tokens.css', 'dist/catalog.css']);
 
     const detected = stylesheetsForSlots(
-      ['<div class="stage__glow"></div>', '<svg class="vi-mf-svg"></svg>', '<span class="vi-agent-badge"></span>'],
+      ['<div class="stage__glow"></div>', '<svg class="vi-mf-svg"></svg>', '<span class="vi-agent-badge"></span>', '<vi-orbital-field class="vi-orbital-host"></vi-orbital-field>'],
       'light',
     );
     assert.ok(detected.includes('dist/themes.css'));
     assert.ok(detected.includes('dist/stage.css'));
     assert.ok(detected.includes('dist/memory-field.css'));
     assert.ok(detected.includes('dist/dialects.css'));
+    assert.ok(detected.includes('dist/vi-orbital-hero.css'));
     assert.equal(detected.includes('dist/glass.css'), false);
   });
 
@@ -116,7 +117,7 @@ describe('collaborative design studio & reference contracts', () => {
     const expected = buildComponentsManifest(COMPONENT_CATALOG, tokens);
     const actual = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf8'));
     assert.deepEqual(actual, expected);
-    assert.equal(actual.componentCount, 78);
+    assert.equal(actual.componentCount, 79);
     assert.deepEqual(actual.categories, CATALOG_CATEGORIES);
     assert.deepEqual(actual.consumers, CATALOG_CONSUMERS);
     assert.equal(Object.keys(actual.archetypes).length, 9);
