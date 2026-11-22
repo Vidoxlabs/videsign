@@ -13,6 +13,7 @@ node_modules/
 
 # Generated token artifacts (run `npm run tokens` to regenerate)
 dist/
+_site/
 .worktrees/
 
 # Local-only asset staging: nothing inside assets/ is committed except its

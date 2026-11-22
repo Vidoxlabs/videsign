@@ -228,7 +228,8 @@
 
       fetch(f.file)
         .then(function (r) { return r.text(); })
-        .then(function (html) {
+        .then(function (raw) {
+          var html = raw.replace(/\{ASSET_BASE\}/g, '..');
           if (f.frame) {
             var iframe = document.createElement('iframe');
             iframe.title = f.label;
