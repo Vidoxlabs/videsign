@@ -61,30 +61,34 @@ npm run canon:check  # Persona canon contract on its own
 ```
 
 Run `npm run tokens`, then serve the repository root over HTTP and open `/preview/` for a
-styled visual catalog of every component (`python3 -m http.server 8000`). The catalog loads
-`dist/tokens.css`, `dist/glass.css` and `dist/catalog.css`, so `dist/` must exist.
+styled visual catalog of every component (`python3 -m http.server 8000`). Build `dist/` before
+opening the catalog. The conversation specimen switches between an empty session and an active
+thread. The agent workspace offers 1440px, 1024px and 390px frames, plus an isolated view.
 
 ## Consuming from a product repo
 
 1. **Tailwind**: Import the generated config — `const videsign = require('@vidoxlabs/videsign/dist/tailwind.config.js')`
    and spread into your `tailwind.config.js` `theme.extend`. Colour utilities are
-   `color-mix()` of `var(--vi-colors-<key>, <hex>)`, so import `dist/tokens.css`
-   with the config. The hex is the fallback when the variable is unset.
+   `color-mix()` of `var(--vi-colors-<key>, <value>)`, so import `dist/tokens.css`
+   with the config. The source colour is the fallback when the variable is unset.
    `color-mix()` needs Safari 16.2+, Chrome 111+, or Firefox 113+.
 2. **CSS custom properties**: Import `dist/tokens.css` for `--vi-*` CSS variables.
    Import `dist/themes.css` as well to opt into the product light theme, which
    remaps the base variables.
 3. **MCP**: Run `npm run mcp` and query resources/tools from your product repo's agent.
-   Use `component_catalog` (78 modular fragments across 9 categories, or read
+   Use `component_catalog` (84 modular fragments across 9 categories, or read
    `file://preview/<id>.html` directly), `design_brief` (proactive Design Read, inferred
    `variance`/`motion`/`visualDensity` dials, reference contract, and ADR-025 anti-slop pre-flight
    checklist), and `scaffold_page` to compile structured briefs and assemble pure HTML page
-   scaffolds across 9 archetypes (`dist/components.manifest.json`).
+   scaffolds across 10 archetypes (`dist/components.manifest.json`).
    `dist/standard.json` is the machine-readable rule set (glass, type, motion, stage
    backdrop, five-bar rule, graph line, chat dock, conversation surface, group conversation,
    modular components in `rules.modularComponents`, studio rules in `rules.designStudio`,
    explorable instrument, accessibility) with the ADR index. Sync it into a product with the
    product's own token sync script, pinned to a videsign SHA.
+   The conversation, group thread, dock and agent workspace load `dist/chat.css` after tokens.
+   The catalog's `preview/chat-preview.js` demonstrates local interactions. Product integrations
+   bind the same markup to their session and composer state.
 4. **Stage backdrop**: `const { renderStageSvg, stageContrastReport } = require('@vidoxlabs/videsign/lib/stage.js')`
    renders the ADR-013 backdrop as an SVG string (or inline `dist/stage-ambient.svg` /
    `dist/stage-hero.svg`). Import `dist/stage.css` with `dist/tokens.css`. Your pause

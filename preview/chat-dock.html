@@ -1,98 +1,107 @@
-<!--
-  Nocturne Museum: Chat dock (ADR-013 dialog and launcher, ADR-016 contents, glass per ADR-006)
-  A non-modal dialog above a launcher fixed bottom right. The dialog is the only glass
-  layer: a shell around a near-opaque core, so every line of text sits on the core.
-  This fragment shows a conversation in progress; preview/conversation-surface.html
-  shows the empty state.
-  Header: the avatar, then a first line of seat name, role, one overflow menu and close,
-  and a second line holding the five seat dots. The avatar here is the seat's crest; a product shows the seat's sprite in the
-  same slot once art is approved for it.
-  The visitor's turn is the only bubble. A guide's reply is text on the core. The
-  five-segment marker and seat name head a reply only when the speaker changes: the
-  first reply carries it, the second from the same seat does not. Follow-up chips sit
-  on the latest reply only, at most three. Starters are gone because a turn was sent.
-  The composer is one bordered field with send inside it. The disclosure is one line.
-  The launcher shows the five seat dots, never a drawn or approximated mark, and
-  carries the five-bar rule along its foot; products reference the tracked brand file
-  instead. Example text describes the component, not a product claim.
--->
-<div class="flex flex-col items-end gap-gap-comfortable-default">
-  <div id="chat-dock" role="dialog" aria-modal="false" aria-label="Chat with the guides" class="vi-glass-shell w-layout-width-conversation-base">
-    <div class="vi-glass-core flex flex-col">
-      <header class="flex items-center gap-gap-comfortable-default p-layout-padding-medium-base">
-        <span aria-hidden="true" class="grid place-items-center shrink-0 w-action-wide-default h-action-wide-default rounded-layout-radius-full-base border border-border-graph-line-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">V</span>
-        <div class="flex flex-col flex-1 min-w-0">
-          <div class="flex items-center gap-gap-dense-default">
-            <p class="shrink-0 pr-inset-compact-default font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Violet</p>
-            <p class="flex-1 min-w-0 truncate font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Coordinates and ratifies</p>
-            <button type="button" aria-label="More options" aria-expanded="false" class="grid place-items-center shrink-0 w-action-min-default h-action-min-default rounded-layout-radius-full-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">…</button>
-            <button type="button" aria-label="Close chat" class="grid place-items-center shrink-0 w-action-min-default h-action-min-default rounded-layout-radius-full-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">×</button>
+<!-- ADR-013: the non-modal dock uses the same solid stage as the full conversation. -->
+<div class="vi-chat-dock" data-chat-preview>
+  <dialog open id="chat-dock" class="vi-chat-stage vi-chat-stage--specimen" data-chat-stage data-chat-skills="dock-skills" data-empty="false" aria-modal="false" aria-label="Chat with the guides">
+    <header class="vi-chat-topbar">
+      <button type="button" class="vi-chat-action" popovertarget="dock-seat" aria-label="Choose a seat: Violet" title="Choose a seat"><span class="vi-chat-avatar vi-chat-avatar--lead" aria-hidden="true" data-chat-monogram>V</span><span data-chat-recipient-label>Violet</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <p class="sr-only" role="status" data-chat-announcement>Companion ready</p>
+      <button type="button" class="vi-chat-action" data-chat-dock-close aria-label="Close chat" title="Close chat"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </header>
+    <div class="vi-chat-body">
+      <div class="vi-chat-stream" role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation" tabindex="0">
+        <div class="vi-chat-thread" data-chat-thread>
+          <div class="vi-chat-seed" data-chat-seed>
+            <article class="vi-chat-turn">
+              <div class="vi-chat-speaker">
+                <span aria-hidden="true" class="inline-flex gap-gap-dense-default">
+                  <span class="w-indicator-mark-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>
+                  <span class="w-indicator-dot-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base opacity-40"></span>
+                  <span class="w-indicator-dot-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-xylia-base opacity-40"></span>
+                  <span class="w-indicator-dot-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base opacity-40"></span>
+                  <span class="w-indicator-dot-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base opacity-40"></span>
+                </span>
+                <span class="vi-chat-meta">Violet</span>
+              </div>
+              <div class="vi-chat-prose"><p>What brings you here today?</p></div>
+            </article>
+            <div class="vi-chat-turn vi-chat-turn--user"><p class="vi-chat-bubble"><span class="sr-only">You said: </span>Where should I start?</p></div>
+            <article class="vi-chat-turn" data-chat-latest>
+              <div class="vi-chat-prose"><p>Start with the work page. Each project links to the record behind it.</p></div>
+              <div class="vi-chat-starters vi-chat-followups" role="group" aria-label="Follow-ups">
+                <button type="button" class="vi-chat-action vi-chat-action--pill vi-chat-action--border" data-chat-prompt="Show the source.">Show the source</button>
+              </div>
+            </article>
           </div>
-          <div role="group" aria-label="Choose a guide" class="flex items-center">
-            <button type="button" aria-pressed="true" aria-label="Violet" class="grid place-items-center w-action-min-default h-action-min-default transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base border border-persona-accent-violet-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span></span></button>
-            <button type="button" aria-pressed="false" aria-label="Wisteria" class="grid place-items-center w-action-min-default h-action-min-default transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span></span></button>
-            <button type="button" aria-pressed="false" aria-label="Xylia" class="grid place-items-center w-action-min-default h-action-min-default transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span></span></button>
-            <button type="button" aria-pressed="false" aria-label="Yarrow" class="grid place-items-center w-action-min-default h-action-min-default transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span></span></button>
-            <button type="button" aria-pressed="false" aria-label="Zinnia" class="grid place-items-center w-action-min-default h-action-min-default transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span></span></button>
-          </div>
-          <p aria-live="polite" class="sr-only">Companion state: at rest</p>
         </div>
-      </header>
-      <div role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation" class="flex flex-col gap-gap-spacious-default px-layout-padding-medium-base pb-layout-padding-medium-base">
-        <div class="flex flex-col gap-gap-compact-default">
-          <div class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
-            <div aria-hidden="true" class="inline-flex gap-gap-dense-default">
-              <span class="w-indicator-mark-base h-indicator-fivebar-base bg-persona-accent-violet-base"></span>
-              <span class="w-indicator-dot-base h-indicator-fivebar-base opacity-40 bg-persona-accent-wisteria-base"></span>
-              <span class="w-indicator-dot-base h-indicator-fivebar-base opacity-40 bg-persona-accent-xylia-base"></span>
-              <span class="w-indicator-dot-base h-indicator-fivebar-base opacity-40 bg-persona-accent-yarrow-base"></span>
-              <span class="w-indicator-dot-base h-indicator-fivebar-base opacity-40 bg-persona-accent-zinnia-base"></span>
+      </div>
+      <div class="vi-chat-composer-area">
+        <form class="vi-composer" data-state="idle" data-chat-composer>
+          <div class="vi-composer__attachments" data-chat-context aria-label="Attached context" hidden>
+            <ul aria-label="Attachments">
+              <li class="vi-composer__attachment" data-chat-attachment="notes" data-tokens="840" hidden>
+                <span class="vi-chat-meta">token-notes.md</span>
+                <button type="button" class="vi-chat-action" data-chat-remove="notes" aria-label="Remove token-notes.md" title="Remove token-notes.md"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+              </li>
+              <li class="vi-composer__attachment" data-chat-attachment="brief" data-tokens="320" hidden>
+                <span class="vi-chat-meta">project-brief.md</span>
+                <button type="button" class="vi-chat-action" data-chat-remove="brief" aria-label="Remove project-brief.md" title="Remove project-brief.md"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+              </li>
+            </ul>
+            <output class="vi-chat-meta" aria-label="Context token budget" data-chat-budget>0 / 4,096 tokens</output>
+          </div>
+          <label for="dock-input" class="sr-only" data-chat-input-label>Message Violet</label>
+          <textarea id="dock-input" rows="1" placeholder="Ask Violet or type / for skills…" data-chat-input aria-keyshortcuts="Enter Shift+Enter"></textarea>
+          <div class="vi-composer__actions">
+            <div role="group" aria-label="Context and mode">
+              <button type="button" class="vi-chat-action" popovertarget="dock-attach" aria-label="Attach context" title="Attach context"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><span class="vi-chat-action__label">Attach</span></button>
+              <button type="button" class="vi-chat-action" popovertarget="dock-seat" data-chat-recipient-control aria-label="Choose recipient: Violet" title="Choose recipient: Violet"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/></svg><span class="vi-chat-action__label"><span data-chat-recipient-label>Violet</span></span></button>
+              <button type="button" class="vi-chat-action" data-chat-think aria-pressed="false" aria-label="Think mode" title="Balanced mode"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M2 12h4m12 0h4M5 5l3 3m8 8 3 3M5 19l3-3m8-8 3-3"/></svg><span class="vi-chat-action__label"><span data-chat-mode-label>Balanced</span></span></button>
             </div>
-            Violet
+            <div role="group" aria-label="Model and send">
+              <button type="button" class="vi-chat-action" popovertarget="dock-model" data-chat-slot-control data-slot-id="providers.slot.remote" aria-label="Model slot: Remote" title="Model slot: Remote"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM4 10h16m-12 4h4"/></svg><span class="vi-chat-action__label"><span data-chat-slot-label>Remote</span></span></button>
+              <button type="submit" class="vi-chat-action vi-chat-action--primary" aria-label="Send" title="Send" disabled><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" data-chat-send-icon><path d="M12 19V5m-6 6 6-6 6 6"/></svg><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" data-chat-stop-icon><path d="M7 7h10v10H7z"/></svg></button>
+            </div>
           </div>
-          <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">What brings you here today?</p>
-        </div>
-        <div class="flex justify-end">
-          <p class="px-inset-operator-default py-inset-compact-default font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base bg-surface-background-tertiary-base rounded-layout-radius-standard-base"><span class="sr-only">You said: </span>Where should I start?</p>
-        </div>
-        <div class="flex flex-col gap-gap-compact-default">
-          <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">Start with the work page. Each project there links to the record behind it.</p>
-          <div role="group" aria-label="Follow-ups" class="flex flex-wrap gap-gap-compact-default">
-            <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base border border-border-separator-primary-base hover:border-surface-accent-violet-base rounded-layout-radius-full-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Show me the work</button>
-            <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base border border-border-separator-primary-base hover:border-surface-accent-violet-base rounded-layout-radius-full-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Summarize this page</button>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col gap-gap-compact-default px-layout-padding-medium-base pb-layout-padding-medium-base">
-        <form class="flex items-end gap-gap-dense-default bg-surface-background-primary-base border border-border-separator-primary-base focus-within:border-surface-accent-violet-base rounded-layout-radius-control-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
-          <label for="chat-dock-input" class="sr-only">Message Violet</label>
-          <textarea id="chat-dock-input" rows="1" placeholder="Ask Violet" class="flex-1 min-w-0 h-action-min-default px-inset-operator-default bg-transparent font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base placeholder:text-text-content-secondary-base resize-none"></textarea>
-          <button type="submit" aria-label="Send" class="grid place-items-center shrink-0 w-action-min-default h-action-min-default rounded-layout-radius-control-base text-text-content-primary-base hover:bg-surface-accent-violet-hover transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">→</button>
         </form>
-        <details class="font-typography-family-sans-base text-typography-size-xs-base text-text-content-secondary-base">
-          <summary>Replies come from an AI model. What is sent</summary>
-          <p>Your question, the selected guide, the page path and recent turns. If the service is unavailable the reply is a labelled fallback.</p>
-        </details>
       </div>
     </div>
-  </div>
-  <div class="flex flex-col items-stretch gap-gap-dense-default">
-    <button type="button" aria-expanded="true" aria-controls="chat-dock" aria-label="Chat with the guides" class="relative inline-flex items-center gap-gap-compact-default h-action-wide-default pl-inset-compact-default pr-layout-padding-medium-base bg-surface-background-secondary-base border border-surface-accent-violet-base rounded-layout-radius-full-base font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">
-      <span aria-hidden="true" class="inline-flex items-center gap-gap-dense-default">
-        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>
-        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span>
-        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span>
-        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span>
-        <span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span>
-      </span>
-      <span aria-hidden="true">Chat</span>
-    </button>
-    <div aria-hidden="true" class="flex gap-gap-dense-default px-layout-padding-medium-base">
-      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>
-      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span>
-      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span>
-      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span>
-      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span>
+    <details class="vi-chat-disclosure">
+      <summary class="vi-chat-summary">Replies are examples</summary>
+      <p>Messages and selections stay in this preview.</p>
+    </details>
+    <div id="dock-seat" class="vi-chat-menu" popover aria-label="Choose a seat">
+      <p class="vi-chat-meta">Choose a seat</p>
+      <div class="vi-chat-seat-list" role="group" aria-label="Choose a guide">
+        <button type="button" class="vi-chat-action" data-chat-seat="Violet" aria-label="Violet" aria-pressed="true" title="Violet"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base border border-persona-accent-violet-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span></span></button>
+        <button type="button" class="vi-chat-action" data-chat-seat="Wisteria" aria-label="Wisteria" aria-pressed="false" title="Wisteria"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base border border-persona-accent-wisteria-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span></span></button>
+        <button type="button" class="vi-chat-action" data-chat-seat="Xylia" aria-label="Xylia" aria-pressed="false" title="Xylia"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base border border-persona-accent-xylia-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span></span></button>
+        <button type="button" class="vi-chat-action" data-chat-seat="Yarrow" aria-label="Yarrow" aria-pressed="false" title="Yarrow"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base border border-persona-accent-yarrow-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span></span></button>
+        <button type="button" class="vi-chat-action" data-chat-seat="Zinnia" aria-label="Zinnia" aria-pressed="false" title="Zinnia"><span aria-hidden="true" class="grid place-items-center w-icon-sm-base h-icon-sm-base rounded-layout-radius-full-base border border-persona-accent-zinnia-base"><span class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span></span></button>
+      </div>
     </div>
-  </div>
+    <div id="dock-attach" class="vi-chat-menu" popover aria-label="Attach context">
+      <p class="vi-chat-meta">Attach context</p>
+      <button type="button" class="vi-chat-action" data-chat-attach="brief" aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg>project-brief.md</button>
+      <button type="button" class="vi-chat-action" data-chat-attach="notes" aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg>token-notes.md</button>
+    </div>
+    <div id="dock-model" class="vi-chat-menu" popover aria-label="Model slot">
+      <p class="vi-chat-meta">Model slot</p>
+      <button type="button" class="vi-chat-action" data-chat-slot="providers.slot.remote" aria-pressed="true">Remote</button>
+      <button type="button" class="vi-chat-action" data-chat-slot="providers.slot.local" aria-pressed="false">Local</button>
+    </div>
+    <div id="dock-skills" class="vi-chat-menu" popover aria-label="Skills">
+      <p class="vi-chat-meta">Skills</p>
+      <button type="button" class="vi-chat-action" data-chat-prompt="Review the token changes."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12m12-6v12M3 7l3-4 3 4m6 10 3 4 3-4M11 12h2"/></svg>Review changes</button>
+      <button type="button" class="vi-chat-action" data-chat-prompt="Summarize the attached context."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Summarize context</button>
+    </div>
+  </dialog>
+  <button type="button" class="vi-chat-action vi-chat-launcher vi-glass-shell vi-glass-shell--pill" data-chat-dock-toggle aria-label="Chat with the guides" aria-haspopup="dialog" aria-expanded="true" aria-controls="chat-dock">
+    <span class="vi-glass-core vi-glass-core--pill">Chat</span>
+    <span aria-hidden="true" class="inline-flex gap-gap-dense-default">
+      <span class="w-indicator-dot-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>
+      <span class="w-indicator-dot-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span>
+      <span class="w-indicator-dot-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span>
+      <span class="w-indicator-dot-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span>
+      <span class="w-indicator-dot-base h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span>
+    </span>
+  </button>
 </div>

@@ -19,7 +19,8 @@ design system — the shared visual language for all Vidoxlabs products and appl
 - **scripts/generate-tokens.js**: Token generation pipeline. Parses `DESIGN.md` YAML
   front-matter and emits `dist/tailwind.config.js`, `dist/tokens.css`,
   `dist/tokens.json`, `dist/themes.css` (product light theme mappings under
-  `[data-theme="light"]`, ADR-012), `dist/glass.css` (crystal glass with literal Safari-safe
+  `[data-theme="light"]`, ADR-012), `dist/chat.css` (solid chat canvas, composer and responsive
+  workspace, ADR-016/020/021), `dist/glass.css` (crystal glass with literal Safari-safe
   declarations, ADR-006) and `dist/catalog.css` (Tailwind utilities for the preview
   catalog only). Run `npm run tokens` to regenerate.
 - **scripts/lint-preview.js**: Static checks for `preview/*.html` (arbitrary values,
@@ -35,6 +36,7 @@ design system — the shared visual language for all Vidoxlabs products and appl
   once by `scripts/lib/token-values.js`; CSS-only values are listed, never approximated.
 - **lib/**: Shared JavaScript primitives. `lib/contrast.js` is the one WCAG contrast and
   compositing implementation (tests, primitives and MCP use it; do not re-implement it).
+  `lib/chat.css` supplies the shared chat stage, composer and workspace layout.
   `lib/stage.js` and `lib/stage.css` are the stage backdrop primitive (ADR-013; reactive planes ADR-019): geometry, SVG
   renderer and contrast report. After changing `lib/stage.js`, run `npm run stage:fragment`.
   `lib/dialects.js` defines the persona dialects (ADR-015) as token references; it generates
@@ -90,7 +92,7 @@ Within the `videsign` repository, agents are restricted to the following command
   preview fragments (ESLint alone never saw them).
 - `npm run mcp`: Starts the local MCP server for cross-repo communication.
 - `npm run tokens`: Parses `DESIGN.md` and regenerates `dist/tailwind.config.js`,
-  `dist/tokens.css`, `dist/tokens.json`, `dist/themes.css`, `dist/glass.css`,
+  `dist/tokens.css`, `dist/tokens.json`, `dist/themes.css`, `dist/glass.css`, `dist/chat.css`,
   `dist/catalog.css`, `dist/standard.json`, `dist/standard.md`, `dist/stage.css`,
   `dist/stage-ambient.svg`, `dist/stage-hero.svg`, `dist/memory-field.css`,
   `dist/memory-field-sample.svg`, `dist/memory-pipeline-sample.svg`, `dist/tokens.ts`,

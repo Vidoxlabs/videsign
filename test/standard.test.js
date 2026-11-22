@@ -168,7 +168,7 @@ test('standard carries the ADR-013 rules and they match the tokens', () => {
   const { rules } = standard;
   const canon = ['violet', 'wisteria', 'xylia', 'yarrow', 'zinnia'];
   assert.ok(standard.adrs.some((a) => a.id === 'ADR-013' && a.status.startsWith('Adopted')));
-  assert.ok(rules.glass.scope.includes('chat dock'));
+  assert.ok(rules.glass.scope.includes('chat dock launcher'));
   assert.equal(rules.motion.ambient.drift, TOKENS.transition['transition-duration-ambient-drift-base']);
   assert.equal(rules.motion.ambient.pulse, TOKENS.transition['transition-duration-ambient-pulse-base']);
   assert.deepEqual(rules.stage.lights, canon);
@@ -248,12 +248,17 @@ test('standard carries the ADR-016 conversation rules and they match the tokens'
   assert.deepEqual(conversation.seatDots.seats, chatDock.personaSwitcher.seats);
   assert.equal(conversation.seatDots.pressedState, chatDock.personaSwitcher.pressedState);
   assert.equal(conversation.seatDots.minTarget, TOKENS.size['action-min-default']);
-  assert.deepEqual(conversation.header.secondLine, ['seat dots']);
+  assert.equal(conversation.header.seatDotsPlacement, 'solid popover');
   assert.equal(conversation.seatDots.printsNames, false);
   assert.equal(conversation.starters.max, 4);
   assert.equal(conversation.followUps.max, 3);
   assert.equal(conversation.composer.fields, 1);
   assert.equal(conversation.composer.keys, chatDock.composer);
+  assert.deepEqual(conversation.composer.modelSlotIds, ['providers.slot.remote', 'providers.slot.local']);
+  assert.deepEqual(conversation.canvasLayout.breakpoints, ['40rem', '64rem']);
+  assert.equal(conversation.canvasLayout.maxThreadWidth, '48rem');
+  assert.equal(conversation.fullPageMeasure, '65ch');
+  assert.equal(chatDock.dialog.material, 'solid chat canvas');
   assert.equal(conversation.disclosure.linesAtRest, 1);
   assert.equal(conversation.motion.open, TOKENS.transition['transition-duration-slow-base']);
   assert.equal(conversation.motion.openEasing, TOKENS.transition['transition-easing-spring-base']);
@@ -281,7 +286,7 @@ test('ADR-016 and ADR-017 rules are stated in DESIGN.md prose (parity guard)', (
     'one header row, the conversation, one composer field and one disclosure line',
     'five dots in canon order',
     'the switcher prints no names',
-    'text on the core, no card',
+    'unboxed prose on `--vi-chat-canvas`',
     'only when the speaker changes',
     'at most four starters',
     'at most three follow-up chips',
@@ -293,7 +298,7 @@ test('ADR-016 and ADR-017 rules are stated in DESIGN.md prose (parity guard)', (
     'no bordered fieldset and no default checkbox',
     'receipt as ledger',
     '{size.layout-width-conversation-base}',
-    'a second line holds the seat dots',
+    'the switcher opens a solid popover',
     '{colors.status-indicator-error-base}',
   ]) {
     assert.ok(prose.includes(phrase), `DESIGN.md is missing: ${phrase}`);
@@ -316,15 +321,16 @@ test('standard carries the ADR-020 group-conversation rules and they match the t
   assert.equal(groupConversation.extends, 'ADR-016');
   assert.equal(groupConversation.banPersonaAccentsOnNonPersonaAgents, true);
   assert.equal(groupConversation.identity.outline, TOKENS.colors['border-graph-line-base']);
-  assert.equal(groupConversation.identity.fill, TOKENS.colors['surface-background-tertiary-base']);
-  assert.equal(groupConversation.identity.headAgentRing, TOKENS.colors['surface-accent-violet-base']);
+  assert.equal(groupConversation.identity.fill, TOKENS.colors['surface-chat-user-bubble-base']);
+  assert.equal(groupConversation.identity.headAgentRing, TOKENS.colors['border-chat-focus-base']);
   assert.equal(groupConversation.identity.minContrast, 3);
   assert.equal(groupConversation.roleLabel.family, TOKENS.typography['typography-family-mono-base']);
   assert.equal(groupConversation.roleLabel.size, TOKENS.typography['typography-size-xs-base']);
   assert.equal(groupConversation.roleLabel.tracking, TOKENS.typography['typography-tracking-wide-base']);
   assert.equal(groupConversation.roleLabel.sentenceCase, true);
-  assert.equal(groupConversation.activityAndBudgetRows.separator, TOKENS.colors['border-separator-primary-base']);
-  assert.equal(groupConversation.artifactCard.surface, TOKENS.colors['surface-background-secondary-base']);
+  assert.equal(groupConversation.activityAndBudgetRows.separator, TOKENS.colors['border-chat-subtle-base']);
+  assert.equal(groupConversation.activityAndBudgetRows.toolIdPattern, 'domain.resource.verb');
+  assert.equal(groupConversation.artifactCard.surface, TOKENS.colors['surface-chat-composer-base']);
   assert.equal(groupConversation.artifactCard.radius, TOKENS.spacing['layout-radius-standard-base']);
   assert.equal(groupConversation.artifactCard.noPreviewPanes, true);
   assert.equal(groupConversation.artifactCard.neverGlass, true);

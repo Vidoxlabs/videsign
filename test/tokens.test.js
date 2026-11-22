@@ -66,10 +66,10 @@ test('32px radii stay banned: no radius token reaches 32px', () => {
   }
 });
 
-test('effects hold only crystal and ambient CSS values (no legacy class strings)', () => {
+test('effects hold only crystal, ambient and solid chat elevation values', () => {
   for (const key of Object.keys(TOKENS.effects)) {
     assert.ok(
-      key.startsWith('glass-crystal-') || key.startsWith('ambient-'),
+      key.startsWith('glass-crystal-') || key.startsWith('ambient-') || key === 'shadow-chat-composer-base',
       `unexpected effects.${key}`,
     );
   }
@@ -85,6 +85,27 @@ test('tokens.css emits every effect under canonical names', () => {
   const css = emitCSS(TOKENS);
   for (const key of Object.keys(TOKENS.effects)) {
     assert.ok(css.includes(`--vi-effects-${key}:`), `missing --vi-effects-${key}`);
+  }
+});
+
+test('chat surfaces clear text and control contrast in both themes', () => {
+  const css = emitCSS(TOKENS);
+  for (const name of ['canvas', 'rail', 'composer-bg', 'composer-hover', 'user-bubble', 'border-subtle',
+    'border-strong', 'focus-ring', 'measure', 'prose-measure', 'radius-composer', 'radius-bubble']) {
+    assert.ok(css.includes(`--vi-chat-${name}: var(`), name);
+  }
+  for (const state of ['base', 'light']) {
+    const surfaces = ['canvas', 'rail', 'composer', 'composer-hover', 'user-bubble'];
+    for (const surface of surfaces) {
+      const background = TOKENS.colors[`surface-chat-${surface}-${state}`];
+      assert.match(background, /^oklch\(/);
+      for (const text of ['primary', 'secondary']) {
+        assert.ok(contrastRatio(TOKENS.colors[`text-content-${text}-${state}`], background) >= 4.5, `${text} on ${surface} (${state})`);
+      }
+      for (const border of ['subtle', 'strong', 'focus']) {
+        assert.ok(contrastRatio(TOKENS.colors[`border-chat-${border}-${state}`], background) >= 3, `${border} on ${surface} (${state})`);
+      }
+    }
   }
 });
 

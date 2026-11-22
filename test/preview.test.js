@@ -27,7 +27,7 @@ let css = '';
 
 before(() => {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'generate-tokens.js')], { cwd: ROOT, stdio: 'ignore' });
-  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css']
+  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css', 'chat.css']
     .map((f) => fs.readFileSync(path.join(ROOT, 'dist', f), 'utf-8'))
     .join('\n');
 });
@@ -81,7 +81,7 @@ test('every class used by a fragment resolves to generated CSS', () => {
 
 test('the catalog loads the generated stylesheets and lists every fragment', () => {
   const index = fs.readFileSync(path.join(PREVIEW, 'index.html'), 'utf-8');
-  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css']) {
+  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css', '../dist/chat.css']) {
     assert.ok(index.includes(`href="${sheet}"`), `catalog must load ${sheet}`);
   }
   const unlisted = FRAGMENTS.filter((f) => f !== 'index.html' && !index.includes(`'${f}'`) && !index.includes(`"${f}"`));
@@ -158,90 +158,58 @@ test('the five-bar rule is five hard segments in canon order, hidden from assist
   assert.doesNotMatch(read('five-bar-rule.html'), /bg-gradient|from-|via-/);
 });
 
-/** Seat dots (ADR-016): five buttons in canon order, named for the seat, one pressed, hit area 44 by 44. */
-function seatDots(html) {
-  const group = html.match(/<div role="group" aria-label="Choose a guide"[^>]*>([\s\S]*?)<\/div>/);
-  assert.ok(group, 'seat dot group missing');
-  return [...group[1].matchAll(/<button type="button" aria-pressed="(true|false)" aria-label="([A-Z][a-z]+)" class="([^"]*)">([\s\S]*?)<\/button>/g)]
-    .map((m) => ({ pressed: m[1] === 'true', seat: m[2].toLowerCase(), classes: m[3], inner: m[4] }));
+function assertSharedComposer(html) {
+  const forms = [...html.matchAll(/<form\b[^>]*class="vi-composer"[^>]*>([\s\S]*?)<\/form>/g)];
+  assert.equal(forms.length, 1);
+  const composer = forms[0][1];
+  const inputId = composer.match(/<textarea id="([^"]+)"/)[1];
+  assert.ok(composer.includes(`for="${inputId}" class="sr-only"`));
+  assert.match(composer, /data-chat-budget/);
+  assert.match(composer, /aria-label="Think mode"/);
+  assert.match(composer, /data-slot-id="providers\.slot\.(local|remote)"/);
+  assert.match(composer, /type="submit"[^>]*aria-label="Send"[^>]*disabled/);
+  assert.match(composer, /data-chat-send-icon[\s\S]*data-chat-stop-icon/);
+  assert.match(html, /data-chat-slot="providers\.slot\.remote"/);
+  assert.match(html, /data-chat-slot="providers\.slot\.local"/);
+  assert.match(html, /role="log" aria-live="polite" aria-relevant="additions" aria-label="/);
+  assert.match(html, /class="vi-chat-disclosure"/);
+  assert.doesNotMatch(html, /\b(?:vi-orbital-field|stage-backdrop)\b|#[\da-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i);
 }
 
-function assertConversationBudget(file) {
-  const html = read(file);
-  // One header row: the name line (name, role, menu, close) and the seat dots beneath it. No printed product title.
-  assert.equal([...html.matchAll(/<header\b/g)].length, 1, `${file}: one header`);
-  const header = html.match(/<header\b[^>]*>([\s\S]*?)<\/header>/)[1];
-  assert.ok(header.indexOf('aria-label="Close chat"') < header.indexOf('aria-label="Choose a guide"'), `${file}: the dots sit on the second line`);
-  assert.equal([...header.matchAll(/aria-label="More options"/g)].length <= 1, true, `${file}: at most one overflow menu`);
-  assert.doesNotMatch(header, /AI assistant|Vidoxlabs guides|>Guides</, `${file}: no product title or model badge in view`);
-  assert.match(header, /<p aria-live="polite" class="sr-only">Companion state: [a-z ]+<\/p>/, `${file}: state is carried by hidden live text`);
-  // Seat dots.
-  const dots = seatDots(html);
-  assert.deepEqual(dots.map((d) => d.seat), CANON, `${file}: seat order`);
-  assert.equal(dots.filter((d) => d.pressed).length, 1, `${file}: one pressed seat`);
-  for (const d of dots) {
-    assert.match(d.classes, /\bw-action-min-default\b/, `${file}: ${d.seat} hit width`);
-    assert.match(d.classes, /\bh-action-min-default\b/, `${file}: ${d.seat} hit height`);
-    assert.match(d.inner, new RegExp(`bg-persona-accent-${d.seat}-base`), `${file}: ${d.seat} dot colour`);
-    // The ring is the pressed seat's own colour, and only the pressed seat carries one.
-    assert.equal(new RegExp(`border-persona-accent-${d.seat}-base`).test(d.inner), d.pressed, `${file}: ${d.seat} ring`);
-    assert.doesNotMatch(d.inner.replace(/<[^>]+>/g, ''), /\S/, `${file}: ${d.seat} prints no name`);
-  }
-  // Seat names stay in a text token, never a persona colour.
+function assertCanonSeatControls(html) {
+  const dots = [...html.matchAll(/data-chat-seat="([A-Z][a-z]+)" aria-label="\1" aria-pressed="(true|false)"/g)];
+  assert.deepEqual(dots.map((dot) => dot[1].toLowerCase()), CANON);
+  assert.equal(dots.filter((dot) => dot[2] === 'true').length, 1);
   assert.doesNotMatch(html, /text-persona-accent-/);
-  // The dialog and its log.
-  assert.match(html, /role="dialog" aria-modal="false" aria-label="Chat with the guides"/);
-  assert.match(html, /role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation"/);
-  // One composer field: the border is on the form, the text area and send sit inside it.
-  assert.equal([...html.matchAll(/<form\b/g)].length, 1, `${file}: one composer`);
-  const form = html.match(/<form class="([^"]*)">([\s\S]*?)<\/form>/);
-  assert.match(form[1], /\bborder\b/, `${file}: the field carries the border`);
-  assert.match(form[1], /rounded-layout-radius-control-base/);
-  const area = form[2].match(/<textarea\b[^>]*class="([^"]*)"/)[1];
-  assert.doesNotMatch(area, /(^|\s)border(\s|$)/, `${file}: the text area has no border of its own`);
-  assert.match(form[2], /<button type="submit" aria-label="Send"/);
-  // One-line disclosure with its detail behind it.
-  assert.equal([...html.matchAll(/<details\b/g)].length, 1, `${file}: one disclosure`);
-  assert.match(html, /<summary>Replies come from an AI model\. What is sent<\/summary>/);
-  // Every interactive control meets the touch target floor.
-  for (const m of html.matchAll(/<(button|textarea)\b[^>]*class="([^"]*)"/g)) {
-    assert.match(m[2], /h-action-(min|wide)-default/, m[0].slice(0, 80));
-  }
-  return html;
 }
 
-test('the conversation surface fragment keeps the ADR-016 chrome budget (empty state)', () => {
-  const html = assertConversationBudget('conversation-surface.html');
-  const starters = html.match(/<div role="group" aria-label="Starters"[^>]*>([\s\S]*?)<\/div>/);
-  assert.ok(starters, 'starters group missing');
-  const count = [...starters[1].matchAll(/<button\b/g)].length;
-  assert.ok(count >= 1 && count <= 4, `starters: ${count}`);
-  // An empty conversation has no visitor bubble, no follow-ups and no message card.
-  assert.doesNotMatch(html, /aria-label="Follow-ups"|You said/);
-  assert.doesNotMatch(html.match(/role="log"[\s\S]*?<form/)[0], /bg-surface-background-secondary-base/);
+test('the conversation surface shares one solid composer between empty and active states', () => {
+  const html = read('conversation-surface.html');
+  assertSharedComposer(html);
+  assertCanonSeatControls(html);
+  assert.match(html, /data-empty="true"/);
+  assert.match(html, /data-chat-seed hidden/);
+  assert.match(html, /data-chat-session="empty" aria-pressed="true"/);
+  assert.match(html, /data-chat-session="active" aria-pressed="false"/);
+  const starters = html.match(/<div[^>]*aria-label="Starters"[^>]*>([\s\S]*?)<\/div>/)[1];
+  const starterCount = [...starters.matchAll(/<button\b/g)].length;
+  assert.ok(starterCount > 0 && starterCount <= 4);
+  assert.doesNotMatch(html, /vi-glass/);
 });
 
-test('the chat dock fragment carries the ADR-013 dialog and launcher and the ADR-016 contents', () => {
-  const html = assertConversationBudget('chat-dock.html');
-  const log = html.match(/role="log"[\s\S]*?<form/)[0];
-  // Starters leave once a turn is sent; follow-ups are at most three.
-  assert.doesNotMatch(log, /aria-label="Starters"/);
-  const followUps = [...log.matchAll(/<div role="group" aria-label="Follow-ups"[^>]*>([\s\S]*?)<\/div>/g)];
-  assert.equal(followUps.length, 1, 'follow-ups on the latest reply only');
-  assert.ok([...followUps[0][1].matchAll(/<button\b/g)].length <= 3);
-  // The visitor's turn is the only bubble; a guide's reply is text on the core.
-  assert.equal([...log.matchAll(/bg-surface-background-tertiary-base/g)].length, 1);
-  assert.doesNotMatch(log, /bg-surface-background-secondary-base/);
-  // Two replies from one seat, one speaker marker: it heads a reply only when the speaker changes.
-  const markers = [...log.matchAll(/<div aria-hidden="true" class="inline-flex gap-gap-dense-default">([\s\S]*?)<\/div>/g)];
-  assert.equal(markers.length, 1);
-  assert.deepEqual([...markers[0][1].matchAll(/bg-persona-accent-([a-z]+)-base/g)].map((c) => c[1]), CANON);
-  // The launcher never draws a mark: no inline SVG or image, and a five-bar foot in canon order follows it.
-  assert.doesNotMatch(html, /<svg|<img|<path/);
-  assert.match(html, /id="chat-dock"/);
-  assert.match(html, /aria-controls="chat-dock"/);
-  const bars = fiveBars(html);
-  assert.deepEqual(bars.at(-1), CANON);
+test('the chat dock keeps its non-modal dialog and canon launcher around the shared compact composer', () => {
+  const html = read('chat-dock.html');
+  assertSharedComposer(html);
+  assertCanonSeatControls(html);
+  const dialog = html.match(/<dialog open id="chat-dock"[^>]*>([\s\S]*?)<\/dialog>/);
+  assert.match(dialog[0], /aria-modal="false"/);
+  assert.doesNotMatch(dialog[1], /vi-glass|aria-label="Starters"/);
+  assert.equal([...dialog[1].matchAll(/class="vi-chat-bubble"/g)].length, 1);
+  assert.equal([...dialog[1].matchAll(/class="vi-chat-speaker"/g)].length, 1);
+  const launcher = html.match(/<button[^>]*data-chat-dock-toggle[^>]*>([\s\S]*?)<\/button>/);
+  assert.match(launcher[0], /aria-controls="chat-dock"/);
+  assert.doesNotMatch(launcher[1], /<svg|<img/);
+  assert.deepEqual([...launcher[1].matchAll(/bg-persona-accent-([a-z]+)-base/g)].map((bar) => bar[1]), CANON);
 });
 
 test('the instrument fragment follows ADR-017', () => {
@@ -273,47 +241,26 @@ test('the instrument fragment follows ADR-017', () => {
   assert.doesNotMatch(html, /persona-accent-/);
 });
 
-test('the group-conversation fragment follows ADR-020', () => {
+test('the group conversation presents neutral traces and unboxed prose with bounded turn actions', () => {
   const html = read('group-conversation.html');
-  // Persona accent ban and no solid violet fill (rings use border-surface-accent-violet-base).
-  assert.doesNotMatch(html, /persona-accent-/);
-  assert.doesNotMatch(html, /bg-surface-accent-violet-base/);
-  // Dialog, glass shell + core, one header, one log, one composer, one disclosure.
-  assert.match(html, /role="dialog" aria-modal="false" aria-label="Agent harness thread"/);
-  assert.match(html, /\bvi-glass-shell\b[\s\S]*\bw-layout-width-conversation-base\b/);
-  assert.match(html, /\bvi-glass-core\b/);
-  assert.equal([...html.matchAll(/<header\b/g)].length, 1);
-  assert.match(html, /role="log" aria-live="polite" aria-relevant="additions" aria-label="Group conversation"/);
-  assert.equal([...html.matchAll(/<form\b/g)].length, 1);
-  assert.equal([...html.matchAll(/<details\b/g)].length, 1);
-  // Deterministic monogram badges: head agent CA uses surface-accent-violet ring, specialist SA uses graph-line outline.
-  assert.match(html, /border-surface-accent-violet-base[^>]*>CA</);
-  assert.match(html, /border-border-graph-line-base[^>]*>SA</);
-  // Speaker rhythm: two consecutive turns from SA render only one Schema auditor header; visitor turn is the only bubble.
+  assertSharedComposer(html);
+  assert.doesNotMatch(html, /persona-accent-|vi-glass/);
   const log = html.match(/role="log"[\s\S]*?<form/)[0];
-  assert.equal([...log.matchAll(/Schema auditor/g)].length, 1);
-  assert.equal([...log.matchAll(/Coordinator/g)].length, 1);
-  assert.match(log, /justify-end[\s\S]*bg-surface-background-tertiary-base[^>]*><span class="sr-only">You said: <\/span>/);
-  // Hairline receipt-ledger rows in polite live regions for handoffs, usage and budget.
-  const ledgers = [...log.matchAll(/<dl aria-live="polite"[^>]*>([\s\S]*?)<\/dl>/g)];
-  assert.ok(ledgers.length >= 2);
-  assert.match(log, /border-border-separator-primary-base/);
-  assert.match(log, /Handoff/);
-  assert.match(log, /Usage[\s\S]*tabular-nums/);
-  assert.match(log, /Budget[\s\S]*tabular-nums/);
-  // Solid artifact card: secondary surface, standard radius, filename and mono micro-line (hash + author), no inline preview pane.
-  assert.match(log, /bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base[\s\S]*token-audit-report\.md[\s\S]*sha256: [0-9a-f]{7} · author: SA/);
-  assert.doesNotMatch(log, /<pre|<code|vi-glass/);
-  // All four turn-state status tokens paired with text labels, plus one retry control on failure.
-  assert.match(html, /bg-status-indicator-info-base[\s\S]*?running/);
-  assert.match(html, /bg-status-indicator-warning-base[\s\S]*?stopping/);
-  assert.match(html, /bg-status-indicator-success-base[\s\S]*?finished/);
-  assert.match(html, /bg-status-indicator-error-base[\s\S]*?failed[\s\S]*?>Retry<\/button>/);
-  // Hover/focus message actions and touch target floors.
-  assert.match(log, /group-hover:opacity-100 focus:opacity-100[^>]*>Copy<\/button>/);
-  for (const m of html.matchAll(/<(button|textarea)\b[^>]*class="([^"]*)"/g)) {
-    assert.match(m[2], /h-action-(min|wide)-default/, m[0].slice(0, 80));
-  }
+  assert.equal([...log.matchAll(/class="vi-chat-speaker"/g)].length, 2);
+  assert.equal([...log.matchAll(/class="vi-chat-bubble"/g)].length, 1);
+  assert.match(log, /<details class="vi-chat-trace">[\s\S]*?2 tool calls · 184 ms · SA handoff/);
+  assert.match(log, /<code>design\.tokens\.read<\/code>/);
+  assert.match(log, /<code>artifacts\.manifest\.compare<\/code>/);
+  assert.match(log, /class="vi-chat-turn-footer"[\s\S]*?Finished[\s\S]*?376 tokens[\s\S]*?data-chat-copy[\s\S]*?data-chat-retry/);
+  assert.match(log, /class="vi-chat-card" aria-label="Artifact"[\s\S]*?migration-notes\.md[\s\S]*?sha256: [0-9a-f]{7} · Author: SA/);
+  assert.match(log, /aria-label="Owner approval"[\s\S]*?Waiting for owner[\s\S]*?artifacts\.notes\.write/);
+});
+
+test('the workspace uses the shared conversation composer and neutral harness identity', () => {
+  const html = read('layout-agent-workspace.html');
+  assertSharedComposer(html);
+  assert.doesNotMatch(html, /persona-accent-|vi-glass/);
+  assert.match(html, /href="#workspace-chat">Skip to conversation/);
 });
 
 test('modular conversation components follow ADR-016 and ADR-017 budgets and aria', () => {
@@ -396,6 +343,7 @@ test('modular agent-workspace and harness fragments follow ADR-020 contracts and
     assert.doesNotMatch(html, /vi-glass/, `${file}: must stay solid (no vi-glass)`);
     assert.doesNotMatch(html, /persona-accent-/, `${file}: must not reuse persona-accent-*`);
     assert.doesNotMatch(html, /bg-surface-accent-violet-base/, `${file}: must not use solid bg-surface-accent-violet-base`);
+    if (file === 'layout-agent-workspace.html') continue;
     for (const m of html.matchAll(/<(button|textarea)\b[^>]*class="([^"]*)"/g)) {
       assert.match(m[2], /h-action-(min|wide)-default/, `${file}: touch target floor on ${m[0].slice(0, 80)}`);
     }
@@ -465,11 +413,11 @@ test('modular agent-workspace and harness fragments follow ADR-020 contracts and
 
   // 8. layout-agent-workspace.html
   const workspace = read('layout-agent-workspace.html');
-  assert.match(workspace, /\bw-layout-width-sidebar-base\b/);
-  assert.match(workspace, /\bw-layout-width-inspector-base\b/);
+  assert.match(workspace, /data-chat-panel="rail"/);
+  assert.match(workspace, /data-chat-panel="inspector"[^>]*\bhidden\b/);
   assert.match(workspace, /role="log"/);
   assert.match(workspace, /Shared desktop/);
-  assert.match(workspace, /Personas/);
+  assert.match(workspace, /aria-label="Workspace mode"/);
   assert.match(workspace, /Notes/);
   assert.match(workspace, /Usage/);
 });

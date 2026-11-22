@@ -108,6 +108,18 @@ test('check_contrast rejects a colour it cannot resolve', async () => {
   assert.equal(result.isError, true);
 });
 
+test('check_contrast evaluates chat OKLCH tokens against the existing text matrix', async () => {
+  const result = await client.callTool({
+    name: 'check_contrast',
+    arguments: { foreground: 'colors.text-content-secondary-light', background: 'colors.surface-chat-composer-light' },
+  });
+  assert.notEqual(result.isError, true, result.content[0].text);
+  const report = JSON.parse(result.content[0].text);
+  assert.match(report.background, /^oklch\(/);
+  assert.ok(report.ratio >= 4.5);
+  assert.equal(report.aa.text, true);
+});
+
 test('stage_backdrop returns the SVG and a passing ambient report', async () => {
   const result = await client.callTool({ name: 'stage_backdrop', arguments: { variant: 'ambient' } });
   assert.notEqual(result.isError, true, result.content[0].text);

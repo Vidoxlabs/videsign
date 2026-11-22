@@ -29,7 +29,7 @@ const path = require('path');
 const { parseFrontMatter } = require('./scripts/generate-tokens');
 const DESIGN_CONTENT = fs.readFileSync(path.join(__dirname, 'DESIGN.md'), 'utf-8');
 const TOKENS = parseFrontMatter(DESIGN_CONTENT);
-const { contrastRatio, wcagLevels } = require('./lib/contrast');
+const { contrastRatio, parseOpaqueColour, wcagLevels } = require('./lib/contrast');
 const stage = require('./lib/stage');
 const memoryField = require('./lib/memory-field');
 const { COMPONENT_CATALOG } = require('./scripts/generate-standard');
@@ -43,14 +43,13 @@ const {
 } = require('./lib/design-studio');
 const BRAND_TOKENS = JSON.parse(fs.readFileSync(path.join(__dirname, 'brand', 'tokens.json'), 'utf-8'));
 
-/** A `#RRGGBB` literal, or a `colors.<key>` token path resolved from DESIGN.md. */
+/** An opaque sRGB colour literal or a colours token path. */
 function resolveColour(input) {
   const value = String(input ?? '').trim();
-  if (/^#[0-9a-f]{6}$/i.test(value) || /^#[0-9a-f]{3}$/i.test(value)) return value.toUpperCase();
   const match = /^colors\.([a-z0-9-]+)$/.exec(value);
-  const token = match ? TOKENS.colors[match[1]] : undefined;
-  if (typeof token === 'string' && /^#[0-9a-f]{6}$/i.test(token)) return token;
-  return null;
+  const colour = match ? TOKENS.colors[match[1]] : value;
+  if (!parseOpaqueColour(colour)) return null;
+  return colour.startsWith('#') ? colour.toUpperCase() : colour;
 }
 
 const textResult = (text, isError = false) => ({ content: [{ type: 'text', text }], ...(isError ? { isError: true } : {}) });
@@ -149,6 +148,7 @@ const STANDARD_RESOURCES = [
   { file: 'dist/dialects.json', name: 'Persona dialects (resolved)', mimeType: 'application/json', description: 'Each seat\'s tempo, density, label type, motif and lead order, resolved to seconds and points.' },
   { file: 'dist/tokens.dtcg.json', name: 'Tokens in DTCG 2025.10 format', mimeType: 'application/json', description: 'W3C Design Tokens Community Group format for design tools and converters.' },
   { file: 'dist/components.manifest.json', name: 'Component Studio Manifest', mimeType: 'application/json', description: 'Deterministic index of modular components, page archetypes, reference contract rules, and token entrypoints (ADR-023).' },
+  { file: 'dist/chat.css', name: 'Chat and agent workspace', mimeType: 'text/css', description: 'Container-query chat canvas, shared floating composer and agent workspace (ADR-016, ADR-020, ADR-021).' },
 ];
 
 /** Title-case a kebab-case filename into a human-readable resource name. */
@@ -299,12 +299,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'check_contrast',
-        description: 'WCAG 2 contrast ratio between two opaque colours. Each argument is a #RRGGBB literal or a colors.<key> token path (e.g., "colors.text-content-secondary-base"). Returns the ratio and whether it clears AA text (4.5:1), large text (3:1) and non-text (3:1).',
+        description: 'WCAG 2 contrast ratio between two opaque sRGB colours: hex, in-gamut OKLCH or a colors.<key> token path. Reports AA text (4.5:1), large text (3:1) and non-text (3:1).',
         inputSchema: {
           type: 'object',
           properties: {
-            foreground: { type: 'string', description: 'Text or mark colour: #RRGGBB or colors.<key>.' },
-            background: { type: 'string', description: 'Surface colour: #RRGGBB or colors.<key>.' },
+            foreground: { type: 'string', description: 'Text or mark colour: hex, OKLCH or colors.<key>.' },
+            background: { type: 'string', description: 'Surface colour: hex, OKLCH or colors.<key>.' },
           },
           required: ['foreground', 'background'],
         },
@@ -404,7 +404,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const foreground = resolveColour(args?.foreground);
     const background = resolveColour(args?.background);
     if (!foreground || !background) {
-      return textResult('Error: "foreground" and "background" must each be #RRGGBB or a colors.<key> token with a hex value.', true);
+      return textResult('Error: "foreground" and "background" must each be an opaque sRGB colour or a colors.<key> token.', true);
     }
     const ratio = contrastRatio(foreground, background);
     return textResult(JSON.stringify({ foreground, background, ratio: Math.round(ratio * 100) / 100, aa: wcagLevels(ratio) }, null, 2));

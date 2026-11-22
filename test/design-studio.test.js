@@ -119,8 +119,23 @@ describe('collaborative design studio & reference contracts', () => {
     const actual = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf8'));
     assert.deepEqual(actual, expected);
     assert.equal(actual.componentCount, 84);
+    assert.equal(actual.files.chatCss, 'dist/chat.css');
     assert.deepEqual(actual.categories, CATALOG_CATEGORIES);
     assert.deepEqual(actual.consumers, CATALOG_CONSUMERS);
     assert.equal(Object.keys(actual.archetypes).length, 10);
+  });
+
+  test('chat scaffolds load the shared canvas and composer stylesheet', () => {
+    for (const id of ['conversation-surface', 'group-conversation', 'chat-dock', 'layout-agent-workspace']) {
+      const scaffold = scaffoldPage({ components: [id] }, ROOT);
+      assert.ok(scaffold.stylesheets.includes('dist/chat.css'), id);
+      assert.match(scaffold.html, /href="dist\/chat\.css"/);
+      assert.match(scaffold.html, /\bvi-composer\b/);
+    }
+    const css = fs.readFileSync(path.join(ROOT, 'dist', 'chat.css'), 'utf8');
+    assert.match(css, /@container vi-chat-stage \(min-width: 40rem\)/);
+    assert.match(css, /@container vi-chat-stage \(min-width: 64rem\)/);
+    assert.match(css, /\.vi-chat-action,\s*\.vi-chat-summary\s*\{[^}]*min-inline-size: var\(--vi-size-action-min-default\);[^}]*min-block-size: var\(--vi-size-action-min-default\);/);
+    assert.doesNotMatch(css, /#[\da-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i);
   });
 });

@@ -21,6 +21,23 @@ colors:
   border-separator-primary-light: "#CBD5E1"
   border-graph-line-base: "#80808A"
   border-graph-line-light: "#64748B"
+# Solid chat surfaces (ADR-016). Both themes use opaque, sRGB-gamut OKLCH.
+  surface-chat-canvas-base: "oklch(0.161 0.010 285)"
+  surface-chat-canvas-light: "oklch(0.972 0.005 268)"
+  surface-chat-rail-base: "oklch(0.192 0.012 285)"
+  surface-chat-rail-light: "oklch(0.950 0.009 270)"
+  surface-chat-composer-base: "oklch(0.225 0.014 285)"
+  surface-chat-composer-light: "oklch(0.985 0.004 270)"
+  surface-chat-composer-hover-base: "oklch(0.266 0.018 285)"
+  surface-chat-composer-hover-light: "oklch(0.938 0.012 270)"
+  surface-chat-user-bubble-base: "oklch(0.251 0.017 285)"
+  surface-chat-user-bubble-light: "oklch(0.920 0.018 285)"
+  border-chat-subtle-base: "oklch(0.560 0.020 285)"
+  border-chat-subtle-light: "oklch(0.553 0.020 274)"
+  border-chat-strong-base: "oklch(0.685 0.023 285)"
+  border-chat-strong-light: "oklch(0.465 0.026 274)"
+  border-chat-focus-base: "oklch(0.605631 0.218915 292.717225)"
+  border-chat-focus-light: "oklch(0.605631 0.218915 292.717225)"
 # ADR-018 memory field link types (CR cluster, RR reasoned, LR linked, TR tree). Meaning-bearing lines: at least 3:1 on every surface of their theme, at least 15 deltaE00 from every persona, status and graph-line colour, at least 20 from each other. Never a persona colour; each code also carries a dash or marker and a text label.
   border-graph-cluster-base: "#5EEAD4"
   border-graph-cluster-light: "#0F766E"
@@ -71,8 +88,9 @@ typography:
   typography-fluid-body-base: "clamp(1rem, 0.96rem + 0.15vw, 1.0625rem)"
   typography-fluid-caption-base: "clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem)"
   typography-fluid-hero-base: "clamp(2.75rem, 6vw + 0.5rem, 5.25rem)"
+  typography-fluid-chat-greeting-base: "clamp(1.5rem, 1.2rem + 1.4vw, 2.125rem)"
 
-# effects: crystal glass and ambient values only (ADR-006). All values are
+# effects: crystal glass, ambient values and the solid chat composer shadow. All values are
 # literal CSS. Legacy glass-functional-* Tailwind class strings are removed.
 effects:
   glass-crystal-surface-base: "rgba(255, 255, 255, 0.035)"
@@ -90,6 +108,7 @@ effects:
   ambient-glow-violet-base: "rgba(124, 58, 237, 0.30)"
   ambient-glow-teal-base: "rgba(45, 212, 191, 0.16)"
   ambient-dots-base: "rgba(161, 161, 170, 0.14)"
+  shadow-chat-composer-base: "0 0.75rem 2rem oklch(0.12 0.012 285 / 0.20)"
 
 spacing:
   layout-radius-standard-base: "14px"
@@ -108,6 +127,9 @@ size:
   layout-width-sidebar-base: "16rem"
   layout-width-inspector-base: "20rem"
   layout-width-conversation-base: "27.5rem"
+  layout-width-chat-thread-base: "48rem"
+  layout-measure-chat-prose-base: "65ch"
+  layout-height-chat-input-max-base: "14rem"
   layout-width-content-base: "80rem"
   icon-xs-base: "1rem"
   icon-sm-base: "1.5rem"
@@ -247,7 +269,7 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 >
 > - A launcher fixed bottom right opens a non-modal dialog (`role="dialog"`, `aria-modal="false"`, labelled by its title). Escape closes it and returns focus to the launcher.
 > - The launcher is at least `{size.action-min-default}`, carries a label, and shows a tracked brand file or the five seat dots, never a drawn or approximated mark. A five-bar rule runs along its foot.
-> - The dialog is a glass shell around a core (ADR-006). Inside: a persona switcher of all five seats (`aria-pressed`), a conversation log (`role="log"`, `aria-live="polite"`, `aria-relevant="additions"`, `aria-label`), action chips, a composer (Enter sends, Shift+Enter adds a line) and a one-line disclosure of how answers are produced. What those parts look like is set by the conversation surface (ADR-016).
+> - The non-modal dialog (`aria-modal="false"`) uses a solid canvas. The floating launcher may use crystal glass. Inside the dialog are the five-seat switcher, a labelled `role="log"` with `aria-live="polite"` and `aria-relevant="additions"`, the shared compact composer, and a one-line disclosure. Escape closes the dock and restores launcher focus.
 > - Seat names stay in `{colors.text-content-primary-base}`. Seat colours mark dots, rings and bars only. A seat's message carries a five-segment marker with that seat lit, so no seat colour appears alone.
 > - The log follows new messages only while the reader is at the bottom; it never scrolls a reader away from what they are reading.
 > - Reference: `preview/chat-dock.html`.
@@ -259,18 +281,19 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > The standard for every Vidoxlabs AI chat: the chat dock, a full-page chat and native product panels.
 >
 > - **Chrome budget.** At rest the surface shows one header row, the conversation, one composer field and one disclosure line. Anything else appears when asked for, or when it becomes true.
-> - **Header.** One row, as tall as the avatar (the seat's sprite, or its crest where no art is approved). Beside the avatar a first line holds the seat's name in `{colors.text-content-primary-base}`, its role in a mono micro-label, at most one overflow menu and close; a second line holds the seat dots. No product title, model badge or state label in view; the accessible name and a visually hidden live text carry them. A docked surface is `{size.layout-width-conversation-base}` wide; on a narrower surface the role is dropped and nothing wraps.
+> - **Header.** One utility row holds the active seat crest and name, the seat switcher, and close where applicable. A docked surface is bounded by `{size.layout-width-conversation-base}`. The switcher opens a solid popover.
 > - **Seat dots.** Five dots in canon order, each a button with `aria-pressed` and the seat's name as its accessible name. Each hit area is at least `{size.action-min-default}` in both dimensions. The pressed seat carries a ring in its own colour. The switcher prints no names.
-> - **Messages.** A guide's reply is text on the core, no card. The visitor's turn is the only bubble, on `{colors.surface-background-tertiary-base}`, aligned to the end. Parts of a reply are separated by the hairline, never boxed.
+> - **Messages.** A guide's reply is unboxed prose on `--vi-chat-canvas`, at most `--vi-chat-prose-measure` (65ch). The visitor's turn is the only bubble, on `--vi-chat-user-bubble`, aligned to the end.
 > - **Speaker marker.** The five-segment marker and seat name head a reply only when the speaker changes, and on the first reply.
 > - **Message actions.** Shown on hover and on keyboard focus; on the latest reply where hover is unavailable.
 > - **Provenance by exception.** A reply is labelled only when it leaves the default path.
 > - **Starters and follow-ups.** At most four starters on an empty conversation, from one source; they leave after the first turn. At most three follow-up chips, on the latest reply only.
-> - **Composer.** One bordered field holding the text area and send. Dictation, where offered, sits inside the field and shows only while it is empty. Enter sends, Shift+Enter adds a line.
+> - **Composer.** One solid floating field holds optional admitted context pills with a tabular token budget, a labelled textarea that grows between 3rem and 14rem, and the action bar. Its hairline rim turns violet on focus. The action bar keeps attach, recipient, reasoning, neutral model slot and send together. Enter sends, Shift+Enter adds a line, a leading slash opens skills, and Escape dismisses a popover. Send becomes Stop during streaming.
 > - **Disclosure.** One line at rest; the detail expands in place. Where typed text is sent to a service, the full statement stands until the visitor's first turn, then rests at one line.
 > - **States.** Idle, composing, thinking, streaming, settled, failed. Thinking is the five-segment pulse; no spinner, no skeleton bubble.
 > - **Motion.** Opens on `{transition.transition-duration-slow-base}` with `{transition.transition-easing-spring-base}`; a turn enters on `{transition.transition-duration-normal-base}`; sprites cross-fade. The thinking pulse is the only loop.
-> - Reference: `preview/conversation-surface.html` (empty state) and `preview/chat-dock.html` (in progress).
+> - **Responsive layout.** `.vi-chat-stage` is the named inline-size container. Under 40rem, the composer actions become icon-first. At 64rem, the canvas increases turn spacing. Empty sessions center the greeting, shared composer and starter strip; active sessions scroll the thread above the docked composer. `--vi-chat-measure` caps the thread and composer at 48rem. The solid dark and light OKLCH palette comes from the token matrix.
+> - Reference: `preview/conversation-surface.html` (empty and active) and `preview/chat-dock.html` (compact). Import `dist/chat.css` after the tokens.
 
 > [!IMPORTANT]
 >
@@ -281,9 +304,9 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > - **Persona accent ban.** The five persona signature tokens (`{colors.persona-accent-violet-base}` through `{colors.persona-accent-zinnia-base}`) belong exclusively to the five sovereign VWXYZ seats and are never reused for dynamic, non-persona agents or specialist roles.
 > - **Deterministic monogram identity.** Every runtime agent is identified by a deterministic one- or two-letter monogram in `{typography.typography-family-mono-base}` inside a circular badge (`{spacing.layout-radius-full-base}`) with a neutral fill (`{colors.surface-background-tertiary-base}` or `{colors.surface-background-secondary-base}`) and a `{colors.border-graph-line-base}` outline (at least 3:1). The coordinating head agent reserves a `{colors.surface-accent-violet-base}` ring (at least 3:1 non-text indicator).
 > - **Mono role micro-labels.** Each agent's role sits beside its name as a sentence-case micro-label in `{typography.typography-family-mono-base}` (`{typography.typography-size-xs-base}`, `{typography.typography-tracking-wide-base}`, `{colors.text-content-secondary-base}`), never uppercase-transformed.
-> - **Speaker rhythm.** The monogram badge, agent name and role micro-label head a turn only when the speaker changes, and on the first agent turn; consecutive turns from one agent carry no repeated header. The visitor's turn is the only bubble (`{colors.surface-background-tertiary-base}`, aligned to the end); agent replies are text on the core with no card around prose.
-> - **Receipt-ledger rows.** Handoffs, tool activity, and token/cost usage and budget readouts render as hairline-separated rows (`{colors.border-separator-primary-base}`, per ADR-017): a mono micro-label paired with a `tabular-nums` mono value inside a polite live region.
-> - **Artifact and file cards.** Shared files and produced artifacts render as solid cards on `{colors.surface-background-secondary-base}` (never glass) with `{spacing.layout-radius-standard-base}` radius and a `{colors.border-separator-primary-base}` border, showing filename and a mono micro-line with the short content hash and authoring agent. Inline preview panes, nested code viewers and drop shadows are banned.
+> - **Speaker rhythm.** The monogram badge, agent name and role micro-label head a turn only when the speaker changes, and on the first agent turn. Visitor turns are aligned to the end on `--vi-chat-user-bubble`. Agent Markdown sits on `--vi-chat-canvas`, at most 65ch.
+> - **Receipt-ledger rows.** One expandable trace summarizes tool call count, elapsed time and handoff above a reply. Neutral IDs follow `domain.resource.verb` in hairline-separated rows. Completed turns carry a text-labelled state, tabular token and budget readouts, and copy or retry controls where applicable.
+> - **Artifact and file cards.** Shared files and produced artifacts render on solid `--vi-chat-composer-bg`, with the standard radius, a hairline rim, the filename, short digest and author. Owner approval uses the same elevated surface. Inline preview panes, nested code viewers and drop shadows are banned in the stream.
 > - **Turn-state grammar.** States pair a status token with a text label: `running` (`{colors.status-indicator-info-base}`), `stopping` (`{colors.status-indicator-warning-base}`), `finished` (`{colors.status-indicator-success-base}`) and `failed` (`{colors.status-indicator-error-base}`, one plain sentence with one retry control). A thinking pulse is the only loop (static under reduced motion); spinners and skeleton bubbles are banned.
 > - **Message actions.** Copy and per-turn commands appear on hover and keyboard focus inside the message (`{size.action-min-default}` hit target), or on the latest reply where hover is unavailable.
 > - Reference: `preview/group-conversation.html`.
@@ -294,8 +317,8 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 >
 > Extends ADR-016, ADR-017 and ADR-020 for multi-agent workspaces (`bloom`), Seed harness contracts (`seed`), and public ecosystem continuity (`vidoxlabs.dev`, `vitools`).
 >
-> - **Three-column workstation.** Multi-agent workspaces compose a left sidebar (`{size.layout-width-sidebar-base}` on `{colors.surface-background-secondary-base}`) for workspaces and the recruitable persona library, a centre conversation surface (`{colors.surface-background-primary-base}`) for the group thread and single-field composer, and a right inspector (`{size.layout-width-inspector-base}` on `{colors.surface-background-secondary-base}`) for team roster, shared desktop, team notes, activity, and usage.
-> - **Owner approval gates and artifact lineage.** Effectful run pauses (`waiting_for_owner`) render on a solid `{colors.surface-background-secondary-base}` card (`{spacing.layout-radius-standard-base}` radius) with `{colors.status-indicator-warning-base}` + text label, a hairline-separated `<dl>` showing tool ID, effect, scope, and action digest, and `44px` (`{size.action-min-default}`) action buttons (`Allow once` bordered in `{colors.surface-accent-violet-base}`, `Always allow`, `Reject`) that collapse into a resolved receipt once acted on. Shared desktop files group under muted folders with revision tags (`· v2`, `· v3`) and selection checkboxes (`accent-surface-accent-violet-base`) inside `{size.action-min-default}` rows; artifact lineage readers sit in a solid dialog (`never glass` on the reading body).
+> - **Three-column workstation.** Multi-agent workspaces place a session rail and a run inspector on `--vi-chat-rail` around one `--vi-chat-canvas`. The rail holds Chat / Workspace, New session, session search, Context, Pinned, Projects and Recents. Below 64rem both panels become off-canvas sheets. The inspector starts closed for new sessions and holds Team, Shared desktop, Notes and Usage. Mobile sheets close on Escape and restore focus.
+> - **Owner approval gates and artifact lineage.** The chat specimen renders effectful run pauses (`waiting_for_owner`) on `--vi-chat-composer-bg` with a warning dot and text, a hairline-separated `<dl>` for tool ID, effect, scope and action digest, and `{size.action-min-default}` actions (Allow once, Always allow, Reject). An acted-on gate collapses to a receipt. Shared files show revision tags and open into a solid lineage dialog.
 > - **Team roster, governed notes and cross-team handoffs.** Active members follow ADR-020 monograms (head agent with `{colors.surface-accent-violet-base}` ring; specialists with `{colors.border-graph-line-base}` outline) paired with generalized role hints (`Coordinator`, `Model-backed specialist`, `Deterministic checker`). Recruitable saved personas stay in a sidebar section. Cross-team questions and answers carry a `{colors.surface-accent-violet-base}` left border (`border-l-2`), and review holds mark `Review approved` (`{colors.status-indicator-success-base}`) and `Changes requested` (`{colors.status-indicator-warning-base}`). Confirmed notes (`Always used` or `Used when relevant`, `Correct`, `Forget`) remain visually distinct from unconfirmed agent suggestions (`Suggested by agents`, `Keep`, `Dismiss`), with recall disclosures (`{actor} · {used} of {considered} notes used`) and polite-live `tabular-nums` usage meters.
 > - **Harness contracts and neutral tool registry.** Run lifecycles (`draft`, `ready`, `running`, `waiting_for_owner`, `settling`, `complete`, `stopping`, `stopped`, `failed`) and neutral tool registry rows (`domain.[resource.][sub.]verb`, `effect`: `read | write | destructive | credential`) follow ADR-017 solid-panel readout and hairline `<dl>` receipt rules with zero vendor names inside tool IDs. The credential activity ledger (`preview/credential-activity-ledger.html`) renders credential-effect bindings as hairline rows carrying scope, a masked reference, rotation, and Active / Expired / Revoked state pairs with a destructive 44px Revoke — the secret value never renders. The policy rule matrix (`preview/policy-rule-matrix.html`) maps neutral tool patterns and effect classes to `Allow`, `Ask owner`, and `Deny` scope boundaries, while `preview/tool-call-trace-card.html` exposes expandable `<details>` invocation traces and `preview/context-attachment-tray.html` surfaces explicitly admitted turn context items and token budgets.
 > - **Public-repository continuity and claim maturity.** Public pages (`vidoxlabs.dev`) replace internal infrastructure references with the four published repository nouns (`seed`, `bloom`, `videsign`, `vitools`), the four generalized planes (`Surfaces`, `Harness`, `Providers`, `Authority stores`), and the four status-backed claim maturity badges (`implemented`, `observed`, `specified`, `planned`), never using retired internal terms or colour-only badges.
@@ -383,7 +406,7 @@ Consuming products present sovereign personas and evidence inside static-edge co
 
 Crystal glass is the one sanctioned glass material for public product surfaces. It is near-clear, with a bright rim and a top highlight; it dims and softens what is behind it instead of tinting it milky. Tokens: `{effects.glass-crystal-surface-base}`, `{effects.glass-crystal-rim-base}`, `{effects.glass-crystal-highlight-base}`, `{effects.glass-crystal-sheen-base}`, `{effects.glass-crystal-shadow-base}`, `{effects.glass-crystal-backdrop-base}`, `{effects.glass-crystal-core-base}`, and the solid fallback `{effects.glass-crystal-solid-base}`. The generator emits them as `--vi-effects-*` custom properties and as a generated `dist/glass.css` with literal values, because Safari does not resolve custom properties inside `-webkit-backdrop-filter`.
 
-- **Scope.** Glass marks controls and lenses: the floating island navigation, overlays and popovers, the question bar, the persona switcher, the evidence lens over a field, and the chat dock dialog (an overlay, ADR-013). Never on paragraphs, cards or section containers. Content stays solid and readable; chat text sits on the dock's core scrim and the visitor's turn is a solid bubble (ADR-016).
+- **Scope.** Glass marks controls and lenses: the floating island navigation, overlays and popovers outside chat, the question bar, the persona switcher outside chat, the evidence lens over a field, and the floating chat dock launcher (ADR-013). The chat canvas, composer, popovers, cards, rails and dialogs are solid.
 - **Limits.** At most three glass layers per viewport. Never glass on glass (the lens core is a scrim, not a second blur). Never backdrop blur on scrolling containers. Never animate or transition the blur.
 - **Double bezel.** Glass shells use the outer radius `{spacing.layout-radius-glass-base}` (20px), `{spacing.layout-padding-bezel-base}` (6px) padding, and an inner core at `{spacing.layout-radius-standard-base}` (14px): 20 = 6 + 14, concentric. The rim is an inset box-shadow (not a border box) so the arithmetic holds. Pill shapes use `vi-glass-shell--pill` / `vi-glass-core--pill` so plain-CSS consumers get the full radius without relying on a later Tailwind utility.
 - **Composition.** Clear glass floats over the field, imagery and the ambient layer, never directly over body copy. The page background is the stage backdrop (ADR-013). The glow tokens (`{effects.ambient-glow-violet-base}`, `{effects.ambient-glow-teal-base}`) and the dot token (`{effects.ambient-dots-base}`) stay for existing consumers; the dot grid is retired for new page backgrounds. A headline may pass beneath the island while scrolling.
@@ -429,7 +452,7 @@ To prevent "AI drift" and the generation of generic or hallucinated UI elements,
 >
 > ### 4. Glassmorphism Application
 >
-> - **One material.** Crystal glass (ADR-006) is the only glass. It appears only on controls and lenses: island navigation, overlays and popovers, the question bar, the persona switcher, the evidence lens and the chat dock dialog (ADR-013). Sidebars, cards, section containers and paragraphs stay solid opaque surfaces.
+> - **One material.** Crystal glass (ADR-006) is the only glass. On chat surfaces it is reserved for the floating dock launcher or an evidence lens. Sidebars, cards, section containers, paragraphs and chat dialogs stay solid.
 > - **BAN Legacy Semi-transparent**: Ban legacy `backdrop-blur-*` / `bg-white/*` glass class strings and any other milky overlay. Never glass on glass; at most three glass layers per viewport; never backdrop blur on scrolling containers.
 
 > [!CAUTION]

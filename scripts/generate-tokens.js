@@ -10,6 +10,7 @@
  *   dist/themes.css          — Product light theme mappings (ADR-012)
  *   dist/glass.css           — Crystal glass stylesheet with LITERAL declarations (ADR-006)
  *   dist/catalog.css         — Tailwind utilities compiled from the config, for preview/ only
+ *   dist/chat.css            — Shared conversation canvas, composer, and workspace styles
  *   dist/standard.json|md    — Agent-readable standard (addendum §2)
  *
  * Usage:
@@ -27,6 +28,20 @@ const { buildComponentsManifest, COMPONENT_CATALOG } = require('../lib/design-st
 const ROOT = path.join(__dirname, '..');
 const DESIGN_FILE = path.join(ROOT, 'DESIGN.md');
 const DIST_DIR = path.join(ROOT, 'dist');
+const CHAT_VARS = {
+  canvas: 'colors-surface-chat-canvas-base',
+  rail: 'colors-surface-chat-rail-base',
+  'composer-bg': 'colors-surface-chat-composer-base',
+  'composer-hover': 'colors-surface-chat-composer-hover-base',
+  'user-bubble': 'colors-surface-chat-user-bubble-base',
+  'border-subtle': 'colors-border-chat-subtle-base',
+  'border-strong': 'colors-border-chat-strong-base',
+  'focus-ring': 'colors-border-chat-focus-base',
+  measure: 'size-layout-width-chat-thread-base',
+  'prose-measure': 'size-layout-measure-chat-prose-base',
+  'radius-composer': 'spacing-layout-radius-standard-base',
+  'radius-bubble': 'spacing-layout-radius-standard-base',
+};
 
 // --- Minimal YAML parser (handles the flat key: "value" format in DESIGN.md) ---
 
@@ -75,12 +90,11 @@ function withPrefix(entries, prefix) {
 /**
  * Tailwind 3 drops an opacity modifier when the color is a bare var() it cannot
  * parse. color-mix keeps the custom property, so a light-theme override of that
- * variable still flows through, and /opacity utilities still compile. The hex
+ * still flows through, and /opacity utilities still compile. The colour
  * is the fallback when the variable is unset. color-mix() needs Safari 16.2+,
  * Chrome 111+, or Firefox 113+.
  */
 function tailwindColorValue(key, value) {
-  if (!/^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/.test(value)) return value;
   return `color-mix(in srgb, var(--vi-colors-${key}, ${value}) calc(<alpha-value> * 100%), transparent)`;
 }
 
@@ -151,6 +165,10 @@ function emitCSS(tokens) {
     }
   }
 
+  lines.push('}', '', ':root, [data-theme] {');
+  for (const [name, token] of Object.entries(CHAT_VARS)) {
+    lines.push(`  --vi-chat-${name}: var(--vi-${token});`);
+  }
   lines.push('}');
   return lines.join('\n') + '\n';
 }
@@ -420,6 +438,7 @@ function main() {
     'themes.css': emitThemeCSS(tokens),
     'tokens.json': emitJSON(tokens),
     'glass.css': emitGlassCSS(tokens),
+    'chat.css': fs.readFileSync(path.join(ROOT, 'lib', 'chat.css'), 'utf-8'),
     'standard.json': standardArtifacts['standard.json'],
     'standard.md': standardArtifacts['standard.md'],
     'components.manifest.json': `${JSON.stringify(buildComponentsManifest(COMPONENT_CATALOG, tokens), null, 2)}\n`,

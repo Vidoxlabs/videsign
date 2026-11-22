@@ -1,129 +1,225 @@
-<!--
-  Nocturne Museum: Agent workspace layout (ADR-020)
-  Full-page 3-column agent workstation composition: top masthead (wordmark, provider
-  label, connection status), left workspaces + personas sidebar, center group
-  conversation log + single-field composer, and right inspector (team, shared desktop,
-  notes, activity, usage). All surfaces are solid and zero persona-accent tokens appear.
--->
-<div class="flex flex-col h-dvh w-screen bg-surface-background-primary-base overflow-hidden">
-  <header class="flex items-center justify-between gap-gap-compact-default px-layout-padding-medium-base py-inset-compact-default bg-surface-background-secondary-base border-b border-border-separator-primary-base shrink-0">
-    <span class="font-typography-family-mono-base font-typography-weight-semibold-base text-typography-size-md-base tracking-typography-tracking-tight-base text-text-content-primary-base">bloom</span>
-    <div class="flex items-center gap-gap-comfortable-default">
-      <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Local provider</span>
-      <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-primary-base">
-        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
-        <span>Connected</span>
-      </span>
-    </div>
-  </header>
-  <div class="flex flex-1 min-w-0 overflow-hidden">
-    <aside aria-label="Workspaces and personas" class="w-layout-width-sidebar-base bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-medium-base flex flex-col gap-gap-spacious-default shrink-0 overflow-y-auto">
-      <div class="flex flex-col gap-gap-compact-default">
-        <div class="flex items-center justify-between gap-gap-compact-default">
-          <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base text-balance">Workspaces</h2>
-          <button type="button" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">+ New</button>
-        </div>
-        <nav aria-label="Workspace list" class="flex flex-col gap-gap-dense-default">
-          <button type="button" aria-current="page" class="flex items-center w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base text-left truncate transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Token migration</button>
-          <button type="button" class="flex items-center w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base text-left truncate transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Release team</button>
+<!-- ADR-020 and ADR-021: the rail and inspector flank one undivided chat canvas. -->
+<div class="vi-chat-workspace" data-chat-preview data-chat-workspace>
+  <a class="vi-chat-action vi-chat-skip" href="#workspace-chat">Skip to conversation</a>
+  <div class="vi-chat-workspace__grid">
+    <aside id="workspace-rail" class="vi-chat-workspace__panel vi-chat-workspace__rail" data-chat-panel="rail" aria-label="Session rail">
+      <header>
+        <h2 class="font-typography-weight-semibold-base text-typography-size-sm-base">Agent workspace</h2>
+        <button type="button" class="vi-chat-action" data-chat-panel-close="rail" aria-label="Close session rail" title="Close session rail"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      </header>
+      <div class="vi-chat-workspace__mode" role="group" aria-label="Workspace mode">
+        <button type="button" class="vi-chat-action vi-chat-action--border" data-chat-workspace-mode="chat" aria-pressed="false">Chat</button>
+        <button type="button" class="vi-chat-action vi-chat-action--border" data-chat-workspace-mode="workspace" aria-pressed="true">Workspace</button>
+      </div>
+      <nav aria-label="Session actions" class="vi-chat-workspace__nav">
+        <button type="button" class="vi-chat-action" data-chat-session="empty"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>New session</button>
+        <button type="button" class="vi-chat-action" popovertarget="workspace-search" data-chat-search-trigger aria-label="Search sessions" aria-keyshortcuts="Meta+K Control+K"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a6 6 0 1 1-12 0 6 6 0 0 1 12 0Zm4 10-5-5"/></svg>Search <kbd class="vi-chat-meta">⌘ K</kbd></button>
+      </nav>
+      <details open data-chat-workspace-context>
+        <summary class="vi-chat-summary vi-chat-meta"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" data-chat-chevron><path d="m6 9 6 6 6-6"/></svg>Context</summary>
+        <nav aria-label="Context" class="vi-chat-workspace__nav">
+          <button type="button" class="vi-chat-action" popovertarget="workspace-rail-skills">Skills</button>
+          <button type="button" class="vi-chat-action" data-chat-inspect="workspace-team">Agents</button>
+          <button type="button" class="vi-chat-action" data-chat-inspect="workspace-notes">Knowledge</button>
+          <button type="button" class="vi-chat-action" popovertarget="workspace-connectors">Connectors</button>
         </nav>
+      </details>
+      <nav class="vi-chat-workspace__nav" aria-label="Pinned">
+        <h3 class="vi-chat-meta">Pinned</h3>
+        <button type="button" class="vi-chat-action" data-chat-session="active" aria-current="true">Token migration</button>
+      </nav>
+      <nav class="vi-chat-workspace__nav" aria-label="Projects">
+        <h3 class="vi-chat-meta">Projects</h3>
+        <button type="button" class="vi-chat-action" data-chat-session="active">Design system</button>
+      </nav>
+      <nav class="vi-chat-workspace__nav" aria-label="Recents">
+        <h3 class="vi-chat-meta">Recents</h3>
+        <button type="button" class="vi-chat-action" data-chat-session="active">Migration review</button>
+      </nav>
+      <footer class="vi-chat-meta">Local workspace</footer>
+      <div id="workspace-search" class="vi-chat-menu" popover aria-label="Search sessions">
+        <p class="vi-chat-meta">Search sessions</p>
+        <label for="workspace-search-input" class="sr-only">Find a session</label>
+        <input id="workspace-search-input" type="search" placeholder="Find a session" data-chat-search autofocus>
+        <button type="button" class="vi-chat-action" data-chat-session="active" data-chat-search-result>Token migration</button>
+        <button type="button" class="vi-chat-action" data-chat-session="active" data-chat-search-result>Migration review</button>
+        <p class="vi-chat-meta" data-chat-search-empty hidden>No matching sessions</p>
       </div>
-      <div class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
-        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base text-balance">Personas</h2>
-        <div class="flex flex-col gap-gap-compact-default">
-          <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Auditor · Review</span>
-          <button type="button" class="inline-flex items-center justify-center w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Add to team</button>
-        </div>
+      <div id="workspace-connectors" class="vi-chat-menu" popover aria-label="Connectors">
+        <p class="vi-chat-meta">Connectors</p>
+        <p class="text-typography-size-sm-base"><code>providers.slot.local</code> · Available in the preview</p>
+      </div>
+      <div id="workspace-rail-skills" class="vi-chat-menu" popover aria-label="Skills">
+        <p class="vi-chat-meta">Skills</p>
+        <button type="button" class="vi-chat-action" data-chat-prompt="Review the token changes."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12m12-6v12M3 7l3-4 3 4m6 10 3 4 3-4M11 12h2"/></svg>Review changes</button>
+        <button type="button" class="vi-chat-action" data-chat-prompt="Summarize the attached context."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Summarize context</button>
       </div>
     </aside>
-    <main class="flex-1 min-w-0 flex flex-col bg-surface-background-primary-base overflow-hidden">
-      <div class="flex items-center justify-between gap-gap-compact-default px-layout-padding-medium-base py-inset-operator-default border-b border-border-separator-primary-base shrink-0">
-        <h1 class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base text-balance">Group conversation</h1>
-        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums tracking-typography-tracking-wide-base text-text-content-secondary-base">3 active agents</span>
-      </div>
-      <div role="log" aria-live="polite" aria-relevant="additions" aria-label="Group conversation" class="flex-1 min-w-0 overflow-y-auto flex flex-col gap-gap-spacious-default p-layout-padding-medium-base">
-        <div class="flex justify-end">
-          <p class="px-inset-operator-default py-inset-compact-default font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base bg-surface-background-tertiary-base rounded-layout-radius-standard-base"><span class="sr-only">You said: </span>Review the shared token notes and assemble the migration guide.</p>
+    <main id="workspace-chat" tabindex="-1" class="vi-chat-stage" data-chat-stage data-chat-skills="workspace-skills" data-empty="false">
+      <header class="vi-chat-topbar">
+        <button type="button" class="vi-chat-action" data-chat-panel-toggle="rail" aria-label="Toggle session rail" title="Toggle session rail" aria-controls="workspace-rail" aria-expanded="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3zM9 5v14"/></svg></button>
+        <h1 class="vi-chat-title" data-chat-title>Token migration</h1>
+        <span class="vi-chat-status" data-chat-connection data-slot-id="providers.slot.local"><span aria-hidden="true" class="bg-status-indicator-success-base"></span><span data-chat-slot-label>Local</span><span>Ready</span></span>
+        <button type="button" class="vi-chat-action" data-chat-panel-toggle="inspector" aria-label="Toggle inspector" title="Toggle inspector" aria-controls="workspace-inspector" aria-expanded="false"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3zM15 5v14"/></svg></button>
+        <p class="sr-only" role="status" data-chat-announcement></p>
+      </header>
+      <div class="vi-chat-body">
+        <div class="vi-chat-welcome">
+          <span aria-hidden="true" class="vi-chat-avatar vi-chat-avatar--lead" data-chat-monogram>LA</span>
+          <h2 class="vi-chat-greeting">What should we work on?</h2>
         </div>
-        <div class="flex flex-col gap-gap-compact-default">
-          <div class="flex items-center gap-gap-compact-default min-w-0">
-            <span aria-hidden="true" class="grid place-items-center shrink-0 w-icon-md-base h-icon-md-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">LA</span>
-            <span class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-sm-base text-text-content-primary-base">Lead</span>
-            <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">head agent</span>
-          </div>
-          <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">Checking with Release team first, then assigning Source reader to draft migration-guide.md.</p>
-        </div>
-        <div class="flex flex-col gap-gap-dense-default border-l-2 border-surface-accent-violet-base pl-layout-padding-medium-base">
-          <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">From team Release team</span>
-          <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">From our side: stage 1 contract modules ship with zero runtime dependencies.</p>
-        </div>
-        <div class="flex flex-col gap-gap-compact-default">
-          <div class="flex items-center gap-gap-compact-default min-w-0">
-            <span aria-hidden="true" class="grid place-items-center shrink-0 w-icon-md-base h-icon-md-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-graph-line-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">SA</span>
-            <span class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-sm-base text-text-content-primary-base">Source reader</span>
-            <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">specialist</span>
-          </div>
-          <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">Drafted revision 3 of the migration guide from the admitted notes.</p>
-          <div class="flex flex-wrap items-center justify-between gap-gap-compact-default p-layout-padding-medium-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
-            <div class="flex flex-col gap-gap-dense-default min-w-0">
-              <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base truncate">migration-guide.md</span>
-              <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">sha256: 7f4a9c2 · Revision 3</span>
+        <div class="vi-chat-stream" role="log" aria-live="polite" aria-relevant="additions" aria-label="Group conversation" tabindex="0">
+          <div class="vi-chat-thread" data-chat-thread>
+            <div class="vi-chat-seed" data-chat-seed>
+              <div class="vi-chat-turn vi-chat-turn--user"><p class="vi-chat-bubble"><span class="sr-only">You said: </span>Compare the current token exports and draft a migration note.</p></div>
+              <article class="vi-chat-turn">
+                <div class="vi-chat-speaker">
+                  <span aria-hidden="true" class="vi-chat-avatar vi-chat-avatar--lead">LA</span>
+                  <span class="font-typography-weight-semibold-base text-typography-size-sm-base">Coordinator</span>
+                  <span class="vi-chat-meta">Lead agent</span>
+                </div>
+                <details class="vi-chat-trace">
+                  <summary class="vi-chat-summary"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6 3 12l4 6m10-12 4 6-4 6m-3-13-4 14"/></svg><span>2 tool calls · 184 ms · SA handoff</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" data-chat-chevron><path d="m6 9 6 6 6-6"/></svg></summary>
+                  <dl class="vi-chat-ledger" aria-label="Tool and handoff receipt">
+                    <div><dt><code>design.tokens.read</code></dt><dd>Finished · 72 ms</dd></div>
+                    <div><dt><code>artifacts.manifest.compare</code></dt><dd>Finished · 112 ms</dd></div>
+                    <div><dt>Handoff</dt><dd>LA → SA · schema audit</dd></div>
+                  </dl>
+                </details>
+                <div class="vi-chat-prose"><p>I compared the token export with the component manifest and handed the schema check to the auditor.</p></div>
+                <footer class="vi-chat-turn-footer">
+                  <span class="vi-chat-status"><span aria-hidden="true" class="bg-status-indicator-success-base"></span>Finished</span>
+                  <span class="vi-chat-meta">376 tokens</span>
+                  <div class="vi-chat-turn-actions">
+                    <button type="button" class="vi-chat-action" data-chat-copy aria-label="Copy reply">Copy</button>
+                    <button type="button" class="vi-chat-action" data-chat-retry aria-label="Retry reply">Retry</button>
+                  </div>
+                </footer>
+              </article>
+              <article class="vi-chat-turn" data-chat-latest>
+                <div class="vi-chat-speaker">
+                  <span aria-hidden="true" class="vi-chat-avatar">SA</span>
+                  <span class="font-typography-weight-semibold-base text-typography-size-sm-base">Schema auditor</span>
+                  <span class="vi-chat-meta">Specialist</span>
+                </div>
+                <div class="vi-chat-prose"><p>I added the stylesheet import and the preview checks to the draft.</p></div>
+                <section class="vi-chat-card" aria-label="Artifact">
+                  <p class="font-typography-weight-semibold-base text-typography-size-sm-base">migration-notes.md</p>
+                  <p class="vi-chat-meta">sha256: 7f4a9c2 · Author: SA</p>
+                  <div class="vi-chat-card-actions">
+                    <button type="button" class="vi-chat-action vi-chat-action--border" data-chat-dialog-open="workspace-artifact">Open artifact</button>
+                  </div>
+                </section>
+                <footer class="vi-chat-turn-footer">
+                  <span class="vi-chat-status"><span aria-hidden="true" class="bg-status-indicator-success-base"></span>Finished</span>
+                  <span class="vi-chat-meta">284 tokens · $0.04 / $0.50</span>
+                  <div class="vi-chat-turn-actions">
+                    <button type="button" class="vi-chat-action" data-chat-copy aria-label="Copy reply">Copy</button>
+                    <button type="button" class="vi-chat-action" data-chat-retry aria-label="Retry reply">Retry</button>
+                  </div>
+                </footer>
+              </article>
             </div>
-            <button type="button" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Open migration-guide.md</button>
+          </div>
+        </div>
+        <div class="vi-chat-composer-area">
+          <form class="vi-composer" data-state="idle" data-chat-composer>
+            <div class="vi-composer__attachments" data-chat-context aria-label="Attached context" hidden>
+              <ul aria-label="Attachments">
+                <li class="vi-composer__attachment" data-chat-attachment="notes" data-tokens="840" hidden>
+                  <span class="vi-chat-meta">token-notes.md</span>
+                  <button type="button" class="vi-chat-action" data-chat-remove="notes" aria-label="Remove token-notes.md" title="Remove token-notes.md"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+                </li>
+                <li class="vi-composer__attachment" data-chat-attachment="brief" data-tokens="320" hidden>
+                  <span class="vi-chat-meta">project-brief.md</span>
+                  <button type="button" class="vi-chat-action" data-chat-remove="brief" aria-label="Remove project-brief.md" title="Remove project-brief.md"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+                </li>
+              </ul>
+              <output class="vi-chat-meta" aria-label="Context token budget" data-chat-budget>0 / 4,096 tokens</output>
+            </div>
+            <label for="workspace-input" class="sr-only" data-chat-input-label>Message Coordinator</label>
+            <textarea id="workspace-input" rows="1" placeholder="Message Coordinator or type / for skills…" data-chat-input aria-keyshortcuts="Enter Shift+Enter"></textarea>
+            <div class="vi-composer__actions">
+              <div role="group" aria-label="Context and mode">
+                <button type="button" class="vi-chat-action" popovertarget="workspace-attach" aria-label="Attach context" title="Attach context"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><span class="vi-chat-action__label">Attach</span></button>
+                <button type="button" class="vi-chat-action" popovertarget="workspace-recipient" data-chat-recipient-control aria-label="Choose recipient: Coordinator" title="Choose recipient: Coordinator"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/></svg><span class="vi-chat-action__label"><span data-chat-recipient-label>Coordinator</span></span></button>
+                <button type="button" class="vi-chat-action" data-chat-think aria-pressed="false" aria-label="Think mode" title="Balanced mode"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M2 12h4m12 0h4M5 5l3 3m8 8 3 3M5 19l3-3m8-8 3-3"/></svg><span class="vi-chat-action__label"><span data-chat-mode-label>Balanced</span></span></button>
+              </div>
+              <div role="group" aria-label="Model and send">
+                <button type="button" class="vi-chat-action" popovertarget="workspace-model" data-chat-slot-control data-slot-id="providers.slot.local" aria-label="Model slot: Local" title="Model slot: Local"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM4 10h16m-12 4h4"/></svg><span class="vi-chat-action__label"><span data-chat-slot-label>Local</span></span></button>
+                <button type="submit" class="vi-chat-action vi-chat-action--primary" aria-label="Send" title="Send" disabled><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" data-chat-send-icon><path d="M12 19V5m-6 6 6-6 6 6"/></svg><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" data-chat-stop-icon><path d="M7 7h10v10H7z"/></svg></button>
+              </div>
+            </div>
+          </form>
+          <div class="vi-chat-starters" role="group" aria-label="Starters">
+            <button type="button" class="vi-chat-action vi-chat-action--border vi-chat-action--pill" data-chat-prompt="Review the token changes."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12m12-6v12M3 7l3-4 3 4m6 10 3 4 3-4M11 12h2"/></svg>Review changes</button>
+            <button type="button" class="vi-chat-action vi-chat-action--border vi-chat-action--pill" data-chat-prompt="Draft a migration note."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg>Draft a migration note</button>
+            <button type="button" class="vi-chat-action vi-chat-action--border vi-chat-action--pill" data-chat-prompt="Summarize the attached context."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Summarize context</button>
           </div>
         </div>
       </div>
-      <div class="flex flex-col gap-gap-compact-default p-layout-padding-medium-base border-t border-border-separator-primary-base shrink-0">
-        <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
-          <div class="flex flex-wrap items-center gap-gap-compact-default">
-            <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">To: Lead</button>
-            <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Model: Default model</button>
-          </div>
-          <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Try a sample task</button>
-        </div>
-        <form class="flex items-end gap-gap-compact-default bg-surface-background-secondary-base border border-border-separator-primary-base focus-within:border-surface-accent-violet-base rounded-layout-radius-control-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
-          <label for="workspace-composer-input" class="sr-only">Message Lead</label>
-          <textarea id="workspace-composer-input" rows="1" placeholder="Message Lead" class="flex-1 min-w-0 h-action-min-default px-inset-operator-default bg-transparent font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base placeholder:text-text-content-secondary-base resize-none"></textarea>
-          <button type="submit" class="inline-flex items-center shrink-0 whitespace-nowrap h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Send</button>
-        </form>
+      <details class="vi-chat-disclosure">
+        <summary class="vi-chat-summary">Replies are examples</summary>
+        <p>Messages and selections stay in this preview.</p>
+      </details>
+      <div id="workspace-recipient" class="vi-chat-menu" popover aria-label="Choose an agent">
+        <p class="vi-chat-meta">Choose an agent</p>
+        <button type="button" class="vi-chat-action" data-chat-recipient="Coordinator" data-monogram="LA" aria-pressed="true">Coordinator</button>
+        <button type="button" class="vi-chat-action" data-chat-recipient="Schema auditor" data-monogram="SA" aria-pressed="false">Schema auditor</button>
       </div>
+      <div id="workspace-attach" class="vi-chat-menu" popover aria-label="Attach context">
+        <p class="vi-chat-meta">Attach context</p>
+        <button type="button" class="vi-chat-action" data-chat-attach="brief" aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg>project-brief.md</button>
+        <button type="button" class="vi-chat-action" data-chat-attach="notes" aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg>token-notes.md</button>
+      </div>
+      <div id="workspace-model" class="vi-chat-menu" popover aria-label="Model slot">
+        <p class="vi-chat-meta">Model slot</p>
+        <button type="button" class="vi-chat-action" data-chat-slot="providers.slot.remote" aria-pressed="false">Remote</button>
+        <button type="button" class="vi-chat-action" data-chat-slot="providers.slot.local" aria-pressed="true">Local</button>
+      </div>
+      <div id="workspace-skills" class="vi-chat-menu" popover aria-label="Skills">
+        <p class="vi-chat-meta">Skills</p>
+        <button type="button" class="vi-chat-action" data-chat-prompt="Review the token changes."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12m12-6v12M3 7l3-4 3 4m6 10 3 4 3-4M11 12h2"/></svg>Review changes</button>
+        <button type="button" class="vi-chat-action" data-chat-prompt="Summarize the attached context."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Summarize context</button>
+      </div>
+      <dialog class="vi-chat-dialog" id="workspace-artifact" aria-labelledby="workspace-artifact-title">
+        <h2 id="workspace-artifact-title" class="font-typography-weight-semibold-base">migration-notes.md</h2>
+        <p class="vi-chat-meta">Revision 3 · SA · sha256: 7f4a9c2</p>
+        <p>Load the shared chat stylesheet after tokens. Import the light mappings when the product offers a light theme.</p>
+        <div class="vi-chat-card-actions"><button type="button" class="vi-chat-action vi-chat-action--border" data-chat-dialog-close>Close</button></div>
+      </dialog>
     </main>
-    <aside aria-label="Workspace inspector" class="w-layout-width-inspector-base bg-surface-background-secondary-base border-l border-border-separator-primary-base p-layout-padding-medium-base flex flex-col gap-gap-spacious-default shrink-0 overflow-y-auto">
-      <section class="flex flex-col gap-gap-compact-default">
-        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base text-balance">Team</h2>
-        <ul class="flex flex-col gap-gap-dense-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
-          <li>Lead · Head agent</li>
-          <li>Source reader · Research</li>
-          <li>Hash checker · Check</li>
+    <aside id="workspace-inspector" class="vi-chat-workspace__panel vi-chat-workspace__inspector" data-chat-panel="inspector" aria-label="Workspace inspector" hidden>
+      <header>
+        <h2 class="font-typography-weight-semibold-base text-typography-size-sm-base">Inspector</h2>
+        <button type="button" class="vi-chat-action" data-chat-panel-close="inspector" aria-label="Close inspector" title="Close inspector"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      </header>
+      <section id="workspace-team">
+        <h3 class="vi-chat-meta">Team</h3>
+        <ul class="text-typography-size-sm-base">
+          <li>LA Coordinator</li>
+          <li>SA Schema auditor</li>
         </ul>
       </section>
-      <section class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
-        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base text-balance">Shared desktop</h2>
-        <ul class="flex flex-col gap-gap-dense-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
-          <li class="text-text-content-primary-base">project-brief.md</li>
-          <li>source-notes.md · v2</li>
-          <li>migration-guide.md · v3</li>
-        </ul>
+      <section>
+        <h3 class="vi-chat-meta">Shared desktop</h3>
+        <div><button type="button" class="vi-chat-action vi-chat-action--border" data-chat-dialog-open="workspace-artifact">migration-notes.md</button></div>
       </section>
-      <section class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
-        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base text-balance">Notes</h2>
-        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Keep all public examples free of hostnames.</p>
-        <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Suggested by agents · 1 pending</p>
+      <section id="workspace-notes">
+        <h3 class="vi-chat-meta">Notes</h3>
+        <p class="text-typography-size-sm-base">Keep public examples free of internal hostnames.</p>
+        <p class="vi-chat-meta">Suggested by agents · 1 pending</p>
       </section>
-      <section class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
-        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base text-balance">Activity</h2>
-        <div class="flex items-center justify-between gap-gap-compact-default">
-          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Turn state</span>
-          <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
-            <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
-            <span>Running</span>
-          </span>
+      <section>
+        <h3 class="vi-chat-meta">Usage</h3>
+        <div class="vi-chat-workspace__metrics vi-chat-meta">
+          <div><label for="workspace-tokens">Tokens</label><span>1,288 / 8,192</span></div>
+          <progress id="workspace-tokens" value="1288" max="8192"></progress>
+          <div><label for="workspace-model-calls">Model calls</label><span>2 / 6</span></div>
+          <progress id="workspace-model-calls" value="2" max="6"></progress>
         </div>
-      </section>
-      <section class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
-        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base text-balance">Usage</h2>
-        <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">3/6 model calls · 14,280 measured tokens</p>
       </section>
     </aside>
+    <div class="vi-chat-workspace__scrim" data-chat-scrim aria-hidden="true" hidden></div>
   </div>
 </div>

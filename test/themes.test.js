@@ -324,12 +324,12 @@ test('tailwind colors reference variables instead of literal hex', () => {
     );
   }
 });
-test('each tailwind colour keeps its hex as the var fallback', () => {
+test('each tailwind colour keeps its source value as the var fallback', () => {
   const module_ = {exports: {}};
   new Function('module', emitTailwindConfig(tokens))(module_);
   const colors = module_.exports.theme.extend.colors;
-  for (const [key, hex] of Object.entries(tokens.colors)) {
-    assert.equal(colors[key].includes(`var(--vi-colors-${key}, ${hex})`), true, key);
+  for (const [key, value] of Object.entries(tokens.colors)) {
+    assert.equal(colors[key].includes(`var(--vi-colors-${key}, ${value})`), true, key);
   }
 });
 test('accent-fill CTAs use only the on-accent text token', () => {
