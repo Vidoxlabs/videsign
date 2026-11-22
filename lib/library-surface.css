@@ -55,6 +55,9 @@
 }
 
 .vi-library-scope {
+  container-type: inline-size;
+  container-name: vi-library-stage;
+  inline-size: 100%;
   font-family: var(--vi-library-font-sans);
   color: var(--vi-library-ink);
   box-sizing: border-box;
@@ -71,10 +74,8 @@
   outline-offset: 0.125rem;
 }
 
-/* Primary container-query host for all three Library views */
+/* Primary stage shell inside the vi-library-stage container query host */
 .vi-library-stage {
-  container-type: inline-size;
-  container-name: vi-library-stage;
   inline-size: 100%;
   display: flex;
   flex-direction: column;
