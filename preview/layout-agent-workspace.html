@@ -1,0 +1,129 @@
+<!--
+  Nocturne Museum: Agent workspace layout (ADR-020)
+  Full-page 3-column agent workstation composition: top masthead (wordmark, provider
+  label, connection status), left workspaces + personas sidebar, center group
+  conversation log + single-field composer, and right inspector (team, shared desktop,
+  notes, activity, usage). All surfaces are solid and zero persona-accent tokens appear.
+-->
+<div class="flex flex-col h-screen w-screen bg-surface-background-primary-base overflow-hidden">
+  <header class="flex items-center justify-between gap-gap-compact-default px-layout-padding-medium-base py-inset-compact-default bg-surface-background-secondary-base border-b border-border-separator-primary-base shrink-0">
+    <span class="font-typography-family-mono-base font-typography-weight-semibold-base text-typography-size-md-base tracking-typography-tracking-tight-base text-text-content-primary-base">bloom</span>
+    <div class="flex items-center gap-gap-comfortable-default">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Local provider</span>
+      <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-primary-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+        <span>Connected</span>
+      </span>
+    </div>
+  </header>
+  <div class="flex flex-1 min-w-0 overflow-hidden">
+    <aside aria-label="Workspaces and personas" class="w-layout-width-sidebar-base bg-surface-background-secondary-base border-r border-border-separator-primary-base p-layout-padding-medium-base flex flex-col gap-gap-spacious-default shrink-0 overflow-y-auto">
+      <div class="flex flex-col gap-gap-compact-default">
+        <div class="flex items-center justify-between gap-gap-compact-default">
+          <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Workspaces</h2>
+          <button type="button" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base">+ New</button>
+        </div>
+        <nav aria-label="Workspace list" class="flex flex-col gap-gap-dense-default">
+          <button type="button" aria-current="page" class="flex items-center w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base text-left truncate">Token migration</button>
+          <button type="button" class="flex items-center w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base text-left truncate">Release team</button>
+        </nav>
+      </div>
+      <div class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Personas</h2>
+        <div class="flex flex-col gap-gap-compact-default">
+          <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Auditor · Review</span>
+          <button type="button" class="inline-flex items-center justify-center w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base hover:border-surface-accent-violet-base">Add to team</button>
+        </div>
+      </div>
+    </aside>
+    <main class="flex-1 min-w-0 flex flex-col bg-surface-background-primary-base overflow-hidden">
+      <div class="flex items-center justify-between gap-gap-compact-default px-layout-padding-medium-base py-inset-operator-default border-b border-border-separator-primary-base shrink-0">
+        <h1 class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Group conversation</h1>
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums tracking-typography-tracking-wide-base text-text-content-secondary-base">3 active agents</span>
+      </div>
+      <div role="log" aria-live="polite" aria-relevant="additions" aria-label="Group conversation" class="flex-1 min-w-0 overflow-y-auto flex flex-col gap-gap-spacious-default p-layout-padding-medium-base">
+        <div class="flex justify-end">
+          <p class="px-inset-operator-default py-inset-compact-default font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base bg-surface-background-tertiary-base rounded-layout-radius-standard-base"><span class="sr-only">You said: </span>Review the shared token notes and assemble the migration guide.</p>
+        </div>
+        <div class="flex flex-col gap-gap-compact-default">
+          <div class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="grid place-items-center shrink-0 w-icon-md-base h-icon-md-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">LA</span>
+            <span class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-sm-base text-text-content-primary-base">Lead</span>
+            <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">head agent</span>
+          </div>
+          <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">Checking with Release team first, then assigning Source reader to draft migration-guide.md.</p>
+        </div>
+        <div class="flex flex-col gap-gap-dense-default border-l-2 border-surface-accent-violet-base pl-layout-padding-medium-base">
+          <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">From team Release team</span>
+          <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">From our side: stage 1 contract modules ship with zero runtime dependencies.</p>
+        </div>
+        <div class="flex flex-col gap-gap-compact-default">
+          <div class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="grid place-items-center shrink-0 w-icon-md-base h-icon-md-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-graph-line-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">SA</span>
+            <span class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-sm-base text-text-content-primary-base">Source reader</span>
+            <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">specialist</span>
+          </div>
+          <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">Drafted revision 3 of the migration guide from the admitted notes.</p>
+          <div class="flex flex-wrap items-center justify-between gap-gap-compact-default p-layout-padding-medium-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+            <div class="flex flex-col gap-gap-dense-default min-w-0">
+              <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base truncate">migration-guide.md</span>
+              <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">sha256: 7f4a9c2 · Revision 3</span>
+            </div>
+            <button type="button" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base hover:border-surface-accent-violet-base">Open migration-guide.md</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col gap-gap-compact-default p-layout-padding-medium-base border-t border-border-separator-primary-base shrink-0">
+        <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+          <div class="flex flex-wrap items-center gap-gap-compact-default">
+            <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">To: Lead</button>
+            <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Model: Default model</button>
+          </div>
+          <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">Try a sample task</button>
+        </div>
+        <form class="flex items-end gap-gap-compact-default bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-control-base">
+          <label for="workspace-composer-input" class="sr-only">Message Lead</label>
+          <textarea id="workspace-composer-input" rows="1" placeholder="Message Lead" class="flex-1 min-w-0 h-action-min-default px-inset-operator-default bg-transparent outline-none font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base placeholder:text-text-content-secondary-base resize-none"></textarea>
+          <button type="submit" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Send</button>
+        </form>
+      </div>
+    </main>
+    <aside aria-label="Workspace inspector" class="w-layout-width-inspector-base bg-surface-background-secondary-base border-l border-border-separator-primary-base p-layout-padding-medium-base flex flex-col gap-gap-spacious-default shrink-0 overflow-y-auto">
+      <section class="flex flex-col gap-gap-compact-default">
+        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Team</h2>
+        <ul class="flex flex-col gap-gap-dense-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
+          <li>Lead · Head agent</li>
+          <li>Source reader · Research</li>
+          <li>Hash checker · Check</li>
+        </ul>
+      </section>
+      <section class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Shared desktop</h2>
+        <ul class="flex flex-col gap-gap-dense-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+          <li class="text-text-content-primary-base">project-brief.md</li>
+          <li>source-notes.md · v2</li>
+          <li>migration-guide.md · v3</li>
+        </ul>
+      </section>
+      <section class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Notes</h2>
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Keep all public examples free of hostnames.</p>
+        <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Suggested by agents · 1 pending</p>
+      </section>
+      <section class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Activity</h2>
+        <div class="flex items-center justify-between gap-gap-compact-default">
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Turn state</span>
+          <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
+            <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+            <span>Running</span>
+          </span>
+        </div>
+      </section>
+      <section class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+        <h2 class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Usage</h2>
+        <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">3/6 model calls · 14,280 measured tokens</p>
+      </section>
+    </aside>
+  </div>
+</div>

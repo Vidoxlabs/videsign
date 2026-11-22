@@ -1,0 +1,45 @@
+<!--
+  Nocturne Museum: Owner approval gate (ADR-020)
+  Solid secondary card for a pending owner-gated tool request (waiting_for_owner)
+  paired with a hairline-separated resolved receipt state. Uses neutral fixture text
+  with no overclaiming copy.
+-->
+<div role="region" aria-label="Pending approval" class="flex flex-col gap-gap-spacious-default p-layout-padding-medium-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+  <div class="flex items-center justify-between gap-gap-compact-default">
+    <div class="flex items-center gap-gap-compact-default min-w-0">
+      <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>
+      <h3 class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Approval needed</h3>
+    </div>
+    <span class="shrink-0 px-inset-compact-default py-rhythm-1-base rounded-layout-radius-control-base bg-surface-background-tertiary-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">waiting_for_owner</span>
+  </div>
+  <dl aria-live="polite" aria-label="Requested action receipt" class="flex flex-col">
+    <div class="flex items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Tool</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">vcs.file.write</dd>
+    </div>
+    <div class="flex items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Effect</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">write · owner gate</dd>
+    </div>
+    <div class="flex items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Scope</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">docs/architecture.md</dd>
+    </div>
+    <div class="flex items-baseline justify-between gap-gap-spacious-default py-inset-compact-default">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Action digest</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-sm-base tabular-nums text-text-content-primary-base">sha256: 4b9e1d0</dd>
+    </div>
+  </dl>
+  <div role="group" aria-label="Approval actions" class="flex flex-wrap items-center gap-gap-compact-default">
+    <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Allow once</button>
+    <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">Always allow</button>
+    <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">Reject</button>
+  </div>
+  <div aria-label="Resolved receipt" class="flex items-center justify-between gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Resolved receipt</span>
+    <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">
+      <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+      <span>Allowed once · sha256: 4b9e1d0</span>
+    </span>
+  </div>
+</div>

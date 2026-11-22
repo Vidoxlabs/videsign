@@ -1,0 +1,22 @@
+<!--
+  Nocturne Museum: Usage and limits meter (ADR-020)
+  Solid secondary panel with polite live updates, tabular-nums mono model-call and
+  token totals, per-actor input/output/cache breakdown rows, and an explicit
+  unreported-tokens fallback row.
+-->
+<section role="region" aria-label="Usage and limits" aria-live="polite" class="flex flex-col gap-gap-spacious-default p-layout-padding-medium-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+  <details open class="flex flex-col gap-gap-compact-default">
+    <summary class="flex flex-wrap items-center justify-between gap-gap-compact-default h-action-min-default">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">3/6 model calls · 14,280 measured tokens</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums tracking-typography-tracking-wide-base text-text-content-secondary-base">Token limit: 50,000</span>
+    </summary>
+    <ul aria-label="Per-actor usage" class="flex flex-col border-t border-border-separator-primary-base">
+      <li class="py-inset-compact-default border-b border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Lead · Default model · input 3,120 · output 640 · cache read 1,024 · write 512 · USD unreported</li>
+      <li class="py-inset-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Source reader · Default model · input 8,410 · output 2,110 · cache read 4,096 · write 0 · USD unreported</li>
+    </ul>
+  </details>
+  <div class="flex items-center justify-between gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Fallback receipt</span>
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">1/6 model calls · tokens unreported</span>
+  </div>
+</section>

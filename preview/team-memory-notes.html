@@ -1,0 +1,57 @@
+<!--
+  Nocturne Museum: Team memory notes and suggestions (ADR-020)
+  Solid secondary panel for confirmed team notes (Always used / Used when relevant),
+  pending agent suggestions requiring owner Keep/Dismiss confirmation, and per-turn
+  recall activity disclosure.
+-->
+<section role="region" aria-label="Team notes and suggestions" class="flex flex-col gap-gap-spacious-default p-layout-padding-medium-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+  <div class="flex items-center justify-between gap-gap-compact-default">
+    <h3 class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Notes</h3>
+    <button type="button" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base hover:border-surface-accent-violet-base">Add note</button>
+  </div>
+  <div class="flex flex-col border-t border-border-separator-primary-base">
+    <div class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base">
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Keep all public examples free of hostnames.</p>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums tracking-typography-tracking-wide-base text-text-content-secondary-base">Always used · Shared with every team · Used 3 times</span>
+        <div class="flex items-center gap-gap-compact-default">
+          <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">Correct</button>
+          <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">Forget</button>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-gap-compact-default py-inset-operator-default">
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Cite revision digests on every handoff.</p>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums tracking-typography-tracking-wide-base text-text-content-secondary-base">Used when relevant · Corrected · Used 1 time</span>
+        <div class="flex items-center gap-gap-compact-default">
+          <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">Correct</button>
+          <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">Forget</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+    <div class="flex flex-col gap-gap-dense-default">
+      <h4 class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Suggested by agents</h4>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Agents never use a suggestion until you keep it.</p>
+    </div>
+    <div class="flex flex-col gap-gap-compact-default p-layout-padding-medium-base bg-surface-background-tertiary-base border border-border-separator-primary-base rounded-layout-radius-control-base">
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Attach review notes before assembling the final migration guide.</p>
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Suggested by Source reader</span>
+        <div class="flex items-center gap-gap-compact-default">
+          <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-secondary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Keep</button>
+          <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <details class="pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+    <summary class="flex items-center h-action-min-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums tracking-typography-tracking-wide-base text-text-content-secondary-base hover:text-text-content-primary-base">Source reader · 2 of 5 notes used</summary>
+    <ul class="flex flex-col gap-gap-compact-default pt-inset-compact-default">
+      <li class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Always · Keep all public examples free of hostnames.</li>
+      <li class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Relevant · Cite revision digests on every handoff.</li>
+    </ul>
+  </details>
+</section>

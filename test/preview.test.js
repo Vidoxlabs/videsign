@@ -88,7 +88,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });
@@ -376,4 +376,99 @@ test('modular conversation components follow ADR-016 and ADR-017 budgets and ari
     assert.match(m[1], /\brounded-layout-radius-full-base\b/);
   }
   assert.doesNotMatch(starters, /bg-surface-accent-violet-base/);
+});
+
+test('modular agent-workspace and harness fragments follow ADR-020 contracts and touch targets', () => {
+  const workspaceFragments = [
+    'owner-approval-gate.html',
+    'shared-desktop-catalog.html',
+    'artifact-lineage-reader.html',
+    'agent-roster-card.html',
+    'team-memory-notes.html',
+    'cross-team-handoff.html',
+    'usage-budget-meter.html',
+    'layout-agent-workspace.html',
+  ];
+
+  for (const file of workspaceFragments) {
+    const html = read(file);
+    assert.doesNotMatch(html, /vi-glass/, `${file}: must stay solid (no vi-glass)`);
+    assert.doesNotMatch(html, /persona-accent-/, `${file}: must not reuse persona-accent-*`);
+    assert.doesNotMatch(html, /bg-surface-accent-violet-base/, `${file}: must not use solid bg-surface-accent-violet-base`);
+    for (const m of html.matchAll(/<(button|textarea)\b[^>]*class="([^"]*)"/g)) {
+      assert.match(m[2], /h-action-(min|wide)-default/, `${file}: touch target floor on ${m[0].slice(0, 80)}`);
+    }
+  }
+
+  // 1. owner-approval-gate.html
+  const approval = read('owner-approval-gate.html');
+  assert.match(approval, /bg-status-indicator-warning-base[\s\S]*waiting_for_owner/);
+  assert.match(approval, /<dl\b[\s\S]*sha256:[\s\S]*<\/dl>/);
+  assert.match(approval, /border-surface-accent-violet-base[^>]*>Allow once<\/button>/);
+  assert.match(approval, />Always allow<\/button>/);
+  assert.match(approval, />Reject<\/button>/);
+  assert.match(approval, /bg-status-indicator-success-base[\s\S]*Allowed once · sha256:/);
+
+  // 2. shared-desktop-catalog.html
+  const desktop = read('shared-desktop-catalog.html');
+  assert.match(desktop, /Shared desktop/);
+  const checkboxLabels = [...desktop.matchAll(/<label class="([^"]*)">[\s\S]*?<input type="checkbox"[^>]*class="([^"]*)"[\s\S]*?<\/label>/g)];
+  assert.ok(checkboxLabels.length >= 3, 'shared-desktop-catalog must have at least 3 checkbox rows');
+  for (const m of checkboxLabels) {
+    assert.match(m[1], /\bh-action-min-default\b/);
+    assert.match(m[2], /\baccent-surface-accent-violet-base\b/);
+  }
+  assert.match(desktop, />Research</);
+  assert.match(desktop, />Guides</);
+  assert.match(desktop, /· v2/);
+  assert.match(desktop, /· v3/);
+
+  // 3. artifact-lineage-reader.html
+  const reader = read('artifact-lineage-reader.html');
+  assert.match(reader, /role="dialog"/);
+  assert.match(reader, /sha256:/);
+  assert.match(reader, />Input files</);
+  assert.match(reader, />Other revisions</);
+  assert.match(reader, /border-surface-accent-violet-base[^>]*>Download Markdown<\/button>/);
+
+  // 4. agent-roster-card.html
+  const roster = read('agent-roster-card.html');
+  assert.match(roster, /border-surface-accent-violet-base[^>]*>LA</);
+  assert.match(roster, /border-border-graph-line-base[^>]*>SR</);
+  assert.match(roster, /border-border-graph-line-base[^>]*>HC</);
+  assert.match(roster, />Save as persona<\/button>/);
+  assert.match(roster, />Personas<[\s\S]*>Add to team<\/button>[\s\S]*>Edit<\/button>/);
+
+  // 5. team-memory-notes.html
+  const notes = read('team-memory-notes.html');
+  assert.match(notes, /Always used/);
+  assert.match(notes, /Used when relevant/);
+  assert.match(notes, />Correct<\/button>/);
+  assert.match(notes, />Forget<\/button>/);
+  assert.match(notes, />Suggested by agents<[\s\S]*>Keep<\/button>[\s\S]*>Dismiss<\/button>/);
+  assert.match(notes, /notes used/);
+
+  // 6. cross-team-handoff.html
+  const handoff = read('cross-team-handoff.html');
+  assert.match(handoff, /border-surface-accent-violet-base[\s\S]*Question for Release team/);
+  assert.match(handoff, /border-surface-accent-violet-base[\s\S]*From team Release team/);
+  assert.match(handoff, /bg-status-indicator-success-base[\s\S]*Review approved/);
+  assert.match(handoff, /bg-status-indicator-warning-base[\s\S]*Changes requested/);
+
+  // 7. usage-budget-meter.html
+  const usage = read('usage-budget-meter.html');
+  assert.match(usage, /aria-live="polite"/);
+  assert.match(usage, /tabular-nums/);
+  assert.match(usage, /measured tokens/);
+  assert.match(usage, /tokens unreported/);
+
+  // 8. layout-agent-workspace.html
+  const workspace = read('layout-agent-workspace.html');
+  assert.match(workspace, /\bw-layout-width-sidebar-base\b/);
+  assert.match(workspace, /\bw-layout-width-inspector-base\b/);
+  assert.match(workspace, /role="log"/);
+  assert.match(workspace, /Shared desktop/);
+  assert.match(workspace, /Personas/);
+  assert.match(workspace, /Notes/);
+  assert.match(workspace, /Usage/);
 });
