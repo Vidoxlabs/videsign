@@ -139,6 +139,10 @@ Agents must never introduce arbitrary UI values (e.g., `w-[15px]`, `text-[#FF000
 `tailwindcss/no-arbitrary-value` ESLint rule strictly enforces the use of explicitly defined design
 tokens from the semantic matrix. Any generated code must pass `npm run lint`.
 
+The pipeline is pinned to `tailwindcss` 3 until a coordinated migration moves `tailwindcss`,
+`eslint-plugin-tailwindcss`, and the platform generators together (see `README.md`
+`## Contributing`).
+
 ## Brand rules for agents
 
 The `DESIGN.md` persona-accent matrix equals the canon signatures (ratified 2026-11-03; ADR-011 item 9 + ADR-010 §2): Violet `#8B5CF6`, Wisteria `#B4A7F2`, Xylia `#D92B3A`, Yarrow `#F0A020`, Zinnia `#E13D9E`. Field tiles stay `#121214` and `#F7F7F5`. Status error `#F43F5E` and status warning `#F59E0B` keep their own role tokens (no shared-hex collisions remain).
