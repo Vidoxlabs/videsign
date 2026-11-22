@@ -1,0 +1,40 @@
+# Consolidated Cloudflare Worker configuration for the Phase 0 persona asset service
+# (ADR-022, extends ADR-010 item 3).
+# Supply the live D1 database_id via deployment environment / override config;
+# the zero placeholder keeps private Cloudflare resource UUIDs out of public source control.
+name = "vi-assets"
+main = "worker.js"
+compatibility_date = "2026-10-26"
+workers_dev = false
+preview_urls = false
+
+[observability]
+enabled = true
+redact_query_string = true
+
+[observability.logs]
+enabled = true
+invocation_logs = false
+head_sampling_rate = 1
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1
+
+[vars]
+ASSET_BASE = "https://assets.vidoxlabs.dev"
+CORS_ORIGINS = ""
+
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "vi-assets"
+
+[[r2_buckets]]
+binding = "STAGING"
+bucket_name = "vi-assets-staging"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "vi_assets"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

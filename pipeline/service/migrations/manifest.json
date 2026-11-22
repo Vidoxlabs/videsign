@@ -1,0 +1,24 @@
+{
+  "migrations": [
+    {
+      "file": "0001_init.sql",
+      "sha256": "6814573763e666305e58b2355b2089cc6f31d4725703369fbe01f705cd620c99",
+      "remote_applied": true
+    },
+    {
+      "file": "0002_tokens.sql",
+      "sha256": "09e0fbb6af85314c2f569e0159978673f61bbafe0ff1bc99c7e5e659042501a6",
+      "remote_applied": true
+    },
+    {
+      "file": "0003_idempotency.sql",
+      "sha256": "e98b83c379625bc6544585fc17e51973000154ce29a33d8f829d6ff83769652f",
+      "remote_applied": true
+    },
+    {
+      "file": "0004_auth_fail_windows.sql",
+      "sha256": "f2cdecb0b42f91a61a720768c690c442bac5962cf6b84f06d0e3cae1f0322a93",
+      "remote_applied": false
+    }
+  ]
+}

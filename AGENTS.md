@@ -42,6 +42,8 @@ design system — the shared visual language for all Vidoxlabs products and appl
   `lib/memory-field.js` and `lib/memory-field.css` are the memory field primitive (ADR-018):
   deterministic constellation layout, SVG, text equivalent, link contrast report and the memory
   pipeline figure. After changing `lib/memory-field.js`, run `npm run memory-field:fragment`.
+  `lib/asset-service.js` implements the consolidated Phase 0 read-only persona asset Worker logic (ADR-022).
+- **pipeline/**: Persona asset pipeline (`animation/`, `audit/`, `templates/`) and `pipeline/service/` (`worker.js`, `wrangler.toml`, `migrations/` D1 SQL schema + SHA-256 `manifest.json`, `README.md`) consolidated from `vi-assets` under ADR-022.
 - **mcp-server.js**: The MCP server that exposes this design system to product
   repositories for cross-repo token and fragment fetching. Tools: `resolve_token` (one token
   value), `style_pack`, `check_contrast` (WCAG ratio of two colours or tokens),
@@ -91,6 +93,7 @@ Within the `videsign` repository, agents are restricted to the following command
   the agent standard contract (`test/standard.test.js`), the persona canon
   contract (`test/persona-canon.test.js`), the canon tool contract
   (`test/canon-tool.test.js`), the pipeline pack contract (`test/pipeline-packs.test.js`),
+  the asset service contract (`test/asset-service.test.js`),
   the stage primitive contract (`test/stage.test.js`), the memory field contract
   (`test/memory-field.test.js`), the platform token contract (`test/platforms.test.js`),
   the persona dialect contract (`test/dialects.test.js`), and the safety hash builder
