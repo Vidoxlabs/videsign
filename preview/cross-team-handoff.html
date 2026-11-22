@@ -1,0 +1,29 @@
+<!--
+  Nocturne Museum: Cross-team handoff and review gate (ADR-020)
+  Solid secondary panel showing an outgoing cross-team question, an incoming team
+  answer marked with a violet left accent border, and hairline-separated review
+  stage gate outcomes (Review approved / Changes requested).
+-->
+<section role="region" aria-label="Cross-team handoff and review gate" class="flex flex-col gap-gap-spacious-default p-layout-padding-medium-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+  <div class="flex flex-col gap-gap-dense-default border-l-2 border-surface-accent-violet-base pl-layout-padding-medium-base">
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Question for Release team</span>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Can stage 1 contract modules ship before the platform sync runs?</p>
+  </div>
+  <div class="flex flex-col gap-gap-dense-default border-l-2 border-surface-accent-violet-base pl-layout-padding-medium-base">
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">From team Release team</span>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">From our side: stage 1 contract modules ship with zero runtime dependencies.</p>
+  </div>
+  <div class="flex flex-col border-t border-border-separator-primary-base">
+    <div class="flex items-center gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base">
+      <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-primary-base">Review approved</span>
+    </div>
+    <div class="flex flex-col gap-gap-dense-default pt-inset-operator-default">
+      <div class="flex items-center gap-gap-compact-default">
+        <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-primary-base">Changes requested</span>
+      </div>
+      <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Assembly pauses until the author revises the draft and attaches the review.</p>
+    </div>
+  </div>
+</section>

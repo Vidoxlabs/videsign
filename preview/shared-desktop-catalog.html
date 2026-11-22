@@ -1,0 +1,45 @@
+<!--
+  Nocturne Museum: Shared desktop catalog (ADR-020)
+  Solid secondary panel listing shared files grouped by folder with checkbox
+  admission rows (44px touch target floor) and explicit Open controls.
+-->
+<section role="region" aria-label="Shared desktop" class="flex flex-col gap-gap-spacious-default p-layout-padding-medium-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+  <div class="flex flex-col gap-gap-compact-default">
+    <div class="flex items-center justify-between gap-gap-compact-default">
+      <h3 class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Shared desktop</h3>
+      <button type="button" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base hover:border-surface-accent-violet-base">Add file</button>
+    </div>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Files every agent on this computer can open and reuse. Check files to include with the next task.</p>
+  </div>
+  <div class="flex flex-col border-t border-border-separator-primary-base">
+    <div class="flex items-center justify-between gap-gap-compact-default border-b border-border-separator-primary-base">
+      <label class="flex items-center gap-gap-compact-default flex-1 min-w-0 h-action-min-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
+        <input type="checkbox" checked class="shrink-0 accent-surface-accent-violet-base" />
+        <span class="truncate">project-brief.md</span>
+      </label>
+      <button type="button" aria-label="Open project-brief.md" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base hover:text-text-content-primary-base">Open</button>
+    </div>
+    <div class="flex flex-col pt-inset-operator-default border-b border-border-separator-primary-base">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Research</span>
+      <div class="flex items-center justify-between gap-gap-compact-default pl-layout-padding-medium-base">
+        <label class="flex items-center gap-gap-compact-default flex-1 min-w-0 h-action-min-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
+          <input type="checkbox" checked class="shrink-0 accent-surface-accent-violet-base" />
+          <span class="truncate">source-notes.md</span>
+          <span class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base"> · v2</span>
+        </label>
+        <button type="button" aria-label="Open source-notes.md" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base hover:text-text-content-primary-base">Open</button>
+      </div>
+    </div>
+    <div class="flex flex-col pt-inset-operator-default">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Guides</span>
+      <div class="flex items-center justify-between gap-gap-compact-default pl-layout-padding-medium-base">
+        <label class="flex items-center gap-gap-compact-default flex-1 min-w-0 h-action-min-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
+          <input type="checkbox" class="shrink-0 accent-surface-accent-violet-base" />
+          <span class="truncate">migration-guide.md</span>
+          <span class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base"> · v3</span>
+        </label>
+        <button type="button" aria-label="Open migration-guide.md" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base hover:text-text-content-primary-base">Open</button>
+      </div>
+    </div>
+  </div>
+</section>

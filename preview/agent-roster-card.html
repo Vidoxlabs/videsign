@@ -1,0 +1,69 @@
+<!--
+  Nocturne Museum: Agent roster and persona library (ADR-020)
+  Solid secondary panel showing the active team roster (head agent with violet ring,
+  specialists with graph-line outline, zero persona-accent tokens) and reusable
+  saved personas.
+-->
+<section role="region" aria-label="Team roster and persona library" class="flex flex-col gap-gap-spacious-default p-layout-padding-medium-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+  <div class="flex flex-col gap-gap-compact-default">
+    <h3 class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Team</h3>
+    <div class="flex flex-col border-t border-border-separator-primary-base">
+      <details open class="border-b border-border-separator-primary-base">
+        <summary class="flex items-center justify-between gap-gap-compact-default h-action-min-default">
+          <span class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="grid place-items-center shrink-0 w-icon-md-base h-icon-md-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">LA</span>
+            <span class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-sm-base text-text-content-primary-base truncate">Lead · Head agent</span>
+          </span>
+          <span class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Coordinator</span>
+        </summary>
+        <div class="flex flex-col gap-gap-compact-default pb-layout-padding-medium-base pl-layout-padding-large-base">
+          <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Plans the work and creates specialists for it.</p>
+        </div>
+      </details>
+      <details open class="border-b border-border-separator-primary-base">
+        <summary class="flex items-center justify-between gap-gap-compact-default h-action-min-default">
+          <span class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="grid place-items-center shrink-0 w-icon-md-base h-icon-md-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-graph-line-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">SR</span>
+            <span class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-sm-base text-text-content-primary-base truncate">Source reader · Research</span>
+          </span>
+          <span class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Model-backed specialist</span>
+        </summary>
+        <div class="flex flex-col gap-gap-compact-default pb-layout-padding-medium-base pl-layout-padding-large-base">
+          <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Extracts claims and digests from attached files.</p>
+          <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Voice: Direct and cite-first.</p>
+          <div>
+            <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base hover:border-surface-accent-violet-base">Save as persona</button>
+          </div>
+        </div>
+      </details>
+      <details open>
+        <summary class="flex items-center justify-between gap-gap-compact-default h-action-min-default">
+          <span class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="grid place-items-center shrink-0 w-icon-md-base h-icon-md-base rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-border-graph-line-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">HC</span>
+            <span class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-sm-base text-text-content-primary-base truncate">Hash checker · Check</span>
+          </span>
+          <span class="shrink-0 font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Deterministic checker</span>
+        </summary>
+        <div class="flex flex-col gap-gap-compact-default pb-layout-padding-medium-base pl-layout-padding-large-base">
+          <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Re-reads admitted files and checks SHA-256 digests without a model call.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="flex flex-col gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+    <div class="flex items-center justify-between gap-gap-compact-default">
+      <div class="flex flex-col gap-gap-dense-default">
+        <h4 class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Personas</h4>
+        <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Saved specialists any head agent can recruit by name.</p>
+      </div>
+      <button type="button" class="inline-flex items-center shrink-0 h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base hover:border-surface-accent-violet-base">+ New</button>
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-gap-compact-default pt-inset-compact-default border-t border-border-separator-primary-base">
+      <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Auditor · Review</span>
+      <div class="flex items-center gap-gap-compact-default">
+        <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base hover:border-surface-accent-violet-base">Add to team</button>
+        <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base">Edit</button>
+      </div>
+    </div>
+  </div>
+</section>
