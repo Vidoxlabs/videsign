@@ -101,7 +101,7 @@ describe('collaborative design studio & reference contracts', () => {
     assert.deepEqual(plain.stylesheets, ['dist/tokens.css', 'dist/catalog.css']);
 
     const detected = stylesheetsForSlots(
-      ['<div class="stage__glow"></div>', '<svg class="vi-mf-svg"></svg>', '<span class="vi-agent-badge"></span>', '<vi-orbital-field class="vi-orbital-host"></vi-orbital-field>', '<div class="vi-docs-portal"></div>', '<div class="vi-settings-shell"></div>'],
+      ['<div class="stage__glow"></div>', '<svg class="vi-mf-svg"></svg>', '<span class="vi-agent-badge"></span>', '<vi-orbital-field class="vi-orbital-host"></vi-orbital-field>', '<div class="vi-docs-portal"></div>', '<div class="vi-settings-shell"></div>', '<div class="vi-library-stage"></div>'],
       'light',
     );
     assert.ok(detected.includes('dist/themes.css'));
@@ -111,6 +111,7 @@ describe('collaborative design studio & reference contracts', () => {
     assert.ok(detected.includes('dist/vi-orbital-hero.css'));
     assert.ok(detected.includes('dist/docs-portal.css'));
     assert.ok(detected.includes('dist/settings-surface.css'));
+    assert.ok(detected.includes('dist/library-surface.css'));
     assert.equal(detected.includes('dist/glass.css'), false);
   });
 
@@ -119,12 +120,12 @@ describe('collaborative design studio & reference contracts', () => {
     const expected = buildComponentsManifest(COMPONENT_CATALOG, tokens);
     const actual = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf8'));
     assert.deepEqual(actual, expected);
-    assert.equal(actual.componentCount, 90);
+    assert.equal(actual.componentCount, 93);
     assert.equal(actual.files.chatCss, 'dist/chat.css');
     assert.equal(actual.files.pluginsCss, 'dist/plugins.css');
     assert.deepEqual(actual.categories, CATALOG_CATEGORIES);
     assert.deepEqual(actual.consumers, CATALOG_CONSUMERS);
-    assert.equal(Object.keys(actual.archetypes).length, 11);
+    assert.equal(Object.keys(actual.archetypes).length, 12);
   });
 
   test('chat scaffolds load the shared canvas and composer stylesheet', () => {

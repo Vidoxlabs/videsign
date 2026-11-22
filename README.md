@@ -76,11 +76,11 @@ thread. The agent workspace offers 1440px, 1024px and 390px frames, plus an isol
    Import `dist/themes.css` as well to opt into the product light theme, which
    remaps the base variables.
 3. **MCP**: Run `npm run mcp` and query resources/tools from your product repo's agent.
-   Use `component_catalog` (90 modular fragments across 9 categories, or read
+   Use `component_catalog` (93 modular fragments across 9 categories, or read
    `file://preview/<id>.html` directly), `design_brief` (proactive Design Read, inferred
    `variance`/`motion`/`visualDensity` dials, reference contract, and ADR-025 anti-slop pre-flight
    checklist), and `scaffold_page` to compile structured briefs and assemble pure HTML page
-   scaffolds across 11 archetypes (`dist/components.manifest.json`).
+   scaffolds across 12 archetypes (`dist/components.manifest.json`).
    `dist/standard.json` is the machine-readable rule set (glass, type, motion, stage
    backdrop, five-bar rule, graph line, chat dock, conversation surface, group conversation,
    modular components in `rules.modularComponents`, studio rules in `rules.designStudio`,

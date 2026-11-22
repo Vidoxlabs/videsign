@@ -1,0 +1,304 @@
+<!--
+  Nocturne Museum: Skills Library surface (ADR-011, ADR-016, ADR-020, ADR-024, ADR-025)
+  Progressive-disclosure Skills catalog with live search, ownership tabs, category pills,
+  Grid/List toggle, Subgrid-aligned cards, Auto-trigger vs Manual only switches, tabular
+  token budget metadata, and a solid slide-over SKILL.md inspector drawer.
+  All surfaces are solid (0 vi-glass) and zero persona-accent tokens appear.
+-->
+<section class="vi-library-scope" aria-label="Skills library">
+  <div class="vi-library-stage" data-library-skills>
+    <header class="vi-library-header">
+      <div class="vi-library-header-copy">
+        <h1 class="vi-library-title">Skills</h1>
+        <p class="vi-library-subtitle">Progressive playbooks loaded Just-In-Time by match or /command</p>
+        <p class="vi-library-meta">8 installed &middot; ~860 tok index footprint</p>
+      </div>
+      <div class="vi-library-header-actions">
+        <button type="button" data-skill-action="Create new skill" class="vi-library-btn vi-library-btn--primary h-action-min-default">+ New skill</button>
+      </div>
+    </header>
+
+    <div class="vi-library-toolbar">
+      <div class="vi-library-toolbar-row">
+        <div class="vi-library-search-box">
+          <label for="skills-library-search" class="sr-only">Search skills, slash commands, or neutral tool IDs</label>
+          <input id="skills-library-search" type="search" data-skills-search placeholder="Search skills, /commands, or neutral tool IDs..." class="vi-library-search-input h-action-min-default" />
+        </div>
+        <div role="tablist" aria-label="Skill origin filter" class="vi-library-tabs">
+          <button type="button" role="tab" aria-selected="true" tabindex="0" data-skills-owner="all" class="vi-library-tab h-action-min-default">All</button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" data-skills-owner="custom" class="vi-library-tab h-action-min-default">Custom</button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" data-skills-owner="built-in" class="vi-library-tab h-action-min-default">Built-in</button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" data-skills-owner="team" class="vi-library-tab h-action-min-default">Team</button>
+        </div>
+        <div role="group" aria-label="Layout mode" class="vi-library-tabs">
+          <button type="button" aria-pressed="true" data-skills-view="grid" class="vi-library-tab h-action-min-default">Grid</button>
+          <button type="button" aria-pressed="false" data-skills-view="list" class="vi-library-tab h-action-min-default">List</button>
+        </div>
+      </div>
+
+      <div class="vi-library-toolbar-row">
+        <div role="group" aria-label="Skill category filter" class="vi-library-pills">
+          <button type="button" aria-pressed="true" data-skills-category="all" class="vi-library-pill h-action-min-default">All</button>
+          <button type="button" aria-pressed="false" data-skills-category="engineering" class="vi-library-pill h-action-min-default">Engineering</button>
+          <button type="button" aria-pressed="false" data-skills-category="research" class="vi-library-pill h-action-min-default">Research</button>
+          <button type="button" aria-pressed="false" data-skills-category="governance" class="vi-library-pill h-action-min-default">Governance</button>
+          <button type="button" aria-pressed="false" data-skills-category="design" class="vi-library-pill h-action-min-default">Design</button>
+        </div>
+        <p class="vi-library-meta" role="status" aria-live="polite" data-skills-count>Showing 8 of 8 skills</p>
+      </div>
+    </div>
+
+    <ul class="vi-library-grid vi-library-grid--subgrid" data-skills-grid data-view="grid">
+      <li class="vi-library-card" data-skill-card data-skill-owner="custom" data-skill-category="engineering" data-skill-tokens="~110 tok" data-skill-tools="vcs.diff.read, schema.lint.check" data-skill-directive="Read staged schema migrations via vcs.diff.read, run schema.lint.check, and list every breaking column or nullability shift with rollback steps before apply.">
+        <div class="vi-library-card-head">
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">/schema-audit</span>
+            <span class="vi-library-mono-pill">Custom</span>
+          </div>
+          <button type="button" role="switch" aria-checked="true" data-skill-trigger="/schema-audit" class="vi-library-switch h-action-min-default">
+            <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
+            <span data-switch-label>Auto-trigger</span>
+          </button>
+        </div>
+        <div class="vi-library-card-body">
+          <h2 class="vi-library-card-title">Schema migration audit</h2>
+          <p class="vi-library-card-desc">Inspects schema diffs for lock risks, missing indexes, and backwards-compatibility breaks prior to rollout.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">vcs.diff.read</span>
+            <span class="vi-library-mono-pill">schema.lint.check</span>
+          </div>
+        </div>
+        <div class="vi-library-card-footer">
+          <span class="vi-library-meta">~110 tok &middot; SKILL.md + 2 scripts</span>
+          <button type="button" data-skill-inspect="/schema-audit" class="vi-library-btn h-action-min-default">Inspect</button>
+        </div>
+      </li>
+
+      <li class="vi-library-card" data-skill-card data-skill-owner="team" data-skill-category="governance" data-skill-tokens="~95 tok" data-skill-tools="release.gate.check, ci.run.inspect" data-skill-directive="Gather test receipts from ci.run.inspect, evaluate every required release gate via release.gate.check, and hold publication whenever a gate remains unconfirmed.">
+        <div class="vi-library-card-head">
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">/release-checklist</span>
+            <span class="vi-library-mono-pill">Team</span>
+          </div>
+          <button type="button" role="switch" aria-checked="true" data-skill-trigger="/release-checklist" class="vi-library-switch h-action-min-default">
+            <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
+            <span data-switch-label>Auto-trigger</span>
+          </button>
+        </div>
+        <div class="vi-library-card-body">
+          <h2 class="vi-library-card-title">Release gate checklist</h2>
+          <p class="vi-library-card-desc">Compiles local test evidence, changelog deltas, and rollback anchors into an explicit pre-ship gate receipt.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">release.gate.check</span>
+            <span class="vi-library-mono-pill">ci.run.inspect</span>
+          </div>
+        </div>
+        <div class="vi-library-card-footer">
+          <span class="vi-library-meta">~95 tok &middot; SKILL.md + 1 script</span>
+          <button type="button" data-skill-inspect="/release-checklist" class="vi-library-btn h-action-min-default">Inspect</button>
+        </div>
+      </li>
+
+      <li class="vi-library-card" data-skill-card data-skill-owner="built-in" data-skill-category="engineering" data-skill-tokens="~130 tok" data-skill-tools="incident.log.read, ci.run.inspect" data-skill-directive="Collect the latest fault timeline from incident.log.read, cross-reference recent builds via ci.run.inspect, and separate confirmed causes from open hypotheses.">
+        <div class="vi-library-card-head">
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">/incident-triage</span>
+            <span class="vi-library-mono-pill">Built-in</span>
+          </div>
+          <button type="button" role="switch" aria-checked="false" data-skill-trigger="/incident-triage" class="vi-library-switch h-action-min-default">
+            <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
+            <span data-switch-label>Manual only</span>
+          </button>
+        </div>
+        <div class="vi-library-card-body">
+          <h2 class="vi-library-card-title">Incident timeline triage</h2>
+          <p class="vi-library-card-desc">Structures read-only fault logs, blast-radius bounds, and candidate mitigations without mutating live services.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">incident.log.read</span>
+            <span class="vi-library-mono-pill">ci.run.inspect</span>
+          </div>
+        </div>
+        <div class="vi-library-card-footer">
+          <span class="vi-library-meta">~130 tok &middot; SKILL.md + 3 scripts</span>
+          <button type="button" data-skill-inspect="/incident-triage" class="vi-library-btn h-action-min-default">Inspect</button>
+        </div>
+      </li>
+
+      <li class="vi-library-card" data-skill-card data-skill-owner="custom" data-skill-category="design" data-skill-tokens="~85 tok" data-skill-tools="design.token.audit" data-skill-directive="Run design.token.audit against dark and light semantic pairs to confirm 4.5:1 text contrast, 3.0:1 border contrast, and zero raw hex literals.">
+        <div class="vi-library-card-head">
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">/contrast-check</span>
+            <span class="vi-library-mono-pill">Custom</span>
+          </div>
+          <button type="button" role="switch" aria-checked="true" data-skill-trigger="/contrast-check" class="vi-library-switch h-action-min-default">
+            <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
+            <span data-switch-label>Auto-trigger</span>
+          </button>
+        </div>
+        <div class="vi-library-card-body">
+          <h2 class="vi-library-card-title">Contrast floor audit</h2>
+          <p class="vi-library-card-desc">Computes perceptual contrast ratios across semantic surfaces and flags any token below WCAG 2.1 floors.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">design.token.audit</span>
+          </div>
+        </div>
+        <div class="vi-library-card-footer">
+          <span class="vi-library-meta">~85 tok &middot; SKILL.md + 1 script</span>
+          <button type="button" data-skill-inspect="/contrast-check" class="vi-library-btn h-action-min-default">Inspect</button>
+        </div>
+      </li>
+
+      <li class="vi-library-card" data-skill-card data-skill-owner="built-in" data-skill-category="research" data-skill-tokens="~120 tok" data-skill-tools="docs.index.read, memory.scope.inspect" data-skill-directive="Query scoped documents with docs.index.read, tag each claim with its observation date via memory.scope.inspect, and highlight unresolved evidence gaps.">
+        <div class="vi-library-card-head">
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">/evidence-digest</span>
+            <span class="vi-library-mono-pill">Built-in</span>
+          </div>
+          <button type="button" role="switch" aria-checked="true" data-skill-trigger="/evidence-digest" class="vi-library-switch h-action-min-default">
+            <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
+            <span data-switch-label>Auto-trigger</span>
+          </button>
+        </div>
+        <div class="vi-library-card-body">
+          <h2 class="vi-library-card-title">Evidence synthesis digest</h2>
+          <p class="vi-library-card-desc">Summarizes primary design specs and test artifacts while keeping observation dates distinct from review notes.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">docs.index.read</span>
+            <span class="vi-library-mono-pill">memory.scope.inspect</span>
+          </div>
+        </div>
+        <div class="vi-library-card-footer">
+          <span class="vi-library-meta">~120 tok &middot; SKILL.md + 2 scripts</span>
+          <button type="button" data-skill-inspect="/evidence-digest" class="vi-library-btn h-action-min-default">Inspect</button>
+        </div>
+      </li>
+
+      <li class="vi-library-card" data-skill-card data-skill-owner="team" data-skill-category="engineering" data-skill-tokens="~105 tok" data-skill-tools="vcs.diff.read, docs.index.read" data-skill-directive="Diff target module boundaries with vcs.diff.read, compare against docs.index.read contracts, and output a step-by-step migration sequence.">
+        <div class="vi-library-card-head">
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">/migration-brief</span>
+            <span class="vi-library-mono-pill">Team</span>
+          </div>
+          <button type="button" role="switch" aria-checked="false" data-skill-trigger="/migration-brief" class="vi-library-switch h-action-min-default">
+            <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
+            <span data-switch-label>Manual only</span>
+          </button>
+        </div>
+        <div class="vi-library-card-body">
+          <h2 class="vi-library-card-title">Contract migration brief</h2>
+          <p class="vi-library-card-desc">Maps deprecated symbols, consumer call sites, and staged fallback rules into a single migration plan.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">vcs.diff.read</span>
+            <span class="vi-library-mono-pill">docs.index.read</span>
+          </div>
+        </div>
+        <div class="vi-library-card-footer">
+          <span class="vi-library-meta">~105 tok &middot; SKILL.md + 1 script</span>
+          <button type="button" data-skill-inspect="/migration-brief" class="vi-library-btn h-action-min-default">Inspect</button>
+        </div>
+      </li>
+
+      <li class="vi-library-card" data-skill-card data-skill-owner="team" data-skill-category="governance" data-skill-tokens="~115 tok" data-skill-tools="release.gate.check, memory.scope.inspect" data-skill-directive="Audit memory retention boundaries with memory.scope.inspect and confirm shared-project isolation policies before publishing.">
+        <div class="vi-library-card-head">
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">/policy-review</span>
+            <span class="vi-library-mono-pill">Team</span>
+          </div>
+          <button type="button" role="switch" aria-checked="false" data-skill-trigger="/policy-review" class="vi-library-switch h-action-min-default">
+            <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
+            <span data-switch-label>Manual only</span>
+          </button>
+        </div>
+        <div class="vi-library-card-body">
+          <h2 class="vi-library-card-title">Scope and memory review</h2>
+          <p class="vi-library-card-desc">Checks shared workspace permissions, redaction boundaries, and private-realm isolation rules before handoff.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">release.gate.check</span>
+            <span class="vi-library-mono-pill">memory.scope.inspect</span>
+          </div>
+        </div>
+        <div class="vi-library-card-footer">
+          <span class="vi-library-meta">~115 tok &middot; SKILL.md + 2 scripts</span>
+          <button type="button" data-skill-inspect="/policy-review" class="vi-library-btn h-action-min-default">Inspect</button>
+        </div>
+      </li>
+
+      <li class="vi-library-card" data-skill-card data-skill-owner="custom" data-skill-category="design" data-skill-tokens="~100 tok" data-skill-tools="design.token.audit, vcs.diff.read" data-skill-directive="Compare emitted semantic CSS variables against DESIGN.md via design.token.audit and report any unmapped consumer utilities.">
+        <div class="vi-library-card-head">
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">/token-sync</span>
+            <span class="vi-library-mono-pill">Custom</span>
+          </div>
+          <button type="button" role="switch" aria-checked="true" data-skill-trigger="/token-sync" class="vi-library-switch h-action-min-default">
+            <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
+            <span data-switch-label>Auto-trigger</span>
+          </button>
+        </div>
+        <div class="vi-library-card-body">
+          <h2 class="vi-library-card-title">Design token sync</h2>
+          <p class="vi-library-card-desc">Reconciles upstream oklch token changes with consumer stylesheets while preventing ad-hoc custom overrides.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">design.token.audit</span>
+            <span class="vi-library-mono-pill">vcs.diff.read</span>
+          </div>
+        </div>
+        <div class="vi-library-card-footer">
+          <span class="vi-library-meta">~100 tok &middot; SKILL.md + 1 script</span>
+          <button type="button" data-skill-inspect="/token-sync" class="vi-library-btn h-action-min-default">Inspect</button>
+        </div>
+      </li>
+    </ul>
+
+    <div class="vi-library-empty" hidden data-skills-empty>
+      <p class="vi-library-card-title">No matching skills</p>
+      <p class="vi-library-subtitle">Adjust the search query, origin tab, or category filter to view installed playbooks.</p>
+      <button type="button" data-skills-reset class="vi-library-btn h-action-min-default">Reset filters</button>
+    </div>
+
+    <div class="vi-library-receipt" role="status" aria-live="polite">
+      <span data-skills-receipt>JIT skill index loaded &middot; ~860 tok active header budget</span>
+      <span>Read-only inspection</span>
+    </div>
+
+    <div class="vi-library-drawer-backdrop" hidden data-skill-drawer>
+      <div class="vi-library-drawer" role="dialog" aria-modal="true" aria-labelledby="skill-inspector-heading">
+        <div class="vi-library-drawer-head">
+          <div class="vi-library-header-copy">
+            <h2 id="skill-inspector-heading" class="vi-library-title" data-skill-drawer-title>/schema-audit</h2>
+            <p class="vi-library-meta" data-skill-drawer-meta>custom &middot; ~110 tok JIT header</p>
+          </div>
+          <button type="button" data-skill-drawer-close class="vi-library-btn h-action-min-default">Close</button>
+        </div>
+        <div class="vi-library-drawer-body">
+          <div class="vi-library-section">
+            <h3 class="vi-library-section-title">YAML frontmatter metadata</h3>
+            <pre class="vi-library-code" data-skill-drawer-yaml>---
+name: schema-audit
+origin: custom
+index_budget: ~110 tok
+tools: [vcs.diff.read, schema.lint.check]
+---</pre>
+          </div>
+          <div class="vi-library-section">
+            <h3 class="vi-library-section-title">SKILL.md directives preview</h3>
+            <pre class="vi-library-code" data-skill-drawer-body>Read staged schema migrations via vcs.diff.read, run schema.lint.check, and list every breaking column or nullability shift with rollback steps before apply.</pre>
+          </div>
+          <div class="vi-library-section">
+            <h3 class="vi-library-section-title">Required tool effect classes</h3>
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill" data-skill-drawer-tools>vcs.diff.read, schema.lint.check</span>
+              <span class="vi-library-status">
+                <span aria-hidden="true" class="vi-library-dot vi-library-dot--success"></span>
+                <span>Read-only check</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="vi-library-drawer-foot">
+          <button type="button" data-skill-drawer-close class="vi-library-btn h-action-min-default">Cancel</button>
+          <button type="button" data-skill-drawer-run class="vi-library-btn vi-library-btn--primary h-action-min-default">Run in new session</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

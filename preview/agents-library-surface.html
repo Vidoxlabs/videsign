@@ -1,0 +1,276 @@
+<!--
+  Nocturne Museum: Agents and Routines Roster surface (ADR-011, ADR-013, ADR-020, ADR-024, ADR-025)
+  Separates the five sovereign VWXYZ persona seats (with the quarantined five-bar accent rule
+  in canon order, zero gradients, and zero Xylia text) from on-demand specialist agents and
+  scheduled routines (zero persona-accent tokens, explicit approval posture, handoff eligibility).
+  All surfaces are solid (0 vi-glass).
+-->
+<section class="vi-library-scope" aria-label="Agents and routines roster">
+  <div class="vi-library-stage" data-library-agents>
+    <header class="vi-library-header">
+      <div class="vi-library-header-copy">
+        <h1 class="vi-library-title">Agents</h1>
+        <p class="vi-library-subtitle">Sovereign persona seats, on-demand specialists, and scheduled routines with explicit approval posture.</p>
+      </div>
+      <div class="vi-library-header-actions">
+        <button type="button" data-agent-action="Create new agent" class="vi-library-btn vi-library-btn--primary h-action-min-default">+ New agent</button>
+      </div>
+    </header>
+
+    <div class="vi-library-toolbar">
+      <div class="vi-library-toolbar-row">
+        <div class="vi-library-search-box">
+          <label for="agents-library-search" class="sr-only">Search agents, routines, or model slots</label>
+          <input id="agents-library-search" type="search" data-agents-search placeholder="Search seats, specialists, routines, or model slots..." class="vi-library-search-input h-action-min-default" />
+        </div>
+        <div role="tablist" aria-label="Agent type filter" class="vi-library-tabs">
+          <button type="button" role="tab" aria-selected="true" tabindex="0" data-agents-kind="all" class="vi-library-tab h-action-min-default">All</button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" data-agents-kind="sovereign" class="vi-library-tab h-action-min-default">Sovereign seats</button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" data-agents-kind="specialist" class="vi-library-tab h-action-min-default">Specialists</button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" data-agents-kind="routine" class="vi-library-tab h-action-min-default">Routines</button>
+        </div>
+      </div>
+      <div class="vi-library-toolbar-row">
+        <p class="vi-library-meta">5 sovereign seats &middot; 2 specialists &middot; 2 routines</p>
+        <p class="vi-library-meta" role="status" aria-live="polite" data-agents-count>Showing 9 of 9 agents and routines</p>
+      </div>
+    </div>
+
+    <section class="vi-library-section" aria-labelledby="sovereign-seats-heading" data-agent-section="sovereign">
+      <div class="vi-library-section-head">
+        <h2 id="sovereign-seats-heading" class="vi-library-section-title">Sovereign persona seats</h2>
+        <span class="vi-library-meta">Canon order: Violet, Wisteria, Xylia, Yarrow, Zinnia</span>
+      </div>
+      <div aria-hidden="true" class="flex w-full gap-gap-dense-default">
+        <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-violet-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-wisteria-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-xylia-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-yarrow-base"></span>
+        <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-persona-accent-zinnia-base"></span>
+      </div>
+
+      <ul class="vi-seat-grid">
+        <li class="vi-seat-card" data-agent-item data-agent-kind="sovereign">
+          <div class="vi-library-card-head">
+            <div class="flex items-center gap-gap-compact-default min-w-0">
+              <span aria-hidden="true" class="vi-library-monogram">VI</span>
+              <div class="flex flex-col min-w-0">
+                <h3 class="vi-library-card-title truncate">Violet</h3>
+                <span class="vi-library-meta truncate">Core coordinator</span>
+              </div>
+            </div>
+          </div>
+          <p class="vi-library-card-desc">Primary synthesis seat for workspace planning, memory governance, and multi-thread handoffs.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">providers.slot.remote</span>
+          </div>
+          <button type="button" data-agent-action="Open chat with Violet" class="vi-library-btn w-full h-action-min-default">Open chat</button>
+        </li>
+
+        <li class="vi-seat-card" data-agent-item data-agent-kind="sovereign">
+          <div class="vi-library-card-head">
+            <div class="flex items-center gap-gap-compact-default min-w-0">
+              <span aria-hidden="true" class="vi-library-monogram">WI</span>
+              <div class="flex flex-col min-w-0">
+                <h3 class="vi-library-card-title truncate">Wisteria</h3>
+                <span class="vi-library-meta truncate">Research analyst</span>
+              </div>
+            </div>
+          </div>
+          <p class="vi-library-card-desc">Evaluates primary sources, literature evidence, and date-bounded research questions.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">providers.slot.remote</span>
+          </div>
+          <button type="button" data-agent-action="Open chat with Wisteria" class="vi-library-btn w-full h-action-min-default">Open chat</button>
+        </li>
+
+        <li class="vi-seat-card" data-agent-item data-agent-kind="sovereign">
+          <div class="vi-library-card-head">
+            <div class="flex items-center gap-gap-compact-default min-w-0">
+              <span aria-hidden="true" class="vi-library-monogram">XY</span>
+              <div class="flex flex-col min-w-0">
+                <h3 class="vi-library-card-title truncate">Xylia</h3>
+                <span class="vi-library-meta truncate">Systems reviewer</span>
+              </div>
+            </div>
+          </div>
+          <p class="vi-library-card-desc">Audits architecture invariants, schema boundaries, and strict failure-mode contracts.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">providers.slot.local</span>
+          </div>
+          <button type="button" data-agent-action="Open chat with Xylia" class="vi-library-btn w-full h-action-min-default">Open chat</button>
+        </li>
+
+        <li class="vi-seat-card" data-agent-item data-agent-kind="sovereign">
+          <div class="vi-library-card-head">
+            <div class="flex items-center gap-gap-compact-default min-w-0">
+              <span aria-hidden="true" class="vi-library-monogram">YA</span>
+              <div class="flex flex-col min-w-0">
+                <h3 class="vi-library-card-title truncate">Yarrow</h3>
+                <span class="vi-library-meta truncate">Editorial guide</span>
+              </div>
+            </div>
+          </div>
+          <p class="vi-library-card-desc">Refines public narratives, technical prose, and evidence-strength calibration across docs.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">providers.slot.remote</span>
+          </div>
+          <button type="button" data-agent-action="Open chat with Yarrow" class="vi-library-btn w-full h-action-min-default">Open chat</button>
+        </li>
+
+        <li class="vi-seat-card" data-agent-item data-agent-kind="sovereign">
+          <div class="vi-library-card-head">
+            <div class="flex items-center gap-gap-compact-default min-w-0">
+              <span aria-hidden="true" class="vi-library-monogram">ZI</span>
+              <div class="flex flex-col min-w-0">
+                <h3 class="vi-library-card-title truncate">Zinnia</h3>
+                <span class="vi-library-meta truncate">Craft specialist</span>
+              </div>
+            </div>
+          </div>
+          <p class="vi-library-card-desc">Maintains token discipline, layout proportion, and accessibility floors across surfaces.</p>
+          <div class="vi-library-chip-row">
+            <span class="vi-library-mono-pill">providers.slot.local</span>
+          </div>
+          <button type="button" data-agent-action="Open chat with Zinnia" class="vi-library-btn w-full h-action-min-default">Open chat</button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="vi-library-section" aria-labelledby="specialists-routines-heading" data-agent-section="workers">
+      <div class="vi-library-section-head">
+        <h2 id="specialists-routines-heading" class="vi-library-section-title">Specialist agents and routines</h2>
+        <span class="vi-library-meta">Neutral tokens only &middot; Explicit approval posture</span>
+      </div>
+
+      <ul class="vi-library-grid vi-library-grid--subgrid">
+        <li class="vi-library-card" data-agent-item data-agent-kind="specialist">
+          <div class="vi-library-card-head">
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill">Specialist</span>
+              <span class="vi-library-mono-pill">Can delegate</span>
+            </div>
+            <span class="vi-library-status">
+              <span aria-hidden="true" class="vi-library-dot vi-library-dot--warning"></span>
+              <span>Ask owner on write</span>
+            </span>
+          </div>
+          <div class="vi-library-card-body">
+            <h3 class="vi-library-card-title">Schema auditor</h3>
+            <p class="vi-library-card-desc">Evaluates migration diffs, foreign-key safety, and RLS policies before staging changes.</p>
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill">providers.slot.local</span>
+              <span class="vi-library-mono-pill">3 skills</span>
+              <span class="vi-library-mono-pill">2 connectors</span>
+            </div>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">On-demand worker</span>
+            <div class="vi-library-chip-row">
+              <button type="button" data-agent-action="Launch Schema auditor" class="vi-library-btn vi-library-btn--primary h-action-min-default">Launch</button>
+              <button type="button" data-agent-action="Configure Schema auditor" class="vi-library-btn h-action-min-default">Configure</button>
+            </div>
+          </div>
+        </li>
+
+        <li class="vi-library-card" data-agent-item data-agent-kind="specialist">
+          <div class="vi-library-card-head">
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill">Specialist</span>
+              <span class="vi-library-mono-pill">Leaf worker</span>
+            </div>
+            <span class="vi-library-status">
+              <span aria-hidden="true" class="vi-library-dot vi-library-dot--success"></span>
+              <span>Read-only auto</span>
+            </span>
+          </div>
+          <div class="vi-library-card-body">
+            <h3 class="vi-library-card-title">Runbook checker</h3>
+            <p class="vi-library-card-desc">Cross-checks operational checklists against current repository contracts without side effects.</p>
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill">providers.slot.remote</span>
+              <span class="vi-library-mono-pill">2 skills</span>
+              <span class="vi-library-mono-pill">1 connector</span>
+            </div>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">On-demand worker</span>
+            <div class="vi-library-chip-row">
+              <button type="button" data-agent-action="Launch Runbook checker" class="vi-library-btn vi-library-btn--primary h-action-min-default">Launch</button>
+              <button type="button" data-agent-action="Configure Runbook checker" class="vi-library-btn h-action-min-default">Configure</button>
+            </div>
+          </div>
+        </li>
+
+        <li class="vi-library-card" data-agent-item data-agent-kind="routine">
+          <div class="vi-library-card-head">
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill">Routine</span>
+              <span class="vi-library-mono-pill">Leaf worker</span>
+            </div>
+            <span class="vi-library-status">
+              <span aria-hidden="true" class="vi-library-dot vi-library-dot--success"></span>
+              <span>Read-only auto</span>
+            </span>
+          </div>
+          <div class="vi-library-card-body">
+            <h3 class="vi-library-card-title">Nightly dependency drift check</h3>
+            <p class="vi-library-card-desc">Scans pinned lockfiles and reports version skew into the morning release digest.</p>
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill">providers.slot.local</span>
+              <span class="vi-library-mono-pill">2 skills</span>
+              <span class="vi-library-mono-pill">2 connectors</span>
+            </div>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">Daily 03:00</span>
+            <div class="vi-library-chip-row">
+              <button type="button" data-agent-action="Launch Nightly dependency drift check" class="vi-library-btn vi-library-btn--primary h-action-min-default">Launch</button>
+              <button type="button" data-agent-action="Configure Nightly dependency drift check" class="vi-library-btn h-action-min-default">Configure</button>
+            </div>
+          </div>
+        </li>
+
+        <li class="vi-library-card" data-agent-item data-agent-kind="routine">
+          <div class="vi-library-card-head">
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill">Routine</span>
+              <span class="vi-library-mono-pill">Leaf worker</span>
+            </div>
+            <span class="vi-library-status">
+              <span aria-hidden="true" class="vi-library-dot vi-library-dot--info"></span>
+              <span>Paused</span>
+            </span>
+          </div>
+          <div class="vi-library-card-body">
+            <h3 class="vi-library-card-title">Weekly token contrast audit</h3>
+            <p class="vi-library-card-desc">Re-runs automated dark and light WCAG luminance checks across emitted stylesheets.</p>
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill">providers.slot.local</span>
+              <span class="vi-library-mono-pill">3 skills</span>
+              <span class="vi-library-mono-pill">1 connector</span>
+            </div>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">Mondays 06:00</span>
+            <div class="vi-library-chip-row">
+              <button type="button" data-agent-action="Launch Weekly token contrast audit" class="vi-library-btn vi-library-btn--primary h-action-min-default">Launch</button>
+              <button type="button" data-agent-action="Configure Weekly token contrast audit" class="vi-library-btn h-action-min-default">Configure</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <div class="vi-library-empty" hidden data-agents-empty>
+      <p class="vi-library-card-title">No matching agents or routines</p>
+      <p class="vi-library-subtitle">Clear the search filter or switch back to All to inspect every seat and worker.</p>
+      <button type="button" data-agents-reset class="vi-library-btn h-action-min-default">Reset filters</button>
+    </div>
+
+    <div class="vi-library-receipt" role="status" aria-live="polite">
+      <span data-agents-receipt>Roster ready &middot; All approvals enforced by workspace policy</span>
+      <span>Zero ambient mutations</span>
+    </div>
+  </div>
+</section>

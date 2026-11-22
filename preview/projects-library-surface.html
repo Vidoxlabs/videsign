@@ -1,0 +1,483 @@
+<!--
+  Nocturne Museum: Projects Directory and Detail Workspace (ADR-011, ADR-016, ADR-020, ADR-024, ADR-025)
+  Pairs a scannable Projects Directory (hairline table + optional card view, Private/Shared scope
+  tabs, sort control) with a two-zone Project Detail Workspace (.vi-project-split) combining
+  Threads/Sources/Activity tabs and an embedded .vi-composer on the main stage with Project
+  instructions, immutable knowledge sources + capacity meter, explicit memory isolation policy,
+  and bound skills/connectors in the context panel.
+  All surfaces are solid (0 vi-glass) and zero persona-accent tokens appear.
+-->
+<section class="vi-library-scope" aria-label="Projects workspace">
+  <div class="vi-library-stage" data-library-projects>
+    <header class="vi-library-header">
+      <div class="vi-library-header-copy">
+        <h1 class="vi-library-title">Projects</h1>
+        <p class="vi-library-subtitle">Scoped workspaces pairing stacked instructions, immutable sources, and explicit memory isolation.</p>
+      </div>
+      <div class="vi-library-header-actions">
+        <div role="tablist" aria-label="Projects view mode" class="vi-library-tabs">
+          <button type="button" role="tab" aria-selected="true" tabindex="0" data-projects-mode="directory" class="vi-library-tab h-action-min-default">Directory view</button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" data-projects-mode="detail" class="vi-library-tab h-action-min-default">Project detail</button>
+        </div>
+        <button type="button" data-project-action="Create new project" class="vi-library-btn vi-library-btn--primary h-action-min-default">+ New project</button>
+      </div>
+    </header>
+
+    <!-- View 1: Projects Directory -->
+    <div class="vi-project-view flex flex-col gap-gap-comfortable-default" data-projects-view-panel="directory">
+      <div class="vi-library-toolbar">
+        <div class="vi-library-toolbar-row">
+          <div class="vi-library-search-box">
+            <label for="projects-library-search" class="sr-only">Search projects by name, scope, or memory policy</label>
+            <input id="projects-library-search" type="search" data-projects-search placeholder="Search projects by name, scope, or memory policy..." class="vi-library-search-input h-action-min-default" />
+          </div>
+          <div role="tablist" aria-label="Project visibility scope" class="vi-library-tabs">
+            <button type="button" role="tab" aria-selected="true" tabindex="0" data-projects-scope="all" class="vi-library-tab h-action-min-default">All (6)</button>
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" data-projects-scope="private" class="vi-library-tab h-action-min-default">Private (4)</button>
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" data-projects-scope="shared" class="vi-library-tab h-action-min-default">Shared (2)</button>
+          </div>
+        </div>
+
+        <div class="vi-library-toolbar-row">
+          <div class="vi-library-chip-row">
+            <label for="projects-library-sort" class="vi-library-meta">Sort by</label>
+            <select id="projects-library-sort" data-projects-sort class="vi-library-select h-action-min-default">
+              <option value="updated">Last updated</option>
+              <option value="name">Name</option>
+            </select>
+            <div role="group" aria-label="Directory layout" class="vi-library-tabs">
+              <button type="button" aria-pressed="true" data-projects-layout="table" class="vi-library-tab h-action-min-default">Table</button>
+              <button type="button" aria-pressed="false" data-projects-layout="cards" class="vi-library-tab h-action-min-default">Cards</button>
+            </div>
+          </div>
+          <p class="vi-library-meta" role="status" aria-live="polite" data-projects-count>Showing 6 of 6 projects</p>
+        </div>
+      </div>
+
+      <ul class="vi-library-list" data-projects-table>
+        <li class="vi-library-list-row vi-library-list-head" aria-hidden="true">
+          <span>Project</span>
+          <span>Visibility and memory</span>
+          <span>Scope</span>
+          <span>Modified</span>
+          <span>Actions</span>
+        </li>
+
+        <li class="vi-library-list-row" data-project-item data-project-surface="table" data-project-scope="shared" data-project-name="Nocturne Design System" data-project-order="1">
+          <div class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="vi-library-monogram">ND</span>
+            <div class="flex flex-col min-w-0">
+              <span class="vi-library-card-title truncate">Nocturne Design System</span>
+              <span class="vi-library-meta truncate">Semantic oklch tokens and component catalog</span>
+            </div>
+          </div>
+          <span class="vi-library-status">
+            <span aria-hidden="true" class="vi-library-dot vi-library-dot--info"></span>
+            <span>Shared &middot; Personal memory off</span>
+          </span>
+          <span class="vi-library-meta">5 threads &middot; 4 sources</span>
+          <span class="vi-library-meta">14m ago</span>
+          <div class="vi-library-chip-row">
+            <button type="button" data-open-project="Nocturne Design System" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+            <button type="button" data-project-action="Project options for Nocturne Design System" class="vi-library-btn h-action-min-default">More</button>
+          </div>
+        </li>
+
+        <li class="vi-library-list-row" data-project-item data-project-surface="table" data-project-scope="private" data-project-name="Cluster Runbooks" data-project-order="2">
+          <div class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="vi-library-monogram">CR</span>
+            <div class="flex flex-col min-w-0">
+              <span class="vi-library-card-title truncate">Cluster Runbooks</span>
+              <span class="vi-library-meta truncate">Recovery drills and snapshot checklists</span>
+            </div>
+          </div>
+          <span class="vi-library-status">
+            <span aria-hidden="true" class="vi-library-dot vi-library-dot--accent"></span>
+            <span>Private &middot; Project-only memory</span>
+          </span>
+          <span class="vi-library-meta">4 threads &middot; 6 sources</span>
+          <span class="vi-library-meta">2h ago</span>
+          <div class="vi-library-chip-row">
+            <button type="button" data-open-project="Cluster Runbooks" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+            <button type="button" data-project-action="Project options for Cluster Runbooks" class="vi-library-btn h-action-min-default">More</button>
+          </div>
+        </li>
+
+        <li class="vi-library-list-row" data-project-item data-project-surface="table" data-project-scope="shared" data-project-name="Seed Contract Spec" data-project-order="3">
+          <div class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="vi-library-monogram">SC</span>
+            <div class="flex flex-col min-w-0">
+              <span class="vi-library-card-title truncate">Seed Contract Spec</span>
+              <span class="vi-library-meta truncate">Schema compatibility and migration rules</span>
+            </div>
+          </div>
+          <span class="vi-library-status">
+            <span aria-hidden="true" class="vi-library-dot vi-library-dot--info"></span>
+            <span>Shared &middot; Personal memory off</span>
+          </span>
+          <span class="vi-library-meta">3 threads &middot; 5 sources</span>
+          <span class="vi-library-meta">5h ago</span>
+          <div class="vi-library-chip-row">
+            <button type="button" data-open-project="Seed Contract Spec" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+            <button type="button" data-project-action="Project options for Seed Contract Spec" class="vi-library-btn h-action-min-default">More</button>
+          </div>
+        </li>
+
+        <li class="vi-library-list-row" data-project-item data-project-surface="table" data-project-scope="private" data-project-name="Release Gate Checklists" data-project-order="4">
+          <div class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="vi-library-monogram">RG</span>
+            <div class="flex flex-col min-w-0">
+              <span class="vi-library-card-title truncate">Release Gate Checklists</span>
+              <span class="vi-library-meta truncate">Pre-flight test gates and sign-off records</span>
+            </div>
+          </div>
+          <span class="vi-library-status">
+            <span aria-hidden="true" class="vi-library-dot vi-library-dot--success"></span>
+            <span>Private &middot; Workspace default</span>
+          </span>
+          <span class="vi-library-meta">6 threads &middot; 3 sources</span>
+          <span class="vi-library-meta">1d ago</span>
+          <div class="vi-library-chip-row">
+            <button type="button" data-open-project="Release Gate Checklists" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+            <button type="button" data-project-action="Project options for Release Gate Checklists" class="vi-library-btn h-action-min-default">More</button>
+          </div>
+        </li>
+
+        <li class="vi-library-list-row" data-project-item data-project-surface="table" data-project-scope="private" data-project-name="Bloom Workspace Specs" data-project-order="5">
+          <div class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="vi-library-monogram">BW</span>
+            <div class="flex flex-col min-w-0">
+              <span class="vi-library-card-title truncate">Bloom Workspace Specs</span>
+              <span class="vi-library-meta truncate">Multi-agent pane layout and keyboard maps</span>
+            </div>
+          </div>
+          <span class="vi-library-status">
+            <span aria-hidden="true" class="vi-library-dot vi-library-dot--accent"></span>
+            <span>Private &middot; Project-only memory</span>
+          </span>
+          <span class="vi-library-meta">2 threads &middot; 4 sources</span>
+          <span class="vi-library-meta">3d ago</span>
+          <div class="vi-library-chip-row">
+            <button type="button" data-open-project="Bloom Workspace Specs" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+            <button type="button" data-project-action="Project options for Bloom Workspace Specs" class="vi-library-btn h-action-min-default">More</button>
+          </div>
+        </li>
+
+        <li class="vi-library-list-row" data-project-item data-project-surface="table" data-project-scope="private" data-project-name="Vitools Catalog" data-project-order="6">
+          <div class="flex items-center gap-gap-compact-default min-w-0">
+            <span aria-hidden="true" class="vi-library-monogram">VC</span>
+            <div class="flex flex-col min-w-0">
+              <span class="vi-library-card-title truncate">Vitools Catalog</span>
+              <span class="vi-library-meta truncate">Neutral tool contracts and effect classes</span>
+            </div>
+          </div>
+          <span class="vi-library-status">
+            <span aria-hidden="true" class="vi-library-dot vi-library-dot--success"></span>
+            <span>Private &middot; Workspace default</span>
+          </span>
+          <span class="vi-library-meta">4 threads &middot; 2 sources</span>
+          <span class="vi-library-meta">5d ago</span>
+          <div class="vi-library-chip-row">
+            <button type="button" data-open-project="Vitools Catalog" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+            <button type="button" data-project-action="Project options for Vitools Catalog" class="vi-library-btn h-action-min-default">More</button>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="vi-library-grid vi-library-grid--subgrid" hidden data-projects-cards>
+        <li class="vi-library-card" data-project-item data-project-surface="cards" data-project-scope="shared" data-project-name="Nocturne Design System" data-project-order="1">
+          <div class="vi-library-card-head">
+            <span aria-hidden="true" class="vi-library-monogram">ND</span>
+            <span class="vi-library-status"><span aria-hidden="true" class="vi-library-dot vi-library-dot--info"></span><span>Shared</span></span>
+          </div>
+          <div class="vi-library-card-body">
+            <h2 class="vi-library-card-title">Nocturne Design System</h2>
+            <p class="vi-library-card-desc">Semantic oklch tokens, component specimens, and WCAG 2.1 contrast floor verification.</p>
+            <span class="vi-library-mono-pill">Personal memory off</span>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">5 threads &middot; 4 sources &middot; 14m ago</span>
+            <button type="button" data-open-project="Nocturne Design System" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+          </div>
+        </li>
+
+        <li class="vi-library-card" data-project-item data-project-surface="cards" data-project-scope="private" data-project-name="Cluster Runbooks" data-project-order="2">
+          <div class="vi-library-card-head">
+            <span aria-hidden="true" class="vi-library-monogram">CR</span>
+            <span class="vi-library-status"><span aria-hidden="true" class="vi-library-dot vi-library-dot--accent"></span><span>Private</span></span>
+          </div>
+          <div class="vi-library-card-body">
+            <h2 class="vi-library-card-title">Cluster Runbooks</h2>
+            <p class="vi-library-card-desc">Recovery drills, maintenance windows, and offline archive verification procedures.</p>
+            <span class="vi-library-mono-pill">Project-only memory</span>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">4 threads &middot; 6 sources &middot; 2h ago</span>
+            <button type="button" data-open-project="Cluster Runbooks" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+          </div>
+        </li>
+
+        <li class="vi-library-card" data-project-item data-project-surface="cards" data-project-scope="shared" data-project-name="Seed Contract Spec" data-project-order="3">
+          <div class="vi-library-card-head">
+            <span aria-hidden="true" class="vi-library-monogram">SC</span>
+            <span class="vi-library-status"><span aria-hidden="true" class="vi-library-dot vi-library-dot--info"></span><span>Shared</span></span>
+          </div>
+          <div class="vi-library-card-body">
+            <h2 class="vi-library-card-title">Seed Contract Spec</h2>
+            <p class="vi-library-card-desc">Schema compatibility boundaries and staged rollout playbooks shared across teams.</p>
+            <span class="vi-library-mono-pill">Personal memory off</span>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">3 threads &middot; 5 sources &middot; 5h ago</span>
+            <button type="button" data-open-project="Seed Contract Spec" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+          </div>
+        </li>
+
+        <li class="vi-library-card" data-project-item data-project-surface="cards" data-project-scope="private" data-project-name="Release Gate Checklists" data-project-order="4">
+          <div class="vi-library-card-head">
+            <span aria-hidden="true" class="vi-library-monogram">RG</span>
+            <span class="vi-library-status"><span aria-hidden="true" class="vi-library-dot vi-library-dot--success"></span><span>Private</span></span>
+          </div>
+          <div class="vi-library-card-body">
+            <h2 class="vi-library-card-title">Release Gate Checklists</h2>
+            <p class="vi-library-card-desc">Pre-flight test gates, evidence receipts, and explicit holdback triggers.</p>
+            <span class="vi-library-mono-pill">Workspace default</span>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">6 threads &middot; 3 sources &middot; 1d ago</span>
+            <button type="button" data-open-project="Release Gate Checklists" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+          </div>
+        </li>
+
+        <li class="vi-library-card" data-project-item data-project-surface="cards" data-project-scope="private" data-project-name="Bloom Workspace Specs" data-project-order="5">
+          <div class="vi-library-card-head">
+            <span aria-hidden="true" class="vi-library-monogram">BW</span>
+            <span class="vi-library-status"><span aria-hidden="true" class="vi-library-dot vi-library-dot--accent"></span><span>Private</span></span>
+          </div>
+          <div class="vi-library-card-body">
+            <h2 class="vi-library-card-title">Bloom Workspace Specs</h2>
+            <p class="vi-library-card-desc">Multi-agent workstation rail, inspector architecture, and keyboard focus maps.</p>
+            <span class="vi-library-mono-pill">Project-only memory</span>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">2 threads &middot; 4 sources &middot; 3d ago</span>
+            <button type="button" data-open-project="Bloom Workspace Specs" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+          </div>
+        </li>
+
+        <li class="vi-library-card" data-project-item data-project-surface="cards" data-project-scope="private" data-project-name="Vitools Catalog" data-project-order="6">
+          <div class="vi-library-card-head">
+            <span aria-hidden="true" class="vi-library-monogram">VC</span>
+            <span class="vi-library-status"><span aria-hidden="true" class="vi-library-dot vi-library-dot--success"></span><span>Private</span></span>
+          </div>
+          <div class="vi-library-card-body">
+            <h2 class="vi-library-card-title">Vitools Catalog</h2>
+            <p class="vi-library-card-desc">Neutral tool identifiers, read/write effect classes, and dry-run refusal contracts.</p>
+            <span class="vi-library-mono-pill">Workspace default</span>
+          </div>
+          <div class="vi-library-card-footer">
+            <span class="vi-library-meta">4 threads &middot; 2 sources &middot; 5d ago</span>
+            <button type="button" data-open-project="Vitools Catalog" class="vi-library-btn vi-library-btn--primary h-action-min-default">Open</button>
+          </div>
+        </li>
+      </ul>
+
+      <div class="vi-library-empty" hidden data-projects-empty>
+        <p class="vi-library-card-title">No matching projects</p>
+        <p class="vi-library-subtitle">Reset the search query or visibility tab to see all workspace projects.</p>
+        <button type="button" data-projects-reset class="vi-library-btn h-action-min-default">Reset filters</button>
+      </div>
+    </div>
+
+    <!-- View 2: Project Detail Workspace (.vi-project-split) -->
+    <div class="vi-project-view flex flex-col gap-gap-comfortable-default" hidden data-projects-view-panel="detail">
+      <div class="vi-library-toolbar-row">
+        <div class="flex flex-wrap items-center gap-gap-compact-default">
+          <button type="button" data-projects-back class="vi-library-btn h-action-min-default">&larr; Projects</button>
+          <span class="vi-library-meta" aria-hidden="true">/</span>
+          <span class="vi-library-meta" data-project-detail-crumb>Nocturne Design System</span>
+        </div>
+        <span class="vi-library-status">
+          <span aria-hidden="true" class="vi-library-dot vi-library-dot--info"></span>
+          <span>Shared &middot; Personal memory off</span>
+        </span>
+      </div>
+
+      <div class="vi-library-toolbar-row">
+        <h2 class="vi-library-title" data-project-detail-title>Nocturne Design System</h2>
+        <div role="group" aria-label="Compact workspace pane switcher" class="vi-library-tabs vi-project-mobile-tabs">
+          <button type="button" aria-pressed="true" data-project-mobile-tab="main" class="vi-library-tab h-action-min-default">Main stage</button>
+          <button type="button" aria-pressed="false" data-project-mobile-tab="context" class="vi-library-tab h-action-min-default">Context and sources</button>
+        </div>
+      </div>
+
+      <div class="vi-project-split" data-project-split data-mobile-pane="main">
+        <!-- Main Stage (Left / Top) -->
+        <div class="vi-project-main">
+          <div role="tablist" aria-label="Project main stage tabs" class="vi-library-tabs">
+            <button type="button" role="tab" aria-selected="true" tabindex="0" data-project-subtab="threads" class="vi-library-tab h-action-min-default">Threads (5)</button>
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" data-project-subtab="sources" class="vi-library-tab h-action-min-default">Sources (4)</button>
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" data-project-subtab="activity" class="vi-library-tab h-action-min-default">Activity</button>
+          </div>
+
+          <form class="vi-composer" data-project-composer>
+            <label for="project-scoped-composer" class="sr-only">Ask inside Nocturne Design System or type slash for skills</label>
+            <textarea id="project-scoped-composer" rows="1" placeholder="Ask inside Nocturne Design System or type / for skills..." class="vi-composer-input h-action-min-default"></textarea>
+            <button type="submit" class="vi-library-btn vi-library-btn--primary h-action-min-default">Start thread</button>
+          </form>
+
+          <div class="vi-project-tab-panel" data-project-subpanel="threads">
+            <ul class="vi-library-hairline-list">
+              <li class="vi-library-hairline-item">
+                <div class="flex flex-col gap-gap-dense-default min-w-0">
+                  <span class="vi-library-card-title">Contrast floor review for library borders</span>
+                  <span class="vi-library-meta">Zinnia &middot; 14m ago &middot; 12 msgs</span>
+                </div>
+                <div class="vi-library-chip-row">
+                  <button type="button" data-project-action="Pinned thread Contrast floor review" class="vi-library-btn h-action-min-default">Pin</button>
+                  <button type="button" data-project-action="Move thread Contrast floor review" class="vi-library-btn h-action-min-default">Move thread</button>
+                </div>
+              </li>
+              <li class="vi-library-hairline-item">
+                <div class="flex flex-col gap-gap-dense-default min-w-0">
+                  <span class="vi-library-card-title">Subgrid alignment for skill index cards</span>
+                  <span class="vi-library-meta">Violet &middot; 2h ago &middot; 8 msgs</span>
+                </div>
+                <div class="vi-library-chip-row">
+                  <button type="button" data-project-action="Pinned thread Subgrid alignment" class="vi-library-btn h-action-min-default">Pin</button>
+                  <button type="button" data-project-action="Move thread Subgrid alignment" class="vi-library-btn h-action-min-default">Move thread</button>
+                </div>
+              </li>
+              <li class="vi-library-hairline-item">
+                <div class="flex flex-col gap-gap-dense-default min-w-0">
+                  <span class="vi-library-card-title">VWXYZ quarantine audit for agent roster</span>
+                  <span class="vi-library-meta">Xylia &middot; 1d ago &middot; 19 msgs</span>
+                </div>
+                <div class="vi-library-chip-row">
+                  <button type="button" data-project-action="Pinned thread VWXYZ quarantine audit" class="vi-library-btn h-action-min-default">Pin</button>
+                  <button type="button" data-project-action="Move thread VWXYZ quarantine audit" class="vi-library-btn h-action-min-default">Move thread</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="vi-project-tab-panel" hidden data-project-subpanel="sources">
+            <ul class="vi-library-hairline-list">
+              <li class="vi-library-hairline-item">
+                <div class="flex flex-col gap-gap-dense-default min-w-0">
+                  <span class="vi-library-card-title">DESIGN.md</span>
+                  <span class="vi-library-meta">Source &middot; Immutable &middot; 6.4% context budget</span>
+                </div>
+                <button type="button" data-project-action="Inspect DESIGN.md" class="vi-library-btn h-action-min-default">Inspect</button>
+              </li>
+              <li class="vi-library-hairline-item">
+                <div class="flex flex-col gap-gap-dense-default min-w-0">
+                  <span class="vi-library-card-title">adr-020-agent-workspace.md</span>
+                  <span class="vi-library-meta">Source &middot; Immutable &middot; 4.2% context budget</span>
+                </div>
+                <button type="button" data-project-action="Inspect adr-020-agent-workspace.md" class="vi-library-btn h-action-min-default">Inspect</button>
+              </li>
+              <li class="vi-library-hairline-item">
+                <div class="flex flex-col gap-gap-dense-default min-w-0">
+                  <span class="vi-library-card-title">adr-025-contrast-floors.md</span>
+                  <span class="vi-library-meta">Source &middot; Immutable &middot; 3.8% context budget</span>
+                </div>
+                <button type="button" data-project-action="Inspect adr-025-contrast-floors.md" class="vi-library-btn h-action-min-default">Inspect</button>
+              </li>
+              <li class="vi-library-hairline-item">
+                <div class="flex flex-col gap-gap-dense-default min-w-0">
+                  <span class="vi-library-card-title">library-tokens-spec.md</span>
+                  <span class="vi-library-meta">Source &middot; Immutable &middot; 3.6% context budget</span>
+                </div>
+                <button type="button" data-project-action="Inspect library-tokens-spec.md" class="vi-library-btn h-action-min-default">Inspect</button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="vi-project-tab-panel" hidden data-project-subpanel="activity">
+            <ul class="vi-library-hairline-list">
+              <li class="vi-library-hairline-item">
+                <span class="vi-library-card-title">Added immutable source library-tokens-spec.md</span>
+                <span class="vi-library-meta">14m ago</span>
+              </li>
+              <li class="vi-library-hairline-item">
+                <span class="vi-library-card-title">Updated stacked project instructions</span>
+                <span class="vi-library-meta">2h ago</span>
+              </li>
+              <li class="vi-library-hairline-item">
+                <span class="vi-library-card-title">Confirmed personal memory off while shared</span>
+                <span class="vi-library-meta">1d ago</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Context Panel (Right / Collapsible tab below 64rem) -->
+        <aside class="vi-project-context" aria-label="Project context and sources">
+          <section class="vi-project-panel" aria-labelledby="proj-instructions-head">
+            <div class="vi-library-section-head">
+              <h3 id="proj-instructions-head" class="vi-library-section-title">Project instructions</h3>
+              <span class="vi-library-mono-pill">Layered</span>
+            </div>
+            <p class="vi-library-meta">Stacks on top of Workspace profile preferences</p>
+            <p class="vi-library-subtitle">Use zero-hex oklch tokens, 44px touch targets, and solid reading surfaces on every library view.</p>
+            <button type="button" data-project-action="Edit project instructions" class="vi-library-btn h-action-min-default">Edit instructions</button>
+          </section>
+
+          <section class="vi-project-panel" aria-labelledby="proj-sources-head">
+            <div class="vi-library-section-head">
+              <h3 id="proj-sources-head" class="vi-library-section-title">Immutable knowledge sources</h3>
+            </div>
+            <p class="vi-library-meta">4 / 20 files &middot; 18% context budget</p>
+            <div class="vi-library-meter" role="progressbar" aria-label="Project knowledge context budget" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100">
+              <span class="vi-library-meter-fill"></span>
+            </div>
+            <ul class="vi-library-hairline-list">
+              <li class="vi-library-hairline-item">
+                <span class="vi-library-meta">DESIGN.md</span>
+                <span class="vi-library-mono-pill">Source &middot; Immutable</span>
+              </li>
+              <li class="vi-library-hairline-item">
+                <span class="vi-library-meta">adr-020-agent-workspace.md</span>
+                <span class="vi-library-mono-pill">Source &middot; Immutable</span>
+              </li>
+              <li class="vi-library-hairline-item">
+                <span class="vi-library-meta">adr-025-contrast-floors.md</span>
+                <span class="vi-library-mono-pill">Source &middot; Immutable</span>
+              </li>
+              <li class="vi-library-hairline-item">
+                <span class="vi-library-meta">library-tokens-spec.md</span>
+                <span class="vi-library-mono-pill">Source &middot; Immutable</span>
+              </li>
+            </ul>
+            <button type="button" data-project-action="Add immutable source" class="vi-library-btn h-action-min-default">+ Add source</button>
+          </section>
+
+          <section class="vi-project-panel" aria-labelledby="proj-memory-head">
+            <h3 id="proj-memory-head" class="vi-library-section-title">Memory and sharing policy</h3>
+            <div role="group" aria-label="Project memory isolation" class="vi-library-tabs">
+              <button type="button" aria-pressed="true" data-project-memory="project-only" class="vi-library-tab h-action-min-default">Project-only memory</button>
+              <button type="button" aria-pressed="false" data-project-memory="workspace-default" class="vi-library-tab h-action-min-default">Workspace default</button>
+            </div>
+            <p class="vi-library-subtitle">Shared project members can inspect project instructions and uploaded sources; personal memory is disabled while shared.</p>
+          </section>
+
+          <section class="vi-project-panel" aria-labelledby="proj-bound-head">
+            <h3 id="proj-bound-head" class="vi-library-section-title">Bound skills and connectors</h3>
+            <div class="vi-library-chip-row">
+              <span class="vi-library-mono-pill">/contrast-check</span>
+              <span class="vi-library-mono-pill">/schema-audit</span>
+              <span class="vi-library-mono-pill">vcs.diff.read</span>
+              <span class="vi-library-mono-pill">design.token.audit</span>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </div>
+
+    <div class="vi-library-receipt" role="status" aria-live="polite">
+      <span data-projects-receipt>6 projects indexed &middot; Explicit memory isolation active</span>
+      <span>Solid reading surface</span>
+    </div>
+  </div>
+</section>

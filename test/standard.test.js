@@ -395,7 +395,7 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
   assert.deepEqual(modularComponents.planes, ['surfaces', 'harness', 'providers', 'authority stores']);
   assert.deepEqual(modularComponents.runStates, ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete', 'stopping', 'stopped', 'failed']);
   assert.deepEqual(modularComponents.toolEffects, ['read', 'write', 'destructive', 'credential']);
-  assert.equal(modularComponents.catalog.length, 90);
+  assert.equal(modularComponents.catalog.length, 93);
   assert.equal(modularComponents.pluginsConnectors.saveRequiresCurrentPreAdmissionCheck, true);
   assert.equal(modularComponents.pluginsConnectors.bindingIdentitySeparate, true);
   assert.deepEqual(modularComponents.pluginsConnectors.connectorOverrides, ['Allow read-only', 'Ask owner', 'Deny']);
@@ -405,6 +405,7 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
     'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace',
     'settings-quick-menu', 'settings-surface', 'layout-settings',
     'plugin-connector-row', 'plugins-connectors-surface', 'custom-connector-drawer',
+    'skills-library-surface', 'agents-library-surface', 'projects-library-surface',
     'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner',
     'public-repo-card', 'ecosystem-plane-map', 'comparison-matrix', 'site-header-island', 'mobile-navigation-sheet', 'site-footer', 'hero-billboard', 'bento-feature-grid', 'filterable-catalog-grid', 'client-install-switcher', 'persona-companion-stage', 'evidence-exhibit-figure',
     'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'article-toc-and-meta',

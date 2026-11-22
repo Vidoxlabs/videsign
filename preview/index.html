@@ -25,12 +25,14 @@
   <link rel="stylesheet" href="../dist/docs-portal.css" />
   <link rel="stylesheet" href="../dist/chat.css" />
   <link rel="stylesheet" href="../dist/settings-surface.css" />
+  <link rel="stylesheet" href="../dist/library-surface.css" />
   <link rel="stylesheet" href="../dist/plugins.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
   <script defer src="../dist/settings-surface.js"></script>
   <script src="chat-preview.js" defer></script>
   <script src="plugins-preview.js" defer></script>
+  <script defer src="../dist/library-surface.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
@@ -696,6 +698,9 @@
       { file: 'plugin-connector-row.html', tier: 'workspace', label: 'Plugin and connector row', desc: 'Four connector health and provenance examples with tool bindings (ADR-021).' },
       { file: 'plugins-connectors-surface.html', tier: 'workspace', label: 'Plugins and connectors', desc: 'Search and filter plugins, set policy, and manage synthetic connector bindings (ADR-021).', frame: true },
       { file: 'custom-connector-drawer.html', tier: 'workspace', label: 'Custom connector drawer', desc: 'Test a sample connector configuration before saving it (ADR-024).' },
+      { file: 'skills-library-surface.html', tier: 'workspace', label: 'Skills library', desc: 'Canvas-first Skills catalog with JIT token index budget, ownership tabs, category pills, Subgrid cards, Auto-trigger vs Manual only switches, and a solid SKILL.md inspector drawer (ADR-011, ADR-020, ADR-024).' },
+      { file: 'agents-library-surface.html', tier: 'workspace', label: 'Agents and routines roster', desc: 'Separates the five quarantined sovereign VWXYZ persona seats from on-demand specialist agents and scheduled routines with explicit approval posture and handoff tags (ADR-013, ADR-020, ADR-024).' },
+      { file: 'projects-library-surface.html', tier: 'workspace', label: 'Projects directory and workspace', desc: 'Interactive Directory table/cards switcher and two-zone Project Detail split pairing Threads/Sources/Activity + scoped composer with stacked instructions, immutable sources meter, and memory isolation (ADR-016, ADR-024).' },
       { file: 'context-attachment-tray.html', tier: 'workspace', label: 'Context attachment tray', desc: 'Composer-adjacent tray listing admitted files, recalled notes, and selections with tabular token budget and 44px Remove/Clear actions (ADR-016, ADR-020).' },
       { file: 'session-checkpoint-card.html', tier: 'workspace', label: 'Session checkpoint card', desc: 'Resumable thread checkpoint anchoring the last confirmed pause with tabular timestamps, a bounded-reference summary fence, and 44px resume actions (ADR-020).' },
       { file: 'speaker-marker.html', tier: 'workspace', label: 'Speaker marker', desc: 'Five-segment marker and seat name; heads a reply only when the speaker changes (ADR-016).' },
@@ -811,12 +816,14 @@
         '<link rel="stylesheet" href="../dist/docs-portal.css">' +
         '<link rel="stylesheet" href="../dist/chat.css">' +
         '<link rel="stylesheet" href="../dist/settings-surface.css">' +
+        '<link rel="stylesheet" href="../dist/library-surface.css">' +
         '<link rel="stylesheet" href="../dist/plugins.css">' +
         '<script type="module" src="../dist/vi-orbital-field.js"></scr' + 'ipt>' +
         '<script defer src="../dist/docs-portal.js"></scr' + 'ipt>' +
         '<script defer src="../dist/settings-surface.js"></scr' + 'ipt>' +
         (html.includes('data-chat-preview') ? '<script src="chat-preview.js" defer></scr' + 'ipt>' : '') +
         (html.includes('data-plugin-') ? '<script src="plugins-preview.js" defer></scr' + 'ipt>' : '') +
+        '<script defer src="../dist/library-surface.js"></scr' + 'ipt>' +
         '<style>body{margin:0;min-height:100dvh;background:var(--vi-colors-surface-background-primary-base);color:var(--vi-colors-text-content-primary-base);font-family:var(--vi-typography-typography-family-sans-base)}</style>' +
         '</head><body>' + html + '</body></html>';
     }
@@ -893,6 +900,9 @@
             }
             if (window.ViSettingsSurface && typeof window.ViSettingsSurface.initSettingsSurface === 'function') {
               window.ViSettingsSurface.initSettingsSurface(record.frame);
+            }
+            if (window.ViLibrarySurface && typeof window.ViLibrarySurface.initLibrarySurface === 'function') {
+              window.ViLibrarySurface.initLibrarySurface(record.frame);
             }
             record.frame.querySelectorAll('img[data-chibi-fallback]').forEach(function (img) {
               img.addEventListener('error', function () {
