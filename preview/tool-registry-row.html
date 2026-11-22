@@ -1,0 +1,58 @@
+<!--
+  Nocturne Museum: Neutral tool registry (Seed tool-id contract)
+  Solid secondary card displaying neutral domain.[resource.][sub.]verb tool entries,
+  connector bindings, effect classes, realms, and ownerGate / deterministic check states.
+-->
+<div role="region" aria-label="Neutral tool registry" class="flex flex-col gap-gap-spacious-default p-layout-padding-large-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+  <div class="flex flex-col gap-gap-compact-default">
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">domain.[resource.][sub.]verb</span>
+    <h3 class="font-typography-family-sans-base font-typography-weight-semibold-base text-typography-size-md-base text-text-content-primary-base">Neutral tool registry</h3>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Vendor identity lives in the connector binding, never in the tool ID.</p>
+  </div>
+  <ul aria-label="Registered tool entries" class="flex flex-col border-t border-border-separator-primary-base">
+    <li class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base last:border-b-0">
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">vcs.file.read</span>
+        <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-border-graph-line-base"></span><span>Admitted in scope</span></span>
+      </div>
+      <div class="flex flex-wrap items-center gap-gap-spacious-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+        <span>connector <span class="text-text-content-primary-base">local-git</span></span>
+        <span>effect <span class="text-text-content-primary-base">read</span></span>
+        <span>realm <span class="text-text-content-primary-base">workspace</span></span>
+      </div>
+    </li>
+    <li class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base last:border-b-0">
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">memory.context.read</span>
+        <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-border-graph-line-base"></span><span>Admitted in scope</span></span>
+      </div>
+      <div class="flex flex-wrap items-center gap-gap-spacious-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+        <span>connector <span class="text-text-content-primary-base">memory-fabric</span></span>
+        <span>effect <span class="text-text-content-primary-base">read</span></span>
+        <span>realm <span class="text-text-content-primary-base">team-shared</span></span>
+      </div>
+    </li>
+    <li class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base last:border-b-0">
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">ingest.job.create</span>
+        <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span><span>ownerGate · pauses run</span></span>
+      </div>
+      <div class="flex flex-wrap items-center gap-gap-spacious-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+        <span>connector <span class="text-text-content-primary-base">queue-adapter</span></span>
+        <span>effect <span class="text-text-content-primary-base">write</span></span>
+        <span>realm <span class="text-text-content-primary-base">external</span></span>
+      </div>
+    </li>
+    <li class="flex flex-col gap-gap-compact-default py-inset-operator-default border-b border-border-separator-primary-base last:border-b-0">
+      <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+        <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base">compute.rows.check</span>
+        <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>No model call</span></span>
+      </div>
+      <div class="flex flex-wrap items-center gap-gap-spacious-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+        <span>connector <span class="text-text-content-primary-base">deterministic-checker</span></span>
+        <span>effect <span class="text-text-content-primary-base">read</span></span>
+        <span>realm <span class="text-text-content-primary-base">artifact-store</span></span>
+      </div>
+    </li>
+  </ul>
+</div>

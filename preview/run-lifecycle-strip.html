@@ -1,0 +1,68 @@
+<!--
+  Nocturne Museum: Run lifecycle strip (Seed run-model contract, ADR-017 style)
+  Solid secondary card showing the six main objective/attempt stages, terminal branch
+  indicators with explicit text labels, and a hairline-separated receipt ledger.
+-->
+<div role="region" aria-label="Objective and attempt run lifecycle" class="flex flex-col gap-gap-section-default p-layout-padding-large-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
+  <div class="flex flex-col gap-gap-compact-default">
+    <p class="font-typography-family-sans-base text-typography-size-md-base text-text-content-primary-base">Shows the objective and attempt lifecycle from draft to completion.</p>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Restarts resume from recorded intents; completion requires an acceptance receipt at the current revision.</p>
+  </div>
+  <ol aria-label="Objective and attempt lifecycle" class="flex flex-wrap items-start gap-gap-compact-default">
+    <li class="flex flex-col items-center shrink-0 gap-gap-compact-default px-inset-compact-default">
+      <span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border border-border-graph-line-base text-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">1</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">draft</span>
+    </li>
+    <li class="flex flex-col items-center shrink-0 gap-gap-compact-default px-inset-compact-default">
+      <span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border border-border-graph-line-base text-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">2</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">ready</span>
+    </li>
+    <li aria-current="step" class="flex flex-col items-center shrink-0 gap-gap-compact-default px-inset-compact-default">
+      <span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base text-text-content-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">3</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">running</span>
+    </li>
+    <li class="flex flex-col items-center shrink-0 gap-gap-compact-default px-inset-compact-default">
+      <span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border-2 border-dashed border-status-indicator-warning-base text-text-content-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">4</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">waiting_for_owner</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Owner gate</span>
+    </li>
+    <li class="flex flex-col items-center shrink-0 gap-gap-compact-default px-inset-compact-default">
+      <span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border border-border-graph-line-base text-text-content-secondary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">5</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">settling</span>
+    </li>
+    <li class="flex flex-col items-center shrink-0 gap-gap-compact-default px-inset-compact-default">
+      <span class="grid place-items-center w-icon-md-base h-icon-md-base rounded-layout-radius-full-base border border-status-indicator-success-base text-text-content-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums">6</span>
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">complete</span>
+    </li>
+  </ol>
+  <div role="group" aria-label="Terminal branches" class="flex flex-wrap items-center gap-gap-compact-default">
+    <span class="inline-flex items-center gap-gap-compact-default px-inset-operator-default py-inset-compact-default rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-status-indicator-warning-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
+      <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>
+      <span>stopping → stopped</span>
+      <span class="text-text-content-secondary-base">Halted cleanly</span>
+    </span>
+    <span class="inline-flex items-center gap-gap-compact-default px-inset-operator-default py-inset-compact-default rounded-layout-radius-full-base bg-surface-background-tertiary-base border border-status-indicator-error-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
+      <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span>
+      <span>failed</span>
+      <span class="text-text-content-secondary-base">Terminal error</span>
+    </span>
+  </div>
+  <dl aria-live="polite" aria-label="Run receipt" class="flex flex-col border-t border-border-separator-primary-base">
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Objective</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-sm-base tabular-nums text-text-content-primary-base">obj-01 · Audit token outputs</dd>
+    </div>
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Attempt</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-sm-base tabular-nums text-text-content-primary-base">1 · lease active</dd>
+    </div>
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Recorded intent</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-sm-base tabular-nums text-text-content-primary-base">vcs.file.read · args sha256: 9c1d4e2 · before effect</dd>
+    </div>
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Completion gate</dt>
+      <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Requires acceptance check receipt at current revision</dd>
+    </div>
+  </dl>
+</div>
