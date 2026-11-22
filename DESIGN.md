@@ -314,6 +314,17 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 
 > [!IMPORTANT]
 >
+> ### Base UI primitives, markdown rendering, homepage graphic maps and chibi standardization (ADR-024)
+>
+> Extends ADR-010, ADR-011, ADR-013, ADR-018, ADR-021 and ADR-023 so consuming repos never invent unstyled primitives, prose/diff views, architecture constellations, or uncanonical persona art.
+>
+> - **Standardized chibi companions.** `preview/persona-companion-stage.html` pairs each seat's 463x798 runtime chibi set (`{ASSET_BASE}/vi/{vi}/chibi/{vi}_chibi_{slot}_v{NNN}.png`: `violet` `v005`, `wisteria`/`xylia`/`yarrow`/`zinnia` `v003`; slots `neutral`, `thinking`, `alert`, `success`, `happy`) with its 24x24 canonical SVG badge, canon color hex, setting, and full five-segment bar, alongside the six-stage walkthrough in `preview/persona-deliberation-stepper.html`.
+> - **Homepage graphic maps and lenses.** `preview/systems-constellation-map.html` provides the deterministic `640x420` SVG architecture constellation (`{colors.border-graph-line-base}` curves, active `{colors.surface-accent-violet-base}` selection, verification boundary legend, and `vi-glass-shell` Evidence Lens), catalogued alongside `stage-backdrop.html`, `memory-field.html`, `memory-pipeline.html`, `evidence-lens.html`, and `coverage-grid.html`.
+> - **Markdown and code/diff surfaces.** `preview/markdown-prose-renderer.html` and `preview/code-and-diff-viewer.html` standardize GFM prose, callouts, checklists, `tabular-nums` tables, fenced code blocks, and accessible `+`/`-` unified diffs on solid surfaces.
+> - **Complete UI primitives.** `preview/form-controls.html`, `preview/button-variants.html`, `preview/navigation-primitives.html`, `preview/feedback-and-empty-states.html`, `preview/disclosure-and-modals.html`, and `preview/data-table.html` expand `COMPONENT_CATALOG` in `lib/design-studio.js` to 50 components across 9 categories (`ui-primitives`, `markdown-and-code`, `graphic-maps`, `persona-canon`, `conversation`, `agent-workspace`, `harness-contracts`, `public-continuity`, `design-studio`).
+
+> [!IMPORTANT]
+>
 > ### Explorable instrument (ADR-017)
 >
 > The standard for interactive panels inside articles and proofs.

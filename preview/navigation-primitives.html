@@ -1,0 +1,40 @@
+<!--
+  Nocturne Museum: Navigation primitives (tabs, breadcrumbs, pagination, command palette) (ADR-024)
+  Provides horizontal tab lists, hierarchical breadcrumb trails, tabular-nums page controls,
+  and a Cmd+K command quick-jump surface on solid dark containers with 44px hit areas.
+-->
+<section aria-labelledby="nav-primitives-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <h2 id="nav-primitives-title" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Navigation primitives</h2>
+  <nav aria-label="Breadcrumb" class="flex flex-wrap items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">
+    <a href="#home" class="inline-flex items-center h-action-min-default hover:text-text-content-primary-base">Home</a>
+    <span aria-hidden="true">/</span>
+    <a href="#catalog" class="inline-flex items-center h-action-min-default hover:text-text-content-primary-base">Catalog</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page" class="text-text-content-primary-base">Component primitives</span>
+  </nav>
+  <div role="tablist" aria-label="Section tabs" class="flex flex-wrap items-center gap-gap-compact-default border-b border-border-separator-primary-base pb-rhythm-3-base">
+    <button type="button" role="tab" aria-selected="true" class="inline-flex items-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base">Overview</button>
+    <button type="button" role="tab" aria-selected="false" class="inline-flex items-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-transparent hover:border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Contracts</button>
+    <button type="button" role="tab" aria-selected="false" class="inline-flex items-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-transparent hover:border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Changelog</button>
+  </div>
+  <nav aria-label="Pagination" class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Page 2 of 6 · 49 components</span>
+    <div class="flex items-center gap-gap-dense-default">
+      <a href="#prev" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Prev</a>
+      <a href="#p1" class="inline-flex items-center justify-center w-action-min-default h-action-min-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">1</a>
+      <a href="#p2" aria-current="page" class="inline-flex items-center justify-center w-action-min-default h-action-min-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">2</a>
+      <a href="#p3" class="inline-flex items-center justify-center w-action-min-default h-action-min-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">3</a>
+      <a href="#next" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Next</a>
+    </div>
+  </nav>
+  <div role="region" aria-label="Command launcher" class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-compact-default">
+    <div class="flex items-center justify-between gap-gap-compact-default">
+      <input type="search" aria-label="Jump to component or route" placeholder="Type a component id or command..." class="flex-1 h-action-min-default px-inset-compact-default bg-transparent font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base placeholder:text-text-content-secondary-base" />
+      <kbd class="font-typography-family-mono-base text-typography-size-xs-base px-inset-compact-default py-rhythm-1-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base text-text-content-secondary-base">Esc</kbd>
+    </div>
+    <ul class="flex flex-col border-t border-border-separator-primary-base pt-rhythm-2-base list-none">
+      <li><a href="#scaffold" class="flex items-center justify-between h-action-min-default px-inset-compact-default rounded-layout-radius-control-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span>scaffold_page · public-site-landing</span><span class="text-text-content-secondary-base">MCP tool</span></a></li>
+      <li><a href="#brief" class="flex items-center justify-between h-action-min-default px-inset-compact-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base"><span>design_brief · compile reference contract</span><span>MCP tool</span></a></li>
+    </ul>
+  </div>
+</section>

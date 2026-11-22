@@ -1,0 +1,58 @@
+<!--
+  Nocturne Museum: Accessible web form controls primitive suite (ADR-006, ADR-009, ADR-024)
+  Standardizes text inputs (default, focused, validation error, disabled), textarea, select dropdown,
+  checkbox rows, radio pills, accessible switch, and range slider on solid surfaces with 44px targets.
+-->
+<form aria-labelledby="form-controls-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-col gap-gap-dense-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Form primitives · 44px controls</p>
+    <h2 id="form-controls-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base">Input states and selection controls</h2>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-rhythm-4-base">
+    <label class="flex flex-col gap-gap-dense-default">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Repository slug (default)</span>
+      <input type="text" value="seed" class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base bg-surface-background-primary-base border border-border-separator-primary-base focus:border-surface-accent-violet-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base" />
+    </label>
+    <label class="flex flex-col gap-gap-dense-default">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Target consumer (validation error)</span>
+      <input type="text" value="unknown-target" aria-invalid="true" class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base bg-surface-background-primary-base border border-status-indicator-error-base font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base" />
+      <span class="inline-flex items-center gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span>
+        <span>Select one of seed, bloom, videsign, or vitools.</span>
+      </span>
+    </label>
+    <label class="flex flex-col gap-gap-dense-default">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Framework target</span>
+      <select class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base bg-surface-background-primary-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
+        <option value="react">React / Next.js</option>
+        <option value="svelte">SvelteKit</option>
+        <option value="html">Static HTML</option>
+      </select>
+    </label>
+    <label class="flex flex-col gap-gap-dense-default">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Read-only lock reference</span>
+      <input type="text" value="dist/standard.json" disabled class="w-full h-action-min-default px-inset-operator-default rounded-layout-radius-control-base bg-surface-background-tertiary-base border border-border-separator-primary-base opacity-60 font-typography-family-mono-base text-typography-size-sm-base text-text-content-secondary-base" />
+    </label>
+  </div>
+  <label class="flex flex-col gap-gap-dense-default">
+    <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Design notes (multiline textarea)</span>
+    <textarea rows="3" placeholder="Document reference boundaries or layout constraints..." class="w-full h-action-wide-default p-inset-operator-default rounded-layout-radius-control-base bg-surface-background-primary-base border border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base placeholder:text-text-content-secondary-base"></textarea>
+  </label>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-rhythm-4-base items-center pt-rhythm-2-base border-t border-border-separator-primary-base">
+    <label class="inline-flex items-center gap-gap-compact-default h-action-min-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">
+      <input type="checkbox" checked class="w-indicator-mark-base h-indicator-mark-base accent-surface-accent-violet-base" />
+      <span>Enforce 4.5:1 contrast</span>
+    </label>
+    <div class="flex items-center justify-between gap-gap-compact-default">
+      <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Strict token mode</span>
+      <button type="button" role="switch" aria-checked="true" aria-label="Strict token mode" class="inline-flex items-center gap-gap-compact-default h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+        <span>On</span>
+      </button>
+    </div>
+    <label class="flex items-center justify-between gap-gap-compact-default">
+      <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Columns (1-4)</span>
+      <input type="range" min="1" max="4" value="3" class="accent-surface-accent-violet-base" />
+    </label>
+  </div>
+</form>

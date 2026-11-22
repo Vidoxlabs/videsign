@@ -43,7 +43,7 @@ design system — the shared visual language for all Vidoxlabs products and appl
   deterministic constellation layout, SVG, text equivalent, link contrast report and the memory
   pipeline figure. After changing `lib/memory-field.js`, run `npm run memory-field:fragment`.
   `lib/asset-service.js` implements the consolidated Phase 0 read-only persona asset Worker logic (ADR-022).
-  `lib/design-studio.js` owns the modular component catalog, collaborative studio brief compiler, reference contract, `dist/components.manifest.json` generator, and multi-slot page scaffolder (ADR-023).
+  `lib/design-studio.js` owns the 50-component catalog, 9 archetypes, collaborative studio brief compiler, reference contract, `dist/components.manifest.json` generator, and multi-slot page scaffolder (ADR-023, ADR-024).
 - **pipeline/**: Persona asset pipeline (`animation/`, `audit/`, `templates/`) and `pipeline/service/` (`worker.js`, `wrangler.toml`, `migrations/` D1 SQL schema + SHA-256 `manifest.json`, `README.md`) consolidated from `vi-assets` under ADR-022.
 - **mcp-server.js**: The MCP server that exposes this design system to product
   repositories for cross-repo token and fragment fetching. Tools: `resolve_token` (one token

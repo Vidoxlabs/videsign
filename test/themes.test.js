@@ -352,5 +352,5 @@ test('accent-fill CTAs use only the on-accent text token', () => {
     }
   }
   assert.deepEqual(bad, []);
-  assert.deepEqual(seen, ['button.html', 'island-nav.html', 'persona-console.html', 'question-bar.html']);
+  assert.deepEqual(seen, ['button-variants.html', 'button.html', 'island-nav.html', 'persona-console.html', 'question-bar.html']);
 });

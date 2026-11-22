@@ -1,0 +1,25 @@
+<!--
+  Nocturne Museum: Button hierarchy and action triggers (ADR-011, ADR-024)
+  Enforces ADR-011 item 10 & item 7 contrast rules: solid #8B5CF6 fill is reserved exclusively for
+  large CTAs (bold xl or larger), while normal-size primary triggers use the accent border on dark
+  surfaces. Every button holds 44px (h-action-min-default) and 10px/pill radii.
+-->
+<section aria-labelledby="button-variants-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-col gap-gap-dense-default">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Action hierarchy · ADR-011 contrast rules</p>
+    <h2 id="button-variants-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base">Standard button variants and segmented group</h2>
+  </div>
+  <div class="flex flex-wrap items-center gap-rhythm-3-base">
+    <button type="button" class="inline-flex items-center justify-center gap-gap-compact-default h-action-wide-default px-rhythm-6-base rounded-layout-radius-control-base bg-surface-accent-violet-base hover:bg-surface-accent-violet-hover active:bg-surface-accent-violet-active font-typography-family-sans-base font-typography-weight-bold-base text-typography-size-xl-base text-text-content-on-accent-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Large solid CTA</button>
+    <button type="button" class="inline-flex items-center justify-center gap-gap-compact-default h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-primary-base font-typography-family-sans-base font-typography-weight-medium-base text-typography-size-sm-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Accent-bordered primary</button>
+    <button type="button" class="inline-flex items-center justify-center gap-gap-compact-default h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base hover:border-text-content-secondary-base font-typography-family-sans-base font-typography-weight-medium-base text-typography-size-sm-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">Secondary hairline</button>
+    <button type="button" class="inline-flex items-center justify-center gap-gap-compact-default h-action-min-default px-inset-operator-default rounded-layout-radius-control-base font-typography-family-sans-base font-typography-weight-medium-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base hover:bg-surface-background-tertiary-base">Ghost button</button>
+    <button type="button" class="inline-flex items-center justify-center gap-gap-compact-default h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-status-indicator-error-base bg-surface-background-primary-base font-typography-family-sans-base font-typography-weight-medium-base text-typography-size-sm-base text-text-content-primary-base">Destructive reject</button>
+    <button type="button" disabled class="inline-flex items-center justify-center gap-gap-compact-default h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-border-separator-primary-base opacity-40 font-typography-family-sans-base font-typography-weight-medium-base text-typography-size-sm-base text-text-content-secondary-base">Disabled</button>
+  </div>
+  <div role="group" aria-label="Density mode" class="inline-flex flex-wrap items-center border border-border-separator-primary-base rounded-layout-radius-control-base bg-surface-background-primary-base p-rhythm-1-base gap-rhythm-1-base w-fit">
+    <button type="button" aria-pressed="false" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Compact</button>
+    <button type="button" aria-pressed="true" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Balanced</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Spacious</button>
+  </div>
+</section>

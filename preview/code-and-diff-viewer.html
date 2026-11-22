@@ -1,0 +1,53 @@
+<!--
+  Nocturne Museum: Multi-tab code block, unified diff viewer, and terminal receipt (ADR-007, ADR-024)
+  Uses tabular-nums line numbers and explicit `+` / `-` markers plus status text (`added`, `removed`)
+  so diff comprehension never relies on colour alone. Solid surfaces, 44px tab/copy controls.
+-->
+<section aria-labelledby="code-diff-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
+    <div class="flex flex-col gap-gap-dense-default">
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Code &amp; patch inspection</p>
+      <h2 id="code-diff-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base">lib/design-studio.js</h2>
+    </div>
+    <div role="tablist" aria-label="View mode" class="flex items-center gap-gap-compact-default">
+      <button type="button" role="tab" aria-selected="true" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Unified diff</button>
+      <button type="button" role="tab" aria-selected="false" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Full file</button>
+      <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Copy snippet</button>
+    </div>
+  </div>
+  <div class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base overflow-hidden font-typography-family-mono-base text-typography-size-xs-base">
+    <div class="flex items-center justify-between px-inset-operator-default py-rhythm-2-base bg-surface-background-tertiary-base border-b border-border-separator-primary-base text-text-content-secondary-base">
+      <span>@@ -415,4 +415,6 @@ stylesheetsForSlots</span>
+      <span>1 removed · 2 added</span>
+    </div>
+    <div class="flex flex-col divide-y divide-border-separator-primary-base">
+      <div class="grid grid-cols-12 items-center px-inset-operator-default py-rhythm-1-base text-text-content-secondary-base">
+        <span class="col-span-2 tabular-nums">415 415</span>
+        <span class="col-span-2">context</span>
+        <code class="col-span-8 overflow-x-auto">const sheets = ['dist/tokens.css', 'dist/catalog.css'];</code>
+      </div>
+      <div class="grid grid-cols-12 items-center px-inset-operator-default py-rhythm-1-base border-l-2 border-status-indicator-error-base text-text-content-secondary-base">
+        <span class="col-span-2 tabular-nums">416 -</span>
+        <span class="col-span-2 inline-flex items-center gap-gap-dense-default text-text-content-primary-base"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span>- removed</span>
+        <code class="col-span-8 overflow-x-auto">return sheets;</code>
+      </div>
+      <div class="grid grid-cols-12 items-center px-inset-operator-default py-rhythm-1-base border-l-2 border-status-indicator-success-base bg-surface-background-tertiary-base text-text-content-primary-base">
+        <span class="col-span-2 tabular-nums">- 417</span>
+        <span class="col-span-2 inline-flex items-center gap-gap-dense-default"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>+ added</span>
+        <code class="col-span-8 overflow-x-auto">if (/vi-glass/.test(combined)) sheets.push('dist/glass.css');</code>
+      </div>
+      <div class="grid grid-cols-12 items-center px-inset-operator-default py-rhythm-1-base border-l-2 border-status-indicator-success-base bg-surface-background-tertiary-base text-text-content-primary-base">
+        <span class="col-span-2 tabular-nums">- 418</span>
+        <span class="col-span-2 inline-flex items-center gap-gap-dense-default"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>+ added</span>
+        <code class="col-span-8 overflow-x-auto">return sheets;</code>
+      </div>
+    </div>
+  </div>
+  <div class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base font-typography-family-mono-base text-typography-size-xs-base flex flex-wrap items-center justify-between gap-gap-compact-default">
+    <span class="text-text-content-primary-base">$ npm run lint &amp;&amp; npm test</span>
+    <span class="inline-flex items-center gap-gap-compact-default text-text-content-secondary-base">
+      <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+      <span class="tabular-nums">exit 0 · preview fragments clean</span>
+    </span>
+  </div>
+</section>

@@ -121,7 +121,7 @@ test('accepted status is limited to ratified items and Adopted/Proposed statuses
     if (line.startsWith('**Status**:') && current) statuses.push({ id: current, status: line.slice('**Status**:'.length).trim() });
   }
   const adoptedIds = ['ADR-013', 'ADR-016', 'ADR-017', 'ADR-018', 'ADR-019'];
-  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022', 'ADR-023'];
+  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022', 'ADR-023', 'ADR-024'];
   const byId = new Map(statuses.map((adr) => [adr.id, adr.status]));
   for (const id of ['ADR-010', 'ADR-011', 'ADR-012', ...adoptedIds, ...proposedIds]) {
     assert.ok(byId.has(id), `missing **Status**: line for ${id}`);
@@ -373,13 +373,23 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
   assert.equal(modularComponents.adr, 'ADR-021');
   assert.deepEqual(modularComponents.extends, ['ADR-016', 'ADR-017', 'ADR-020']);
   assert.equal(modularComponents.mcpTool, 'component_catalog');
-  assert.deepEqual(modularComponents.categories, ['conversation', 'agent-workspace', 'harness-contracts', 'public-continuity', 'design-studio']);
+  assert.deepEqual(modularComponents.categories, [
+    'ui-primitives',
+    'markdown-and-code',
+    'graphic-maps',
+    'persona-canon',
+    'conversation',
+    'agent-workspace',
+    'harness-contracts',
+    'public-continuity',
+    'design-studio',
+  ]);
   assert.deepEqual(modularComponents.claimLabels, ['implemented', 'specified', 'planned', 'observed']);
   assert.deepEqual(modularComponents.publicProperNouns, ['seed', 'bloom', 'videsign', 'vitools']);
   assert.deepEqual(modularComponents.planes, ['surfaces', 'harness', 'providers', 'authority stores']);
   assert.deepEqual(modularComponents.runStates, ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete', 'stopping', 'stopped', 'failed']);
   assert.deepEqual(modularComponents.toolEffects, ['read', 'write', 'destructive', 'credential']);
-  assert.equal(modularComponents.catalog.length, 30);
+  assert.equal(modularComponents.catalog.length, 50);
   assert.deepEqual(modularComponents.catalog, COMPONENT_CATALOG);
   const expectedIds = [
     'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips',
@@ -387,6 +397,11 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
     'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner',
     'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'persona-companion-stage', 'evidence-exhibit-figure',
     'design-studio-canvas', 'layout-public-site',
+    'form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'data-table',
+    'markdown-prose-renderer', 'code-and-diff-viewer',
+    'systems-constellation-map', 'stage-backdrop', 'memory-field', 'memory-pipeline', 'evidence-lens', 'coverage-grid',
+    'persona-deliberation-stepper', 'persona-identity-badge', 'persona-dialects', 'five-bar-rule',
+    'instrument', 'statement-proof-row',
   ];
   assert.deepEqual(modularComponents.catalog.map((c) => c.id), expectedIds);
   for (const entry of modularComponents.catalog) {
@@ -505,4 +520,29 @@ test('standard carries ADR-023 design studio rules and DESIGN.md prose parity', 
     assert.ok(prose.includes(phrase), `DESIGN.md missing: ${phrase}`);
   }
   assert.ok(md.includes('## Collaborative design studio and site scaffolding (ADR-023)'), 'standard.md missing ## Collaborative design studio and site scaffolding (ADR-023)');
+});
+
+test('standard carries ADR-024 base UI, markdown, graphic maps and chibi rules and DESIGN.md prose parity', () => {
+  const { standard, 'standard.md': md } = generateStandardArtifacts(TOKENS);
+  const { chibiCompanion } = standard.rules;
+  assert.ok(standard.adrs.some((a) => a.id === 'ADR-024' && a.status.startsWith('Proposed')));
+  assert.equal(chibiCompanion.adr, 'ADR-024');
+  assert.deepEqual(chibiCompanion.runtimeCell, { width: 463, height: 798 });
+  assert.deepEqual(chibiCompanion.versions, { violet: 'v005', wisteria: 'v003', xylia: 'v003', yarrow: 'v003', zinnia: 'v003' });
+  assert.deepEqual(chibiCompanion.slots, ['neutral', 'thinking', 'alert', 'success', 'happy']);
+  assert.equal(chibiCompanion.uiPrimitiveFragments.length, 6);
+  const prose = DESIGN.toLowerCase();
+  for (const phrase of [
+    'base ui primitives, markdown rendering, homepage graphic maps and chibi standardization (adr-024)',
+    'standardized chibi companions',
+    'homepage graphic maps and lenses',
+    'markdown and code/diff surfaces',
+    'complete ui primitives',
+    'preview/systems-constellation-map.html',
+    'preview/markdown-prose-renderer.html',
+    'preview/form-controls.html',
+  ]) {
+    assert.ok(prose.includes(phrase), `DESIGN.md missing: ${phrase}`);
+  }
+  assert.ok(md.includes('## Base UI, markdown, graphic maps and chibi companions (ADR-024)'), 'standard.md missing ## Base UI, markdown, graphic maps and chibi companions (ADR-024)');
 });

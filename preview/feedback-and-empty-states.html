@@ -1,0 +1,42 @@
+<!--
+  Nocturne Museum: Feedback banners, toasts, progress readout, and empty-filter state (ADR-024)
+  Pairs every semantic status indicator (success, info, warning, error) with visible text labels
+  inside polite status regions, includes dismiss controls with 44px targets, and frames empty
+  queries with dashed borders and an actionable reset button.
+-->
+<section aria-labelledby="feedback-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+  <h2 id="feedback-title" class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Feedback banners, progress, and empty states</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-rhythm-3-base">
+    <div role="status" aria-live="polite" class="bg-surface-background-primary-base border border-border-separator-primary-base border-l-2 border-l-status-indicator-success-base rounded-layout-radius-control-base px-rhythm-4-base py-rhythm-3-base flex items-center justify-between gap-gap-compact-default">
+      <div class="flex items-center gap-gap-compact-default">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base shrink-0"></span>
+        <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Token build completed with 0 errors.</span>
+      </div>
+      <button type="button" class="inline-flex items-center h-action-min-default px-inset-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Dismiss</button>
+    </div>
+    <div role="status" aria-live="polite" class="bg-surface-background-primary-base border border-border-separator-primary-base border-l-2 border-l-status-indicator-error-base rounded-layout-radius-control-base px-rhythm-4-base py-rhythm-3-base flex items-center justify-between gap-gap-compact-default">
+      <div class="flex items-center gap-gap-compact-default">
+        <span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base shrink-0"></span>
+        <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Tailwind v4 breaks token build pipeline.</span>
+      </div>
+      <button type="button" class="inline-flex items-center h-action-min-default px-inset-compact-default font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Inspect</button>
+    </div>
+  </div>
+  <div class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-compact-default">
+    <div class="flex items-center justify-between font-typography-family-mono-base text-typography-size-xs-base">
+      <span class="text-text-content-secondary-base">Catalog sync progress</span>
+      <span class="tabular-nums text-text-content-primary-base">3 / 4 complete</span>
+    </div>
+    <div role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="Catalog sync progress" class="flex gap-gap-dense-default">
+      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+      <span class="flex-1 h-indicator-fivebar-base rounded-layout-radius-full-base bg-border-separator-primary-base"></span>
+    </div>
+  </div>
+  <div class="border border-dashed border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-large-base flex flex-col items-center justify-center gap-gap-compact-default text-center">
+    <p class="font-typography-family-sans-base text-typography-size-md-base font-typography-weight-medium-base text-text-content-primary-base">No matching components</p>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Try clearing your category filter or reset the consumer selector.</p>
+    <button type="button" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Reset all filters</button>
+  </div>
+</section>

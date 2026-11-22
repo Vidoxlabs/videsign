@@ -345,7 +345,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'component_catalog',
-        description: 'Discover and fetch modular Nocturne HTML components by id, category (conversation, agent-workspace, harness-contracts, public-continuity, design-studio) or target consumer (seed, bloom, vidoxlabs.dev, vitools, videsign). Pass "name" to retrieve one component with its pure HTML fragment.',
+        description: `Discover and fetch modular Nocturne HTML components by id, category (${CATALOG_CATEGORIES.join(', ')}) or target consumer (${CATALOG_CONSUMERS.join(', ')}). Pass "name" to retrieve one component with its pure HTML fragment.`,
         inputSchema: {
           type: 'object',
           properties: {

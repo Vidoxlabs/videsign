@@ -1,19 +1,25 @@
 <!--
-  Nocturne Museum: Five-seat companion state stage and deliberation walkthrough (ADR-013, ADR-023)
-  Always renders all five VWXYZ seats together with canon-order five-segment bars (Xylia never alone),
-  44px operational state triggers, hairline state readout, and synthetic sample disclosure.
+  Nocturne Museum: Five-seat companion state stage and canonical chibi standardization (ADR-013, ADR-023, ADR-024)
+  Standardizes Violet (v005), Wisteria (v003), Xylia (v003), Yarrow (v003), and Zinnia (v003)
+  using the 463x798 runtime cell (`COMPANION_CELL`), `{ASSET_BASE}/vi/{vi}/chibi/{vi}_chibi_{slot}_v{NNN}.png`
+  naming, paired 24x24 canonical SVG identity micro-badges, five-segment canon bars, six operational states,
+  and a polite state readout.
 -->
 <section aria-labelledby="companion-stage-heading" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
   <div class="flex flex-col gap-gap-compact-default">
-    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Living interface · Five-seat ensemble</p>
-    <h2 id="companion-stage-heading" class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base">State-reactive companion stage</h2>
-    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Companion sprites shift expression only when operational state changes, never on a decorative loop. Sample data rendered below.</p>
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Living interface · Canonical VWXYZ chibis</p>
+    <h2 id="companion-stage-heading" class="font-typography-family-sans-base text-typography-size-xl-base font-typography-weight-semibold-base tracking-typography-tracking-tight-base text-text-content-primary-base">Standardized five-seat companion stage</h2>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Each seat binds the reviewed 463x798 chibi set (neutral, thinking, alert, success, happy) alongside its canon signature bar and environment setting. Raster switches only on operational state changes.</p>
   </div>
   <ul aria-label="Five sovereign seats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-rhythm-3-base list-none">
     <li class="bg-surface-background-primary-base border border-surface-accent-violet-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Violet identity badge" class="w-icon-lg-base h-icon-lg-base"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M4.5 5.5 H9.2 L12 12.8 L14.8 5.5 H19.5 L14.2 18.5 H9.8 Z" fill="#8B5CF6"/></svg>
+      <div class="w-icon-lg-base h-icon-lg-base rounded-layout-radius-control-base bg-surface-background-tertiary-base overflow-hidden flex items-end justify-center relative">
+        <img data-chibi-fallback="violet" src="{ASSET_BASE}/vi/violet/chibi/violet_chibi_neutral_v005.png" width="463" height="798" alt="Violet, neutral" class="w-icon-lg-base h-icon-lg-base object-cover" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Violet identity badge" class="w-icon-sm-base h-icon-sm-base shrink-0"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M4.5 5.5 H9.2 L12 12.8 L14.8 5.5 H19.5 L14.2 18.5 H9.8 Z" fill="#8B5CF6"/></svg>
+      </div>
       <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Violet</p>
-      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Synthesis lead</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Orchestration Deck</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">#8B5CF6 · v005</p>
       <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base"></span>
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base opacity-40"></span>
@@ -23,9 +29,13 @@
       </div>
     </li>
     <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Wisteria identity badge" class="w-icon-lg-base h-icon-lg-base"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M4 5.5 H20 L16.6 12.5 H7.4 Z" fill="#B4A7F2"/></svg>
+      <div class="w-icon-lg-base h-icon-lg-base rounded-layout-radius-control-base bg-surface-background-tertiary-base overflow-hidden flex items-end justify-center relative">
+        <img data-chibi-fallback="wisteria" src="{ASSET_BASE}/vi/wisteria/chibi/wisteria_chibi_neutral_v003.png" width="463" height="798" alt="Wisteria, neutral" class="w-icon-lg-base h-icon-lg-base object-cover" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Wisteria identity badge" class="w-icon-sm-base h-icon-sm-base shrink-0"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M4 5.5 H20 L16.6 12.5 H7.4 Z" fill="#B4A7F2"/></svg>
+      </div>
       <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Wisteria</p>
-      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Design systems</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Lattice Studio</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">#B4A7F2 · v003</p>
       <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base opacity-40"></span>
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base"></span>
@@ -35,9 +45,13 @@
       </div>
     </li>
     <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Xylia identity badge" class="w-icon-lg-base h-icon-lg-base"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M12 4.5 L18.5 12 L12 19.5 L5.5 12 Z" fill="#D92B3A"/></svg>
+      <div class="w-icon-lg-base h-icon-lg-base rounded-layout-radius-control-base bg-surface-background-tertiary-base overflow-hidden flex items-end justify-center relative">
+        <img data-chibi-fallback="xylia" src="{ASSET_BASE}/vi/xylia/chibi/xylia_chibi_neutral_v003.png" width="463" height="798" alt="Xylia, neutral" class="w-icon-lg-base h-icon-lg-base object-cover" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Xylia identity badge" class="w-icon-sm-base h-icon-sm-base shrink-0"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M12 4.5 L18.5 12 L12 19.5 L5.5 12 Z" fill="#D92B3A"/></svg>
+      </div>
       <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Xylia</p>
-      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Adversarial red</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Review Chamber</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">#D92B3A · v003</p>
       <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base opacity-40"></span>
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base opacity-40"></span>
@@ -47,9 +61,13 @@
       </div>
     </li>
     <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Yarrow identity badge" class="w-icon-lg-base h-icon-lg-base"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M12 4.5 L17.2 18.5 H6.8 Z" fill="#F0A020"/></svg>
+      <div class="w-icon-lg-base h-icon-lg-base rounded-layout-radius-control-base bg-surface-background-tertiary-base overflow-hidden flex items-end justify-center relative">
+        <img data-chibi-fallback="yarrow" src="{ASSET_BASE}/vi/yarrow/chibi/yarrow_chibi_neutral_v003.png" width="463" height="798" alt="Yarrow, neutral" class="w-icon-lg-base h-icon-lg-base object-cover" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Yarrow identity badge" class="w-icon-sm-base h-icon-sm-base shrink-0"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M12 4.5 L17.2 18.5 H6.8 Z" fill="#F0A020"/></svg>
+      </div>
       <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Yarrow</p>
-      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Systems and ops</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Map Room</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">#F0A020 · v003</p>
       <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base opacity-40"></span>
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base opacity-40"></span>
@@ -59,9 +77,13 @@
       </div>
     </li>
     <li class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col items-center gap-gap-compact-default">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Zinnia identity badge" class="w-icon-lg-base h-icon-lg-base"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M5.5 6 H18.5 V9.5 H10 V14.5 H18.5 V18 H5.5 Z" fill="#E13D9E"/></svg>
+      <div class="w-icon-lg-base h-icon-lg-base rounded-layout-radius-control-base bg-surface-background-tertiary-base overflow-hidden flex items-end justify-center relative">
+        <img data-chibi-fallback="zinnia" src="{ASSET_BASE}/vi/zinnia/chibi/zinnia_chibi_neutral_v003.png" width="463" height="798" alt="Zinnia, neutral" class="w-icon-lg-base h-icon-lg-base object-cover" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Zinnia identity badge" class="w-icon-sm-base h-icon-sm-base shrink-0"><rect x="0" y="0" width="24" height="24" rx="6" fill="#121214"/><path d="M5.5 6 H18.5 V9.5 H10 V14.5 H18.5 V18 H5.5 Z" fill="#E13D9E"/></svg>
+      </div>
       <p class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-semibold-base text-text-content-primary-base">Zinnia</p>
-      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Research evidence</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Launch Lane</p>
+      <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">#E13D9E · v003</p>
       <div aria-hidden="true" class="flex w-full overflow-hidden rounded-layout-radius-full-base gap-gap-dense-default">
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-violet-base opacity-40"></span>
         <span class="flex-1 h-indicator-fivebar-base bg-persona-accent-wisteria-base opacity-40"></span>
@@ -72,11 +94,12 @@
     </li>
   </ul>
   <div role="group" aria-label="Operational states" class="flex flex-wrap items-center gap-gap-compact-default">
-    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Neutral</button>
-    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Listening</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">At rest</button>
     <button type="button" aria-pressed="true" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Thinking</button>
-    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Replying</button>
-    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Waiting for owner</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Planning</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Risk alert</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Drafting</button>
+    <button type="button" aria-pressed="false" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-full-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Sources returned</button>
   </div>
   <dl aria-live="polite" aria-label="Companion state readout" class="flex flex-col border-t border-border-separator-primary-base">
     <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
@@ -84,12 +107,12 @@
       <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Thinking</dd>
     </div>
     <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base">
-      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Operational trigger</dt>
-      <dd class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Synthesizing multi-seat deliberation before presenting a proposal</dd>
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Canon slots registered</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">neutral, thinking, alert, success, happy (463x798 runtime cell)</dd>
     </div>
     <div class="flex flex-wrap items-baseline justify-between gap-gap-spacious-default py-inset-compact-default border-b border-border-separator-primary-base last:border-b-0">
-      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Canon slot</dt>
-      <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">violet/chibi/thinking/v001</dd>
+      <dt class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Active asset id</dt>
+      <dd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">violet/chibi/thinking/v005</dd>
     </div>
   </dl>
 </section>
