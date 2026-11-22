@@ -400,6 +400,17 @@ function emitDocsPortalArtifacts() {
   };
 }
 
+/**
+ * Modernized Settings architecture: zero-hex oklch() container-query stylesheet plus
+ * CSP-safe vanilla JS progressive-enhancement controller.
+ */
+function emitSettingsSurfaceArtifacts() {
+  return {
+    'settings-surface.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'settings-surface.css'), 'utf-8'),
+    'settings-surface.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'settings-surface.js'), 'utf-8'),
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -429,6 +440,7 @@ function main() {
     ...emitMemoryFieldArtifacts(),
     ...emitOrbitalFieldArtifacts(),
     ...emitDocsPortalArtifacts(),
+    ...emitSettingsSurfaceArtifacts(),
   };
 
   if (dryRun) {
@@ -470,4 +482,5 @@ module.exports = {
   emitMemoryFieldArtifacts,
   emitOrbitalFieldArtifacts,
   emitDocsPortalArtifacts,
+  emitSettingsSurfaceArtifacts,
 };

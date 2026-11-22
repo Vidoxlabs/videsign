@@ -1,0 +1,68 @@
+<!--
+  Nocturne Museum: Quick settings sidebar popover (ADR-006, ADR-007, ADR-011, ADR-024, ADR-025)
+  Gemini-inspired compact popover anchored to the workspace sidebar identity footer. Uses a single
+  crystal-glass shell+core layer strictly on the floating control menu (never behind prose or text
+  inputs), grouping telemetry usage, quick theme/motion/receipts toggles, workspace shortcuts,
+  and an All settings trigger at the 44px touch target floor.
+-->
+<div class="vi-settings-scope vi-settings-quick">
+  <div class="vi-glass-shell">
+    <div role="menu" aria-label="Quick settings" class="vi-glass-core vi-settings-quick-core">
+      <div role="group" aria-label="Telemetry" class="vi-settings-quick-group">
+        <a href="#settings-usage" role="menuitem" class="vi-settings-quick-item h-action-min-default">
+          <span class="flex flex-col min-w-0">
+            <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Usage and budgets</span>
+            <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">14,280 / 50,000 tokens</span>
+          </span>
+          <span aria-hidden="true" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">&rarr;</span>
+        </a>
+      </div>
+
+      <div role="group" aria-label="Preferences" class="vi-settings-quick-group">
+        <div class="vi-settings-quick-row">
+          <span class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Theme</span>
+          <div role="group" aria-label="Select theme" class="vi-settings-segmented">
+            <button type="button" data-settings-theme="dark" aria-pressed="true" class="vi-settings-seg-btn h-action-min-default">Dark</button>
+            <button type="button" data-settings-theme="light" aria-pressed="false" class="vi-settings-seg-btn h-action-min-default">Light</button>
+          </div>
+        </div>
+        <div class="vi-settings-quick-row">
+          <span id="quick-motion-label" class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Background motion</span>
+          <button type="button" role="switch" aria-labelledby="quick-motion-label" aria-checked="false" data-settings-switch="Background motion" class="vi-settings-switch h-action-min-default">
+            <span class="vi-settings-switch-track" aria-hidden="true"><span class="vi-settings-switch-thumb"></span></span>
+            <span data-settings-switch-label>Off</span>
+          </button>
+        </div>
+        <div class="vi-settings-quick-row">
+          <span id="quick-receipts-label" class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-primary-base">Developer receipts</span>
+          <button type="button" role="switch" aria-labelledby="quick-receipts-label" aria-checked="true" data-settings-switch="Developer receipts" class="vi-settings-switch h-action-min-default">
+            <span class="vi-settings-switch-track" aria-hidden="true"><span class="vi-settings-switch-thumb"></span></span>
+            <span data-settings-switch-label>On</span>
+          </button>
+        </div>
+      </div>
+
+      <div role="group" aria-label="Workspace and data" class="vi-settings-quick-group">
+        <button type="button" role="menuitem" class="vi-settings-quick-item h-action-min-default">
+          <span>Personas and dialects</span>
+          <span aria-hidden="true" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">&rarr;</span>
+        </button>
+        <button type="button" role="menuitem" class="vi-settings-quick-item h-action-min-default">
+          <span>Memory and export</span>
+          <span aria-hidden="true" class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">&rarr;</span>
+        </button>
+        <button type="button" role="menuitem" class="vi-settings-quick-item h-action-min-default">
+          <span>Keyboard shortcuts</span>
+          <kbd class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Cmd+,</kbd>
+        </button>
+      </div>
+
+      <div class="vi-settings-quick-group">
+        <button type="button" data-settings-open-modal aria-expanded="false" class="vi-settings-btn vi-settings-btn--primary w-full h-action-min-default">
+          <span>All settings&hellip;</span>
+        </button>
+        <p role="status" aria-live="polite" data-settings-receipt class="vi-settings-meta px-rhythm-2-base pt-rhythm-1-base">Quick preferences ready</p>
+      </div>
+    </div>
+  </div>
+</div>
