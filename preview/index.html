@@ -26,7 +26,7 @@
     html, body {
       margin: 0;
       min-height: 100dvh;
-      overflow-x: hidden;
+      overflow-x: clip;
       background: var(--vi-colors-surface-background-primary-base);
       color: var(--vi-colors-text-content-primary-base);
       font-family: var(--vi-typography-typography-family-sans-base);
@@ -57,6 +57,7 @@
 
     .catalog-shell {
       display: flex;
+      align-items: flex-start;
       min-height: 100dvh;
       background: var(--vi-colors-surface-background-primary-base);
     }
@@ -67,7 +68,9 @@
       position: sticky;
       top: 0;
       height: 100dvh;
+      max-height: 100dvh;
       overflow-y: auto;
+      overscroll-behavior: contain;
       display: flex;
       flex-direction: column;
       gap: var(--vi-spacing-layout-padding-medium-base);
@@ -176,25 +179,58 @@
     .sidebar-nav {
       display: flex;
       flex-direction: column;
-      gap: var(--vi-spacing-layout-padding-medium-base);
+      gap: var(--vi-space-gap-compact-default);
     }
     .sidebar-group {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      border-bottom: 1px solid var(--vi-colors-border-separator-primary-base);
+      padding-bottom: var(--vi-space-gap-compact-default);
+    }
+    .sidebar-group:last-child {
+      border-bottom: 0;
     }
     .sidebar-group-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: var(--vi-space-gap-dense-default) var(--vi-space-gap-compact-default);
+      min-height: var(--vi-size-action-min-default);
+      padding: 0 var(--vi-space-gap-compact-default);
       font-family: var(--vi-typography-typography-family-mono-base);
       font-size: var(--vi-typography-typography-size-xs-base);
       color: var(--vi-colors-text-content-secondary-base);
-      text-decoration: none;
+      cursor: pointer;
+      list-style: none;
+      border-radius: var(--vi-spacing-layout-radius-control-base);
+      transition: color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base),
+        background-color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
     }
+    .sidebar-group-head::-webkit-details-marker { display: none; }
     .sidebar-group-head:hover {
       color: var(--vi-colors-text-content-primary-base);
+      background: var(--vi-colors-surface-background-tertiary-base);
+    }
+    .sidebar-group-head:focus-visible {
+      outline: 2px solid var(--vi-colors-surface-accent-violet-base);
+      outline-offset: -2px;
+    }
+    .sidebar-group-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--vi-space-gap-compact-default);
+    }
+    .sidebar-chevron {
+      display: inline-block;
+      transition: transform var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
+    }
+    .sidebar-group[open] .sidebar-chevron {
+      transform: rotate(90deg);
+    }
+    .sidebar-group-links {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-top: 2px;
     }
     .sidebar-link {
       display: flex;
@@ -384,11 +420,13 @@
       gap: var(--vi-space-gap-compact-default);
     }
 
-    /* Specimen stage floor: strictly contained so no absolute SVG or overlay escapes its card. */
+    /* Specimen stage floor: flush inset band strictly contained inside its specimen card. */
     .fragment-frame {
       position: relative;
       isolation: isolate;
       contain: layout style;
+      border: 0;
+      border-radius: 0;
       padding: var(--vi-spacing-layout-padding-large-base);
       background: var(--vi-colors-surface-background-primary-base);
       overflow-x: auto;
@@ -439,7 +477,7 @@
 
     /* Lazy-loaded iframe host with selectable 1440px / 1024px / 390px viewport widths. */
     .fragment-frame.layout-frame {
-      padding: var(--vi-spacing-layout-padding-medium-base);
+      padding: 0;
       display: flex;
       justify-content: center;
       background: var(--vi-colors-surface-background-primary-base);
@@ -447,14 +485,22 @@
     .layout-viewport {
       width: 100%;
       height: 560px;
-      border: 1px solid var(--vi-colors-border-separator-primary-base);
-      border-radius: var(--vi-spacing-layout-radius-control-base);
+      border: 0;
+      border-radius: 0;
       overflow: hidden;
       background: var(--vi-colors-surface-background-primary-base);
       transition: width var(--vi-transition-transition-duration-normal-base) var(--vi-transition-transition-easing-standard-base);
     }
-    .layout-viewport[data-width="1024"] { width: min(100%, 1024px); }
-    .layout-viewport[data-width="390"] { width: min(100%, 390px); }
+    .layout-viewport[data-width="1024"] {
+      width: min(100%, 1024px);
+      border-left: 1px solid var(--vi-colors-border-separator-primary-base);
+      border-right: 1px solid var(--vi-colors-border-separator-primary-base);
+    }
+    .layout-viewport[data-width="390"] {
+      width: min(100%, 390px);
+      border-left: 1px solid var(--vi-colors-border-separator-primary-base);
+      border-right: 1px solid var(--vi-colors-border-separator-primary-base);
+    }
     .layout-viewport iframe {
       display: block;
       width: 100%;
@@ -520,7 +566,7 @@
 
     .hidden-item { display: none !important; }
 
-    @media (max-width: 1023px) {
+    @media (max-width: 960px) {
       .catalog-shell { flex-direction: column; }
       .catalog-sidebar { display: none; }
       .mobile-nav-wrap { display: block; }
@@ -636,7 +682,7 @@
       { file: 'session-checkpoint-card.html', tier: 'workspace', label: 'Session checkpoint card', desc: 'Resumable thread checkpoint anchoring the last confirmed pause with tabular timestamps, a bounded-reference summary fence, and 44px resume actions (ADR-020).' },
       { file: 'speaker-marker.html', tier: 'workspace', label: 'Speaker marker', desc: 'Five-segment marker and seat name; heads a reply only when the speaker changes (ADR-016).' },
       { file: 'starter-chips.html', tier: 'workspace', label: 'Starter chips', desc: 'At most four starter prompts on an empty conversation with 44px touch targets; they leave after the first turn (ADR-016).' },
-      { file: 'question-bar.html', tier: 'workspace', label: 'Question bar', desc: 'The /ask input as one crystal-glass control pill; focus draws the violet brand outline (ADR-006).', glass: true },
+      { file: 'question-bar.html', tier: 'workspace', label: 'Question bar', desc: 'The /ask input as one concentric crystal-glass control; focus draws the violet brand outline (ADR-006).', glass: true },
       { file: 'receipt-ledger-row.html', tier: 'workspace', label: 'Receipt ledger row', desc: 'Hairline-separated receipt rows in a polite live region: mono micro-label paired with a tabular mono value (ADR-017, ADR-020).' },
       { file: 'turn-state-chip.html', tier: 'workspace', label: 'Turn-state chip', desc: 'Status-token turn states (running, stopping, finished, failed) paired with visible text labels; never colour alone (ADR-020).' },
       { file: 'owner-approval-gate.html', tier: 'workspace', label: 'Owner approval gate', desc: 'Solid card for pending owner-gated tool requests with scannable Allow once / Always allow / Reject controls and collapsible audit receipt (ADR-020).' },
@@ -682,17 +728,17 @@
       { file: 'critique-thread-panel.html', tier: 'public', label: 'Critique thread panel', desc: 'Slot-anchored critique entries with Keep / Change / Do not copy classification chips, polite open/resolved counter, and a critique composer (ADR-023).' },
       { file: 'guardrail-receipt-panel.html', tier: 'public', label: 'Guardrail receipt panel', desc: 'Polite receipt pairing text contrast, graph line, glass layers, arbitrary-class, and scaffold-tool bounds with export and inspection actions (ADR-023).' },
 
-      // Page layouts (8)
+      // Page layouts (5 full-viewport compositions)
       { file: 'layout-public-site.html', tier: 'layouts', label: 'Layout: public site', desc: 'Full-page dynamic public website composition integrating the island header, hero billboard, four public repos, and footer (ADR-023).', frame: true },
       { file: 'design-studio-canvas.html', tier: 'layouts', label: 'Layout: design studio canvas', desc: 'Collaborative agent design studio with structured brief, Keep/Change/Do not copy contract, viewport presets, and guardrail check (ADR-023).', frame: true },
       { file: 'layout-agent-workspace.html', tier: 'layouts', label: 'Layout: agent workspace', desc: 'Masthead, workspaces and personas sidebar, group conversation and composer, and workspace inspector (ADR-020).', frame: true },
       { file: 'layout-dashboard.html', tier: 'layouts', label: 'Layout: dashboard', desc: 'Sidebar, toolbar, stat cards, and monitor rows.', frame: true },
       { file: 'layout-graph.html', tier: 'layouts', label: 'Layout: graph', desc: 'Sidebar, graph canvas, and inspector panel.', frame: true },
-      { file: 'sidebar-nav.html', tier: 'layouts', label: 'Sidebar navigation', desc: 'Full-height navigation rail with right-edge rounding.', frame: true },
-      { file: 'inspector-panel.html', tier: 'layouts', label: 'Inspector panel', desc: 'Right-hand inspection panel shell.', frame: true },
-      { file: 'graph-canvas.html', tier: 'layouts', label: 'Graph canvas', desc: 'Container for node and edge visualisations.', frame: true },
 
-      // Atomic and legacy reference (17)
+      // Atomic and legacy reference (20: superseded specimens, single-region partials, and micro-atoms)
+      { file: 'sidebar-nav.html', tier: 'legacy', label: 'Sidebar navigation', note: 'Single-region partial', desc: 'Full-height navigation rail with right-edge rounding.', frame: true },
+      { file: 'inspector-panel.html', tier: 'legacy', label: 'Inspector panel', note: 'Single-region partial', desc: 'Right-hand inspection panel shell.', frame: true },
+      { file: 'graph-canvas.html', tier: 'legacy', label: 'Graph canvas', note: 'Single-region partial', desc: 'Container for node and edge visualisations.', frame: true },
       { file: 'island-nav.html', tier: 'legacy', label: 'Island navigation', note: 'Superseded by site-header-island.html', desc: 'Original ADR-006 crystal pill navigation specimen with six bounded links and an Ask trigger.', glass: true },
       { file: 'button.html', tier: 'legacy', label: 'Button atom', note: 'Prefer button-variants.html', desc: 'Single primary action button specimen.' },
       { file: 'alert-banner.html', tier: 'legacy', label: 'Alert banner', desc: 'Single inline warning status row.' },
@@ -855,13 +901,16 @@
     TIERS.forEach(function (tier) {
       var tierItems = FRAGMENTS.filter(function (f) { return f.tier === tier.id; });
 
-      var navGroup = document.createElement('div');
+      var navGroup = document.createElement('details');
       navGroup.className = 'sidebar-group';
-      var navHead = document.createElement('a');
+      if (!tier.collapsed) navGroup.open = true;
+      var navHead = document.createElement('summary');
       navHead.className = 'sidebar-group-head';
-      navHead.href = '#tier-' + tier.id;
-      navHead.innerHTML = '<span>' + tier.shortLabel + '</span><span class="count-num">' + tierItems.length + '</span>';
+      navHead.innerHTML = '<span>' + tier.shortLabel + '</span><span class="sidebar-group-meta"><span class="count-num">' + tierItems.length + '</span><span class="sidebar-chevron" aria-hidden="true">&#8250;</span></span>';
       navGroup.appendChild(navHead);
+      var navLinks = document.createElement('div');
+      navLinks.className = 'sidebar-group-links';
+      navGroup.appendChild(navLinks);
 
       var container;
       var list = document.createElement('div');
@@ -1010,7 +1059,7 @@
           if (tier.collapsed) container.open = true;
           loadFragment(record);
         });
-        navGroup.appendChild(link);
+        navLinks.appendChild(link);
 
         var record = {
           meta: f,
@@ -1066,6 +1115,11 @@
         var showTier = count > 0;
         sectionNodes[t.id].container.classList.toggle('hidden-item', !showTier);
         sectionNodes[t.id].navGroup.classList.toggle('hidden-item', !showTier);
+        if (q && showTier) {
+          sectionNodes[t.id].navGroup.open = true;
+        } else if (!q) {
+          sectionNodes[t.id].navGroup.open = !t.collapsed || state.tier === t.id;
+        }
       });
 
       countEl.textContent = 'Showing ' + visibleTotal + ' of ' + FRAGMENTS.length + ' specimens';

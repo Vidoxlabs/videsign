@@ -11,6 +11,7 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 
 const { lintAll, lintFragment } = require('../scripts/lint-preview');
+const { COMPONENT_CATALOG } = require('../lib/design-studio');
 
 const ROOT = path.join(__dirname, '..');
 const PREVIEW = path.join(ROOT, 'preview');
@@ -548,7 +549,8 @@ test('Seed contract and public-repo continuity fragments enforce solid surfaces,
     assert.match(registry, new RegExp(`${toolId.replace(/\./g, '\\.')}[\\s\\S]*?${connector}[\\s\\S]*?${effect}[\\s\\S]*?${realm}`));
   }
   assert.match(registry, /bg-status-indicator-warning-base[\s\S]*ownerGate · pauses run/);
-  assert.match(registry, /bg-status-indicator-info-base[\s\S]*No model call/);
+  assert.match(registry, />No model call</);
+  assert.doesNotMatch(registry, /bg-status-indicator-info-base[\s\S]*No model call/);
 
   // 4. public-repo-card.html
   const cards = read('public-repo-card.html');
@@ -715,7 +717,7 @@ test('chibi companion stage, homepage graphic maps, markdown and web UI primitiv
   }
   assert.match(credLedger, /cred ···· 7f3a/);
   assert.match(credLedger, /aria-label="Revoke binding cred 7f3a"/);
-  assert.match(credLedger, /scope <span class="text-text-content-primary-base">repo:runbooks:read<\/span>/);
+  assert.match(credLedger, /scope <span class="[^"]*font-typography-family-mono-base[^"]*text-text-content-primary-base">repo:runbooks:read<\/span>/);
   assert.doesNotMatch(credLedger, /vi-glass/);
 
   const briefCard = read('brief-contract-card.html');
@@ -983,4 +985,45 @@ test('the linter rejects external placeholder image services (SKILL.md negative 
     lintFragment('good-img.html', '<img src="{ASSET_BASE}/brand/brand_mark_header_v008.svg" alt="Vidoxlabs brand mark">'),
     [],
   );
+});
+
+test('Pass-2 catalog hygiene: manifest count parity, sticky sidebar, status-dot hygiene, and typography split', () => {
+  const count = COMPONENT_CATALOG.length;
+  assert.match(read('hero-billboard.html'), new RegExp(`>${count}</dd>`));
+  assert.match(read('bento-feature-grid.html'), new RegExp(`>${count}</dd>`));
+  assert.match(read('kpi-metric-strip.html'), new RegExp(`>${count}</dd>`));
+  assert.match(read('search-and-filter-bar.html'), new RegExp(`Showing 12 of ${count} modules`));
+  assert.match(read('markdown-prose-renderer.html'), new RegExp(`>${count} components</td>`));
+  assert.match(read('navigation-primitives.html'), new RegExp(`Page 2 of 6 · ${count} components`));
+
+  const provider = read('provider-model-selector.html');
+  assert.doesNotMatch(provider, /bg-status-indicator-info-base[\s\S]*2 slots listed/);
+  assert.match(provider, /grid-cols-2 md:grid-cols-5/);
+  assert.match(provider, /col-span-2 md:col-span-2/);
+
+  const credLedger = read('credential-activity-ledger.html');
+  assert.doesNotMatch(credLedger, /bg-status-indicator-info-base[\s\S]*1 active · 1 expired · 1 revoked/);
+
+  assert.match(read('coverage-grid.html'), /<caption class="sr-only">/);
+  const questionBar = read('question-bar.html');
+  assert.doesNotMatch(questionBar, /vi-glass-shell--pill|vi-glass-core--pill/);
+  assert.match(questionBar, /rounded-layout-radius-control-base/);
+
+  const nav = read('navigation-primitives.html');
+  assert.doesNotMatch(nav, /scaffold_page · public-site-landing/);
+  assert.match(nav, />Cmd\+K</);
+
+  for (const file of ['layout-dashboard.html', 'layout-graph.html', 'sidebar-nav.html']) {
+    const html = read(file);
+    assert.doesNotMatch(html, /VIDOX<span>LABS<\/span>/);
+    assert.match(html, />Vidoxlabs</);
+  }
+
+  const index = read('index.html');
+  assert.match(index, /overflow-x:\s*clip/);
+  assert.match(index, /overscroll-behavior:\s*contain/);
+  assert.match(index, /createElement\('details'\)/);
+  for (const partial of ['sidebar-nav.html', 'inspector-panel.html', 'graph-canvas.html']) {
+    assert.match(index, new RegExp(`file: '${partial}', tier: 'legacy'`));
+  }
 });

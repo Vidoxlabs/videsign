@@ -18,7 +18,7 @@
     <button type="button" role="tab" aria-selected="false" class="inline-flex items-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-transparent hover:border-border-separator-primary-base font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Changelog</button>
   </div>
   <nav aria-label="Pagination" class="flex flex-wrap items-center justify-between gap-gap-compact-default">
-    <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Page 2 of 6 · 49 components</span>
+    <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Page 2 of 6 · 78 components</span>
     <div class="flex items-center gap-gap-dense-default">
       <a href="#prev" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Prev</a>
       <a href="#p1" class="inline-flex items-center justify-center w-action-min-default h-action-min-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">1</a>
@@ -27,14 +27,10 @@
       <a href="#next" class="inline-flex items-center justify-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Next</a>
     </div>
   </nav>
-  <div role="region" aria-label="Command launcher" class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base flex flex-col gap-gap-compact-default">
-    <div class="flex items-center justify-between gap-gap-compact-default">
-      <input type="search" aria-label="Jump to component or route" placeholder="Type a component id or command..." class="flex-1 h-action-min-default px-inset-compact-default bg-transparent font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base placeholder:text-text-content-secondary-base" />
-      <kbd class="font-typography-family-mono-base text-typography-size-xs-base px-inset-compact-default py-rhythm-1-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base text-text-content-secondary-base">Esc</kbd>
-    </div>
-    <ul class="flex flex-col border-t border-border-separator-primary-base pt-rhythm-2-base list-none">
-      <li><a href="#scaffold" class="flex items-center justify-between h-action-min-default px-inset-compact-default rounded-layout-radius-control-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base"><span>scaffold_page · public-site-landing</span><span class="text-text-content-secondary-base">MCP tool</span></a></li>
-      <li><a href="#brief" class="flex items-center justify-between h-action-min-default px-inset-compact-default rounded-layout-radius-control-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base"><span>design_brief · compile reference contract</span><span>MCP tool</span></a></li>
-    </ul>
+  <div role="region" aria-label="Command launcher" class="flex items-center justify-between gap-gap-compact-default bg-surface-background-primary-base border border-border-separator-primary-base focus-within:border-surface-accent-violet-base rounded-layout-radius-control-base px-inset-operator-default transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+    <button type="button" aria-haspopup="dialog" class="flex-1 flex items-center justify-between gap-gap-compact-default h-action-min-default font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base hover:text-text-content-primary-base text-left transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base">
+      <span>Jump to component, command, or route</span>
+      <kbd class="font-typography-family-mono-base text-typography-size-xs-base px-inset-compact-default py-rhythm-1-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base text-text-content-secondary-base whitespace-nowrap">Cmd+K</kbd>
+    </button>
   </div>
 </section>
