@@ -475,6 +475,12 @@ function main() {
 
   emitCatalogCSS();
   process.stdout.write('wrote dist/catalog.css\n');
+
+  const { syncFixtureMetrics } = require('./sync-fixture-metrics');
+  const syncedFixtures = syncFixtureMetrics(ROOT, COMPONENT_CATALOG.length);
+  if (syncedFixtures.length) {
+    process.stdout.write(`synced manifest metrics in ${syncedFixtures.length} preview fragment(s)\n`);
+  }
 }
 
 if (require.main === module) {

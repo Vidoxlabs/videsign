@@ -1020,9 +1020,13 @@ test('Pass-2 catalog hygiene: manifest count parity, sticky sidebar, status-dot 
   }
 
   const index = read('index.html');
-  assert.match(index, /overflow-x:\s*clip/);
-  assert.match(index, /overscroll-behavior:\s*contain/);
-  assert.match(index, /createElement\('details'\)/);
+  const shellCss = fs.readFileSync(path.join(PREVIEW, 'catalog.css'), 'utf-8');
+  const shellJs = fs.readFileSync(path.join(PREVIEW, 'catalog.js'), 'utf-8');
+  assert.match(index, /href="\.\/catalog\.css"/);
+  assert.match(index, /src="\.\/catalog\.js"/);
+  assert.match(shellCss, /overflow-x:\s*clip/);
+  assert.match(shellCss, /overscroll-behavior:\s*contain/);
+  assert.match(shellJs, /createElement\('details'\)/);
   for (const partial of ['sidebar-nav.html', 'inspector-panel.html', 'graph-canvas.html']) {
     assert.match(index, new RegExp(`file: '${partial}', tier: 'legacy'`));
   }

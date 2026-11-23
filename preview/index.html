@@ -1,15 +1,13 @@
 <!--
   Nocturne Museum: Visual Catalog
-  Renders every preview/ fragment with the generated stylesheets so each one is styled for real.
+  Renders every preview/ fragment with the generated stylesheets inside isolated stages.
 
   Run `npm run tokens` first (it writes dist/), then serve the repository root over HTTP and
-  open /preview/ (fragments load with fetch(), which browsers block on file://):
+  open /preview/ (fragments and dist/components.manifest.json load via fetch()):
     python3 -m http.server 8000
-  Geist and Geist Mono are not bundled here (ADR-007: binaries live in the consuming site).
-  The catalog uses them if installed and otherwise falls back to the system stack.
 -->
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-motion="paused">
+<html lang="en" data-theme="dark" data-motion="paused" data-glass="solid">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,568 +23,12 @@
   <link rel="stylesheet" href="../dist/docs-portal.css" />
   <link rel="stylesheet" href="../dist/settings-surface.css" />
   <link rel="stylesheet" href="../dist/library-surface.css" />
+  <link rel="stylesheet" href="./catalog.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
   <script defer src="../dist/settings-surface.js"></script>
   <script defer src="../dist/library-surface.js"></script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      min-height: 100dvh;
-      overflow-x: clip;
-      background: var(--vi-colors-surface-background-primary-base);
-      color: var(--vi-colors-text-content-primary-base);
-      font-family: var(--vi-typography-typography-family-sans-base);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .skip-link {
-      position: absolute;
-      left: -9999px;
-      top: 0;
-    }
-    .skip-link:focus {
-      display: inline-flex;
-      align-items: center;
-      min-height: var(--vi-size-action-min-default);
-      left: var(--vi-spacing-layout-padding-large-base);
-      top: var(--vi-spacing-layout-padding-medium-base);
-      z-index: 40;
-      padding: 0 var(--vi-spacing-layout-padding-medium-base);
-      background: var(--vi-colors-surface-background-secondary-base);
-      color: var(--vi-colors-text-content-primary-base);
-      border: 1px solid var(--vi-colors-surface-accent-violet-base);
-      border-radius: var(--vi-spacing-layout-radius-control-base);
-      font-family: var(--vi-typography-typography-family-mono-base);
-      font-size: var(--vi-typography-typography-size-sm-base);
-      text-decoration: none;
-    }
-
-    .catalog-shell {
-      display: flex;
-      align-items: flex-start;
-      min-height: 100dvh;
-      background: var(--vi-colors-surface-background-primary-base);
-    }
-
-    .catalog-sidebar {
-      width: 280px;
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      height: 100dvh;
-      max-height: 100dvh;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      display: flex;
-      flex-direction: column;
-      gap: var(--vi-spacing-layout-padding-medium-base);
-      padding: var(--vi-spacing-layout-padding-large-base) var(--vi-spacing-layout-padding-medium-base);
-      background: var(--vi-colors-surface-background-secondary-base);
-      border-right: 1px solid var(--vi-colors-border-separator-primary-base);
-    }
-
-    .catalog-brand {
-      display: flex;
-      align-items: center;
-      gap: var(--vi-space-gap-comfortable-default);
-    }
-    .catalog-brand img {
-      width: var(--vi-size-icon-sm-base);
-      height: var(--vi-size-icon-sm-base);
-      flex-shrink: 0;
-    }
-    .catalog-brand-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-    .catalog-brand-text h1 {
-      margin: 0;
-      font-size: var(--vi-typography-typography-size-lg-base);
-      font-weight: var(--vi-typography-typography-weight-semibold-base);
-      letter-spacing: var(--vi-typography-typography-tracking-tight-base);
-      line-height: var(--vi-typography-typography-leading-tight-base);
-      color: var(--vi-colors-text-content-primary-base);
-    }
-    .catalog-brand-sub {
-      margin: 0;
-      font-family: var(--vi-typography-typography-family-mono-base);
-      font-size: var(--vi-typography-typography-size-xs-base);
-      color: var(--vi-colors-text-content-secondary-base);
-    }
-
-    .search-box {
-      display: flex;
-      align-items: center;
-      min-height: var(--vi-size-action-min-default);
-      padding: 0 var(--vi-space-gap-comfortable-default);
-      background: var(--vi-colors-surface-background-primary-base);
-      border: 1px solid var(--vi-colors-border-separator-primary-base);
-      border-radius: var(--vi-spacing-layout-radius-control-base);
-      transition: border-color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
-    }
-    .search-box:focus-within {
-      border-color: var(--vi-colors-surface-accent-violet-base);
-    }
-    .search-box input {
-      width: 100%;
-      min-width: 0;
-      border: 0;
-      outline: none;
-      background: transparent;
-      color: var(--vi-colors-text-content-primary-base);
-      font-family: var(--vi-typography-typography-family-sans-base);
-      font-size: var(--vi-typography-typography-size-sm-base);
-    }
-    .search-box input::placeholder {
-      color: var(--vi-colors-text-content-secondary-base);
-    }
-
-    .tier-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--vi-space-gap-compact-default);
-    }
-    .ctl-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--vi-space-gap-compact-default);
-      min-height: var(--vi-size-action-min-default);
-      padding: 0 var(--vi-space-gap-comfortable-default);
-      background: var(--vi-colors-surface-background-primary-base);
-      color: var(--vi-colors-text-content-secondary-base);
-      border: 1px solid var(--vi-colors-border-separator-primary-base);
-      border-radius: var(--vi-spacing-layout-radius-control-base);
-      font-family: var(--vi-typography-typography-family-mono-base);
-      font-size: var(--vi-typography-typography-size-xs-base);
-      white-space: nowrap;
-      cursor: pointer;
-      text-decoration: none;
-      transition: border-color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base),
-        color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base),
-        background-color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
-    }
-    .ctl-btn:hover {
-      border-color: var(--vi-colors-text-content-secondary-base);
-      color: var(--vi-colors-text-content-primary-base);
-    }
-    .ctl-btn:focus-visible {
-      outline: 2px solid var(--vi-colors-surface-accent-violet-base);
-      outline-offset: 2px;
-    }
-    .ctl-btn[aria-pressed="true"] {
-      background: var(--vi-colors-surface-background-tertiary-base);
-      border-color: var(--vi-colors-surface-accent-violet-base);
-      color: var(--vi-colors-text-content-primary-base);
-    }
-
-    .sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      gap: var(--vi-space-gap-compact-default);
-    }
-    .sidebar-group {
-      display: flex;
-      flex-direction: column;
-      border-bottom: 1px solid var(--vi-colors-border-separator-primary-base);
-      padding-bottom: var(--vi-space-gap-compact-default);
-    }
-    .sidebar-group:last-child {
-      border-bottom: 0;
-    }
-    .sidebar-group-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: var(--vi-size-action-min-default);
-      padding: 0 var(--vi-space-gap-compact-default);
-      font-family: var(--vi-typography-typography-family-mono-base);
-      font-size: var(--vi-typography-typography-size-xs-base);
-      color: var(--vi-colors-text-content-secondary-base);
-      cursor: pointer;
-      list-style: none;
-      border-radius: var(--vi-spacing-layout-radius-control-base);
-      transition: color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base),
-        background-color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
-    }
-    .sidebar-group-head::-webkit-details-marker { display: none; }
-    .sidebar-group-head:hover {
-      color: var(--vi-colors-text-content-primary-base);
-      background: var(--vi-colors-surface-background-tertiary-base);
-    }
-    .sidebar-group-head:focus-visible {
-      outline: 2px solid var(--vi-colors-surface-accent-violet-base);
-      outline-offset: -2px;
-    }
-    .sidebar-group-meta {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--vi-space-gap-compact-default);
-    }
-    .sidebar-chevron {
-      display: inline-block;
-      transition: transform var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
-    }
-    .sidebar-group[open] .sidebar-chevron {
-      transform: rotate(90deg);
-    }
-    .sidebar-group-links {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      padding-top: 2px;
-    }
-    .sidebar-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--vi-space-gap-compact-default);
-      min-height: var(--vi-size-action-min-default);
-      padding: 0 var(--vi-space-gap-compact-default);
-      border-radius: var(--vi-spacing-layout-radius-control-base);
-      color: var(--vi-colors-text-content-secondary-base);
-      font-size: var(--vi-typography-typography-size-sm-base);
-      text-decoration: none;
-      transition: background-color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base),
-        color var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
-    }
-    .sidebar-link:hover {
-      background: var(--vi-colors-surface-background-tertiary-base);
-      color: var(--vi-colors-text-content-primary-base);
-    }
-    .sidebar-link:focus-visible {
-      outline: 2px solid var(--vi-colors-surface-accent-violet-base);
-      outline-offset: -2px;
-    }
-    .sidebar-link span {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .count-num {
-      font-family: var(--vi-typography-typography-family-mono-base);
-      font-size: var(--vi-typography-typography-size-xs-base);
-      font-variant-numeric: tabular-nums;
-      color: var(--vi-colors-text-content-secondary-base);
-    }
-
-    .catalog-main {
-      flex: 1;
-      width: 100%;
-      max-width: 100%;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .catalog-toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--vi-space-gap-comfortable-default);
-      padding: var(--vi-spacing-layout-padding-medium-base) var(--vi-spacing-layout-padding-large-base);
-      background: var(--vi-colors-surface-background-primary-base);
-      border-bottom: 1px solid var(--vi-colors-border-separator-primary-base);
-    }
-    .toolbar-meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--vi-space-gap-comfortable-default);
-    }
-    .toolbar-status {
-      font-family: var(--vi-typography-typography-family-mono-base);
-      font-size: var(--vi-typography-typography-size-xs-base);
-      font-variant-numeric: tabular-nums;
-      color: var(--vi-colors-text-content-secondary-base);
-    }
-    .toolbar-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--vi-space-gap-compact-default);
-    }
-
-    .catalog-content {
-      width: 100%;
-      max-width: 1200px;
-      padding: var(--vi-spacing-layout-padding-large-base);
-      display: flex;
-      flex-direction: column;
-      gap: 48px;
-    }
-
-    .tier-section {
-      display: flex;
-      flex-direction: column;
-      gap: var(--vi-spacing-layout-padding-large-base);
-      scroll-margin-top: 84px;
-    }
-    .tier-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: var(--vi-space-gap-compact-default);
-      padding-bottom: var(--vi-space-gap-comfortable-default);
-      border-bottom: 1px solid var(--vi-colors-border-separator-primary-base);
-    }
-    .tier-header h2 {
-      margin: 0;
-      font-size: var(--vi-typography-typography-size-2xl-base);
-      font-weight: var(--vi-typography-typography-weight-semibold-base);
-      letter-spacing: var(--vi-typography-typography-tracking-tight-base);
-      color: var(--vi-colors-text-content-primary-base);
-    }
-    .tier-summary {
-      margin: 4px 0 0;
-      font-size: var(--vi-typography-typography-size-sm-base);
-      color: var(--vi-colors-text-content-secondary-base);
-      max-width: 65ch;
-    }
-
-    .specimen-list {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    .fragment-section {
-      display: flex;
-      flex-direction: column;
-      background: var(--vi-colors-surface-background-secondary-base);
-      border: 1px solid var(--vi-colors-border-separator-primary-base);
-      border-radius: var(--vi-spacing-layout-radius-standard-base);
-      overflow: hidden;
-      scroll-margin-top: 84px;
-    }
-    .specimen-head {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--vi-space-gap-comfortable-default);
-      padding: var(--vi-spacing-layout-padding-medium-base) var(--vi-spacing-layout-padding-large-base);
-      border-bottom: 1px solid var(--vi-colors-border-separator-primary-base);
-    }
-    .specimen-titles {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: 0;
-    }
-    .specimen-title-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--vi-space-gap-compact-default);
-    }
-    .fragment-label {
-      margin: 0;
-      font-size: var(--vi-typography-typography-size-md-base);
-      font-weight: var(--vi-typography-typography-weight-semibold-base);
-      color: var(--vi-colors-text-content-primary-base);
-    }
-    .fragment-label a {
-      color: inherit;
-      text-decoration: none;
-    }
-    .fragment-label a:hover {
-      text-decoration: underline;
-    }
-    .fragment-file {
-      font-family: var(--vi-typography-typography-family-mono-base);
-      font-size: var(--vi-typography-typography-size-xs-base);
-      color: var(--vi-colors-text-content-secondary-base);
-      padding: 2px 8px;
-      background: var(--vi-colors-surface-background-primary-base);
-      border: 1px solid var(--vi-colors-border-separator-primary-base);
-      border-radius: var(--vi-spacing-layout-radius-control-base);
-    }
-    .fragment-note {
-      font-family: var(--vi-typography-typography-family-mono-base);
-      font-size: var(--vi-typography-typography-size-xs-base);
-      color: var(--vi-colors-status-indicator-warning-base);
-    }
-    .fragment-desc {
-      margin: 0;
-      font-size: var(--vi-typography-typography-size-sm-base);
-      line-height: var(--vi-typography-typography-leading-normal-base);
-      color: var(--vi-colors-text-content-secondary-base);
-      max-width: 68ch;
-    }
-    .specimen-controls {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--vi-space-gap-compact-default);
-    }
-
-    /* Specimen stage floor: flush inset band strictly contained inside its specimen card. */
-    .fragment-frame {
-      position: relative;
-      isolation: isolate;
-      contain: layout style;
-      border: 0;
-      border-radius: 0;
-      padding: var(--vi-spacing-layout-padding-large-base);
-      background: var(--vi-colors-surface-background-primary-base);
-      overflow-x: auto;
-      overflow-y: hidden;
-    }
-    .fragment-frame > [class*="fixed"] {
-      position: static;
-      transform: none;
-    }
-
-    /* Clean architectural dot floor for crystal-glass controls; no overlapping text or neon wash. */
-    .fragment-frame.glass-stage {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 160px;
-      padding: 32px 24px;
-      background-color: var(--vi-colors-surface-background-primary-base);
-      background-image: radial-gradient(var(--vi-colors-border-separator-primary-base) 1px, transparent 1px);
-      background-size: var(--vi-spacing-layout-padding-large-base) var(--vi-spacing-layout-padding-large-base);
-    }
-    .fragment-frame.glass-stage > * {
-      max-width: 100%;
-    }
-    body.show-glass-tint .fragment-frame.glass-stage::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 18% 60%, var(--vi-effects-ambient-glow-violet-base), transparent 46%),
-        radial-gradient(circle at 86% 80%, var(--vi-effects-ambient-glow-teal-base), transparent 44%);
-    }
-
-    /* Bounded specimen wrapper for stage-backdrop.html so the SVG never bleeds beyond its card. */
-    .fragment-frame.stage-specimen {
-      padding: 0;
-      height: 360px;
-      overflow: hidden;
-      background: var(--vi-colors-surface-background-primary-base);
-    }
-    .fragment-frame.stage-specimen > div {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Lazy-loaded iframe host with selectable 1440px / 1024px / 390px viewport widths. */
-    .fragment-frame.layout-frame {
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      background: var(--vi-colors-surface-background-primary-base);
-    }
-    .layout-viewport {
-      width: 100%;
-      height: 640px;
-      border: 0;
-      border-radius: 0;
-      overflow: hidden;
-      position: relative;
-      background: var(--vi-colors-surface-background-primary-base);
-      transition: width var(--vi-transition-transition-duration-normal-base) var(--vi-transition-transition-easing-standard-base);
-    }
-    .layout-viewport[data-width="1024"] {
-      width: min(100%, 1024px);
-      border-left: 1px solid var(--vi-colors-border-separator-primary-base);
-      border-right: 1px solid var(--vi-colors-border-separator-primary-base);
-    }
-    .layout-viewport[data-width="390"] {
-      width: min(100%, 390px);
-      border-left: 1px solid var(--vi-colors-border-separator-primary-base);
-      border-right: 1px solid var(--vi-colors-border-separator-primary-base);
-    }
-    .layout-viewport iframe {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      transform-origin: top left;
-    }
-
-    .legacy-drawer {
-      border: 1px solid var(--vi-colors-border-separator-primary-base);
-      border-radius: var(--vi-spacing-layout-radius-standard-base);
-      background: var(--vi-colors-surface-background-secondary-base);
-      padding: var(--vi-spacing-layout-padding-medium-base) var(--vi-spacing-layout-padding-large-base);
-    }
-    .legacy-drawer > summary {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--vi-space-gap-comfortable-default);
-      min-height: var(--vi-size-action-min-default);
-      cursor: pointer;
-      list-style: none;
-    }
-    .legacy-drawer > summary::-webkit-details-marker { display: none; }
-    .legacy-drawer[open] > summary {
-      padding-bottom: var(--vi-spacing-layout-padding-medium-base);
-      margin-bottom: var(--vi-spacing-layout-padding-large-base);
-      border-bottom: 1px solid var(--vi-colors-border-separator-primary-base);
-    }
-
-    .empty-state {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--vi-space-gap-comfortable-default);
-      padding: 48px 24px;
-      text-align: center;
-      border: 1px dashed var(--vi-colors-border-separator-primary-base);
-      border-radius: var(--vi-spacing-layout-radius-standard-base);
-      background: var(--vi-colors-surface-background-secondary-base);
-    }
-    .empty-state.visible { display: flex; }
-
-    .mobile-nav-wrap {
-      display: none;
-      border-bottom: 1px solid var(--vi-colors-border-separator-primary-base);
-      background: var(--vi-colors-surface-background-secondary-base);
-      padding: var(--vi-spacing-layout-padding-medium-base);
-    }
-    .mobile-nav-body {
-      margin-top: var(--vi-space-gap-comfortable-default);
-      display: flex;
-      flex-direction: column;
-      gap: var(--vi-space-gap-comfortable-default);
-    }
-    .legacy-heading {
-      margin: 0;
-      font-size: var(--vi-typography-typography-size-xl-base);
-      font-weight: var(--vi-typography-typography-weight-semibold-base);
-      color: var(--vi-colors-text-content-primary-base);
-    }
-
-    .hidden-item { display: none !important; }
-
-    @media (max-width: 960px) {
-      .catalog-shell { flex-direction: column; align-items: stretch; }
-      .catalog-sidebar { display: none; }
-      .mobile-nav-wrap { display: block; }
-      .catalog-toolbar,
-      .catalog-content,
-      .fragment-frame { padding: var(--vi-spacing-layout-padding-medium-base); }
-    }
-  </style>
+  <script defer src="./catalog.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#catalog-sections">Skip to catalog sections</a>
@@ -597,18 +39,30 @@
         <img src="../brand/brand_mark_header_v008.svg" alt="Vidoxlabs" />
         <div class="catalog-brand-text">
           <h1>Nocturne Museum</h1>
-          <p class="catalog-brand-sub" id="sidebar-total">Visual catalog</p>
+          <p class="catalog-brand-sub" id="sidebar-total">Loading catalog...</p>
         </div>
       </header>
 
       <div class="search-box">
-        <label for="catalog-search" class="sr-only">Filter components by name or filename</label>
-        <input id="catalog-search" type="search" autocomplete="off" placeholder="Search components or files" />
+        <label for="catalog-search" class="sr-only">Filter components by name, filename, or ADR</label>
+        <input id="catalog-search" type="search" autocomplete="off" placeholder="Search specimens or files" />
+        <kbd class="search-kbd" aria-hidden="true">/</kbd>
       </div>
 
-      <div class="tier-filters" role="group" aria-label="Filter by tier" id="tier-filter-bar"></div>
+      <button type="button" class="ctl-btn sidebar-all-btn" id="filter-all-active" aria-pressed="true">
+        <span>All active</span>
+        <span class="count-num" id="all-active-count"></span>
+      </button>
 
       <nav class="sidebar-nav" aria-label="Component index" id="sidebar-index"></nav>
+
+      <div class="sidebar-legacy-foot">
+        <button type="button" class="ctl-btn sidebar-legacy-btn" id="toggle-legacy" aria-pressed="false">
+          <span id="legacy-toggle-text">Legacy reference · hidden</span>
+          <span class="count-num" id="legacy-toggle-count"></span>
+        </button>
+        <div id="sidebar-legacy-links"></div>
+      </div>
     </aside>
 
     <div class="catalog-main">
@@ -618,9 +72,10 @@
           <div class="mobile-nav-body">
             <div class="search-box">
               <label for="mobile-search" class="sr-only">Filter components</label>
-              <input id="mobile-search" type="search" autocomplete="off" placeholder="Search components or files" />
+              <input id="mobile-search" type="search" autocomplete="off" placeholder="Search specimens or files" />
+              <kbd class="search-kbd" aria-hidden="true">/</kbd>
             </div>
-            <div class="tier-filters" id="mobile-tier-bar"></div>
+            <div class="mobile-tier-list" id="mobile-tier-list"></div>
           </div>
         </details>
       </div>
@@ -628,630 +83,243 @@
       <div class="catalog-toolbar" role="region" aria-label="Catalog display controls">
         <div class="toolbar-meta">
           <span class="toolbar-status" id="catalog-count" aria-live="polite">Loading catalog...</span>
+          <a class="ctl-btn" href="../dist/components.manifest.json">manifest.json</a>
           <a class="ctl-btn" href="../dist/standard.json">standard.json</a>
         </div>
         <div class="toolbar-actions">
-          <button type="button" class="ctl-btn" id="toggle-theme" aria-pressed="false">Theme: dark</button>
-          <button type="button" class="ctl-btn" id="toggle-motion" aria-pressed="true">Motion: paused</button>
-          <button type="button" class="ctl-btn" id="toggle-tint" aria-pressed="false">Glass tint: off</button>
+          <button type="button" class="ctl-btn runtime-toggle" id="toggle-theme" data-state="default" aria-pressed="false">
+            <span class="vi-toggle-dot" aria-hidden="true"></span>
+            <span data-toggle-label>Theme: dark</span>
+          </button>
+          <button type="button" class="ctl-btn runtime-toggle" id="toggle-motion" data-state="default" aria-pressed="false">
+            <span class="vi-toggle-dot" aria-hidden="true"></span>
+            <span data-toggle-label>Motion: paused</span>
+          </button>
+          <button type="button" class="ctl-btn runtime-toggle" id="toggle-glass" data-state="default" aria-pressed="false">
+            <span class="vi-toggle-dot" aria-hidden="true"></span>
+            <span data-toggle-label>Glass: solid</span>
+          </button>
         </div>
       </div>
 
       <main id="catalog-sections" class="catalog-content">
         <div class="empty-state" id="empty-state" role="status" aria-live="polite">
-          <p class="fragment-desc">No component specimens match the active search or tier filter.</p>
+          <p class="empty-state-title">No matching specimens</p>
+          <p class="empty-state-copy" id="empty-state-copy">No component specimens match the active filter.</p>
           <button type="button" class="ctl-btn" id="reset-filters">Reset filters</button>
         </div>
       </main>
     </div>
   </div>
 
+  <!-- Shared Solid Tier-4 4-Tab Specimen Inspector Drawer -->
+  <div class="inspector-backdrop" id="specimen-inspector-backdrop" hidden>
+    <div class="inspector-drawer" role="dialog" aria-modal="true" aria-labelledby="inspector-title">
+      <div class="inspector-head">
+        <div class="inspector-head-copy">
+          <div class="inspector-title-row">
+            <h2 class="inspector-title" id="inspector-title">Specimen inspector</h2>
+            <span class="fragment-file" id="inspector-file"></span>
+            <span class="fragment-adr" id="inspector-adr"></span>
+          </div>
+          <p class="inspector-desc" id="inspector-desc"></p>
+        </div>
+        <button type="button" class="ctl-btn" id="inspector-close">Close</button>
+      </div>
+
+      <div class="inspector-tabs" role="tablist" aria-label="Specimen inspection views">
+        <button type="button" role="tab" class="inspector-tab" data-inspector-tab="preview" aria-selected="true" tabindex="0">Interactive Preview</button>
+        <button type="button" role="tab" class="inspector-tab" data-inspector-tab="markup" aria-selected="false" tabindex="-1">Raw HTML Markup</button>
+        <button type="button" role="tab" class="inspector-tab" data-inspector-tab="tokens" aria-selected="false" tabindex="-1">Token/Theme Mappings</button>
+        <button type="button" role="tab" class="inspector-tab" data-inspector-tab="a11y" aria-selected="false" tabindex="-1">Accessibility Tree Snapshot</button>
+      </div>
+
+      <div class="inspector-body">
+        <section class="inspector-panel" data-inspector-panel="preview" aria-label="Interactive Preview">
+          <div class="inspector-bar">
+            <span class="inspector-badge" id="inspector-isolation-badge">Isolated preview</span>
+          </div>
+          <div class="inspector-preview-stage" id="inspector-preview-host"></div>
+        </section>
+
+        <section class="inspector-panel" data-inspector-panel="markup" aria-label="Raw HTML Markup" hidden>
+          <div class="inspector-bar">
+            <span class="toolbar-status" id="inspector-copy-status" role="status" aria-live="polite"></span>
+            <button type="button" class="ctl-btn" id="inspector-copy-html">Copy HTML</button>
+          </div>
+          <pre class="inspector-code"><code id="inspector-markup-code"></code></pre>
+        </section>
+
+        <section class="inspector-panel" data-inspector-panel="tokens" aria-label="Token and Theme Mappings" hidden>
+          <div class="inspector-bar">
+            <span class="inspector-badge" id="inspector-tokens-theme">Computed tokens</span>
+          </div>
+          <table class="inspector-table">
+            <thead>
+              <tr>
+                <th scope="col">Custom property</th>
+                <th scope="col">Computed value</th>
+              </tr>
+            </thead>
+            <tbody id="inspector-tokens-body"></tbody>
+          </table>
+        </section>
+
+        <section class="inspector-panel" data-inspector-panel="a11y" aria-label="Accessibility Tree Snapshot" hidden>
+          <div class="inspector-a11y-summary" id="inspector-a11y-summary"></div>
+          <table class="inspector-table">
+            <thead>
+              <tr>
+                <th scope="col">Kind</th>
+                <th scope="col">Role / Element</th>
+                <th scope="col">Accessible name</th>
+                <th scope="col">State / Touch check</th>
+              </tr>
+            </thead>
+            <tbody id="inspector-a11y-body"></tbody>
+          </table>
+        </section>
+      </div>
+    </div>
+  </div>
+
   <script>
-    var TIERS = [
-      { id: 'foundations', label: 'Foundations and persona canon', shortLabel: 'Foundations', summary: 'VWXYZ persona marks, dialects, chibi companion stage, deliberation stepper, and quarantined stage backdrop.' },
-      { id: 'primitives', label: 'UI primitives and code', shortLabel: 'Primitives', summary: 'Core controls, forms, navigation, overlays, KPI strips, GFM markdown, diffs, run logs, and changelogs.' },
-      { id: 'workspace', label: 'Conversation, workspace and harness', shortLabel: 'Workspace', summary: 'Single and group conversations, approval gates, tool traces, memory notes, handoffs, usage meters, and harness contracts.' },
-      { id: 'public', label: 'Public site, maps and studio', shortLabel: 'Public site', summary: 'Public navigation island, mobile drawer, hero, bento grids, graphic constellation maps, and design studio review surfaces.' },
-      { id: 'layouts', label: 'Page layouts', shortLabel: 'Layouts', summary: 'Full-viewport compositions lazy-loaded in resizable 1440px, 1024px, and 390px frames.' },
-      { id: 'legacy', label: 'Atomic and legacy reference', shortLabel: 'Legacy', summary: 'Superseded single-component specimens and atomic sub-parts retained for backwards compatibility.', collapsed: true }
-    ];
+    window.VIDESIGN_CATALOG_DATA = {
+      tiers: [
+        { id: 'foundations', label: 'Foundations and persona canon', shortLabel: 'Foundations', summary: 'VWXYZ persona marks, dialects, chibi companion stage, deliberation stepper, and quarantined stage backdrop.' },
+        { id: 'primitives', label: 'UI primitives and code', shortLabel: 'Primitives', summary: 'Core controls, forms, navigation, overlays, KPI strips, GFM markdown, diffs, run logs, and changelogs.' },
+        { id: 'workspace', label: 'Conversation, workspace and harness', shortLabel: 'Workspace', summary: 'Library surfaces, single and group conversations, approval gates, tool traces, memory notes, handoffs, settings, and harness contracts.' },
+        { id: 'public', label: 'Public site, maps and studio', shortLabel: 'Public site', summary: 'Public navigation island, mobile drawer, hero, bento grids, graphic constellation maps, and design studio review surfaces.' },
+        { id: 'layouts', label: 'Page layouts', shortLabel: 'Layouts', summary: 'Full-viewport compositions lazy-loaded in resizable viewport frames.' },
+        { id: 'legacy', label: 'Atomic and legacy reference', shortLabel: 'Legacy', summary: 'Superseded single-component specimens and atomic sub-parts retained for backwards compatibility.', collapsed: true }
+      ],
+      fragments: [
+        // Foundations and persona canon
+        { file: 'five-bar-rule.html', tier: 'foundations', label: 'Five-bar rule', desc: 'Five hard segments in canon order; never a blended gradient (ADR-013).' },
+        { file: 'persona-identity-badge.html', tier: 'foundations', label: 'Persona identity badges', desc: 'Deterministic SVG micro-badges for the five seats; signature hexes on dark tile, mono light-field row, set of five only (ADR-013).' },
+        { file: 'persona-dialects.html', tier: 'foundations', label: 'Persona dialects', desc: 'One agent surface in five dialects: tempo, density, label type, motif and lead order follow each seat with subgrid baseline alignment (ADR-015).' },
+        { file: 'persona-switcher.html', tier: 'foundations', label: 'Persona switcher', desc: 'Glass tablist of five seats; accent dots use only the locked persona tokens (ADR-013).', glass: true },
+        { file: 'persona-companion-stage.html', tier: 'foundations', label: 'Persona companion stage', desc: 'Five-seat Living Interface ensemble with canon-order five-bar indicators and operational state switcher (ADR-013, ADR-023, ADR-024).' },
+        { file: 'persona-deliberation-stepper.html', tier: 'foundations', label: 'Persona deliberation stepper', desc: 'Six-stage VWXYZ request and deliberation walkthrough with scenario presets and owner-gate outcome receipt (ADR-013, ADR-024).' },
+        { file: 'stage-backdrop.html', tier: 'foundations', label: 'Stage backdrop', desc: 'Quarantined arc of persona lights over a five-segment stage ring from lib/stage.js; paused by default in catalog view (ADR-013).', stageSpecimen: true },
+        { file: 'vi-orbital-field.html', tier: 'foundations', label: 'Orbital hero field', desc: 'Zero-hex oklch() Canvas 2D orbital capsule field with 6-state agentic modulation, smooth pointer repulsion wake, radial clarity scrim, and deterministic reduced-motion fallback (ADR-024).', orbitalControls: true },
 
-    var FRAGMENTS = [
-      // Foundations and persona canon (7)
-      { file: 'five-bar-rule.html', tier: 'foundations', label: 'Five-bar rule', desc: 'Five hard segments in canon order; never a blended gradient (ADR-013).' },
-      { file: 'persona-identity-badge.html', tier: 'foundations', label: 'Persona identity badges', desc: 'Deterministic SVG micro-badges for the five seats; signature hexes on dark tile, mono light-field row, set of five only.' },
-      { file: 'persona-dialects.html', tier: 'foundations', label: 'Persona dialects', desc: 'One agent surface in five dialects: tempo, density, label type, motif and lead order follow each seat (ADR-015).' },
-      { file: 'persona-switcher.html', tier: 'foundations', label: 'Persona switcher', desc: 'Glass tablist of five seats; accent dots use only the locked persona tokens.', glass: true },
-      { file: 'persona-companion-stage.html', tier: 'foundations', label: 'Persona companion stage', desc: 'Five-seat Living Interface ensemble with canon-order five-bar indicators and operational state switcher (ADR-013, ADR-023, ADR-024).' },
-      { file: 'persona-deliberation-stepper.html', tier: 'foundations', label: 'Persona deliberation stepper', desc: 'Six-stage VWXYZ request and deliberation walkthrough with scenario presets and owner-gate outcome receipt (ADR-013, ADR-024).' },
-      { file: 'stage-backdrop.html', tier: 'foundations', label: 'Stage backdrop', desc: 'Quarantined arc of persona lights over a five-segment stage ring from lib/stage.js; paused by default in catalog view (ADR-013).', stageSpecimen: true },
-      { file: 'vi-orbital-field.html', tier: 'foundations', label: 'Orbital hero field', desc: 'Zero-hex oklch() Canvas 2D orbital capsule field with 6-state agentic modulation, smooth pointer repulsion wake, radial clarity scrim, and deterministic reduced-motion fallback.', orbitalControls: true },
+        // UI primitives and code
+        { file: 'button-variants.html', tier: 'primitives', label: 'Button variants', desc: 'Large solid violet CTA (bold xl+), accent-bordered primary, secondary hairline, ghost, destructive, disabled, and segmented group (ADR-011, ADR-024).' },
+        { file: 'form-controls.html', tier: 'primitives', label: 'Form controls', desc: 'Standardized text inputs (default, focus, error, disabled), textarea, select, checkbox, toggle switch, and range slider on solid surfaces (ADR-024).' },
+        { file: 'navigation-primitives.html', tier: 'primitives', label: 'Navigation primitives', desc: 'Horizontal tablist, breadcrumb trail, tabular-nums pagination, and Cmd+K command launcher with 44px hit areas (ADR-024).' },
+        { file: 'search-and-filter-bar.html', tier: 'primitives', label: 'Search and filter bar', desc: 'Standalone toolbar with visible-focus search field, aria-pressed facet pills, removable filter chips, sort select, Clear all, and a polite match counter (ADR-024).' },
+        { file: 'feedback-and-empty-states.html', tier: 'primitives', label: 'Feedback and empty states', desc: 'Status-paired polite banners (success, error), progress bar, and dashed zero-match empty state with reset control (ADR-024).' },
+        { file: 'toast-notification-stack.html', tier: 'primitives', label: 'Toast notification stack', desc: 'Polite status and assertive alert rows on solid surfaces with status dots, explicit labels, one recovery action, and 44px dismiss controls (ADR-024).' },
+        { file: 'disclosure-and-modals.html', tier: 'primitives', label: 'Disclosure and modals', desc: 'Native details accordion rows, solid secondary modal confirm dialog, and role="menu" action rows (ADR-024).' },
+        { file: 'command-palette-dialog.html', tier: 'primitives', label: 'Command palette dialog', desc: 'Solid keyboard-first command palette modal with focus-visible search input, grouped 44px command rows, shortcuts, and hint footer (ADR-024).' },
+        { file: 'drawer-inspector-sheet.html', tier: 'primitives', label: 'Drawer inspector sheet', desc: 'Solid slide-over detail sheet with 44px Close button, section tabs, hairline metadata dl, JSON preview, and footer actions (ADR-024).' },
+        { file: 'file-dropzone-upload.html', tier: 'primitives', label: 'File dropzone and upload queue', desc: 'Dashed file dropzone stating accepted MIME and size bounds beside a hairline upload queue with status-dot states and 44px Remove controls (ADR-024).' },
+        { file: 'multi-step-stepper.html', tier: 'primitives', label: 'Multi-step stepper', desc: 'Reusable setup stepper with tabular step numbers, Completed, In progress, Up next, and Blocked states, and 3:1 connectors that collapse below 768px (ADR-024, ADR-025).' },
+        { file: 'kpi-metric-strip.html', tier: 'primitives', label: 'KPI metric strip', desc: 'Responsive four-card summary strip with tabular-nums figures, status-dot + text deltas, and explicit measurement windows (ADR-024).' },
+        { file: 'data-table.html', tier: 'primitives', label: 'Data table', desc: 'Tabular container with header row and hairline row boundaries (ADR-007).' },
+        { file: 'skeleton-row.html', tier: 'primitives', label: 'Skeleton row', desc: 'Static loading geometry matched to the resolved row without shimmer (ADR-025).' },
+        { file: 'markdown-prose-renderer.html', tier: 'primitives', label: 'Markdown prose renderer', desc: 'Upgraded GFM Markdown surface with breadcrumb, claim badge, Raw .md, heading # anchors, Note/Warning/Scope boundary callouts, synced code tabs, sticky-column table, and Prev/Next pager (ADR-007, ADR-024).' },
+        { file: 'docs-code-tabs.html', tier: 'primitives', label: 'Docs synced code tabs', desc: 'Height-stable multi-language code switcher (TypeScript, Python, cURL, CLI) with synced sibling tabs, localStorage memory, arrow-key roving, and Copy receipt (ADR-007, ADR-024).' },
+        { file: 'code-and-diff-viewer.html', tier: 'primitives', label: 'Code and diff viewer', desc: 'Multi-tab code block, unified +/- diff rows with explicit status labels, and CLI receipt bar (ADR-007, ADR-024).' },
+        { file: 'log-stream-viewer.html', tier: 'primitives', label: 'Log stream viewer', desc: 'Solid run-log console: polite role="log" region, tabular-nums timestamps, status-dot severity pairs with text labels, and a Pause tail toggle (ADR-013, ADR-024).' },
+        { file: 'api-reference-row.html', tier: 'primitives', label: 'Endpoint reference rows', desc: 'Harness endpoint rows pairing protocol method chips and mono paths with effect classes (read, write, destructive, credential) and hairline parameter ledgers (ADR-021, ADR-024).' },
+        { file: 'changelog-timeline.html', tier: 'primitives', label: 'Changelog timeline', desc: 'Release notes with version chips, tabular dates, an unreleased block, and Added / Changed / Fixed / Planned hairline ledger rows (ADR-007, ADR-024).' },
 
-      // UI primitives and code (19)
-      { file: 'button-variants.html', tier: 'primitives', label: 'Button variants', desc: 'Large solid violet CTA (bold xl+), accent-bordered primary, secondary hairline, ghost, destructive, disabled, and segmented group (ADR-011, ADR-024).' },
-      { file: 'form-controls.html', tier: 'primitives', label: 'Form controls', desc: 'Standardized text inputs (default, focus, error, disabled), textarea, select, checkbox, toggle switch, and range slider on solid surfaces (ADR-024).' },
-      { file: 'navigation-primitives.html', tier: 'primitives', label: 'Navigation primitives', desc: 'Horizontal tablist, breadcrumb trail, tabular-nums pagination, and Cmd+K command launcher with 44px hit areas (ADR-024).' },
-      { file: 'search-and-filter-bar.html', tier: 'primitives', label: 'Search and filter bar', desc: 'Standalone toolbar with visible-focus search field, aria-pressed facet pills, removable filter chips, sort select, Clear all, and a polite match counter (ADR-024).' },
-      { file: 'feedback-and-empty-states.html', tier: 'primitives', label: 'Feedback and empty states', desc: 'Status-paired polite banners (success, error), progress bar, and dashed zero-match empty state with reset control (ADR-024).' },
-      { file: 'toast-notification-stack.html', tier: 'primitives', label: 'Toast notification stack', desc: 'Polite status and assertive alert rows on solid surfaces with status dots, explicit labels, one recovery action, and 44px dismiss controls (ADR-024).' },
-      { file: 'disclosure-and-modals.html', tier: 'primitives', label: 'Disclosure and modals', desc: 'Native details accordion rows, solid secondary modal confirm dialog, and role="menu" action rows (ADR-024).' },
-      { file: 'command-palette-dialog.html', tier: 'primitives', label: 'Command palette dialog', desc: 'Solid keyboard-first command palette modal with focus-visible search input, grouped 44px command rows, shortcuts, and hint footer (ADR-024).' },
-      { file: 'drawer-inspector-sheet.html', tier: 'primitives', label: 'Drawer inspector sheet', desc: 'Solid slide-over detail sheet with 44px Close button, section tabs, hairline metadata dl, JSON preview, and footer actions (ADR-024).' },
-      { file: 'file-dropzone-upload.html', tier: 'primitives', label: 'File dropzone and upload queue', desc: 'Dashed file dropzone stating accepted MIME and size bounds beside a hairline upload queue with status-dot states and 44px Remove controls (ADR-024).' },
-      { file: 'multi-step-stepper.html', tier: 'primitives', label: 'Multi-step stepper', desc: 'Reusable setup stepper with tabular step numbers, Completed, In progress, Up next, and Blocked states, and 3:1 connectors that collapse below 768px (ADR-024, ADR-025).' },
-      { file: 'kpi-metric-strip.html', tier: 'primitives', label: 'KPI metric strip', desc: 'Responsive four-card summary strip with tabular-nums figures, status-dot + text deltas, and explicit measurement windows (ADR-024).' },
-      { file: 'data-table.html', tier: 'primitives', label: 'Data table', desc: 'Tabular container with header row and hairline row boundaries.' },
-      { file: 'skeleton-row.html', tier: 'primitives', label: 'Skeleton row', desc: 'Static loading geometry matched to the resolved row without shimmer.' },
-      { file: 'markdown-prose-renderer.html', tier: 'primitives', label: 'Markdown prose renderer', desc: 'Upgraded GFM Markdown surface with breadcrumb, claim badge, Raw .md, heading # anchors, Note/Warning/Scope boundary callouts, synced code tabs, sticky-column table, and Prev/Next pager (ADR-007, ADR-024).' },
-      { file: 'docs-code-tabs.html', tier: 'primitives', label: 'Docs synced code tabs', desc: 'Height-stable multi-language code switcher (TypeScript, Python, cURL, CLI) with synced sibling tabs, localStorage memory, arrow-key roving, and Copy receipt (ADR-007, ADR-024).' },
-      { file: 'code-and-diff-viewer.html', tier: 'primitives', label: 'Code and diff viewer', desc: 'Multi-tab code block, unified +/- diff rows with explicit status labels, and CLI receipt bar (ADR-007, ADR-024).' },
-      { file: 'log-stream-viewer.html', tier: 'primitives', label: 'Log stream viewer', desc: 'Solid run-log console: polite role="log" region, tabular-nums timestamps, status-dot severity pairs with text labels, and a Pause tail toggle (ADR-013, ADR-024).' },
-      { file: 'api-reference-row.html', tier: 'primitives', label: 'Endpoint reference rows', desc: 'Harness endpoint rows pairing protocol method chips and mono paths with effect classes (read, write, destructive, credential) and hairline parameter ledgers (ADR-021, ADR-024).' },
-      { file: 'changelog-timeline.html', tier: 'primitives', label: 'Changelog timeline', desc: 'Release notes with version chips, tabular dates, an unreleased block, and Added / Changed / Fixed / Planned hairline ledger rows (ADR-007, ADR-024).' },
+        // Conversation, workspace and harness
+        { file: 'skills-library-surface.html', tier: 'workspace', label: 'Skills library', desc: 'Canvas-first Skills catalog with JIT token index budget, ownership tabs, category pills, Subgrid cards, Auto-trigger vs Manual only switches, and a solid SKILL.md inspector drawer (ADR-011, ADR-020, ADR-024).' },
+        { file: 'agents-library-surface.html', tier: 'workspace', label: 'Agents and routines roster', desc: 'Separates the five quarantined sovereign VWXYZ persona seats from on-demand specialist agents and scheduled routines with explicit approval posture and handoff tags (ADR-013, ADR-020, ADR-024).' },
+        { file: 'projects-library-surface.html', tier: 'workspace', label: 'Projects directory and workspace', desc: 'Interactive Directory table/cards switcher and two-zone Project Detail split pairing Threads/Sources/Activity + scoped composer with stacked instructions, immutable sources meter, and memory isolation (ADR-016, ADR-024).' },
+        { file: 'conversation-surface.html', tier: 'workspace', label: 'Conversation surface', desc: 'Standard AI chat empty state: one header row with seat dots, at most four starters, one composer field, and a one-line disclosure (ADR-016).', glass: true },
+        { file: 'chat-dock.html', tier: 'workspace', label: 'Chat dock', desc: 'Persistent persona chat in progress: launcher with five-bar foot and a glass dialog following the conversation surface (ADR-013, ADR-016).', glass: true },
+        { file: 'group-conversation.html', tier: 'workspace', label: 'Group conversation surface', desc: 'Multi-agent harness thread: monogram badges, head-agent violet ring, mono role labels, handoff and budget receipts, solid artifact card, and status-token turn states (ADR-020).', glass: true },
+        { file: 'context-attachment-tray.html', tier: 'workspace', label: 'Context attachment tray', desc: 'Composer-adjacent tray listing admitted files, recalled notes, and selections with tabular token budget and 44px Remove/Clear actions (ADR-016, ADR-020).' },
+        { file: 'session-checkpoint-card.html', tier: 'workspace', label: 'Session checkpoint card', desc: 'Resumable thread checkpoint anchoring the last confirmed pause with tabular timestamps, a bounded-reference summary fence, and 44px resume actions (ADR-020).' },
+        { file: 'speaker-marker.html', tier: 'workspace', label: 'Speaker marker', desc: 'Five-segment marker and seat name; heads a reply only when the speaker changes (ADR-016).' },
+        { file: 'starter-chips.html', tier: 'workspace', label: 'Starter chips', desc: 'At most four starter prompts on an empty conversation with 44px touch targets; they leave after the first turn (ADR-016).' },
+        { file: 'question-bar.html', tier: 'workspace', label: 'Question bar', desc: 'The /ask input as one concentric crystal-glass control; focus draws the violet brand outline (ADR-006).', glass: true },
+        { file: 'receipt-ledger-row.html', tier: 'workspace', label: 'Receipt ledger row', desc: 'Hairline-separated receipt rows in a polite live region: mono micro-label paired with a tabular mono value (ADR-017, ADR-020).' },
+        { file: 'turn-state-chip.html', tier: 'workspace', label: 'Turn-state chip', desc: 'Status-token turn states (running, stopping, finished, failed) paired with visible text labels; never colour alone (ADR-020).' },
+        { file: 'owner-approval-gate.html', tier: 'workspace', label: 'Owner approval gate', desc: 'Solid card for pending owner-gated tool requests with scannable Allow once / Always allow / Reject controls and collapsible audit receipt (ADR-020).' },
+        { file: 'tool-call-trace-card.html', tier: 'workspace', label: 'Tool call trace card', desc: 'Expandable details/summary trace card for neutral tool invocations showing status dot + label, latency, JSON arguments, output receipt, and Copy action (ADR-017, ADR-021).' },
+        { file: 'shared-desktop-catalog.html', tier: 'workspace', label: 'Shared desktop catalog', desc: 'Folder-grouped shared files with 44px checkbox admission rows, revision badges, and Open controls (ADR-020).' },
+        { file: 'artifact-lineage-reader.html', tier: 'workspace', label: 'Artifact lineage reader', desc: 'Solid dialog for reading produced Markdown revisions with collapsible input-file and prior-revision lineage drawer (ADR-020).' },
+        { file: 'agent-roster-card.html', tier: 'workspace', label: 'Agent roster and persona library', desc: 'Active team roster with head-agent violet ring, specialist graph-line outlines, and reusable saved personas (ADR-020).' },
+        { file: 'team-memory-notes.html', tier: 'workspace', label: 'Team memory notes', desc: 'Confirmed team notes (Always used / Used when relevant), pending agent suggestions requiring Keep/Dismiss confirmation, and recall disclosure (ADR-020).' },
+        { file: 'cross-team-handoff.html', tier: 'workspace', label: 'Cross-team handoff and review gate', desc: 'Outgoing and incoming cross-team handoff blocks paired with Review approved and Changes requested stage gate statuses (ADR-020).' },
+        { file: 'usage-budget-meter.html', tier: 'workspace', label: 'Usage and limits meter', desc: 'Polite live region with tabular mono call/token totals, collapsible per-actor breakdowns, and unreported-tokens fallback receipt (ADR-020).' },
+        { file: 'settings-quick-menu.html', tier: 'workspace', label: 'Quick settings popover', desc: 'Compact crystal-glass sidebar popover grouping token usage, Dark/Light theme switcher, motion and developer receipt switches, workspace shortcuts, and All settings trigger (ADR-006, ADR-024).', glass: true },
+        { file: 'settings-surface.html', tier: 'workspace', label: 'Unified settings dialog', desc: 'Solid two-pane Settings dialog with searchable four-group left rail, General/Export/Danger Zone, neutral model routing and tool connectors, local nodes ledger, and policy/credential/memory panes (ADR-017, ADR-021, ADR-024).' },
+        { file: 'claim-maturity-badge.html', tier: 'workspace', label: 'Claim maturity badge', desc: 'Four canonical claim maturity pills (implemented, observed, specified, planned) pairing status indicators with short receipts (ADR-021).' },
+        { file: 'run-lifecycle-strip.html', tier: 'workspace', label: 'Run lifecycle strip', desc: 'Solid card showing the six objective/attempt stages, owner gate, terminal branches, and hairline-separated run receipt (ADR-021).' },
+        { file: 'tool-registry-row.html', tier: 'workspace', label: 'Neutral tool registry', desc: 'Hairline-separated neutral tool entries showing connector bindings, effect classes, realms, and owner-gate or deterministic-check states (ADR-021).' },
+        { file: 'provider-model-selector.html', tier: 'workspace', label: 'Provider model selector', desc: 'Neutral local and remote routing slots with tabular context and latency readouts, availability pairs, and an ordered fallback chain ending in a typed hold (ADR-021).' },
+        { file: 'credential-activity-ledger.html', tier: 'workspace', label: 'Credential activity ledger', desc: 'Credential-effect binding rows with scope, masked reference, and rotation; state pairs and a destructive 44px Revoke, never the secret value (ADR-017, ADR-021).' },
+        { file: 'policy-rule-matrix.html', tier: 'workspace', label: 'Policy rule matrix', desc: 'Responsive hairline governance table mapping neutral tool patterns and effect classes to Allow, Ask owner, and Deny boundaries (ADR-017, ADR-021).' },
+        { file: 'browser-check-runner.html', tier: 'workspace', label: 'Browser check runner', desc: 'Explorable client-side command/skill checker panel with presets, filter switch, and hairline match results (ADR-017, ADR-023).' },
+        { file: 'instrument.html', tier: 'workspace', label: 'Explorable instrument', desc: 'Interactive panel for articles and proofs: readout diagram, switch rows, range, segmented presets, and a ledger receipt (ADR-017).' },
+        { file: 'statement-proof-row.html', tier: 'workspace', label: 'Statement-to-proof row', desc: 'Numbered statement beside its proof record. Solid, never glass (ADR-016).' },
+        { file: 'locked-panel.html', tier: 'workspace', label: 'Locked panel', desc: 'Fail-closed panel: disabled composer with listed unlock conditions (ADR-016).' },
+        { file: 'persona-console.html', tier: 'workspace', label: 'Sovereign persona console', desc: 'Identity header, viewport, evidence trail with unavailable slots, and command bar (ADR-013).' },
 
-      // Conversation, workspace and harness (34)
-      { file: 'skills-library-surface.html', tier: 'workspace', label: 'Skills library', desc: 'Canvas-first Skills catalog with JIT token index budget, ownership tabs, category pills, Subgrid cards, Auto-trigger vs Manual only switches, and a solid SKILL.md inspector drawer (ADR-011, ADR-020, ADR-024).' },
-      { file: 'agents-library-surface.html', tier: 'workspace', label: 'Agents and routines roster', desc: 'Separates the five quarantined sovereign VWXYZ persona seats from on-demand specialist agents and scheduled routines with explicit approval posture and handoff tags (ADR-013, ADR-020, ADR-024).' },
-      { file: 'projects-library-surface.html', tier: 'workspace', label: 'Projects directory and workspace', desc: 'Interactive Directory table/cards switcher and two-zone Project Detail split pairing Threads/Sources/Activity + scoped composer with stacked instructions, immutable sources meter, and memory isolation (ADR-016, ADR-024).' },
-      { file: 'conversation-surface.html', tier: 'workspace', label: 'Conversation surface', desc: 'Standard AI chat empty state: one header row with seat dots, at most four starters, one composer field, and a one-line disclosure (ADR-016).', glass: true },
-      { file: 'chat-dock.html', tier: 'workspace', label: 'Chat dock', desc: 'Persistent persona chat in progress: launcher with five-bar foot and a glass dialog following the conversation surface (ADR-013, ADR-016).', glass: true },
-      { file: 'group-conversation.html', tier: 'workspace', label: 'Group conversation surface', desc: 'Multi-agent harness thread: monogram badges, head-agent violet ring, mono role labels, handoff and budget receipts, solid artifact card, and status-token turn states (ADR-020).', glass: true },
-      { file: 'context-attachment-tray.html', tier: 'workspace', label: 'Context attachment tray', desc: 'Composer-adjacent tray listing admitted files, recalled notes, and selections with tabular token budget and 44px Remove/Clear actions (ADR-016, ADR-020).' },
-      { file: 'session-checkpoint-card.html', tier: 'workspace', label: 'Session checkpoint card', desc: 'Resumable thread checkpoint anchoring the last confirmed pause with tabular timestamps, a bounded-reference summary fence, and 44px resume actions (ADR-020).' },
-      { file: 'speaker-marker.html', tier: 'workspace', label: 'Speaker marker', desc: 'Five-segment marker and seat name; heads a reply only when the speaker changes (ADR-016).' },
-      { file: 'starter-chips.html', tier: 'workspace', label: 'Starter chips', desc: 'At most four starter prompts on an empty conversation with 44px touch targets; they leave after the first turn (ADR-016).' },
-      { file: 'question-bar.html', tier: 'workspace', label: 'Question bar', desc: 'The /ask input as one concentric crystal-glass control; focus draws the violet brand outline (ADR-006).', glass: true },
-      { file: 'receipt-ledger-row.html', tier: 'workspace', label: 'Receipt ledger row', desc: 'Hairline-separated receipt rows in a polite live region: mono micro-label paired with a tabular mono value (ADR-017, ADR-020).' },
-      { file: 'turn-state-chip.html', tier: 'workspace', label: 'Turn-state chip', desc: 'Status-token turn states (running, stopping, finished, failed) paired with visible text labels; never colour alone (ADR-020).' },
-      { file: 'owner-approval-gate.html', tier: 'workspace', label: 'Owner approval gate', desc: 'Solid card for pending owner-gated tool requests with scannable Allow once / Always allow / Reject controls and collapsible audit receipt (ADR-020).' },
-      { file: 'tool-call-trace-card.html', tier: 'workspace', label: 'Tool call trace card', desc: 'Expandable details/summary trace card for neutral tool invocations showing status dot + label, latency, JSON arguments, output receipt, and Copy action (ADR-017, ADR-021).' },
-      { file: 'shared-desktop-catalog.html', tier: 'workspace', label: 'Shared desktop catalog', desc: 'Folder-grouped shared files with 44px checkbox admission rows, revision badges, and Open controls (ADR-020).' },
-      { file: 'artifact-lineage-reader.html', tier: 'workspace', label: 'Artifact lineage reader', desc: 'Solid dialog for reading produced Markdown revisions with collapsible input-file and prior-revision lineage drawer (ADR-020).' },
-      { file: 'agent-roster-card.html', tier: 'workspace', label: 'Agent roster and persona library', desc: 'Active team roster with head-agent violet ring, specialist graph-line outlines, and reusable saved personas (ADR-020).' },
-      { file: 'team-memory-notes.html', tier: 'workspace', label: 'Team memory notes', desc: 'Confirmed team notes (Always used / Used when relevant), pending agent suggestions requiring Keep/Dismiss confirmation, and recall disclosure (ADR-020).' },
-      { file: 'cross-team-handoff.html', tier: 'workspace', label: 'Cross-team handoff and review gate', desc: 'Outgoing and incoming cross-team handoff blocks paired with Review approved and Changes requested stage gate statuses (ADR-020).' },
-      { file: 'usage-budget-meter.html', tier: 'workspace', label: 'Usage and limits meter', desc: 'Polite live region with tabular mono call/token totals, collapsible per-actor breakdowns, and unreported-tokens fallback receipt (ADR-020).' },
-      { file: 'settings-quick-menu.html', tier: 'workspace', label: 'Quick settings popover', desc: 'Compact crystal-glass sidebar popover grouping token usage, Dark/Light theme switcher, motion and developer receipt switches, workspace shortcuts, and All settings trigger (ADR-006, ADR-024).', glass: true },
-      { file: 'settings-surface.html', tier: 'workspace', label: 'Unified settings dialog', desc: 'Solid two-pane Settings dialog with searchable four-group left rail, General/Export/Danger Zone, neutral model routing and tool connectors, local nodes ledger, and policy/credential/memory panes (ADR-017, ADR-021, ADR-024).' },
-      { file: 'claim-maturity-badge.html', tier: 'workspace', label: 'Claim maturity badge', desc: 'Four canonical claim maturity pills (implemented, observed, specified, planned) pairing status indicators with short receipts.' },
-      { file: 'run-lifecycle-strip.html', tier: 'workspace', label: 'Run lifecycle strip', desc: 'Solid card showing the six objective/attempt stages, owner gate, terminal branches, and hairline-separated run receipt.' },
-      { file: 'tool-registry-row.html', tier: 'workspace', label: 'Neutral tool registry', desc: 'Hairline-separated neutral tool entries showing connector bindings, effect classes, realms, and owner-gate or deterministic-check states.' },
-      { file: 'provider-model-selector.html', tier: 'workspace', label: 'Provider model selector', desc: 'Neutral local and remote routing slots with tabular context and latency readouts, availability pairs, and an ordered fallback chain ending in a typed hold (ADR-021).' },
-      { file: 'credential-activity-ledger.html', tier: 'workspace', label: 'Credential activity ledger', desc: 'Credential-effect binding rows with scope, masked reference, and rotation; state pairs and a destructive 44px Revoke, never the secret value (ADR-017, ADR-021).' },
-      { file: 'policy-rule-matrix.html', tier: 'workspace', label: 'Policy rule matrix', desc: 'Responsive hairline governance table mapping neutral tool patterns and effect classes to Allow, Ask owner, and Deny boundaries (ADR-017, ADR-021).' },
-      { file: 'browser-check-runner.html', tier: 'workspace', label: 'Browser check runner', desc: 'Explorable client-side command/skill checker panel with presets, filter switch, and hairline match results (ADR-017, ADR-023).' },
-      { file: 'instrument.html', tier: 'workspace', label: 'Explorable instrument', desc: 'Interactive panel for articles and proofs: readout diagram, switch rows, range, segmented presets, and a ledger receipt (ADR-017).' },
-      { file: 'statement-proof-row.html', tier: 'workspace', label: 'Statement-to-proof row', desc: 'Numbered statement beside its proof record. Solid, never glass.' },
-      { file: 'locked-panel.html', tier: 'workspace', label: 'Locked panel', desc: 'Fail-closed panel: disabled composer with listed unlock conditions.' },
-      { file: 'persona-console.html', tier: 'workspace', label: 'Sovereign persona console', desc: 'Identity header, viewport, evidence trail with unavailable slots, and command bar (Violet demo).' },
+        // Public site, maps and studio
+        { file: 'site-header-island.html', tier: 'public', label: 'Site header island', desc: 'Crystal-glass island navigation pill with six bounded links, brand accent Chat trigger, and 44px mobile menu button (ADR-023).', glass: true },
+        { file: 'mobile-navigation-sheet.html', tier: 'public', label: 'Mobile navigation sheet', desc: 'Solid secondary mobile drawer with six bounded routes, aria-current page state, 44px rows, motion pause, and footer continuity strip (ADR-023, ADR-025).' },
+        { file: 'hero-billboard.html', tier: 'public', label: 'Hero billboard', desc: 'Fluid hero headline, five-bar signature rule, computed facts rail, and four-plane overview (ADR-005, ADR-013, ADR-023).' },
+        { file: 'bento-feature-grid.html', tier: 'public', label: 'Bento feature grid', desc: 'Gapless asymmetric bento grid with exact six-card cell math, tabular evidence counters, and bottom-aligned 44px actions across the public ecosystem planes (ADR-023, ADR-025).' },
+        { file: 'public-repo-card.html', tier: 'public', label: 'Public repository cards', desc: 'Two-column showcase grid for seed, bloom, videsign, and vitools using generalized lexicon roles and 44px action links (ADR-021).' },
+        { file: 'ecosystem-plane-map.html', tier: 'public', label: 'Ecosystem plane map', desc: 'Four-plane public architecture container (Surfaces, Harness, Providers, Authority stores) paired with the generalized lexicon ledger (ADR-021).' },
+        { file: 'comparison-matrix.html', tier: 'public', label: 'Comparison matrix', desc: 'Accessible multi-column capability table with semantic row headers, Supported, Planned, and Out of scope state pairs, and an observation-scope footnote (ADR-021).' },
+        { file: 'filterable-catalog-grid.html', tier: 'public', label: 'Filterable catalog grid', desc: 'Search input, four facet selects, polite live count, two-column skill/agent cards, and empty-filter fallback (ADR-023).' },
+        { file: 'client-install-switcher.html', tier: 'public', label: 'Client install switcher', desc: 'Client selector, copyable MCP/skill snippet, unsupported-client gap row, raw markdown links, and provenance ledger (ADR-023).' },
+        { file: 'evidence-exhibit-figure.html', tier: 'public', label: 'Evidence exhibit figure', desc: 'Product exhibit card with truth disclosure, non-image numbered workflow steps, claim IDs, and APA/BibTeX cite block (ADR-023).' },
+        { file: 'article-toc-and-meta.html', tier: 'public', label: 'Article TOC and metadata rail', desc: 'Editorial sidebar rail with 44px scroll-spy jump links, separated Reviewed vs Observed dates, read time, Markdown/llms.txt links, BibTeX, and Ask Violet triggers (ADR-007, ADR-023).' },
+        { file: 'docs-sidebar-nav.html', tier: 'public', label: 'Docs collapsible sidebar nav', desc: 'Solid documentation tree with collapsible sentence-case mono <details> groups, aria-current hairline indicator, 44px links, and external link markers (ADR-007, ADR-024).' },
+        { file: 'docs-quickstart-grid.html', tier: 'public', label: 'Docs faceted quickstart grid', desc: 'Section hairline header with Copy section link, aria-pressed category pills, polite live count, responsive container-query cards, and completion-time footers (ADR-024, ADR-025).' },
+        { file: 'docs-page-actions.html', tier: 'public', label: 'Docs page actions rail', desc: 'Right-rail documentation actions pairing Copy page (.md), View raw .md, llms.txt discovery link, and Ask Violet about this page dock trigger (ADR-013, ADR-024).' },
+        { file: 'site-footer.html', tier: 'public', label: 'Site footer', desc: 'Grouped footer navigation for public repositories, machine feeds, privacy disclosure, and WCAG 2.2.2 motion pause toggle (ADR-023).' },
+        { file: 'systems-constellation-map.html', tier: 'public', label: 'Systems constellation map', desc: 'Homepage systems constellation graphic map pairing tier filters, deterministic 640x420 SVG links (3:1+), and crystal-glass evidence lens (ADR-013, ADR-024).', glass: true },
+        { file: 'memory-field.html', tier: 'public', label: 'Memory field', desc: 'Deterministic memory constellation: outline shape by memory class, radius by recall count, CR/RR/LR/TR link tokens with a second cue (ADR-018).' },
+        { file: 'memory-pipeline.html', tier: 'public', label: 'Memory pipeline', desc: 'The memory architecture as groups, steps, stores, and labelled flows, with opt-in flow pulses from lib/memory-field.css (ADR-018).' },
+        { file: 'evidence-lens.html', tier: 'public', label: 'Evidence lens', desc: 'Glass shell with a near-opaque core: statement-to-source rows and a not-established row (ADR-006).', glass: true },
+        { file: 'coverage-grid.html', tier: 'public', label: 'Coverage grid', desc: 'Question terms against record kinds, with a text alternative for every cell (ADR-016).' },
+        { file: 'brief-contract-card.html', tier: 'public', label: 'Brief and contract card', desc: 'Standalone structured brief dl beside the Keep / Change / Do not copy reference contract with a brief-JSON copy control (ADR-023).' },
+        { file: 'viewport-frame-set.html', tier: 'public', label: 'Viewport frame set', desc: 'The three standard studio viewports as labelled schematic frames recomposing the same slot stack (ADR-023).' },
+        { file: 'critique-thread-panel.html', tier: 'public', label: 'Critique thread panel', desc: 'Slot-anchored critique entries with Keep / Change / Do not copy classification chips, polite open/resolved counter, and a critique composer (ADR-023).' },
+        { file: 'guardrail-receipt-panel.html', tier: 'public', label: 'Guardrail receipt panel', desc: 'Polite receipt pairing text contrast, graph line, glass layers, arbitrary-class, and scaffold-tool bounds with export and inspection actions (ADR-023).' },
 
-      // Public site, maps and studio (21)
-      { file: 'site-header-island.html', tier: 'public', label: 'Site header island', desc: 'Crystal-glass island navigation pill with six bounded links, brand accent Chat trigger, and 44px mobile menu button (ADR-023).', glass: true },
-      { file: 'mobile-navigation-sheet.html', tier: 'public', label: 'Mobile navigation sheet', desc: 'Solid secondary mobile drawer with six bounded routes, aria-current page state, 44px rows, motion pause, and footer continuity strip (ADR-023, ADR-025).' },
-      { file: 'hero-billboard.html', tier: 'public', label: 'Hero billboard', desc: 'Fluid hero headline, five-bar signature rule, computed facts rail, and four-plane overview (ADR-005, ADR-013, ADR-023).' },
-      { file: 'bento-feature-grid.html', tier: 'public', label: 'Bento feature grid', desc: 'Gapless asymmetric bento grid with exact six-card cell math, tabular evidence counters, and bottom-aligned 44px actions across the public ecosystem planes (ADR-023, ADR-025).' },
-      { file: 'public-repo-card.html', tier: 'public', label: 'Public repository cards', desc: 'Two-column showcase grid for seed, bloom, videsign, and vitools using generalized lexicon roles and 44px action links.' },
-      { file: 'ecosystem-plane-map.html', tier: 'public', label: 'Ecosystem plane map', desc: 'Four-plane public architecture container (Surfaces, Harness, Providers, Authority stores) paired with the generalized lexicon ledger.' },
-      { file: 'comparison-matrix.html', tier: 'public', label: 'Comparison matrix', desc: 'Accessible multi-column capability table with semantic row headers, Supported, Planned, and Out of scope state pairs, and an observation-scope footnote (ADR-021).' },
-      { file: 'filterable-catalog-grid.html', tier: 'public', label: 'Filterable catalog grid', desc: 'Search input, four facet selects, polite live count, two-column skill/agent cards, and empty-filter fallback (ADR-023).' },
-      { file: 'client-install-switcher.html', tier: 'public', label: 'Client install switcher', desc: 'Client selector, copyable MCP/skill snippet, unsupported-client gap row, raw markdown links, and provenance ledger (ADR-023).' },
-      { file: 'evidence-exhibit-figure.html', tier: 'public', label: 'Evidence exhibit figure', desc: 'Product exhibit card with truth disclosure, non-image numbered workflow steps, claim IDs, and APA/BibTeX cite block (ADR-023).' },
-      { file: 'article-toc-and-meta.html', tier: 'public', label: 'Article TOC and metadata rail', desc: 'Editorial sidebar rail with 44px scroll-spy jump links, separated Reviewed vs Observed dates, read time, Markdown/llms.txt links, BibTeX, and Ask Violet triggers (ADR-007, ADR-023).' },
-      { file: 'docs-sidebar-nav.html', tier: 'public', label: 'Docs collapsible sidebar nav', desc: 'Solid documentation tree with collapsible sentence-case mono <details> groups, aria-current hairline indicator, 44px links, and external link markers (ADR-007, ADR-024).' },
-      { file: 'docs-quickstart-grid.html', tier: 'public', label: 'Docs faceted quickstart grid', desc: 'Mistral-inspired section hairline header with Copy section link, aria-pressed category pills, polite live count, responsive container-query cards, and completion-time footers (ADR-024, ADR-025).' },
-      { file: 'docs-page-actions.html', tier: 'public', label: 'Docs page actions rail', desc: 'Right-rail documentation actions pairing Copy page (.md), View raw .md, llms.txt discovery link, and Ask Violet about this page dock trigger (ADR-013, ADR-024).' },
-      { file: 'site-footer.html', tier: 'public', label: 'Site footer', desc: 'Grouped footer navigation for public repositories, machine feeds, privacy disclosure, and WCAG 2.2.2 motion pause toggle (ADR-023).' },
-      { file: 'systems-constellation-map.html', tier: 'public', label: 'Systems constellation map', desc: 'Homepage systems constellation graphic map pairing tier filters, deterministic 640x420 SVG links (3:1+), and crystal-glass evidence lens (ADR-013, ADR-024).', glass: true },
-      { file: 'memory-field.html', tier: 'public', label: 'Memory field', desc: 'Deterministic memory constellation: outline shape by memory class, radius by recall count, CR/RR/LR/TR link tokens with a second cue (ADR-018).' },
-      { file: 'memory-pipeline.html', tier: 'public', label: 'Memory pipeline', desc: 'The memory architecture as groups, steps, stores, and labelled flows, with opt-in flow pulses from lib/memory-field.css (ADR-018).' },
-      { file: 'evidence-lens.html', tier: 'public', label: 'Evidence lens', desc: 'Glass shell with a near-opaque core: statement-to-source rows and a not-established row (ADR-006).', glass: true },
-      { file: 'coverage-grid.html', tier: 'public', label: 'Coverage grid', desc: 'Question terms against record kinds, with a text alternative for every cell.' },
-      { file: 'brief-contract-card.html', tier: 'public', label: 'Brief and contract card', desc: 'Standalone structured brief dl beside the Keep / Change / Do not copy reference contract with a brief-JSON copy control (ADR-023).' },
-      { file: 'viewport-frame-set.html', tier: 'public', label: 'Viewport frame set', desc: 'The three standard studio viewports (1440px, 1024px, 390px) as labelled schematic frames recomposing the same slot stack (ADR-023).' },
-      { file: 'critique-thread-panel.html', tier: 'public', label: 'Critique thread panel', desc: 'Slot-anchored critique entries with Keep / Change / Do not copy classification chips, polite open/resolved counter, and a critique composer (ADR-023).' },
-      { file: 'guardrail-receipt-panel.html', tier: 'public', label: 'Guardrail receipt panel', desc: 'Polite receipt pairing text contrast, graph line, glass layers, arbitrary-class, and scaffold-tool bounds with export and inspection actions (ADR-023).' },
+        // Page layouts
+        { file: 'layout-docs-portal.html', tier: 'layouts', label: 'Layout: docs portal', desc: 'Three-column responsive documentation portal uniting crystal-glass header island, Cmd+K palette, collapsible nav rail, Docs Hub + 72ch Article/API canvas, and scroll-spy TOC rail (ADR-024, ADR-025).', frame: true },
+        { file: 'layout-settings.html', tier: 'layouts', label: 'Layout: workspace settings', desc: 'Full-viewport responsive Settings workstation recomposing between desktop two-pane, tablet split, and mobile single-column drill-down (ADR-024, ADR-025).', frame: true },
+        { file: 'layout-public-site.html', tier: 'layouts', label: 'Layout: public site', desc: 'Full-page dynamic public website composition integrating the island header, hero billboard, four public repos, and footer (ADR-023).', frame: true },
+        { file: 'design-studio-canvas.html', tier: 'layouts', label: 'Layout: design studio canvas', desc: 'Collaborative agent design studio with structured brief, Keep/Change/Do not copy contract, viewport presets, and guardrail check (ADR-023).', frame: true },
+        { file: 'layout-agent-workspace.html', tier: 'layouts', label: 'Layout: agent workspace', desc: 'Masthead, workspaces and personas sidebar, group conversation and composer, and workspace inspector (ADR-020).', frame: true },
+        { file: 'layout-dashboard.html', tier: 'layouts', label: 'Layout: dashboard', desc: 'Sidebar, toolbar, stat cards, and monitor rows.', frame: true },
+        { file: 'layout-graph.html', tier: 'layouts', label: 'Layout: graph', desc: 'Sidebar, graph canvas, and inspector panel.', frame: true },
 
-      // Page layouts (7 full-viewport compositions)
-      { file: 'layout-docs-portal.html', tier: 'layouts', label: 'Layout: docs portal', desc: 'Three-column responsive documentation portal uniting crystal-glass header island, Cmd+K palette, collapsible nav rail, Docs Hub + 72ch Article/API canvas, and scroll-spy TOC rail (ADR-024, ADR-025).', frame: true },
-      { file: 'layout-settings.html', tier: 'layouts', label: 'Layout: workspace settings', desc: 'Full-viewport responsive Settings workstation recomposing between desktop two-pane (1440px), tablet split (1024px), and mobile single-column drill-down (390px) (ADR-024, ADR-025).', frame: true },
-      { file: 'layout-public-site.html', tier: 'layouts', label: 'Layout: public site', desc: 'Full-page dynamic public website composition integrating the island header, hero billboard, four public repos, and footer (ADR-023).', frame: true },
-      { file: 'design-studio-canvas.html', tier: 'layouts', label: 'Layout: design studio canvas', desc: 'Collaborative agent design studio with structured brief, Keep/Change/Do not copy contract, viewport presets, and guardrail check (ADR-023).', frame: true },
-      { file: 'layout-agent-workspace.html', tier: 'layouts', label: 'Layout: agent workspace', desc: 'Masthead, workspaces and personas sidebar, group conversation and composer, and workspace inspector (ADR-020).', frame: true },
-      { file: 'layout-dashboard.html', tier: 'layouts', label: 'Layout: dashboard', desc: 'Sidebar, toolbar, stat cards, and monitor rows.', frame: true },
-      { file: 'layout-graph.html', tier: 'layouts', label: 'Layout: graph', desc: 'Sidebar, graph canvas, and inspector panel.', frame: true },
-
-      // Atomic and legacy reference (20: superseded specimens, single-region partials, and micro-atoms)
-      { file: 'sidebar-nav.html', tier: 'legacy', label: 'Sidebar navigation', note: 'Single-region partial', desc: 'Full-height navigation rail with right-edge rounding.', frame: true },
-      { file: 'inspector-panel.html', tier: 'legacy', label: 'Inspector panel', note: 'Single-region partial', desc: 'Right-hand inspection panel shell.', frame: true },
-      { file: 'graph-canvas.html', tier: 'legacy', label: 'Graph canvas', note: 'Single-region partial', desc: 'Container for node and edge visualisations.', frame: true },
-      { file: 'island-nav.html', tier: 'legacy', label: 'Island navigation', note: 'Superseded by site-header-island.html', desc: 'Original ADR-006 crystal pill navigation specimen with six bounded links and an Ask trigger.', glass: true },
-      { file: 'button.html', tier: 'legacy', label: 'Button atom', note: 'Prefer button-variants.html', desc: 'Single primary action button specimen.' },
-      { file: 'alert-banner.html', tier: 'legacy', label: 'Alert banner', desc: 'Single inline warning status row.' },
-      { file: 'stat-card.html', tier: 'legacy', label: 'Stat card', desc: 'Single metric card atom (see kpi-metric-strip.html for composite strip).' },
-      { file: 'monitor-row.html', tier: 'legacy', label: 'Monitor row', desc: 'Dense list row with status indicator.' },
-      { file: 'activity-feed.html', tier: 'legacy', label: 'Activity feed', desc: 'List container with live status indicator.' },
-      { file: 'activity-item.html', tier: 'legacy', label: 'Activity item', desc: 'Dense text layout for feed entries.' },
-      { file: 'inspector-field.html', tier: 'legacy', label: 'Inspector field', desc: 'Key-value pair atom for inspection panels.' },
-      { file: 'inspector-section.html', tier: 'legacy', label: 'Inspector section', desc: 'Titled group of inspector fields.' },
-      { file: 'toolbar.html', tier: 'legacy', label: 'Toolbar', desc: 'Horizontal control bar.' },
-      { file: 'toolbar-button.html', tier: 'legacy', label: 'Toolbar button', desc: 'Compact toolbar control atom.' },
-      { file: 'data-table-row.html', tier: 'legacy', label: 'Data table row', desc: 'Single table row atom (see data-table.html).' },
-      { file: 'data-table-cell.html', tier: 'legacy', label: 'Data table cell', desc: 'Single table cell atom (see data-table.html).' },
-      { file: 'graph-node.html', tier: 'legacy', label: 'Graph node', desc: 'Dashboard graph node atom with status indicator.' },
-      { file: 'graph-edge.html', tier: 'legacy', label: 'Graph edge', desc: 'Dashboard graph edge atom.' },
-      { file: 'field-node.html', tier: 'legacy', label: 'Field node', desc: 'Build-time SVG node in rest, lit, and dim states.' },
-      { file: 'field-edge.html', tier: 'legacy', label: 'Field edge', desc: 'Edge in rest, lit, and dim states; draw-in uses transform only.' }
-    ];
-
-    var state = {
-      tier: 'all',
-      query: '',
-      theme: 'dark',
-      motionPaused: true,
-      glassTint: false
+        // Atomic and legacy reference
+        { file: 'sidebar-nav.html', tier: 'legacy', label: 'Sidebar navigation', note: 'Single-region partial', desc: 'Full-height navigation rail with right-edge rounding.', frame: true },
+        { file: 'inspector-panel.html', tier: 'legacy', label: 'Inspector panel', note: 'Single-region partial', desc: 'Right-hand inspection panel shell.', frame: true },
+        { file: 'graph-canvas.html', tier: 'legacy', label: 'Graph canvas', note: 'Single-region partial', desc: 'Container for node and edge visualisations.', frame: true },
+        { file: 'island-nav.html', tier: 'legacy', label: 'Island navigation', note: 'Superseded by site-header-island.html', desc: 'Original ADR-006 crystal pill navigation specimen with six bounded links and an Ask trigger.', glass: true },
+        { file: 'button.html', tier: 'legacy', label: 'Button atom', note: 'Prefer button-variants.html', desc: 'Single primary action button specimen.' },
+        { file: 'alert-banner.html', tier: 'legacy', label: 'Alert banner', desc: 'Single inline warning status row.' },
+        { file: 'stat-card.html', tier: 'legacy', label: 'Stat card', desc: 'Single metric card atom (see kpi-metric-strip.html for composite strip).' },
+        { file: 'monitor-row.html', tier: 'legacy', label: 'Monitor row', desc: 'Dense list row with status indicator.' },
+        { file: 'activity-feed.html', tier: 'legacy', label: 'Activity feed', desc: 'List container with live status indicator.' },
+        { file: 'activity-item.html', tier: 'legacy', label: 'Activity item', desc: 'Dense text layout for feed entries.' },
+        { file: 'inspector-field.html', tier: 'legacy', label: 'Inspector field', desc: 'Key-value pair atom for inspection panels.' },
+        { file: 'inspector-section.html', tier: 'legacy', label: 'Inspector section', desc: 'Titled group of inspector fields.' },
+        { file: 'toolbar.html', tier: 'legacy', label: 'Toolbar', desc: 'Horizontal control bar.' },
+        { file: 'toolbar-button.html', tier: 'legacy', label: 'Toolbar button', desc: 'Compact toolbar control atom.' },
+        { file: 'data-table-row.html', tier: 'legacy', label: 'Data table row', desc: 'Single table row atom (see data-table.html).' },
+        { file: 'data-table-cell.html', tier: 'legacy', label: 'Data table cell', desc: 'Single table cell atom (see data-table.html).' },
+        { file: 'graph-node.html', tier: 'legacy', label: 'Graph node', desc: 'Dashboard graph node atom with status indicator.' },
+        { file: 'graph-edge.html', tier: 'legacy', label: 'Graph edge', desc: 'Dashboard graph edge atom.' },
+        { file: 'field-node.html', tier: 'legacy', label: 'Field node', desc: 'Build-time SVG node in rest, lit, and dim states.' },
+        { file: 'field-edge.html', tier: 'legacy', label: 'Field edge', desc: 'Edge in rest, lit, and dim states; draw-in uses transform only.' }
+      ]
     };
-
-    var mountedIframes = [];
-    var fragmentHtmlCache = {};
-    var sectionNodes = {};
-    var cardRecords = [];
-
-    function framedDocument(html) {
-      var base = document.baseURI;
-      return '<!DOCTYPE html><html lang="en" data-theme="' + state.theme + '" data-motion="' + (state.motionPaused ? 'paused' : 'running') + '"><head><base href="' + base + '">' +
-        '<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
-        '<link rel="stylesheet" href="../dist/tokens.css">' +
-        '<link rel="stylesheet" href="../dist/themes.css">' +
-        '<link rel="stylesheet" href="../dist/catalog.css">' +
-        '<link rel="stylesheet" href="../dist/glass.css">' +
-        '<link rel="stylesheet" href="../dist/stage.css">' +
-        '<link rel="stylesheet" href="../dist/dialects.css">' +
-        '<link rel="stylesheet" href="../dist/memory-field.css">' +
-        '<link rel="stylesheet" href="../dist/vi-orbital-hero.css">' +
-        '<link rel="stylesheet" href="../dist/docs-portal.css">' +
-        '<link rel="stylesheet" href="../dist/settings-surface.css">' +
-        '<link rel="stylesheet" href="../dist/library-surface.css">' +
-        '<script type="module" src="../dist/vi-orbital-field.js"></scr' + 'ipt>' +
-        '<script defer src="../dist/docs-portal.js"></scr' + 'ipt>' +
-        '<script defer src="../dist/settings-surface.js"></scr' + 'ipt>' +
-        '<script defer src="../dist/library-surface.js"></scr' + 'ipt>' +
-        '<style>body{margin:0;min-height:100dvh;background:var(--vi-colors-surface-background-primary-base);color:var(--vi-colors-text-content-primary-base);font-family:var(--vi-typography-typography-family-sans-base)}</style>' +
-        '</head><body>' + html + '</body></html>';
-    }
-
-    function normalizeSpecimenHeadings(container) {
-      container.querySelectorAll('h1, h2, h3, h4').forEach(function (heading) {
-        var div = document.createElement('div');
-        div.setAttribute('role', 'presentation');
-        for (var i = 0; i < heading.attributes.length; i += 1) {
-          var attr = heading.attributes[i];
-          if (attr.name !== 'role') div.setAttribute(attr.name, attr.value);
-        }
-        while (heading.firstChild) div.appendChild(heading.firstChild);
-        heading.replaceWith(div);
-      });
-    }
-
-    function resolveAssets(raw) {
-      return raw
-        .replace(/\{ASSET_BASE\}\/vi\/([^/]+)\/chibi\//g, '../assets/quarantine/run_20261103-snap/')
-        .replace(/\{ASSET_BASE\}/g, '..');
-    }
-
-    function applyViewportScale(viewport) {
-      if (!viewport) return;
-      var iframe = viewport.querySelector('iframe');
-      if (!iframe) return;
-      var targetW = Number(viewport.dataset.width || '1440');
-      var availW = viewport.clientWidth || targetW;
-      var availH = viewport.clientHeight || 640;
-      var scale = availW < targetW ? availW / targetW : 1;
-      iframe.style.width = targetW + 'px';
-      iframe.style.height = Math.round(availH / scale) + 'px';
-      iframe.style.transform = scale < 1 ? 'scale(' + scale.toFixed(4) + ')' : '';
-    }
-
-    var viewportResizeObserver = 'ResizeObserver' in window
-      ? new ResizeObserver(function (entries) {
-          entries.forEach(function (entry) { applyViewportScale(entry.target); });
-        })
-      : null;
-
-    function loadFragment(record) {
-      if (record.loaded) return;
-      record.loaded = true;
-      var f = record.meta;
-      fetch(f.file)
-        .then(function (r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.text();
-        })
-        .then(function (raw) {
-          var html = resolveAssets(raw);
-          fragmentHtmlCache[f.file] = html;
-          if (f.frame) {
-            var iframe = document.createElement('iframe');
-            iframe.title = f.label;
-            iframe.loading = 'lazy';
-            iframe.srcdoc = framedDocument(html);
-            record.viewport.innerHTML = '';
-            record.viewport.appendChild(iframe);
-            mountedIframes.push(iframe);
-            applyViewportScale(record.viewport);
-            if (viewportResizeObserver) viewportResizeObserver.observe(record.viewport);
-            if (record.openLink) {
-              var blob = new Blob([framedDocument(html)], { type: 'text/html' });
-              record.openLink.href = URL.createObjectURL(blob);
-            }
-          } else {
-            record.frame.innerHTML = html;
-            normalizeSpecimenHeadings(record.frame);
-            if (window.ViDocsPortal && typeof window.ViDocsPortal.initDocsPortal === 'function') {
-              window.ViDocsPortal.initDocsPortal(record.frame);
-            }
-            if (window.ViSettingsSurface && typeof window.ViSettingsSurface.initSettingsSurface === 'function') {
-              window.ViSettingsSurface.initSettingsSurface(record.frame);
-            }
-            if (window.ViLibrarySurface && typeof window.ViLibrarySurface.initLibrarySurface === 'function') {
-              window.ViLibrarySurface.initLibrarySurface(record.frame);
-            }
-            record.frame.querySelectorAll('img[data-chibi-fallback]').forEach(function (img) {
-              img.addEventListener('error', function () {
-                img.classList.add('hidden');
-              }, { once: true });
-            });
-          }
-        })
-        .catch(function () {
-          var target = f.frame ? record.viewport : record.frame;
-          target.textContent = 'Could not load ' + f.file;
-        });
-    }
-
-    function syncIframes() {
-      mountedIframes.forEach(function (iframe) {
-        try {
-          var doc = iframe.contentDocument;
-          if (!doc || !doc.documentElement) return;
-          doc.documentElement.setAttribute('data-theme', state.theme);
-          doc.documentElement.setAttribute('data-motion', state.motionPaused ? 'paused' : 'running');
-        } catch (err) {
-          void err;
-        }
-      });
-    }
-
-    var observer = 'IntersectionObserver' in window
-      ? new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (!entry.isIntersecting) return;
-            var rec = entry.target._record;
-            if (rec) {
-              loadFragment(rec);
-              observer.unobserve(entry.target);
-            }
-          });
-        }, { rootMargin: '240px 0px' })
-      : null;
-
-    var mainHost = document.getElementById('catalog-sections');
-    var emptyState = document.getElementById('empty-state');
-    var sidebarIndex = document.getElementById('sidebar-index');
-    var tierFilterBar = document.getElementById('tier-filter-bar');
-    var mobileTierBar = document.getElementById('mobile-tier-bar');
-    var countEl = document.getElementById('catalog-count');
-    var sidebarTotal = document.getElementById('sidebar-total');
-
-    sidebarTotal.textContent = FRAGMENTS.length + ' verified specimens';
-
-    function makeTierButton(tierId, label) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'ctl-btn';
-      btn.dataset.tier = tierId;
-      btn.setAttribute('aria-pressed', tierId === state.tier ? 'true' : 'false');
-      btn.textContent = label;
-      btn.addEventListener('click', function () {
-        state.tier = tierId;
-        applyFilters();
-      });
-      return btn;
-    }
-
-    [tierFilterBar, mobileTierBar].forEach(function (bar) {
-      bar.appendChild(makeTierButton('all', 'All'));
-      TIERS.forEach(function (t) {
-        bar.appendChild(makeTierButton(t.id, t.shortLabel));
-      });
-    });
-
-    TIERS.forEach(function (tier) {
-      var tierItems = FRAGMENTS.filter(function (f) { return f.tier === tier.id; });
-
-      var navGroup = document.createElement('details');
-      navGroup.className = 'sidebar-group';
-      if (!tier.collapsed) navGroup.open = true;
-      var navHead = document.createElement('summary');
-      navHead.className = 'sidebar-group-head';
-      navHead.innerHTML = '<span>' + tier.shortLabel + '</span><span class="sidebar-group-meta"><span class="count-num">' + tierItems.length + '</span><span class="sidebar-chevron" aria-hidden="true">&#8250;</span></span>';
-      navGroup.appendChild(navHead);
-      var navLinks = document.createElement('div');
-      navLinks.className = 'sidebar-group-links';
-      navGroup.appendChild(navLinks);
-
-      var container;
-      var list = document.createElement('div');
-      list.className = 'specimen-list';
-
-      if (tier.collapsed) {
-        var details = document.createElement('details');
-        details.className = 'legacy-drawer';
-        details.id = 'tier-' + tier.id;
-        var summary = document.createElement('summary');
-        summary.innerHTML = '<div><h2 class="legacy-heading">' +
-          tier.label + '</h2><p class="tier-summary">' + tier.summary + '</p></div><span class="ctl-btn">Show ' + tierItems.length + ' items</span>';
-        details.appendChild(summary);
-        details.appendChild(list);
-        details.addEventListener('toggle', function () {
-          var badge = summary.querySelector('.ctl-btn');
-          if (badge) badge.textContent = details.open ? 'Hide ' + tierItems.length + ' items' : 'Show ' + tierItems.length + ' items';
-          if (details.open) {
-            cardRecords.forEach(function (rec) {
-              if (rec.meta.tier === tier.id && !rec.card.classList.contains('hidden-item')) loadFragment(rec);
-            });
-          }
-        });
-        container = details;
-      } else {
-        var sec = document.createElement('section');
-        sec.className = 'tier-section';
-        sec.id = 'tier-' + tier.id;
-        var head = document.createElement('div');
-        head.className = 'tier-header';
-        head.innerHTML = '<div><h2>' + tier.label + '</h2><p class="tier-summary">' + tier.summary + '</p></div><span class="count-num">' + tierItems.length + ' specimens</span>';
-        sec.appendChild(head);
-        sec.appendChild(list);
-        container = sec;
-      }
-
-      mainHost.insertBefore(container, emptyState);
-      sectionNodes[tier.id] = { container: container, navGroup: navGroup, tier: tier };
-
-      tierItems.forEach(function (f) {
-        var id = f.file.replace('.html', '');
-        var card = document.createElement('article');
-        card.className = 'fragment-section';
-        card.id = 'frag-' + id;
-
-        var head = document.createElement('div');
-        head.className = 'specimen-head';
-
-        var titles = document.createElement('div');
-        titles.className = 'specimen-titles';
-
-        var titleRow = document.createElement('div');
-        titleRow.className = 'specimen-title-row';
-
-        var h3 = document.createElement('h3');
-        h3.className = 'fragment-label';
-        var anchor = document.createElement('a');
-        anchor.href = '#frag-' + id;
-        anchor.textContent = f.label;
-        h3.appendChild(anchor);
-
-        var fileBadge = document.createElement('span');
-        fileBadge.className = 'fragment-file';
-        fileBadge.textContent = f.file;
-
-        titleRow.append(h3, fileBadge);
-        if (f.note) {
-          var noteEl = document.createElement('span');
-          noteEl.className = 'fragment-note';
-          noteEl.textContent = f.note;
-          titleRow.appendChild(noteEl);
-        }
-
-        var desc = document.createElement('p');
-        desc.className = 'fragment-desc';
-        desc.textContent = f.desc;
-
-        titles.append(titleRow, desc);
-        head.appendChild(titles);
-
-        var frame = document.createElement('div');
-        frame.className = 'fragment-frame' +
-          (f.glass ? ' glass-stage' : '') +
-          (f.stageSpecimen ? ' stage-specimen' : '') +
-          (f.frame ? ' layout-frame' : '');
-
-        var viewport = null;
-        var openLink = null;
-        if (f.frame) {
-          var controls = document.createElement('div');
-          controls.className = 'specimen-controls';
-
-          viewport = document.createElement('div');
-          viewport.className = 'layout-viewport';
-          viewport.dataset.width = '1440';
-          viewport.textContent = 'Loading layout preview...';
-          frame.appendChild(viewport);
-
-          ['1440', '1024', '390'].forEach(function (w) {
-            var vpBtn = document.createElement('button');
-            vpBtn.type = 'button';
-            vpBtn.className = 'ctl-btn';
-            vpBtn.textContent = w + 'px';
-            vpBtn.setAttribute('aria-pressed', w === '1440' ? 'true' : 'false');
-            vpBtn.addEventListener('click', function () {
-              viewport.dataset.width = w;
-              controls.querySelectorAll('[data-vp]').forEach(function (b) {
-                b.setAttribute('aria-pressed', b === vpBtn ? 'true' : 'false');
-              });
-              requestAnimationFrame(function () { applyViewportScale(viewport); });
-            });
-            vpBtn.dataset.vp = w;
-            controls.appendChild(vpBtn);
-          });
-
-          openLink = document.createElement('a');
-          openLink.className = 'ctl-btn';
-          openLink.textContent = 'Open isolated';
-          openLink.target = '_blank';
-          openLink.rel = 'noopener';
-          openLink.href = f.file;
-          controls.appendChild(openLink);
-          head.appendChild(controls);
-        }
-
-        if (f.orbitalControls) {
-          var orbControls = document.createElement('div');
-          orbControls.className = 'specimen-controls';
-          orbControls.setAttribute('role', 'group');
-          orbControls.setAttribute('aria-label', 'Orbital agentic state modulation');
-          ['start', 'send', 'waiting', 'streaming', 'finish', 'failure'].forEach(function (st) {
-            var stBtn = document.createElement('button');
-            stBtn.type = 'button';
-            stBtn.className = 'ctl-btn';
-            stBtn.textContent = st;
-            stBtn.setAttribute('aria-pressed', st === 'start' ? 'true' : 'false');
-            stBtn.addEventListener('click', function () {
-              var hostEl = frame.querySelector('vi-orbital-field');
-              if (hostEl) {
-                hostEl.setAttribute('data-motion', 'running');
-                hostEl.setAttribute('data-agent-state', st);
-              }
-              orbControls.querySelectorAll('[data-orb-state]').forEach(function (b) {
-                b.setAttribute('aria-pressed', b === stBtn ? 'true' : 'false');
-              });
-            });
-            stBtn.dataset.orbState = st;
-            orbControls.appendChild(stBtn);
-          });
-          head.appendChild(orbControls);
-        }
-
-        card.append(head, frame);
-        list.appendChild(card);
-
-        var link = document.createElement('a');
-        link.className = 'sidebar-link';
-        link.href = '#frag-' + id;
-        link.innerHTML = '<span>' + f.label + '</span>';
-        link.addEventListener('click', function () {
-          if (tier.collapsed) container.open = true;
-          loadFragment(record);
-        });
-        navLinks.appendChild(link);
-
-        var record = {
-          meta: f,
-          card: card,
-          frame: frame,
-          viewport: viewport,
-          openLink: typeof openLink !== 'undefined' ? openLink : null,
-          link: link,
-          loaded: false,
-          haystack: (f.label + ' ' + f.file + ' ' + f.desc + ' ' + (f.note || '') + ' ' + f.tier).toLowerCase()
-        };
-        card._record = record;
-        cardRecords.push(record);
-
-        if (!tier.collapsed) {
-          if (observer && f.frame) {
-            observer.observe(card);
-          } else {
-            loadFragment(record);
-          }
-        }
-      });
-
-      sidebarIndex.appendChild(navGroup);
-    });
-
-    function applyFilters() {
-      var q = state.query.trim().toLowerCase();
-      var visibleTotal = 0;
-      var tierCounts = {};
-
-      document.querySelectorAll('[data-tier]').forEach(function (btn) {
-        btn.setAttribute('aria-pressed', btn.dataset.tier === state.tier ? 'true' : 'false');
-      });
-
-      cardRecords.forEach(function (rec) {
-        var tierMatch = state.tier === 'all' || rec.meta.tier === state.tier;
-        var queryMatch = !q || rec.haystack.indexOf(q) !== -1;
-        var show = tierMatch && queryMatch;
-        rec.card.classList.toggle('hidden-item', !show);
-        rec.link.classList.toggle('hidden-item', !show);
-        if (show) {
-          visibleTotal += 1;
-          tierCounts[rec.meta.tier] = (tierCounts[rec.meta.tier] || 0) + 1;
-          if ((state.tier === 'legacy' || q) && rec.meta.tier === 'legacy') {
-            sectionNodes.legacy.container.open = true;
-            loadFragment(rec);
-          }
-        }
-      });
-
-      TIERS.forEach(function (t) {
-        var count = tierCounts[t.id] || 0;
-        var showTier = count > 0;
-        sectionNodes[t.id].container.classList.toggle('hidden-item', !showTier);
-        sectionNodes[t.id].navGroup.classList.toggle('hidden-item', !showTier);
-        if (q && showTier) {
-          sectionNodes[t.id].navGroup.open = true;
-        } else if (!q) {
-          sectionNodes[t.id].navGroup.open = !t.collapsed || state.tier === t.id;
-        }
-      });
-
-      countEl.textContent = 'Showing ' + visibleTotal + ' of ' + FRAGMENTS.length + ' specimens';
-      emptyState.classList.toggle('visible', visibleTotal === 0);
-    }
-
-    var searchDesktop = document.getElementById('catalog-search');
-    var searchMobile = document.getElementById('mobile-search');
-    function onSearch(val) {
-      state.query = val;
-      if (searchDesktop.value !== val) searchDesktop.value = val;
-      if (searchMobile.value !== val) searchMobile.value = val;
-      applyFilters();
-    }
-    searchDesktop.addEventListener('input', function (e) { onSearch(e.target.value); });
-    searchMobile.addEventListener('input', function (e) { onSearch(e.target.value); });
-
-    document.getElementById('reset-filters').addEventListener('click', function () {
-      state.tier = 'all';
-      onSearch('');
-    });
-
-    var themeBtn = document.getElementById('toggle-theme');
-    themeBtn.addEventListener('click', function () {
-      state.theme = state.theme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', state.theme);
-      themeBtn.setAttribute('aria-pressed', state.theme === 'light' ? 'true' : 'false');
-      themeBtn.textContent = 'Theme: ' + state.theme;
-      syncIframes();
-    });
-
-    var motionBtn = document.getElementById('toggle-motion');
-    motionBtn.addEventListener('click', function () {
-      state.motionPaused = !state.motionPaused;
-      document.documentElement.setAttribute('data-motion', state.motionPaused ? 'paused' : 'running');
-      motionBtn.setAttribute('aria-pressed', state.motionPaused ? 'true' : 'false');
-      motionBtn.textContent = state.motionPaused ? 'Motion: paused' : 'Motion: playing';
-      syncIframes();
-    });
-
-    var tintBtn = document.getElementById('toggle-tint');
-    tintBtn.addEventListener('click', function () {
-      state.glassTint = !state.glassTint;
-      document.body.classList.toggle('show-glass-tint', state.glassTint);
-      tintBtn.setAttribute('aria-pressed', state.glassTint ? 'true' : 'false');
-      tintBtn.textContent = state.glassTint ? 'Glass tint: on' : 'Glass tint: off';
-    });
-
-    applyFilters();
   </script>
 </body>
 </html>
