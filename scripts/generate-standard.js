@@ -14,6 +14,7 @@ const ROOT = path.join(__dirname, '..');
 const PKG = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf-8'));
 const { STAGE_VARIANT_OPACITY, STAGE_NARROW_AMBIENT_OPACITY, STAGE_TEXT_SCRIM, STAGE_DEPTH, STAGE_RUNTIME_PROPERTIES } = require('../lib/stage');
 const memoryField = require('../lib/memory-field');
+const { ENTITY_KINDS } = require('../lib/memory-graph-explorer');
 const { DIALECTS: PERSONA_DIALECTS } = require('../lib/dialects');
 const {
   ARCHETYPE_DIALS,
@@ -482,6 +483,21 @@ function buildStandard(tokens, designMd, skillMd) {
         stopsUnder: ['prefers-reduced-motion: reduce', 'data-motion="paused" on the root'],
         textEquivalent: 'renderMemoryFieldTable beside the figure',
         neverRedrawn: true,
+        explorer: {
+          fragment: 'preview/memory-graph-explorer.html',
+          stylesheet: 'dist/memory-graph-explorer.css',
+          sampleController: 'dist/memory-graph-explorer.js',
+          sampleData: 'dist/memory-graph-explorer.json',
+          entityKinds: ENTITY_KINDS,
+          solidSurfaces: ['--vi-graph-canvas', '--vi-graph-inspector'],
+          outline: '--vi-graph-line',
+          glassSurfaces: ['search', 'tool rail', 'minimap'],
+          legendDrawerBelow: '52rem',
+          runStates: ['start', 'send', 'waiting', 'streaming', 'finish', 'failure'],
+          layouts: ['force', 'hierarchical', 'radial'],
+          viewportMotion: 'translate3d and scale',
+          textEquivalent: 'selection ledger with entities, memory classes and relationship codes',
+        },
       },
       spacing: {
         rhythmBasePx: 4,
@@ -704,6 +720,7 @@ function emitStandardMd(standard) {
     `- Budget: ${standard.rules.memoryField.budget.nodes} nodes, ${standard.rules.memoryField.budget.edges} edges`,
     `- Motions: ${standard.rules.memoryField.motions.join(', ')}; loops opt in with ${standard.rules.memoryField.loopsOptIn.join(' or ')}; all stop under ${standard.rules.memoryField.stopsUnder.join(' and ')}`,
     `- Text equivalent: ${standard.rules.memoryField.textEquivalent}`,
+    '- Spatial explorer: preview/memory-graph-explorer.html with a docked legend or bottom drawer, settled layouts, and a fixture-only controller',
     '',
     '## Accessibility',
     '',

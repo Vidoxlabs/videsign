@@ -1,0 +1,912 @@
+/* Nocturne Museum spatial workspace. Load tokens, themes, and glass first. */
+.vi-graph-explorer {
+  --vi-graph-inset: var(--vi-space-inset-operator-default);
+  --vi-graph-action: var(--vi-size-action-min-default);
+  --vi-graph-corner: var(--vi-spacing-layout-radius-control-base);
+  --vi-graph-focus: var(--vi-chat-focus-ring);
+  --vi-graph-ink: var(--vi-colors-text-content-primary-base);
+  --vi-graph-muted: var(--vi-colors-text-content-secondary-base);
+  --vi-graph-cell: color-mix(in oklch, var(--vi-graph-line) 18%, var(--vi-graph-canvas));
+  --vi-graph-accent-wash: color-mix(in oklch, var(--vi-graph-focus) 14%, var(--vi-graph-inspector));
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  container: vi-graph-shell / inline-size;
+  block-size: 100dvb;
+  min-block-size: 40rem;
+  overflow: hidden;
+  background: var(--vi-graph-canvas);
+  color: var(--vi-graph-ink);
+  font-family: var(--vi-typography-typography-family-sans-base);
+  font-size: var(--vi-typography-typography-size-sm-base);
+  font-weight: var(--vi-typography-typography-weight-medium-base);
+  line-height: 1.4;
+}
+
+.vi-graph-explorer *, .vi-graph-explorer *::before, .vi-graph-explorer *::after {
+  box-sizing: border-box;
+}
+
+.vi-graph-explorer :is(button, input, select) {
+  font: inherit;
+  color: inherit;
+}
+
+.vi-graph-explorer :is(button, select) {
+  min-inline-size: var(--vi-graph-action);
+  min-block-size: var(--vi-graph-action);
+  padding-inline: var(--vi-space-inset-compact-default);
+  border: 1px solid transparent;
+  border-radius: var(--vi-graph-corner);
+  background: transparent;
+  cursor: pointer;
+}
+
+.vi-graph-explorer select {
+  block-size: var(--vi-graph-action);
+  padding-block: 0;
+  background: var(--vi-graph-inspector);
+  border-color: var(--vi-graph-line);
+}
+
+.vi-graph-explorer button:disabled {
+  cursor: default;
+}
+
+.vi-graph-explorer button:hover:not(:disabled, .vi-graph-node) {
+  background-color: var(--vi-graph-cell);
+}
+
+.vi-graph-explorer :is(button[aria-pressed="true"], button[aria-selected="true"], label:has(:checked)) {
+  border-color: var(--vi-graph-focus);
+  background-color: var(--vi-graph-accent-wash);
+}
+
+.vi-graph-explorer :is(:focus-visible, label:has(:focus-visible)) {
+  outline: 2px solid var(--vi-graph-focus);
+  outline-offset: 2px;
+}
+
+.vi-graph-explorer h1, .vi-graph-explorer h2, .vi-graph-explorer h3, .vi-graph-explorer p {
+  margin: 0;
+}
+
+.vi-graph-symbols {
+  position: absolute;
+  pointer-events: none;
+}
+
+.vi-graph-icon, .vi-graph-mark {
+  display: block;
+  inline-size: var(--vi-size-icon-xs-base);
+  block-size: var(--vi-size-icon-xs-base);
+  flex: none;
+}
+
+.vi-graph-icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vi-graph-number,
+.vi-graph-source,
+.vi-graph-run,
+.vi-graph-scope-count,
+.vi-graph-table td:nth-child(2) {
+  font-family: var(--vi-typography-typography-family-mono-base);
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-graph-header {
+  display: flex;
+  align-items: center;
+  gap: var(--vi-space-gap-comfortable-default);
+  min-block-size: var(--vi-size-action-wide-default);
+  padding-inline: var(--vi-graph-inset);
+  background: var(--vi-graph-inspector);
+  border-block-end: 1px solid var(--vi-graph-line);
+}
+
+.vi-graph-header h1 {
+  font-size: var(--vi-typography-typography-size-md-base);
+  font-weight: var(--vi-typography-typography-weight-semibold-base);
+}
+
+.vi-graph-source {
+  margin-inline-start: auto;
+  color: var(--vi-graph-muted);
+  white-space: nowrap;
+  font-size: var(--vi-typography-typography-size-xs-base);
+}
+
+.vi-graph-layout {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  min-block-size: 0;
+}
+
+.vi-graph-inspector-dock {
+  display: none;
+  min-block-size: 0;
+}
+
+@container vi-graph-shell (min-width: 52rem) {
+  .vi-graph-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(var(--vi-size-layout-width-sidebar-base), 22cqi);
+  }
+
+  .vi-graph-inspector-dock {
+    display: block;
+    border-inline-start: 1px solid var(--vi-graph-line);
+  }
+
+  .vi-graph-header .vi-graph-legend-trigger {
+    display: none;
+  }
+}
+
+.vi-graph-stage {
+  --vi-graph-nav-width: clamp(calc(4 * var(--vi-graph-action) + var(--vi-space-rhythm-1-base)), 19cqi, 12rem);
+  position: relative;
+  container: vi-graph-stage / inline-size;
+  isolation: isolate;
+  display: grid;
+  grid-template: "query query scene" auto
+                 "tools space space" minmax(0, 1fr)
+                 "ledger ledger nav" auto / auto minmax(0, 1fr) auto;
+  min-inline-size: 0;
+  padding: var(--vi-graph-inset);
+  gap: var(--vi-space-gap-compact-default);
+}
+
+.vi-canvas-mount, .vi-graph-edges, .vi-graph-nodes {
+  position: absolute;
+  inset: 0;
+}
+
+.vi-canvas-mount {
+  overflow: clip;
+  touch-action: none;
+  user-select: none;
+  background: radial-gradient(circle, var(--vi-graph-cell) 1px, transparent 1px) 0 0 / var(--vi-space-rhythm-5-base) var(--vi-space-rhythm-5-base);
+  cursor: grab;
+}
+
+.vi-canvas-mount:focus-visible {
+  outline-offset: -3px;
+}
+
+.vi-graph-stage:is([data-mode="box"], [data-mode="lasso"]) .vi-canvas-mount {
+  cursor: crosshair;
+}
+
+.vi-canvas-mount[data-dragging] {
+  cursor: grabbing;
+}
+
+.vi-graph-extent {
+  position: absolute;
+  inset: var(--vi-space-rhythm-macro-base)
+         calc(var(--vi-graph-nav-width) + 2 * var(--vi-space-rhythm-8-base))
+         var(--vi-space-rhythm-macro-base)
+         clamp(7rem, 11cqi, 9rem);
+  margin-block-start: calc(var(--vi-size-action-wide-default) + var(--vi-space-rhythm-2-base));
+  pointer-events: none;
+}
+
+.vi-graph-edges, .vi-graph-nodes {
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+
+.vi-graph-edge {
+  stroke: var(--vi-graph-line);
+  stroke-width: var(--vi-graph-edge-width, 1);
+  fill: none;
+  transition: opacity var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
+}
+
+.vi-graph-explorer [data-code="CR"] {
+  --vi-graph-relation: var(--vi-colors-border-graph-cluster-base);
+}
+
+.vi-graph-explorer [data-code="RR"] {
+  --vi-graph-relation: var(--vi-colors-border-graph-reasoned-base);
+  stroke-dasharray: 7 4;
+}
+
+.vi-graph-explorer [data-code="LR"] {
+  --vi-graph-relation: var(--vi-colors-border-graph-linked-base);
+  stroke-dasharray: 1 5;
+  stroke-linecap: round;
+}
+
+.vi-graph-explorer [data-code="TR"] {
+  --vi-graph-relation: var(--vi-colors-border-graph-tree-base);
+}
+
+.vi-graph-edges marker path {
+  fill: var(--vi-graph-line);
+  fill: context-stroke;
+}
+
+.vi-graph-edge[data-state="lit"] {
+  stroke: var(--vi-graph-relation);
+  stroke-width: var(--vi-graph-edge-width, 1.5);
+}
+
+.vi-graph-edge[data-state="dim"] {
+  opacity: 0.22;
+}
+
+.vi-graph-edge-label {
+  opacity: 0;
+  fill: var(--vi-graph-ink);
+  stroke: var(--vi-graph-canvas);
+  stroke-width: 6;
+  stroke-linejoin: round;
+  paint-order: stroke;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font: var(--vi-typography-typography-size-xs-base) var(--vi-typography-typography-family-mono-base);
+  transition: opacity var(--vi-transition-transition-duration-fast-base) var(--vi-transition-transition-easing-standard-base);
+}
+
+.vi-graph-edge-label[data-state="lit"] {
+  opacity: 1;
+}
+
+.vi-graph-gesture {
+  fill: var(--vi-graph-accent-wash);
+  fill-opacity: 0.5;
+  stroke: var(--vi-graph-focus);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+.vi-graph-explorer [data-kind="concept"] { --vi-graph-entity: var(--vi-node-entity-a); }
+.vi-graph-explorer [data-kind="memory"] { --vi-graph-entity: var(--vi-node-entity-b); }
+.vi-graph-explorer [data-kind="source"] { --vi-graph-entity: var(--vi-node-entity-c); }
+
+.vi-graph-explorer .vi-graph-node {
+  position: absolute;
+  inset: calc(var(--vi-graph-action) / -2) auto auto calc(var(--vi-graph-action) / -2);
+  display: grid;
+  place-items: center;
+  inline-size: var(--vi-graph-action);
+  block-size: var(--vi-graph-action);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: var(--vi-spacing-layout-radius-full-base);
+  pointer-events: auto;
+}
+
+.vi-graph-node:focus-visible, .vi-graph-node[data-state="lit"] {
+  z-index: 1;
+}
+
+.vi-graph-glyph {
+  display: block;
+  inline-size: var(--vi-size-icon-sm-base);
+  block-size: var(--vi-size-icon-sm-base);
+  color: var(--vi-graph-entity);
+  fill: color-mix(in oklch, var(--vi-graph-entity) 20%, var(--vi-graph-canvas));
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+}
+
+.vi-graph-node[data-kind="concept"] .vi-graph-glyph {
+  inline-size: var(--vi-size-icon-md-base);
+  block-size: var(--vi-size-icon-md-base);
+}
+
+.vi-graph-node[data-match="true"]::before,
+.vi-graph-node[aria-pressed="true"]::before {
+  content: "";
+  position: absolute;
+  inset: var(--vi-space-rhythm-1-base);
+  border: 2px solid var(--vi-graph-focus);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.vi-graph-node-label {
+  position: absolute;
+  inset-block-start: calc(100% - var(--vi-space-rhythm-1-base));
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  max-inline-size: 15ch;
+  overflow: hidden;
+  padding-inline: var(--vi-space-rhythm-1-base);
+  border-radius: var(--vi-graph-corner);
+  background: var(--vi-graph-canvas);
+  color: var(--vi-graph-muted);
+  font-size: var(--vi-typography-typography-size-xs-base);
+  line-height: var(--vi-typography-typography-leading-normal-base);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.vi-graph-node[data-state="lit"] .vi-graph-node-label {
+  color: var(--vi-graph-ink);
+}
+
+.vi-graph-stage[data-labels="off"] .vi-graph-node-label {
+  visibility: hidden;
+}
+
+.vi-graph-query {
+  grid-area: query;
+  min-inline-size: 0;
+  inline-size: min(100%, var(--vi-size-layout-width-conversation-base));
+  pointer-events: none;
+  z-index: 4;
+}
+
+.vi-graph-query :is(form, button, .vi-graph-error),
+.vi-graph-navigation > * {
+  pointer-events: auto;
+}
+
+.vi-graph-explorer .vi-glass-core {
+  background: var(--vi-graph-inspector);
+}
+
+.vi-graph-search .vi-glass-core {
+  display: flex;
+  align-items: center;
+  gap: var(--vi-space-gap-compact-default);
+  padding-inline: var(--vi-space-inset-compact-default) var(--vi-space-rhythm-1-base);
+}
+
+.vi-graph-search input {
+  flex: 1;
+  inline-size: 0;
+  min-inline-size: var(--vi-graph-action);
+  min-block-size: var(--vi-graph-action);
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.vi-graph-search input::placeholder {
+  color: var(--vi-graph-muted);
+  opacity: 1;
+}
+
+.vi-graph-search button {
+  color: var(--vi-graph-ink);
+  background: var(--vi-graph-cell);
+}
+
+.vi-graph-starters {
+  display: flex;
+  overflow: visible;
+  gap: var(--vi-space-gap-compact-default);
+  margin-block-start: var(--vi-space-rhythm-1-base);
+}
+
+.vi-graph-starters button {
+  border-color: var(--vi-graph-line);
+  background: var(--vi-graph-canvas);
+  color: var(--vi-graph-muted);
+  font-size: var(--vi-typography-typography-size-xs-base);
+  white-space: nowrap;
+}
+
+.vi-graph-feedback {
+  position: relative;
+  min-block-size: var(--vi-space-rhythm-8-base);
+  padding-block-start: var(--vi-space-rhythm-2-base);
+}
+
+.vi-graph-run {
+  color: var(--vi-graph-muted);
+  font-size: var(--vi-typography-typography-size-xs-base);
+  white-space: nowrap;
+}
+
+.vi-graph-error {
+  position: absolute;
+  inset: 100% auto auto 0;
+  display: flex;
+  align-items: start;
+  gap: var(--vi-space-gap-compact-default);
+  inline-size: min(var(--vi-size-layout-width-inspector-base), 90cqi);
+  padding: var(--vi-space-inset-compact-default);
+  background: var(--vi-graph-inspector);
+  border: 1px solid var(--vi-graph-line);
+  border-inline-start: 3px solid var(--vi-colors-status-indicator-error-base);
+  border-radius: var(--vi-graph-corner);
+}
+
+.vi-graph-error button { border-color: var(--vi-graph-line); }
+
+.vi-graph-explorer:is([data-run-state="send"], [data-run-state="waiting"], [data-run-state="streaming"]) .vi-graph-search {
+  outline: 2px solid var(--vi-graph-focus);
+}
+
+.vi-graph-explorer:is([data-run-state="send"], [data-run-state="waiting"]) .vi-graph-edge:not([data-state="lit"]) {
+  opacity: 0.35;
+}
+
+.vi-graph-minimap {
+  position: relative;
+}
+
+.vi-graph-explorer[data-run-state="waiting"] .vi-graph-minimap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  outline: 1px solid var(--vi-graph-focus);
+  border-radius: inherit;
+  pointer-events: none;
+  animation: vi-graph-wait var(--vi-transition-transition-duration-normal-base)
+    var(--vi-transition-transition-easing-standard-base) alternate 2;
+}
+
+@keyframes vi-graph-wait {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+
+.vi-graph-explorer[data-run-state="waiting"] .vi-graph-legend-count {
+  color: transparent;
+}
+
+.vi-graph-explorer[data-run-state="waiting"] .vi-graph-legend-count::after {
+  content: "";
+  position: absolute;
+  inset: var(--vi-space-rhythm-1-base) 0;
+  background: var(--vi-graph-line);
+  border-radius: var(--vi-graph-corner);
+}
+
+.vi-graph-toolbar {
+  grid-area: tools;
+  align-self: start;
+  z-index: 3;
+}
+
+.vi-graph-toolbar .vi-glass-core {
+  display: grid;
+}
+
+.vi-graph-toolbar button,
+.vi-graph-zoom button,
+.vi-graph-inspector-heading button {
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.vi-graph-toolbar button {
+  display: grid;
+  inline-size: var(--vi-graph-action);
+}
+
+.vi-graph-toolbar [data-graph-open="filters"] {
+  border-block-start-color: var(--vi-graph-line);
+}
+
+.vi-graph-time {
+  position: absolute;
+  z-index: 3;
+  inset-block-start: calc(var(--vi-size-action-wide-default) + var(--vi-graph-action) + var(--vi-space-rhythm-8-base));
+  inset-inline-start: calc(var(--vi-graph-action) + 3 * var(--vi-graph-inset));
+  display: grid;
+  gap: var(--vi-space-gap-compact-default);
+  padding: var(--vi-graph-inset);
+  border: 1px solid var(--vi-graph-line);
+  border-radius: var(--vi-graph-corner);
+  background: var(--vi-graph-inspector);
+}
+
+.vi-graph-explorer .vi-graph-scene {
+  grid-area: scene;
+  align-self: start;
+  justify-self: end;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vi-space-gap-compact-default);
+  background: var(--vi-graph-inspector);
+  border-color: var(--vi-graph-line);
+  white-space: nowrap;
+}
+
+.vi-graph-explorer .vi-graph-scene[aria-pressed="true"] {
+  border-color: var(--vi-graph-focus);
+  background: var(--vi-graph-accent-wash);
+}
+
+.vi-graph-ledger {
+  grid-area: ledger;
+  z-index: 3;
+  align-self: end;
+  justify-self: start;
+}
+
+.vi-graph-explorer .vi-graph-ledger-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--vi-space-gap-compact-default);
+  background: var(--vi-graph-inspector);
+  border-color: var(--vi-graph-line);
+  white-space: nowrap;
+}
+
+.vi-graph-ledger-trigger > span + span {
+  padding-inline-start: var(--vi-space-rhythm-2-base);
+  border-inline-start: 1px solid var(--vi-graph-line);
+}
+
+.vi-graph-ledger-trigger strong {
+  display: inline-block;
+  min-inline-size: 2ch;
+  text-align: end;
+}
+
+.vi-graph-ledger-trigger[aria-expanded="true"] .vi-graph-icon { transform: rotate(180deg); }
+
+.vi-graph-ledger-body {
+  position: absolute;
+  inset: auto auto calc(var(--vi-graph-action) + 2 * var(--vi-graph-inset)) var(--vi-graph-inset);
+  inline-size: min(calc(100% - 2 * var(--vi-graph-inset)), var(--vi-size-layout-width-chat-thread-base));
+  max-block-size: 52%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--vi-graph-inset);
+  border: 1px solid var(--vi-graph-line);
+  border-radius: var(--vi-graph-corner);
+  background: var(--vi-graph-inspector);
+}
+
+.vi-graph-ledger-body :is(h2, h3) {
+  font-size: var(--vi-typography-typography-size-sm-base);
+  padding-block: var(--vi-space-rhythm-2-base);
+}
+
+.vi-graph-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--vi-typography-typography-size-xs-base);
+}
+
+.vi-graph-table :is(th, td) {
+  padding: var(--vi-space-rhythm-2-base) var(--vi-space-rhythm-1-base);
+  border-block-end: 1px solid var(--vi-graph-line);
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.vi-graph-table td span {
+  display: block;
+  color: var(--vi-graph-muted);
+}
+
+.vi-graph-ledger-body ul {
+  margin: 0;
+  padding-inline-start: var(--vi-space-rhythm-4-base);
+  font-size: var(--vi-typography-typography-size-xs-base);
+}
+
+.vi-graph-ledger-body li + li {
+  margin-block-start: var(--vi-space-rhythm-1-base);
+}
+
+.vi-graph-navigation {
+  grid-area: nav;
+  z-index: 2;
+  display: grid;
+  gap: var(--vi-space-gap-compact-default);
+  inline-size: var(--vi-graph-nav-width);
+  pointer-events: none;
+}
+
+.vi-graph-map {
+  position: relative;
+  min-block-size: var(--vi-graph-action);
+  block-size: clamp(var(--vi-size-action-dense-default), 8cqi, calc(var(--vi-size-action-dense-default) + var(--vi-space-rhythm-8-base)));
+  overflow: clip;
+  border-radius: var(--vi-graph-corner);
+  background: var(--vi-graph-canvas);
+  cursor: move;
+  touch-action: none;
+}
+
+.vi-graph-map svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+
+.vi-graph-map use {
+  fill: var(--vi-graph-entity);
+}
+
+.vi-graph-map line {
+  stroke: var(--vi-graph-line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.vi-minimap-viewport {
+  position: absolute;
+  inset: 0 auto auto 0;
+  inline-size: 100%;
+  block-size: 100%;
+  transform-origin: 0 0;
+  border: 2px solid var(--vi-graph-focus);
+  pointer-events: none;
+}
+
+.vi-graph-zoom {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  background: var(--vi-graph-inspector);
+  border: 1px solid var(--vi-graph-line);
+  border-radius: var(--vi-graph-corner);
+}
+
+.vi-graph-zoom output {
+  text-align: center;
+  font-size: var(--vi-typography-typography-size-xs-base);
+}
+
+.vi-graph-inspector {
+  block-size: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--vi-space-rhythm-4-base);
+  background: var(--vi-graph-inspector);
+}
+
+.vi-graph-inspector-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-block-size: var(--vi-graph-action);
+  margin-block-end: var(--vi-space-rhythm-2-base);
+}
+
+.vi-graph-inspector h2 {
+  font-size: var(--vi-typography-typography-size-lg-base);
+  font-weight: var(--vi-typography-typography-weight-semibold-base);
+}
+
+.vi-graph-tabs, .vi-graph-scopes > div {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--vi-space-gap-dense-default);
+}
+
+.vi-graph-tabs {
+  margin-block-end: var(--vi-space-rhythm-5-base);
+  padding-block-end: var(--vi-space-rhythm-3-base);
+  border-block-end: 1px solid var(--vi-graph-line);
+}
+
+.vi-graph-scopes {
+  min-inline-size: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.vi-graph-scopes legend {
+  margin-block-end: var(--vi-space-rhythm-2-base);
+  padding: 0;
+  color: var(--vi-graph-muted);
+}
+
+.vi-graph-scopes label {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-inline-size: var(--vi-graph-action);
+  min-block-size: var(--vi-graph-action);
+  border: 1px solid var(--vi-graph-line);
+  border-radius: var(--vi-graph-corner);
+  font-size: var(--vi-typography-typography-size-xs-base);
+  white-space: nowrap;
+}
+
+.vi-graph-scopes .vi-graph-number {
+  color: var(--vi-graph-muted);
+}
+
+.vi-graph-scopes input {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.vi-graph-explorer .vi-graph-scope-count {
+  margin-block: var(--vi-space-rhythm-3-base) var(--vi-space-rhythm-5-base);
+  color: var(--vi-graph-muted);
+  font-size: var(--vi-typography-typography-size-xs-base);
+  white-space: nowrap;
+}
+
+.vi-graph-legend-list {
+  display: grid;
+  gap: var(--vi-space-gap-compact-default);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.vi-graph-explorer .vi-graph-key {
+  display: grid;
+  grid-template-columns: var(--vi-size-icon-sm-base) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--vi-space-gap-compact-default);
+  inline-size: 100%;
+  min-block-size: var(--vi-size-action-dense-default);
+  border-color: var(--vi-graph-line);
+  background: var(--vi-graph-inspector);
+  text-align: start;
+}
+
+.vi-graph-explorer .vi-graph-key[aria-pressed="true"] {
+  border-color: var(--vi-graph-line);
+  background: var(--vi-graph-cell);
+}
+
+.vi-graph-key[aria-pressed="true"] .vi-graph-key-text {
+  font-weight: var(--vi-typography-typography-weight-semibold-base);
+}
+
+.vi-graph-key[aria-pressed="false"] .vi-graph-key-text {
+  text-decoration: line-through;
+}
+
+.vi-graph-key .vi-graph-glyph {
+  inline-size: var(--vi-size-icon-xs-base);
+  block-size: var(--vi-size-icon-xs-base);
+}
+
+.vi-graph-key .vi-graph-relation-sample {
+  inline-size: var(--vi-size-icon-sm-base);
+  block-size: var(--vi-size-icon-xs-base);
+  fill: var(--vi-graph-relation);
+  stroke: var(--vi-graph-relation);
+  stroke-width: 1.5;
+}
+
+.vi-graph-legend-count {
+  position: relative;
+  min-inline-size: 2ch;
+  text-align: end;
+}
+
+.vi-graph-explorer .vi-graph-label-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 100%;
+  margin-block-start: var(--vi-space-rhythm-5-base);
+  border-color: var(--vi-graph-line);
+  background: var(--vi-graph-inspector);
+}
+
+.vi-graph-legend-drawer {
+  inset: auto 0 0;
+  inline-size: 100%;
+  max-inline-size: none;
+  max-block-size: 78dvb;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--vi-graph-line);
+  border-radius: var(--vi-spacing-layout-radius-standard-base) var(--vi-spacing-layout-radius-standard-base) 0 0;
+  background: var(--vi-graph-inspector);
+  color: var(--vi-graph-ink);
+  overscroll-behavior: contain;
+}
+
+.vi-graph-legend-drawer::backdrop {
+  background: color-mix(in oklch, var(--vi-graph-canvas) 84%, transparent);
+}
+
+@container vi-graph-stage (max-width: 38rem) {
+  .vi-graph-extent {
+    inset-inline: calc(var(--vi-graph-action) + 3 * var(--vi-graph-inset)) calc(var(--vi-space-rhythm-8-base) + var(--vi-space-rhythm-2-base));
+    inset-block-start: calc(var(--vi-space-rhythm-macro-base) + 2 * var(--vi-space-rhythm-8-base));
+    inset-block-end: calc(3 * var(--vi-graph-action) + var(--vi-space-rhythm-5-base));
+    margin-block-start: 0;
+  }
+
+  .vi-graph-search-icon, .vi-graph-scene .vi-graph-icon {
+    display: none;
+  }
+
+  .vi-graph-scene, .vi-graph-ledger-trigger {
+    font-size: var(--vi-typography-typography-size-xs-base);
+  }
+
+  .vi-graph-navigation {
+    grid-area: ledger-start / ledger-start / nav-end / nav-end;
+    grid-template: "map map" auto "layout zoom" auto / minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--vi-space-gap-compact-default);
+    inline-size: 100%;
+  }
+
+  .vi-graph-minimap {
+    grid-area: map;
+    justify-self: end;
+    inline-size: min(44cqi, 12rem);
+  }
+
+  .vi-graph-zoom { grid-area: zoom; }
+  .vi-graph-navigation select { grid-area: layout; }
+
+  .vi-graph-ledger {
+    margin-block-end: calc(var(--vi-graph-action) + var(--vi-space-rhythm-4-base));
+  }
+
+  .vi-graph-ledger-body {
+    inset-block-end: calc(2 * var(--vi-graph-action) + 3 * var(--vi-graph-inset));
+  }
+
+  .vi-graph-node:not([data-kind="concept"], :focus-visible, [data-state="lit"]) .vi-graph-node-label {
+    visibility: hidden;
+  }
+}
+
+[data-motion="paused"] .vi-graph-explorer *,
+.vi-graph-explorer[data-motion="paused"] * {
+  transition: none;
+}
+
+[data-motion="paused"] .vi-graph-explorer .vi-graph-minimap::after,
+.vi-graph-explorer[data-motion="paused"] .vi-graph-minimap::after {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vi-graph-explorer * { transition: none; }
+  .vi-graph-explorer .vi-graph-minimap::after { animation: none; }
+}
+
+@media (forced-colors: active) {
+  .vi-graph-explorer {
+    --vi-graph-focus: Highlight;
+    --vi-graph-line: CanvasText;
+  }
+
+  .vi-graph-glyph, .vi-graph-edge-label {
+    fill: Canvas;
+    stroke: CanvasText;
+  }
+
+  .vi-graph-edge-label {
+    fill: CanvasText;
+    stroke: Canvas;
+  }
+
+  .vi-graph-edge[data-state="lit"], .vi-graph-key .vi-graph-relation-sample {
+    stroke: CanvasText;
+  }
+
+  .vi-graph-map use, .vi-graph-key .vi-graph-relation-sample {
+    fill: CanvasText;
+  }
+}
+
+.vi-graph-explorer [hidden] { display: none; }

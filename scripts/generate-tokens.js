@@ -49,6 +49,14 @@ const PLUGIN_VARS = {
   'attention-bg': 'colors-surface-plugin-attention-bg-base',
   'badge-bg': 'colors-surface-plugin-badge-bg-base',
 };
+const GRAPH_VARS = {
+  'graph-canvas': 'colors-surface-graph-canvas-base',
+  'graph-inspector': 'colors-surface-graph-inspector-base',
+  'graph-line': 'colors-border-graph-explorer-base',
+  'node-entity-a': 'colors-border-entity-concept-base',
+  'node-entity-b': 'colors-border-entity-memory-base',
+  'node-entity-c': 'colors-border-entity-source-base',
+};
 
 // --- Minimal YAML parser (handles the flat key: "value" format in DESIGN.md) ---
 
@@ -178,6 +186,9 @@ function emitCSS(tokens) {
   }
   for (const [name, token] of Object.entries(PLUGIN_VARS)) {
     lines.push('  --vi-plugin-' + name + ': var(--vi-' + token + ');');
+  }
+  for (const [name, token] of Object.entries(GRAPH_VARS)) {
+    lines.push('  --vi-' + name + ': var(--vi-' + token + ');');
   }
   lines.push('}');
   return lines.join('\n') + '\n';
@@ -472,6 +483,9 @@ function main() {
     'glass.css': emitGlassCSS(tokens),
     'chat.css': fs.readFileSync(path.join(ROOT, 'lib', 'chat.css'), 'utf-8'),
     'plugins.css': fs.readFileSync(path.join(ROOT, 'lib', 'plugins.css'), 'utf-8'),
+    'memory-graph-explorer.css': fs.readFileSync(path.join(ROOT, 'lib', 'memory-graph-explorer.css'), 'utf-8'),
+    'memory-graph-explorer.js': fs.readFileSync(path.join(ROOT, 'lib', 'memory-graph-explorer-client.js'), 'utf-8'),
+    'memory-graph-explorer.json': JSON.stringify(require('../lib/memory-graph-explorer').buildExplorerFixture()) + '\n',
     'standard.json': standardArtifacts['standard.json'],
     'standard.md': standardArtifacts['standard.md'],
     'components.manifest.json': `${JSON.stringify(buildComponentsManifest(COMPONENT_CATALOG, tokens), null, 2)}\n`,

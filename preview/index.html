@@ -759,7 +759,8 @@
       { file: 'critique-thread-panel.html', tier: 'public', label: 'Critique thread panel', desc: 'Slot-anchored critique entries with Keep / Change / Do not copy classification chips, polite open/resolved counter, and a critique composer (ADR-023).' },
       { file: 'guardrail-receipt-panel.html', tier: 'public', label: 'Guardrail receipt panel', desc: 'Polite receipt pairing text contrast, graph line, glass layers, arbitrary-class, and scaffold-tool bounds with export and inspection actions (ADR-023).' },
 
-      // Page layouts (7 full-viewport compositions)
+      // Page layouts (8 full-viewport compositions)
+      { file: 'memory-graph-explorer.html', tier: 'layouts', label: 'Memory graph explorer', desc: 'Searchable sample graph with one-hop focus, scene filters, selection ledger and synchronized minimap (ADR-018).', frame: true },
       { file: 'layout-docs-portal.html', tier: 'layouts', label: 'Layout: docs portal', desc: 'Three-column responsive documentation portal uniting crystal-glass header island, Cmd+K palette, collapsible nav rail, Docs Hub + 72ch Article/API canvas, and scroll-spy TOC rail (ADR-024, ADR-025).', frame: true },
       { file: 'layout-settings.html', tier: 'layouts', label: 'Layout: workspace settings', desc: 'Full-viewport responsive Settings workstation recomposing between desktop two-pane (1440px), tablet split (1024px), and mobile single-column drill-down (390px) (ADR-024, ADR-025).', frame: true },
       { file: 'layout-public-site.html', tier: 'layouts', label: 'Layout: public site', desc: 'Full-page dynamic public website composition integrating the island header, hero billboard, four public repos, and footer (ADR-023).', frame: true },
@@ -815,6 +816,7 @@
         '<link rel="stylesheet" href="../dist/stage.css">' +
         '<link rel="stylesheet" href="../dist/dialects.css">' +
         '<link rel="stylesheet" href="../dist/memory-field.css">' +
+        (html.includes('data-graph-explorer') ? '<link rel="stylesheet" href="../dist/memory-graph-explorer.css"><script src="../dist/memory-graph-explorer.js" defer></scr' + 'ipt>' : '') +
         '<link rel="stylesheet" href="../dist/vi-orbital-hero.css">' +
         '<link rel="stylesheet" href="../dist/docs-portal.css">' +
         '<link rel="stylesheet" href="../dist/chat.css">' +

@@ -395,7 +395,7 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
   assert.deepEqual(modularComponents.planes, ['surfaces', 'harness', 'providers', 'authority stores']);
   assert.deepEqual(modularComponents.runStates, ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete', 'stopping', 'stopped', 'failed']);
   assert.deepEqual(modularComponents.toolEffects, ['read', 'write', 'destructive', 'credential']);
-  assert.equal(modularComponents.catalog.length, 93);
+  assert.equal(modularComponents.catalog.length, 94);
   assert.equal(modularComponents.pluginsConnectors.saveRequiresCurrentPreAdmissionCheck, true);
   assert.equal(modularComponents.pluginsConnectors.bindingIdentitySeparate, true);
   assert.deepEqual(modularComponents.pluginsConnectors.connectorOverrides, ['Allow read-only', 'Ask owner', 'Deny']);
@@ -412,7 +412,7 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
     'docs-sidebar-nav', 'docs-quickstart-grid', 'docs-page-actions', 'layout-docs-portal',
     'form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'data-table', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'skeleton-row', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar',
     'markdown-prose-renderer', 'code-and-diff-viewer', 'docs-code-tabs', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline',
-    'systems-constellation-map', 'stage-backdrop', 'vi-orbital-field', 'memory-field', 'memory-pipeline', 'evidence-lens', 'coverage-grid',
+    'systems-constellation-map', 'stage-backdrop', 'vi-orbital-field', 'memory-field', 'memory-graph-explorer', 'memory-pipeline', 'evidence-lens', 'coverage-grid',
     'persona-deliberation-stepper', 'persona-identity-badge', 'persona-dialects', 'five-bar-rule', 'persona-switcher',
     'instrument', 'statement-proof-row',
     'credential-activity-ledger', 'policy-rule-matrix', 'provider-model-selector', 'locked-panel',

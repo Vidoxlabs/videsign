@@ -120,9 +120,10 @@ describe('collaborative design studio & reference contracts', () => {
     const expected = buildComponentsManifest(COMPONENT_CATALOG, tokens);
     const actual = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf8'));
     assert.deepEqual(actual, expected);
-    assert.equal(actual.componentCount, 93);
+    assert.equal(actual.componentCount, 94);
     assert.equal(actual.files.chatCss, 'dist/chat.css');
     assert.equal(actual.files.pluginsCss, 'dist/plugins.css');
+    assert.equal(actual.files.memoryGraphCss, 'dist/memory-graph-explorer.css');
     assert.deepEqual(actual.categories, CATALOG_CATEGORIES);
     assert.deepEqual(actual.consumers, CATALOG_CONSUMERS);
     assert.equal(Object.keys(actual.archetypes).length, 12);
@@ -140,6 +141,14 @@ describe('collaborative design studio & reference contracts', () => {
     assert.match(css, /@container vi-chat-stage \(min-width: 64rem\)/);
     assert.match(css, /\.vi-chat-action,\s*\.vi-chat-summary\s*\{[^}]*min-inline-size: var\(--vi-size-action-min-default\);[^}]*min-block-size: var\(--vi-size-action-min-default\);/);
     assert.doesNotMatch(css, /#[\da-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i);
+  });
+
+  test('memory graph scaffolds include the stylesheet and sample controller', () => {
+    const scaffold = scaffoldPage({ components: ['memory-graph-explorer'], theme: 'light' }, ROOT);
+    assert.ok(scaffold.stylesheets.includes('dist/memory-graph-explorer.css'));
+    assert.ok(scaffold.stylesheets.includes('dist/themes.css'));
+    assert.match(scaffold.html, /src="dist\/memory-graph-explorer\.js" defer/);
+    assert.match(scaffold.html, /data-graph-explorer/);
   });
 
   test('connector specimens scaffold the same named-container stylesheet', () => {

@@ -1,0 +1,162 @@
+<!-- ADR-018: interactive memory graph specimen. Dataset and controller load separately. -->
+<section class="vi-graph-explorer" data-graph-explorer data-run-state="start" aria-labelledby="graph-title">
+  <svg class="vi-graph-symbols" aria-hidden="true" width="0" height="0">
+    <symbol id="graph-hexagon" viewBox="0 0 24 24"><path d="M12 2 21 7v10l-9 5-9-5V7Z"/></symbol>
+    <symbol id="graph-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+    <symbol id="graph-diamond" viewBox="0 0 24 24"><path d="m12 2 10 10-10 10L2 12Z"/></symbol>
+  </svg>
+  <header class="vi-graph-header">
+    <svg class="vi-graph-mark" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="m7 8 10 3M7 9l5 8m5-5-4 5"/><circle cx="5" cy="7" r="2.5"/><circle cx="19" cy="11" r="2.5"/><circle cx="12" cy="19" r="2.5"/>
+    </svg>
+    <h1 id="graph-title">Memory graph</h1>
+    <span class="vi-graph-source">Sample dataset</span>
+    <button class="vi-graph-legend-trigger" type="button" data-graph-open="legend" aria-haspopup="dialog" aria-expanded="false" aria-controls="graph-legend-drawer">Legend</button>
+  </header>
+
+  <div class="vi-graph-layout">
+    <div class="vi-graph-stage" data-graph-stage aria-label="Graph workspace">
+      <div class="vi-graph-query">
+        <form class="vi-glass-shell vi-glass--control vi-graph-search" role="search" aria-label="Search the graph" data-graph-form>
+          <div class="vi-glass-core">
+            <svg class="vi-graph-icon vi-graph-search-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4 4"/></svg>
+            <label class="sr-only" for="graph-query">Search entities, links or epochs</label>
+            <input id="graph-query" type="search" name="query" placeholder="Search memory" autocomplete="off" spellcheck="false" aria-describedby="graph-query-help" disabled>
+            <button type="submit" data-graph-submit disabled>Search</button>
+          </div>
+        </form>
+        <div class="vi-graph-starters" id="graph-query-help" aria-label="Example queries">
+          <button type="button" data-graph-example="Category: Memory with link: CR" title="Category: Memory with link: CR" disabled>Memory + CR</button>
+          <button type="button" data-graph-example="epoch: 2026-Q2" title="epoch: 2026-Q2" disabled>2026 Q2</button>
+        </div>
+        <div class="vi-graph-feedback">
+          <p class="vi-graph-run" role="status" aria-live="polite"><span data-graph-status>Loading sample graph</span></p>
+          <div class="vi-graph-error" data-graph-error hidden>
+            <p role="alert" data-graph-error-text></p>
+            <button type="button" data-graph-retry>Retry</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vi-canvas-mount" data-graph-canvas tabindex="0" role="region" aria-label="Interactive memory graph" aria-describedby="graph-keyboard">
+        <p id="graph-keyboard" class="sr-only">Arrow keys move between nodes. Enter or Space toggles a node in your selection. Plus and minus zoom. Alt and arrow keys pan. Home fits the graph. Escape clears selection.</p>
+        <div class="vi-graph-extent" data-graph-extent aria-hidden="true"></div>
+        <svg class="vi-graph-edges" data-graph-edges aria-hidden="true">
+          <defs>
+            <marker id="graph-tree-tip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 7 7">
+              <path d="M0 0 7 3.5 0 7Z"/>
+            </marker>
+          </defs>
+          <g data-graph-links></g>
+          <g data-graph-edge-labels></g>
+          <polyline class="vi-graph-gesture" data-graph-gesture visibility="hidden"/>
+        </svg>
+        <div class="vi-graph-nodes" data-graph-nodes role="group" aria-label="Memory entities"></div>
+      </div>
+
+      <div class="vi-glass-shell vi-graph-toolbar">
+        <div class="vi-glass-core" role="toolbar" aria-label="Graph tools" aria-orientation="vertical" data-graph-toolbar>
+          <button type="button" data-graph-mode="point" aria-label="Individual select" title="Individual select" aria-pressed="true">
+            <svg class="vi-graph-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m5 3 13 10-6 1-3 6Z"/></svg>
+          </button>
+          <button type="button" data-graph-mode="box" aria-label="Box select" title="Box select" aria-pressed="false" tabindex="-1">
+            <svg class="vi-graph-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1" stroke-dasharray="3 2"/></svg>
+          </button>
+          <button type="button" data-graph-mode="lasso" aria-label="Lasso select" title="Lasso select" aria-pressed="false" tabindex="-1">
+            <svg class="vi-graph-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 17c-8-4-3-13 5-12 8 1 9 11 2 12-2 0-4-1-5 0-4 1-3 5 0 4"/></svg>
+          </button>
+          <button type="button" data-graph-open="filters" aria-label="Filters" title="Filters" aria-controls="graph-inspector" tabindex="-1">
+            <svg class="vi-graph-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10m-7 6h4"/></svg>
+          </button>
+          <button type="button" data-graph-time aria-label="Time slicer" title="Time slicer" aria-expanded="false" aria-controls="graph-time-filter" tabindex="-1">
+            <svg class="vi-graph-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="vi-graph-time" id="graph-time-filter" hidden>
+        <label for="graph-epoch">Epoch</label>
+        <select id="graph-epoch" data-graph-epoch><option value="">All epochs</option></select>
+      </div>
+      <button class="vi-graph-scene" type="button" data-graph-scene aria-pressed="false" title="Show only the current scene">
+        <svg class="vi-graph-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m12 4 9 5-9 5-9-5Zm-9 9 9 5 9-5"/></svg>
+        <span>Scene only</span>
+      </button>
+
+      <div class="vi-graph-ledger">
+        <button type="button" class="vi-graph-ledger-trigger" data-graph-ledger aria-expanded="false" aria-controls="graph-ledger">
+          <span>All <strong class="vi-graph-number" data-graph-total>&hellip;</strong></span>
+          <span>Selected <strong class="vi-graph-number" data-graph-selected>0</strong></span>
+          <svg class="vi-graph-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m7 14 5-5 5 5"/></svg>
+        </button>
+        <div class="vi-graph-ledger-body" id="graph-ledger" role="region" tabindex="0" aria-labelledby="graph-ledger-title" hidden>
+          <h2 id="graph-ledger-title" data-graph-ledger-heading>Nodes in view</h2>
+          <table class="vi-graph-table">
+            <thead><tr><th scope="col">Entity</th><th scope="col">Epoch</th><th scope="col">Memory class</th></tr></thead>
+            <tbody data-graph-records></tbody>
+          </table>
+          <h3>Relationships</h3>
+          <ul data-graph-connections></ul>
+        </div>
+      </div>
+
+      <div class="vi-graph-navigation">
+        <div class="vi-glass-shell vi-graph-minimap">
+          <div class="vi-glass-core">
+            <div class="vi-graph-map" data-graph-map tabindex="0" role="region" aria-label="Graph minimap" aria-describedby="graph-map-help">
+              <p id="graph-map-help" class="sr-only">Drag the viewport or use arrow keys to pan after zooming in.</p>
+              <svg data-graph-mini-svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+              <div class="vi-minimap-viewport" data-graph-map-viewport aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+        <div class="vi-graph-zoom" aria-label="Graph zoom" role="group">
+          <button type="button" data-graph-zoom="out" aria-label="Zoom out" title="Zoom out">&minus;</button>
+          <output class="vi-graph-number" data-graph-zoom-value aria-label="Current zoom">100%</output>
+          <button type="button" data-graph-zoom="in" aria-label="Zoom in" title="Zoom in">+</button>
+          <button type="button" data-graph-zoom="fit" aria-label="Fit graph to view" title="Fit graph to view">
+            <svg class="vi-graph-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5H5v4m10-4h4v4M5 15v4h4m10-4v4h-4"/></svg>
+          </button>
+        </div>
+        <label class="sr-only" for="graph-layout">Graph layout</label>
+        <select id="graph-layout" data-graph-layout>
+          <option value="force">Force layout</option>
+          <option value="hierarchical">Hierarchical</option>
+          <option value="radial">Radial epochs</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="vi-graph-inspector-dock" data-graph-dock>
+      <aside class="vi-graph-inspector" id="graph-inspector" data-graph-inspector aria-labelledby="graph-legend-title">
+        <div class="vi-graph-inspector-heading">
+          <h2 id="graph-legend-title">Legend</h2>
+          <button type="button" data-graph-close aria-label="Close legend" hidden>
+            <svg class="vi-graph-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+        <div class="vi-graph-tabs" role="tablist" aria-label="Legend categories">
+          <button type="button" role="tab" id="graph-tab-nodes" data-graph-tab="nodes" aria-controls="graph-node-panel" aria-selected="true">Nodes</button>
+          <button type="button" role="tab" id="graph-tab-links" data-graph-tab="links" aria-controls="graph-link-panel" aria-selected="false" tabindex="-1">Relationships</button>
+        </div>
+        <fieldset class="vi-graph-scopes">
+          <legend>Scene visibility</legend>
+          <div>
+            <label><input type="radio" name="graph-scope" value="all" checked><span>All</span><span class="vi-graph-number" data-graph-scope-total="all">&hellip;</span></label>
+            <label><input type="radio" name="graph-scope" value="in"><span>In scene</span><span class="vi-graph-number" data-graph-scope-total="in">&hellip;</span></label>
+            <label><input type="radio" name="graph-scope" value="off"><span>Off scene</span><span class="vi-graph-number" data-graph-scope-total="off">&hellip;</span></label>
+          </div>
+        </fieldset>
+        <p class="vi-graph-scope-count" data-graph-scope-count role="status" aria-live="polite">&hellip; in view · &hellip; filtered</p>
+        <div id="graph-node-panel" role="tabpanel" aria-labelledby="graph-tab-nodes">
+          <ul class="vi-graph-legend-list" data-graph-kinds></ul>
+        </div>
+        <div id="graph-link-panel" role="tabpanel" aria-labelledby="graph-tab-links" hidden>
+          <ul class="vi-graph-legend-list" data-graph-codes></ul>
+        </div>
+        <button class="vi-graph-label-toggle" type="button" data-graph-labels aria-pressed="true"><span>Node labels</span><span data-graph-label-state>On</span></button>
+      </aside>
+    </div>
+  </div>
+
+  <dialog class="vi-graph-legend-drawer" id="graph-legend-drawer" aria-labelledby="graph-legend-title" data-graph-drawer></dialog>
+</section>

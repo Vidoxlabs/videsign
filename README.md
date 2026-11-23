@@ -76,7 +76,7 @@ thread. The agent workspace offers 1440px, 1024px and 390px frames, plus an isol
    Import `dist/themes.css` as well to opt into the product light theme, which
    remaps the base variables.
 3. **MCP**: Run `npm run mcp` and query resources/tools from your product repo's agent.
-   Use `component_catalog` (93 modular fragments across 9 categories, or read
+   Use `component_catalog` (94 modular fragments across 9 categories, or read
    `file://preview/<id>.html` directly), `design_brief` (proactive Design Read, inferred
    `variance`/`motion`/`visualDensity` dials, reference contract, and ADR-025 anti-slop pre-flight
    checklist), and `scaffold_page` to compile structured briefs and assemble pure HTML page
@@ -92,6 +92,10 @@ thread. The agent workspace offers 1440px, 1024px and 390px frames, plus an isol
    Plugin rows, the manager and the custom connector drawer share `dist/plugins.css`.
    `preview/plugins-preview.js` demonstrates fixture-only policy, health and pre-admission flows
    from the catalog, Settings and the agent workspace.
+   The Memory Graph Explorer uses `dist/memory-graph-explorer.css` with tokens and glass.
+   The catalog and standalone scaffold load `dist/memory-graph-explorer.js` and its
+   sibling JSON fixture. The form supports entity text, `category:`, `link:`, and
+   `epoch:`. Use quotes around filter values with spaces.
 4. **Stage backdrop**: `const { renderStageSvg, stageContrastReport } = require('@vidoxlabs/videsign/lib/stage.js')`
    renders the ADR-013 backdrop as an SVG string (or inline `dist/stage-ambient.svg` /
    `dist/stage-hero.svg`). Import `dist/stage.css` with `dist/tokens.css`. Your pause
