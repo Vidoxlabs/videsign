@@ -151,6 +151,15 @@ function emitCSS(tokens) {
     }
   }
 
+  lines.push(
+    '  --vi-surface-canvas: oklch(0.095 0.012 275);',
+    '  --vi-surface-shell: oklch(0.135 0.014 275);',
+    '  --vi-surface-card: oklch(0.175 0.015 275);',
+    '  --vi-surface-elevated: oklch(0.225 0.016 275);',
+    '  --vi-radius-outer: 12px;',
+    '  --vi-radius-inner: 8px;',
+  );
+
   lines.push('}');
   return lines.join('\n') + '\n';
 }
@@ -323,7 +332,11 @@ function emitThemeCSS(tokens) {
     if (key.endsWith('-light')) lines.push(`  --vi-colors-${key.slice(0, -6)}-base: ${value};`);
   }
   lines.push(`  --vi-effects-glass-crystal-solid-base: ${tokens.effects['glass-crystal-solid-light']};`,
-    `  --vi-effects-glass-crystal-core-base: ${tokens.effects['glass-crystal-solid-light']};`, '}',
+    `  --vi-effects-glass-crystal-core-base: ${tokens.effects['glass-crystal-solid-light']};`,
+    '  --vi-surface-canvas: oklch(0.945 0.007 275);',
+    '  --vi-surface-shell: oklch(0.972 0.005 275);',
+    '  --vi-surface-card: oklch(1 0 275);',
+    '  --vi-surface-elevated: oklch(0.920 0.009 275);', '}',
     '[data-theme="dark"] { color-scheme: dark; }',
     '[data-theme="light"] .vi-glass, [data-theme="light"] .vi-glass-shell, [data-theme="light"] .vi-glass--control:hover, [data-theme="light"] .vi-glass--control:focus-within {',
     `  background: ${tokens.effects['glass-crystal-solid-light']};`, '  border: 0;', '  backdrop-filter: none;', '  -webkit-backdrop-filter: none;',

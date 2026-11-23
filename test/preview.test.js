@@ -878,7 +878,7 @@ test('modularity and cross-surface continuity fragments follow ADR-021, ADR-023,
   assert.match(chips, /aria-label="Remove filter: harness contracts"/);
   assert.match(searchBar, /<select id="catalog-filter-sort"/);
   assert.ok(searchBar.includes('>Clear all<'));
-  assert.match(searchBar, /role="status" aria-live="polite" class="[^"]*tabular-nums[^"]*">Showing 12 of 90 modules</);
+  assert.match(searchBar, /role="status" aria-live="polite" class="[^"]*tabular-nums[^"]*">Showing 12 of 93 modules</);
 
   // 4. mobile-navigation-sheet.html
   const sheet = read('mobile-navigation-sheet.html');
@@ -906,7 +906,7 @@ test('modularity and cross-surface continuity fragments follow ADR-021, ADR-023,
   assert.ok([...bento.matchAll(/text-balance/g)].length >= 6, 'balanced card headings');
   assert.ok([...bento.matchAll(/mt-auto/g)].length >= 6, 'bottom-aligned actions');
   assert.match(bento, /tabular-nums/);
-  assert.ok(bento.includes('>90</dd>'), 'catalog counter follows the live component count');
+  assert.ok(bento.includes('>93</dd>'), 'catalog counter follows the live component count');
 
   // 6. comparison-matrix.html
   const matrix = read('comparison-matrix.html');

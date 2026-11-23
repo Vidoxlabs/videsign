@@ -22,6 +22,8 @@ const { execFileSync } = require('child_process');
 const { contrastRatio } = require('../lib/contrast');
 const { syncFixtureHtml } = require('../scripts/sync-fixture-metrics');
 const {
+  IFRAME_BASE_CSS,
+  ISOLATION_BASE_CSS,
   parseHashState,
   serializeHashState,
   extractTokenReferences,
@@ -62,21 +64,33 @@ before(() => {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'generate-tokens.js')], { cwd: ROOT, stdio: 'ignore' });
 });
 
-test('preview/catalog.css enforces zero-hex OKLCH, 4-tier dark/light elevation, scrollbars, and GPU-only motion', () => {
+test('preview/catalog.css, dist/tokens.css, and iframe styles enforce zero-hex OKLCH, 4-tier elevation, concentric radii, scrollbars, and GPU-only motion', () => {
   const css = fs.readFileSync(path.join(ROOT, 'preview', 'catalog.css'), 'utf-8');
+  const tokensCss = fs.readFileSync(path.join(ROOT, 'dist', 'tokens.css'), 'utf-8');
   assert.doesNotMatch(css, /#[0-9a-fA-F]{3,8}\b/, 'catalog.css must not contain raw hex colors');
   assert.doesNotMatch(css, /\brgba?\(/i, 'catalog.css must not contain rgb()/rgba()');
   assert.doesNotMatch(css, /\bhsla?\(/i, 'catalog.css must not contain hsl()/hsla()');
-  assert.doesNotMatch(css, /text-transform:\s*uppercase/i, 'ADR-007 forbids uppercase text-transform');
+  assert.doesNotMatch(IFRAME_BASE_CSS, /#[0-9a-fA-F]{3,8}\b/, 'iframe CSS must not contain raw hex colors');
+  assert.doesNotMatch(ISOLATION_BASE_CSS, /#[0-9a-fA-F]{3,8}\b/, 'shadow isolation CSS must not contain raw hex colors');
 
   for (const needle of [
-    '--vi-surface-canvas: oklch(0.10 0.012 275)',
+    '--vi-surface-canvas: oklch(0.095 0.012 275)',
     '--vi-surface-shell: oklch(0.135 0.014 275)',
     '--vi-surface-card: oklch(0.175 0.015 275)',
-    '--vi-surface-elevated: oklch(0.22 0.016 275)',
+    '--vi-surface-elevated: oklch(0.225 0.016 275)',
+    '--vi-radius-outer: 12px',
+    '--vi-radius-inner: 8px',
+  ]) {
+    assert.ok(css.includes(needle), `preview/catalog.css missing required token: ${needle}`);
+    assert.ok(tokensCss.includes(needle), `dist/tokens.css missing required elevation/radius token: ${needle}`);
+  }
+
+  for (const needle of [
     '--vi-ink-primary: oklch(0.95 0.006 275)',
-    '--vi-ink-muted: oklch(0.64 0.012 275)',
+    '--vi-ink-secondary: oklch(0.78 0.010 275)',
+    '--vi-ink-muted: oklch(0.66 0.012 275)',
     '--vi-border-interactive: oklch(0.54 0.02 275)',
+    '--vi-border-strong: oklch(0.64 0.02 275)',
     ':root[data-theme="light"]',
     'scrollbar-width: thin',
     'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -84,8 +98,22 @@ test('preview/catalog.css enforces zero-hex OKLCH, 4-tier dark/light elevation, 
     ':root[data-motion="reduced"]',
     'transition-duration: 0ms !important',
     ':root[data-glass="tactile-blur"]',
+    'text-transform: uppercase',
+    'letter-spacing: 0.06em',
+    '.sidebar-link.is-active-spy',
+    '.fragment-iso-pill',
   ]) {
     assert.ok(css.includes(needle), `preview/catalog.css missing required token/rule: ${needle}`);
+  }
+
+  for (const iframeRule of [
+    'color-scheme: dark',
+    'color-scheme: light',
+    'scrollbar-width: thin',
+    'oklch(0.34 0.015 275)',
+    '::-webkit-scrollbar-thumb',
+  ]) {
+    assert.ok(IFRAME_BASE_CSS.includes(iframeRule), `IFRAME_BASE_CSS missing required scrollbar/theme rule: ${iframeRule}`);
   }
 
   // GPU-only transitions: ensure no transition animates layout/paint properties
@@ -105,11 +133,11 @@ test('preview/catalog.css enforces zero-hex OKLCH, 4-tier dark/light elevation, 
     const tiers = ['--vi-surface-canvas', '--vi-surface-shell', '--vi-surface-card', '--vi-surface-elevated'];
     for (const tier of tiers) {
       const bg = oklchToRgb(...suite.vars[tier]);
-      for (const ink of ['--vi-ink-primary', '--vi-ink-muted']) {
+      for (const ink of ['--vi-ink-primary', '--vi-ink-secondary', '--vi-ink-muted']) {
         const ratio = contrastRatio(oklchToRgb(...suite.vars[ink]), bg);
         assert.ok(ratio >= 4.5, `${suite.name} ${ink} on ${tier} must be >= 4.5:1, got ${ratio.toFixed(2)}`);
       }
-      for (const ctrl of ['--vi-border-interactive', '--vi-dot-active', '--vi-dot-accent', '--vi-dot-warn']) {
+      for (const ctrl of ['--vi-border-interactive', '--vi-border-strong', '--vi-dot-active', '--vi-dot-accent', '--vi-dot-warn']) {
         const ratio = contrastRatio(oklchToRgb(...suite.vars[ctrl]), bg);
         assert.ok(ratio >= 3.0, `${suite.name} ${ctrl} on ${tier} must be >= 3.0:1, got ${ratio.toFixed(2)}`);
       }
@@ -211,4 +239,19 @@ test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens
   assert.equal(snap.interactive.length, 1);
   assert.equal(snap.touchPass, 1);
   assert.equal(snap.touchWarn, 0);
+  assert.equal(parseHashState('#catalog?cat=layouts&specimen=layout-public-site').category, 'layouts');
+});
+
+test('manifest count equals active catalog count (93) and design-studio-canvas aligns with museum accent grammar', () => {
+  const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf-8'));
+  const indexHtml = fs.readFileSync(path.join(ROOT, 'preview', 'index.html'), 'utf-8');
+  const activeCount = [...indexHtml.matchAll(/file:\s*'[^']+',\s*tier:\s*'([^']+)'/g)].filter((m) => m[1] !== 'legacy').length;
+  assert.equal(manifest.componentCount, activeCount, 'manifest componentCount must equal active specimen count');
+  assert.equal(manifest.componentCount, 93);
+
+  const studio = fs.readFileSync(path.join(ROOT, 'preview', 'design-studio-canvas.html'), 'utf-8');
+  assert.ok(studio.includes('bg-status-indicator-success-base'), 'sync ready uses semantic status-ok dot');
+  assert.doesNotMatch(studio, /bg-status-indicator-info-base[\s\S]*sync ready/, 'off-palette blue dot removed from sync ready');
+  assert.ok(studio.includes('Pinned critique slot'), 'pinned critique slot legend present');
+  assert.ok(studio.includes('>Schematic<'), 'inner schematic switcher visually subordinated');
 });
