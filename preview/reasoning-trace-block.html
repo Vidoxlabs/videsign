@@ -1,0 +1,49 @@
+<!--
+  Nocturne Museum: Reasoning Trace Block (ADR-020)
+  Collapsible deliberation trace with elapsed duration (tabular-nums), step bullets,
+  token footprint, and streaming vs settled states. Streaming pulse freezes under
+  data-motion="reduced" and prefers-reduced-motion: reduce. Solid surfaces only.
+-->
+<section class="vi-core-scope" aria-labelledby="reasoning-trace-title">
+  <div class="vi-core-card vi-core-card--narrow vi-trace-block" data-vi-reasoning-trace data-trace-state="streaming">
+    <div class="vi-core-head">
+      <div>
+        <p class="vi-core-eyebrow">Workspace · deliberation trace</p>
+        <h2 id="reasoning-trace-title" class="vi-core-title">Reasoning trace block</h2>
+      </div>
+      <div role="group" aria-label="Trace state preview" class="vi-core-tabs">
+        <button type="button" aria-pressed="true" data-trace-mode="streaming" class="vi-core-tab h-action-min-default">Streaming</button>
+        <button type="button" aria-pressed="false" data-trace-mode="settled" class="vi-core-tab h-action-min-default">Settled</button>
+      </div>
+    </div>
+
+    <details open>
+      <summary class="vi-trace-summary">
+        <span class="vi-core-status">
+          <span aria-hidden="true" class="vi-core-dot vi-core-dot--accent vi-trace-pulse"></span>
+          <span data-trace-label>Streaming deliberation</span>
+        </span>
+        <span class="vi-core-meta" data-trace-duration>2.4s · 4 steps · 418 tok</span>
+      </summary>
+
+      <ol class="vi-trace-steps" aria-label="Deliberation steps">
+        <li class="vi-trace-step">
+          <span class="vi-trace-ts">+0.3s</span>
+          <span class="vi-core-copy">Read DESIGN.md front-matter tokens and confirmed 4 dark elevation tiers (0.10, 0.13, 0.16, 0.20).</span>
+        </li>
+        <li class="vi-trace-step">
+          <span class="vi-trace-ts">+0.9s</span>
+          <span class="vi-core-copy">Checked muted ink delta against Tier 4 surface: L=0.70 yields 0.50 delta, clearing the 0.45 floor.</span>
+        </li>
+        <li class="vi-trace-step">
+          <span class="vi-trace-ts">+1.7s</span>
+          <span class="vi-core-copy">Selected balanced 2-column CSS Subgrid for the 8-card skills roster to eliminate row orphans.</span>
+        </li>
+        <li class="vi-trace-step">
+          <span class="vi-trace-ts">+2.4s</span>
+          <span class="vi-core-copy">Prepared static fragment diff without inline styles or arbitrary utility classes.</span>
+        </li>
+      </ol>
+    </details>
+  </div>
+</section>

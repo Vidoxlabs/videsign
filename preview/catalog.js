@@ -43,6 +43,7 @@
     '../dist/settings-surface.css',
     '../dist/library-surface.css',
     '../dist/specimen-layouts.css',
+    '../dist/core-components.css',
   ];
 
   var ISOLATION_BASE_CSS = [
@@ -61,8 +62,8 @@
     '  --vi-surface-card: oklch(0.16 0.016 275);',
     '  --vi-surface-elevated: oklch(0.20 0.018 275);',
     '  --vi-ink-primary: oklch(0.96 0.006 275);',
-    '  --vi-ink-secondary: oklch(0.80 0.010 275);',
-    '  --vi-ink-muted: oklch(0.66 0.012 275);',
+    '  --vi-ink-secondary: oklch(0.82 0.010 275);',
+    '  --vi-ink-muted: oklch(0.70 0.012 275);',
     '  --vi-border-subtle: oklch(1 0 0 / 0.08);',
     '  --vi-border-interactive: oklch(0.56 0.020 275);',
     '  --vi-border-strong: oklch(0.68 0.022 275);',
@@ -138,8 +139,8 @@
     '  --vi-surface-card: oklch(0.16 0.016 275);',
     '  --vi-surface-elevated: oklch(0.20 0.018 275);',
     '  --vi-ink-primary: oklch(0.96 0.006 275);',
-    '  --vi-ink-secondary: oklch(0.80 0.010 275);',
-    '  --vi-ink-muted: oklch(0.66 0.012 275);',
+    '  --vi-ink-secondary: oklch(0.82 0.010 275);',
+    '  --vi-ink-muted: oklch(0.70 0.012 275);',
     '  --vi-border-subtle: oklch(1 0 0 / 0.08);',
     '  --vi-border-interactive: oklch(0.56 0.020 275);',
     '  --vi-border-strong: oklch(0.68 0.022 275);',
@@ -329,7 +330,7 @@
         found.add('--vi-orbital-c3');
         found.add('--vi-orbital-c4');
       }
-      if (base.indexOf('vi-viewport-') === 0 || base.indexOf('vi-brief-') === 0 || base.indexOf('vi-data-table') === 0 || base.indexOf('vi-bento-') === 0) {
+      if (base.indexOf('vi-viewport-') === 0 || base.indexOf('vi-brief-') === 0 || base.indexOf('vi-data-table') === 0 || base.indexOf('vi-bento-') === 0 || base.indexOf('vi-core-') === 0 || base.indexOf('vi-combo-') === 0 || base.indexOf('vi-cal-') === 0 || base.indexOf('vi-tip-') === 0 || base.indexOf('vi-tree') === 0 || base.indexOf('vi-split-') === 0 || base.indexOf('vi-chart-') === 0 || base.indexOf('vi-trace-') === 0 || base.indexOf('vi-cite-') === 0 || base.indexOf('vi-danger-') === 0 || base.indexOf('vi-err-') === 0) {
         found.add('--vi-surface-canvas');
         found.add('--vi-surface-card');
         found.add('--vi-surface-elevated');
@@ -682,6 +683,7 @@
         '<script defer src="../dist/docs-portal.js"></scr' + 'ipt>' +
         '<script defer src="../dist/settings-surface.js"></scr' + 'ipt>' +
         '<script defer src="../dist/library-surface.js"></scr' + 'ipt>' +
+        '<script defer src="../dist/core-components.js"></scr' + 'ipt>' +
         '<style>' + IFRAME_BASE_CSS + '</style>' +
         '</head><body>' + html + '</body></html>';
     }
@@ -718,6 +720,9 @@
       }
       if (win.ViLibrarySurface && typeof win.ViLibrarySurface.initLibrarySurface === 'function') {
         win.ViLibrarySurface.initLibrarySurface(container);
+      }
+      if (win.ViCoreComponents && typeof win.ViCoreComponents.initCoreComponents === 'function') {
+        win.ViCoreComponents.initCoreComponents(container);
       }
       Array.prototype.slice.call(container.querySelectorAll('img[data-chibi-fallback]')).forEach(function (img) {
         img.addEventListener('error', function () {
@@ -903,9 +908,10 @@
     var inspectorState = { open: false, record: null, trigger: null, activeTab: 'preview', previewWrapper: null, rawHtml: '' };
 
     function syncToolbarScrollMargin() {
-      if (!toolbarEl || typeof toolbarEl.getBoundingClientRect !== 'function') return 96;
-      var h = Math.ceil(toolbarEl.getBoundingClientRect().height || 0);
-      var offset = Math.max(88, h + 24);
+      if (!toolbarEl || typeof toolbarEl.getBoundingClientRect !== 'function') return 76;
+      var h = Math.ceil(toolbarEl.getBoundingClientRect().height || 52);
+      var offset = Math.max(76, h + 24);
+      rootDoc.documentElement.style.setProperty('--shell-topbar-h', h + 'px');
       rootDoc.documentElement.style.setProperty('--vi-scroll-margin', offset + 'px');
       return offset;
     }
@@ -1568,7 +1574,15 @@
     var activeSpyId = '';
     var hasUserScrolled = false;
     var programmaticScrollUntil = 0;
+    var deepLinkCleanup = null;
     var spyVisible = new Map();
+
+    function releaseDeepLinkLock() {
+      if (deepLinkCleanup) {
+        deepLinkCleanup();
+        deepLinkCleanup = null;
+      }
+    }
 
     function setActiveSidebarSpy(id, syncUrl) {
       if (!id || id === activeSpyId) return;
@@ -1612,6 +1626,14 @@
       : null;
 
     if (win) {
+      on(win, 'wheel', function () {
+        hasUserScrolled = true;
+        releaseDeepLinkLock();
+      }, { passive: true });
+      on(win, 'touchmove', function () {
+        hasUserScrolled = true;
+        releaseDeepLinkLock();
+      }, { passive: true });
       on(win, 'scroll', function () {
         if (Date.now() >= programmaticScrollUntil) {
           hasUserScrolled = true;
@@ -1629,10 +1651,10 @@
       if (win && typeof win.scrollTo === 'function' && typeof cardEl.getBoundingClientRect === 'function') {
         var rect = cardEl.getBoundingClientRect();
         var targetY = Math.max(0, (win.scrollY || win.pageYOffset || 0) + rect.top - offset);
-        programmaticScrollUntil = Date.now() + 600;
+        programmaticScrollUntil = Date.now() + 800;
         win.scrollTo({ top: targetY, behavior: 'auto' });
       } else if (typeof cardEl.scrollIntoView === 'function') {
-        programmaticScrollUntil = Date.now() + 600;
+        programmaticScrollUntil = Date.now() + 800;
         cardEl.scrollIntoView({ behavior: 'auto', block: 'start' });
       }
     }
@@ -1640,28 +1662,59 @@
     function focusSpecimen(id, updateUrl) {
       var rec = recordById[id];
       if (!rec) return;
+      releaseDeepLinkLock();
+      hasUserScrolled = false;
       if (rec.meta.tier === 'legacy') state.legacy = true;
       if (state.category !== 'all' && state.category !== rec.meta.tier) state.category = 'all';
       state.specimen = id;
       applyFilters(updateUrl);
-      var loadP = loadFragment(rec);
+
+      // Eagerly hydrate target specimen and immediate preceding visible sibling to prevent lazy layout shift
+      var recIdx = cardRecords.indexOf(rec);
+      var eagerLoads = [loadFragment(rec)];
+      for (var p = recIdx - 1; p >= 0 && p >= recIdx - 2; p -= 1) {
+        if (!cardRecords[p].card.classList.contains('hidden-item')) {
+          eagerLoads.push(loadFragment(cardRecords[p]));
+        }
+      }
+
       cardRecords.forEach(function (r) {
         r.card.classList.toggle('is-focused-specimen', r.id === id);
       });
       setActiveSidebarSpy(id, false);
       alignCardBelowToolbar(rec.card);
-      if (loadP && typeof loadP.then === 'function') {
-        loadP.then(function () {
+
+      // Keep target specimen pinned at toolbar.bottom + 24px while preceding lazy fragments settle
+      var settledObserver = null;
+      var settleTimer = null;
+      if (win && 'ResizeObserver' in win && mainHost) {
+        settledObserver = new win.ResizeObserver(function () {
           if (state.specimen === id && !hasUserScrolled) {
             alignCardBelowToolbar(rec.card);
-            if (win && typeof win.requestAnimationFrame === 'function') {
-              win.requestAnimationFrame(function () {
-                if (state.specimen === id && !hasUserScrolled) alignCardBelowToolbar(rec.card);
-              });
-            }
           }
-        }).catch(function () {});
+        });
+        settledObserver.observe(mainHost);
       }
+      if (win && typeof win.setTimeout === 'function') {
+        settleTimer = win.setTimeout(function () {
+          releaseDeepLinkLock();
+        }, 1600);
+      }
+      deepLinkCleanup = function () {
+        if (settledObserver) settledObserver.disconnect();
+        if (settleTimer && win && typeof win.clearTimeout === 'function') win.clearTimeout(settleTimer);
+      };
+
+      Promise.all(eagerLoads).then(function () {
+        if (state.specimen === id && !hasUserScrolled) {
+          alignCardBelowToolbar(rec.card);
+          if (win && typeof win.requestAnimationFrame === 'function') {
+            win.requestAnimationFrame(function () {
+              if (state.specimen === id && !hasUserScrolled) alignCardBelowToolbar(rec.card);
+            });
+          }
+        }
+      }).catch(function () {});
     }
 
     function applyFilters(syncUrl) {
@@ -1923,6 +1976,7 @@
         if (spyObserver) spyObserver.disconnect();
         if (viewportResizeObserver) viewportResizeObserver.disconnect();
         if (toolbarResizeObserver) toolbarResizeObserver.disconnect();
+        releaseDeepLinkLock();
       },
     };
   }

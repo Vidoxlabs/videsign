@@ -24,11 +24,13 @@
   <link rel="stylesheet" href="../dist/settings-surface.css" />
   <link rel="stylesheet" href="../dist/library-surface.css" />
   <link rel="stylesheet" href="../dist/specimen-layouts.css" />
+  <link rel="stylesheet" href="../dist/core-components.css" />
   <link rel="stylesheet" href="./catalog.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
   <script defer src="../dist/settings-surface.js"></script>
   <script defer src="../dist/library-surface.js"></script>
+  <script defer src="../dist/core-components.js"></script>
   <script defer src="./catalog.js"></script>
 </head>
 <body>
@@ -228,6 +230,13 @@
         { file: 'form-controls.html', tier: 'primitives', label: 'Form controls', desc: 'Standardized text inputs (default, focus, error, disabled), textarea, select, checkbox, toggle switch, and range slider on solid surfaces (ADR-024).' },
         { file: 'navigation-primitives.html', tier: 'primitives', label: 'Navigation primitives', desc: 'Horizontal tablist, breadcrumb trail, tabular-nums pagination, and Cmd+K command launcher with 44px hit areas (ADR-024).' },
         { file: 'search-and-filter-bar.html', tier: 'primitives', label: 'Search and filter bar', desc: 'Standalone toolbar with visible-focus search field, aria-pressed facet pills, removable filter chips, sort select, Clear all, and a polite match counter (ADR-024).' },
+        { file: 'combobox-multiselect.html', tier: 'primitives', label: 'Combobox multiselect', desc: 'Searchable multi-select combobox with keyboard arrow navigation, removable 44px chips, grouped options, and empty-match recovery (ADR-024).' },
+        { file: 'date-range-picker.html', tier: 'primitives', label: 'Date range picker', desc: 'Preset range tabs (24h, 7d, 30d, Custom), tabular-nums calendar grid with arrow-key navigation, and explicit timezone readout (ADR-024).' },
+        { file: 'tooltip-hover-card.html', tier: 'primitives', label: 'Tooltip and hover card', desc: 'Accessible focus/hover micro-tooltips (150ms GPU reveal, role="tooltip", Esc dismiss) paired with a rich solid entity metadata hover card (ADR-024).' },
+        { file: 'file-tree-explorer.html', tier: 'primitives', label: 'File tree explorer', desc: 'Keyboard-navigable collapsible WAI-ARIA treeview (role="tree" / role="treeitem") with Modified/Admitted/Locked status pairs and tabular token counts (ADR-024).' },
+        { file: 'resizable-split-pane.html', tier: 'primitives', label: 'Resizable split pane', desc: 'Horizontal/vertical split container with focusable role="separator" drag handle, ArrowLeft/ArrowRight keyboard stepping, and collapse snap presets (ADR-024).' },
+        { file: 'destructive-action-guard.html', tier: 'primitives', label: 'Destructive action guard', desc: 'Irreversible-action confirmation card listing exact blast radius plus a typed phrase confirmation input unlocking destructive submit only on exact match (ADR-020).' },
+        { file: 'system-error-boundary.html', tier: 'primitives', label: 'System error boundary', desc: 'Production 404 / 500 / Offline recovery boundary card displaying req_id, run_id, copyable diagnostic payload, and primary recovery CTA (ADR-024).' },
         { file: 'feedback-and-empty-states.html', tier: 'primitives', label: 'Feedback and empty states', desc: 'Status-paired polite banners (success, error), progress bar, and dashed zero-match empty state with reset control (ADR-024).' },
         { file: 'toast-notification-stack.html', tier: 'primitives', label: 'Toast notification stack', desc: 'Polite status and assertive alert rows on solid surfaces with status dots, explicit labels, one recovery action, and 44px dismiss controls (ADR-024).' },
         { file: 'disclosure-and-modals.html', tier: 'primitives', label: 'Disclosure and modals', desc: 'Native details accordion rows, solid secondary modal confirm dialog, and role="menu" action rows (ADR-024).' },
@@ -267,6 +276,9 @@
         { file: 'team-memory-notes.html', tier: 'workspace', label: 'Team memory notes', desc: 'Confirmed team notes (Always used / Used when relevant), pending agent suggestions requiring Keep/Dismiss confirmation, and recall disclosure (ADR-020).' },
         { file: 'cross-team-handoff.html', tier: 'workspace', label: 'Cross-team handoff and review gate', desc: 'Outgoing and incoming cross-team handoff blocks paired with Review approved and Changes requested stage gate statuses (ADR-020).' },
         { file: 'usage-budget-meter.html', tier: 'workspace', label: 'Usage and limits meter', desc: 'Polite live region with tabular mono call/token totals, collapsible per-actor breakdowns, and unreported-tokens fallback receipt (ADR-020).' },
+        { file: 'telemetry-chart-card.html', tier: 'workspace', label: 'Telemetry chart card', desc: 'Inline SVG sparkline and 7-bucket time-series area/bar chart using colorblind-safe OKLCH series tokens, tabular-nums axis ticks, and accessible summary table fallback (ADR-024).' },
+        { file: 'reasoning-trace-block.html', tier: 'workspace', label: 'Reasoning trace block', desc: 'Collapsible streaming deliberation trace with tabular-nums elapsed duration, ordered step bullets, token footprint, and streaming vs settled states (ADR-020).' },
+        { file: 'inline-citation-popover.html', tier: 'workspace', label: 'Inline citation popover', desc: 'Prose block with numbered inline citation chips ([1], [2], [3]) opening an anchored solid source receipt popover with file path, line range, and evidence status (ADR-016).' },
         { file: 'settings-quick-menu.html', tier: 'workspace', label: 'Quick settings popover', desc: 'Compact crystal-glass sidebar popover grouping token usage, Dark/Light theme switcher, motion and developer receipt switches, workspace shortcuts, and All settings trigger (ADR-006, ADR-024).', glass: true },
         { file: 'settings-surface.html', tier: 'workspace', label: 'Unified settings dialog', desc: 'Solid two-pane Settings dialog with searchable four-group left rail, General/Export/Danger Zone, neutral model routing and tool connectors, local nodes ledger, and policy/credential/memory panes (ADR-017, ADR-021, ADR-024).' },
         { file: 'claim-maturity-badge.html', tier: 'workspace', label: 'Claim maturity badge', desc: 'Four canonical claim maturity pills (implemented, observed, specified, planned) pairing status indicators with short receipts (ADR-021).' },

@@ -1,0 +1,97 @@
+<!--
+  Nocturne Museum: Keyboard-Navigable File Tree Explorer (ADR-024)
+  Collapsible WAI-ARIA treeview (role="tree" / role="treeitem" / role="group") with
+  explicit text + dot status indicators (Modified, Admitted, Locked) and tabular-nums
+  file sizes and token counts. Solid surfaces only.
+-->
+<section class="vi-core-scope" aria-labelledby="file-tree-title">
+  <div class="vi-core-card vi-core-card--narrow" data-vi-file-tree>
+    <div class="vi-core-head">
+      <div>
+        <p class="vi-core-eyebrow">Primitives · WAI-ARIA treeview</p>
+        <h2 id="file-tree-title" class="vi-core-title">Workspace context tree</h2>
+      </div>
+      <span class="vi-core-meta">6 files · ~9,420 tok</span>
+    </div>
+
+    <ul role="tree" aria-label="Repository context files" class="vi-tree">
+      <li role="none">
+        <div role="treeitem" aria-expanded="true" aria-selected="true" tabindex="0" data-tree-controls="tree-grp-lib" data-tree-path="lib/" data-tree-state="Admitted" class="vi-tree-row">
+          <span class="vi-tree-name"><span aria-hidden="true" class="vi-tree-chev">&rsaquo;</span><span>lib/</span></span>
+          <span class="vi-tree-right"><span>3 files</span><span>~5,140 tok</span></span>
+        </div>
+        <ul id="tree-grp-lib" role="group" class="vi-tree-group">
+          <li role="none">
+            <div role="treeitem" aria-selected="false" tabindex="-1" data-tree-parent="tree-grp-lib" data-tree-path="lib/specimen-layouts.css" data-tree-state="Modified" class="vi-tree-row">
+              <span class="vi-tree-name">specimen-layouts.css</span>
+              <span class="vi-tree-right">
+                <span class="vi-core-status"><span aria-hidden="true" class="vi-core-dot vi-core-dot--warn"></span><span>Modified</span></span>
+                <span>7.4 KB · ~1,820 tok</span>
+              </span>
+            </div>
+          </li>
+          <li role="none">
+            <div role="treeitem" aria-selected="false" tabindex="-1" data-tree-parent="tree-grp-lib" data-tree-path="lib/core-components.css" data-tree-state="Admitted" class="vi-tree-row">
+              <span class="vi-tree-name">core-components.css</span>
+              <span class="vi-tree-right">
+                <span class="vi-core-status"><span aria-hidden="true" class="vi-core-dot vi-core-dot--ok"></span><span>Admitted</span></span>
+                <span>11.2 KB · ~2,480 tok</span>
+              </span>
+            </div>
+          </li>
+          <li role="none">
+            <div role="treeitem" aria-selected="false" tabindex="-1" data-tree-parent="tree-grp-lib" data-tree-path="lib/contrast.js" data-tree-state="Locked" class="vi-tree-row">
+              <span class="vi-tree-name">contrast.js</span>
+              <span class="vi-tree-right">
+                <span class="vi-core-status"><span aria-hidden="true" class="vi-core-dot vi-core-dot--info"></span><span>Locked</span></span>
+                <span>3.1 KB · ~840 tok</span>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li role="none">
+        <div role="treeitem" aria-expanded="true" aria-selected="false" tabindex="-1" data-tree-controls="tree-grp-preview" data-tree-path="preview/" data-tree-state="Admitted" class="vi-tree-row">
+          <span class="vi-tree-name"><span aria-hidden="true" class="vi-tree-chev">&rsaquo;</span><span>preview/</span></span>
+          <span class="vi-tree-right"><span>2 files</span><span>~3,190 tok</span></span>
+        </div>
+        <ul id="tree-grp-preview" role="group" class="vi-tree-group">
+          <li role="none">
+            <div role="treeitem" aria-selected="false" tabindex="-1" data-tree-parent="tree-grp-preview" data-tree-path="preview/catalog.js" data-tree-state="Modified" class="vi-tree-row">
+              <span class="vi-tree-name">catalog.js</span>
+              <span class="vi-tree-right">
+                <span class="vi-core-status"><span aria-hidden="true" class="vi-core-dot vi-core-dot--warn"></span><span>Modified</span></span>
+                <span>9.8 KB · ~2,310 tok</span>
+              </span>
+            </div>
+          </li>
+          <li role="none">
+            <div role="treeitem" aria-selected="false" tabindex="-1" data-tree-parent="tree-grp-preview" data-tree-path="preview/skills-library-surface.html" data-tree-state="Admitted" class="vi-tree-row">
+              <span class="vi-tree-name">skills-library-surface.html</span>
+              <span class="vi-tree-right">
+                <span class="vi-core-status"><span aria-hidden="true" class="vi-core-dot vi-core-dot--ok"></span><span>Admitted</span></span>
+                <span>4.1 KB · ~880 tok</span>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li role="none">
+        <div role="treeitem" aria-selected="false" tabindex="-1" data-tree-path="DESIGN.md" data-tree-state="Locked" class="vi-tree-row">
+          <span class="vi-tree-name">DESIGN.md</span>
+          <span class="vi-tree-right">
+            <span class="vi-core-status"><span aria-hidden="true" class="vi-core-dot vi-core-dot--info"></span><span>Locked</span></span>
+            <span>5.2 KB · ~1,090 tok</span>
+          </span>
+        </div>
+      </li>
+    </ul>
+
+    <div class="vi-core-receipt" role="status" aria-live="polite">
+      <span data-tree-status>Focused lib/ · Admitted</span>
+      <span>Arrows navigate · Left/Right fold</span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+<!--
+  Nocturne Museum: Destructive Action Guard (ADR-020)
+  Irreversible-action confirmation card listing exact blast radius plus a typed phrase
+  confirmation input that enables the destructive submit button only on exact match.
+-->
+<section class="vi-core-scope" aria-labelledby="danger-guard-title">
+  <div role="alertdialog" aria-labelledby="danger-guard-title" aria-describedby="danger-guard-desc" class="vi-core-card vi-core-card--narrow vi-danger-card" data-vi-danger-guard data-confirm-phrase="purge-local-cache">
+    <div class="vi-core-head">
+      <div>
+        <span class="vi-core-status">
+          <span aria-hidden="true" class="vi-core-dot vi-core-dot--danger"></span>
+          <span>Destructive action · irreversible</span>
+        </span>
+        <h2 id="danger-guard-title" class="vi-core-title">Purge local projection cache</h2>
+      </div>
+      <span class="vi-core-meta">Owner confirmation required</span>
+    </div>
+
+    <p id="danger-guard-desc" class="vi-core-copy">This clears all locally materialized search and token caches. Authority stores remain untouched, but rebuilding projections will take ~45 seconds.</p>
+
+    <ul aria-label="Affected blast radius" class="vi-blast-list">
+      <li class="vi-blast-row">
+        <span>Cached projection indexes</span>
+        <span>3 local shards removed</span>
+      </li>
+      <li class="vi-blast-row">
+        <span>Artifact preview snapshots</span>
+        <span>14 files cleared</span>
+      </li>
+      <li class="vi-blast-row">
+        <span>Durable authority databases</span>
+        <span>0 rows affected</span>
+      </li>
+    </ul>
+
+    <div>
+      <label for="vi-danger-confirm-input" class="vi-core-eyebrow">Type "purge-local-cache" to unlock confirmation</label>
+      <input id="vi-danger-confirm-input" type="text" autocomplete="off" spellcheck="false" placeholder="purge-local-cache" data-danger-input class="vi-core-input h-action-min-default" />
+    </div>
+
+    <div class="vi-danger-actions">
+      <button type="button" data-danger-cancel class="vi-core-btn vi-core-btn--ghost h-action-min-default">Cancel</button>
+      <button type="button" disabled aria-disabled="true" data-danger-submit class="vi-core-btn vi-core-btn--danger h-action-min-default">Purge local cache</button>
+    </div>
+
+    <div class="vi-core-receipt" role="status" aria-live="polite">
+      <span data-danger-status>Locked · type "purge-local-cache" to enable confirmation</span>
+      <span>Dry-run specimen</span>
+    </div>
+  </div>
+</section>

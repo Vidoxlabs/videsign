@@ -1,0 +1,49 @@
+<!--
+  Nocturne Museum: Tooltip and Entity Hover Card (ADR-024)
+  Focus/hover micro-tooltips with 150ms GPU-only exponential reveal (role="tooltip",
+  Esc dismissible) paired with a rich solid entity metadata card for ADR/tool inspection.
+-->
+<section class="vi-core-scope" aria-labelledby="tooltip-card-title">
+  <div class="vi-core-card vi-core-card--narrow" data-vi-tooltip-demo>
+    <div class="vi-core-head">
+      <div>
+        <p class="vi-core-eyebrow">Primitives · focus and hover disclosures</p>
+        <h2 id="tooltip-card-title" class="vi-core-title">Micro-tooltips and entity card</h2>
+      </div>
+      <span class="vi-core-meta">150ms GPU reveal · Esc dismisses</span>
+    </div>
+
+    <div class="vi-tip-row" role="group" aria-label="Action buttons with micro-tooltips">
+      <span class="vi-tip-wrap" data-tip-wrap>
+        <button type="button" aria-describedby="tip-copy-digest" class="vi-core-btn h-action-min-default">Copy digest</button>
+        <span id="tip-copy-digest" role="tooltip" class="vi-tooltip">Copy SHA-256 receipt (C)</span>
+      </span>
+
+      <span class="vi-tip-wrap" data-tip-wrap>
+        <button type="button" aria-describedby="tip-pin-slot" class="vi-core-btn h-action-min-default">Pin receipt</button>
+        <span id="tip-pin-slot" role="tooltip" class="vi-tooltip">Anchor receipt to active thread</span>
+      </span>
+
+      <button type="button" aria-expanded="true" aria-controls="entity-hover-card" data-hover-card-trigger class="vi-core-btn vi-core-btn--primary h-action-min-default">Inspect ADR-024 · videsign.tokens.emit</button>
+    </div>
+
+    <div id="entity-hover-card" role="region" aria-label="Entity metadata card" class="vi-hover-card" data-hover-card>
+      <div class="vi-core-head">
+        <div>
+          <p class="vi-core-eyebrow">Contract entity · read-only tool</p>
+          <h3 class="vi-core-title">videsign.tokens.emit</h3>
+        </div>
+        <button type="button" data-hover-card-close class="vi-core-btn vi-core-btn--ghost h-action-min-default">Dismiss</button>
+      </div>
+      <p class="vi-core-copy">Emits semantic OKLCH CSS variables, Tailwind mappings, and machine-readable JSON schemas from DESIGN.md front-matter.</p>
+      <dl class="vi-hover-dl">
+        <dt>ADR anchor</dt>
+        <dd>ADR-024 · ADR-011</dd>
+        <dt>Effect class</dt>
+        <dd><span class="vi-core-status"><span aria-hidden="true" class="vi-core-dot vi-core-dot--ok"></span><span>Read / build emit</span></span></dd>
+        <dt>Schema rev</dt>
+        <dd>v1.1.0 · 4 surface tiers</dd>
+      </dl>
+    </div>
+  </div>
+</section>

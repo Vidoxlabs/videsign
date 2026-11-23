@@ -1,0 +1,67 @@
+<!--
+  Nocturne Museum: Date Range Picker (ADR-024)
+  Preset range tabs (24h, 7d, 30d, Custom), tabular-nums calendar grid with arrow-key
+  navigation, explicit timezone indicator, and polite range readout. Solid surfaces only.
+-->
+<section class="vi-core-scope" aria-labelledby="daterange-title">
+  <div class="vi-core-card vi-core-card--narrow" data-vi-daterange>
+    <div class="vi-core-head">
+      <div>
+        <p class="vi-core-eyebrow">November 2026 · UTC-05:00 America/New_York</p>
+        <h2 id="daterange-title" class="vi-core-title">Observation window</h2>
+      </div>
+      <div role="tablist" aria-label="Date range presets" class="vi-core-tabs">
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-range-preset="24h" class="vi-core-tab h-action-min-default">24h</button>
+        <button type="button" role="tab" aria-selected="true" tabindex="0" data-range-preset="7d" class="vi-core-tab h-action-min-default">7d</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-range-preset="30d" class="vi-core-tab h-action-min-default">30d</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-range-preset="custom" class="vi-core-tab h-action-min-default">Custom</button>
+      </div>
+    </div>
+
+    <div role="grid" aria-label="November 2026 calendar" class="vi-cal-grid">
+      <span role="columnheader" class="vi-cal-dow">Su</span>
+      <span role="columnheader" class="vi-cal-dow">Mo</span>
+      <span role="columnheader" class="vi-cal-dow">Tu</span>
+      <span role="columnheader" class="vi-cal-dow">We</span>
+      <span role="columnheader" class="vi-cal-dow">Th</span>
+      <span role="columnheader" class="vi-cal-dow">Fr</span>
+      <span role="columnheader" class="vi-cal-dow">Sa</span>
+
+      <button type="button" data-cal-day="1" class="vi-cal-day h-action-min-default">01</button>
+      <button type="button" data-cal-day="2" class="vi-cal-day h-action-min-default">02</button>
+      <button type="button" data-cal-day="3" class="vi-cal-day h-action-min-default">03</button>
+      <button type="button" data-cal-day="4" class="vi-cal-day h-action-min-default">04</button>
+      <button type="button" data-cal-day="5" class="vi-cal-day h-action-min-default">05</button>
+      <button type="button" data-cal-day="6" class="vi-cal-day h-action-min-default">06</button>
+      <button type="button" data-cal-day="7" class="vi-cal-day h-action-min-default">07</button>
+      <button type="button" data-cal-day="8" class="vi-cal-day h-action-min-default">08</button>
+      <button type="button" data-cal-day="9" class="vi-cal-day h-action-min-default">09</button>
+      <button type="button" data-cal-day="10" class="vi-cal-day h-action-min-default">10</button>
+      <button type="button" data-cal-day="11" class="vi-cal-day h-action-min-default">11</button>
+      <button type="button" data-cal-day="12" class="vi-cal-day h-action-min-default">12</button>
+      <button type="button" data-cal-day="13" class="vi-cal-day h-action-min-default">13</button>
+      <button type="button" data-cal-day="14" class="vi-cal-day h-action-min-default">14</button>
+      <button type="button" data-cal-day="15" class="vi-cal-day h-action-min-default">15</button>
+      <button type="button" data-cal-day="16" data-in-range="true" data-range-edge="start" aria-pressed="true" class="vi-cal-day h-action-min-default">16</button>
+      <button type="button" data-cal-day="17" data-in-range="true" aria-pressed="true" class="vi-cal-day h-action-min-default">17</button>
+      <button type="button" data-cal-day="18" data-in-range="true" aria-pressed="true" class="vi-cal-day h-action-min-default">18</button>
+      <button type="button" data-cal-day="19" data-in-range="true" aria-pressed="true" class="vi-cal-day h-action-min-default">19</button>
+      <button type="button" data-cal-day="20" data-in-range="true" aria-pressed="true" class="vi-cal-day h-action-min-default">20</button>
+      <button type="button" data-cal-day="21" data-in-range="true" aria-pressed="true" class="vi-cal-day h-action-min-default">21</button>
+      <button type="button" data-cal-day="22" data-in-range="true" data-range-edge="end" aria-pressed="true" class="vi-cal-day h-action-min-default">22</button>
+      <button type="button" data-cal-day="23" class="vi-cal-day h-action-min-default">23</button>
+      <button type="button" data-cal-day="24" class="vi-cal-day h-action-min-default">24</button>
+      <button type="button" data-cal-day="25" class="vi-cal-day h-action-min-default">25</button>
+      <button type="button" data-cal-day="26" class="vi-cal-day h-action-min-default">26</button>
+      <button type="button" data-cal-day="27" class="vi-cal-day h-action-min-default">27</button>
+      <button type="button" data-cal-day="28" class="vi-cal-day h-action-min-default">28</button>
+      <button type="button" data-cal-day="29" class="vi-cal-day h-action-min-default">29</button>
+      <button type="button" data-cal-day="30" class="vi-cal-day h-action-min-default">30</button>
+    </div>
+
+    <div class="vi-core-receipt" role="status" aria-live="polite">
+      <span data-range-readout>2026-11-16 to 2026-11-22 (7d)</span>
+      <span>Arrow keys move · Esc resets</span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,1131 @@
+/* Nocturne Museum: Core Production Components Stylesheet (zero-hex OKLCH, @container).
+   Styles the 10 production components: combobox-multiselect, date-range-picker,
+   tooltip-hover-card, file-tree-explorer, resizable-split-pane, telemetry-chart-card,
+   reasoning-trace-block, inline-citation-popover, destructive-action-guard, and
+   system-error-boundary. Enforces 4-tier OKLCH elevation, ΔL contrast floors, 44px
+   touch targets, colorblind-safe chart tokens, GPU-only motion, and reduced-motion freeze. */
+
+:root,
+.vi-core-scope {
+  --vi-core-canvas: var(--vi-surface-canvas, oklch(0.10 0.012 275));
+  --vi-core-shell: var(--vi-surface-shell, oklch(0.13 0.014 275));
+  --vi-core-card: var(--vi-surface-card, oklch(0.16 0.016 275));
+  --vi-core-elevated: var(--vi-surface-elevated, oklch(0.20 0.018 275));
+
+  --vi-core-ink: var(--vi-ink-primary, oklch(0.96 0.006 275));
+  --vi-core-ink-secondary: var(--vi-ink-secondary, oklch(0.82 0.010 275));
+  --vi-core-ink-muted: var(--vi-ink-muted, oklch(0.70 0.012 275));
+
+  --vi-core-hairline: var(--vi-border-subtle, oklch(1 0 0 / 0.08));
+  --vi-core-border: var(--vi-border-interactive, oklch(0.56 0.020 275));
+  --vi-core-border-strong: var(--vi-border-strong, oklch(0.68 0.022 275));
+  --vi-core-accent: var(--vi-accent-focus, oklch(0.66 0.220 292));
+  --vi-core-accent-tint: oklch(0.66 0.220 292 / 0.16);
+  --vi-core-chip-bg: oklch(1 0 0 / 0.05);
+
+  --vi-core-ok: oklch(0.74 0.160 162);
+  --vi-core-warn: oklch(0.78 0.160 75);
+  --vi-core-danger: oklch(0.68 0.210 20);
+  --vi-core-danger-bg: oklch(0.22 0.050 20);
+  --vi-core-info: oklch(0.72 0.140 230);
+
+  /* Colorblind-safe chart series tokens (cobalt blue + warm amber, paired with dash patterns) */
+  --vi-chart-series-a: oklch(0.72 0.160 250);
+  --vi-chart-series-a-fill: oklch(0.72 0.160 250 / 0.18);
+  --vi-chart-series-b: oklch(0.80 0.160 75);
+  --vi-chart-grid: oklch(1 0 0 / 0.10);
+
+  --vi-core-font-sans: var(--vi-typography-typography-family-sans-base, Geist, ui-sans-serif, system-ui, sans-serif);
+  --vi-core-font-mono: var(--vi-typography-typography-family-mono-base, Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  --vi-core-radius-card: 0.75rem;
+  --vi-core-radius-control: 0.5rem;
+  --vi-core-radius-pill: 9999rem;
+  --vi-core-touch: 2.75rem;
+  --vi-core-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --vi-core-dur: 150ms;
+}
+
+[data-theme="light"],
+[data-theme="light"] .vi-core-scope,
+.vi-core-scope[data-theme="light"] {
+  --vi-core-canvas: var(--vi-surface-canvas, oklch(0.95 0.007 275));
+  --vi-core-shell: var(--vi-surface-shell, oklch(0.975 0.005 275));
+  --vi-core-card: var(--vi-surface-card, oklch(1 0 275));
+  --vi-core-elevated: var(--vi-surface-elevated, oklch(0.92 0.009 275));
+
+  --vi-core-ink: var(--vi-ink-primary, oklch(0.16 0.020 275));
+  --vi-core-ink-secondary: var(--vi-ink-secondary, oklch(0.32 0.020 275));
+  --vi-core-ink-muted: var(--vi-ink-muted, oklch(0.42 0.020 275));
+
+  --vi-core-hairline: var(--vi-border-subtle, oklch(0.16 0.020 275 / 0.14));
+  --vi-core-border: var(--vi-border-interactive, oklch(0.48 0.025 275));
+  --vi-core-border-strong: var(--vi-border-strong, oklch(0.36 0.025 275));
+  --vi-core-accent: var(--vi-accent-focus, oklch(0.46 0.240 292));
+  --vi-core-accent-tint: oklch(0.46 0.240 292 / 0.10);
+  --vi-core-chip-bg: oklch(0.16 0.020 275 / 0.06);
+
+  --vi-core-ok: oklch(0.46 0.140 162);
+  --vi-core-warn: oklch(0.48 0.150 75);
+  --vi-core-danger: oklch(0.48 0.200 20);
+  --vi-core-danger-bg: oklch(0.95 0.020 20);
+  --vi-core-info: oklch(0.46 0.140 230);
+
+  --vi-chart-series-a: oklch(0.46 0.170 250);
+  --vi-chart-series-a-fill: oklch(0.46 0.170 250 / 0.14);
+  --vi-chart-series-b: oklch(0.50 0.150 75);
+  --vi-chart-grid: oklch(0.16 0.020 275 / 0.12);
+}
+
+[data-theme="high-contrast"],
+[data-theme="high-contrast"] .vi-core-scope,
+.vi-core-scope[data-theme="high-contrast"] {
+  --vi-core-canvas: oklch(0.06 0.008 275);
+  --vi-core-shell: oklch(0.09 0.010 275);
+  --vi-core-card: oklch(0.12 0.012 275);
+  --vi-core-elevated: oklch(0.16 0.014 275);
+  --vi-core-ink: oklch(0.99 0.002 275);
+  --vi-core-ink-secondary: oklch(0.88 0.008 275);
+  --vi-core-ink-muted: oklch(0.78 0.010 275);
+  --vi-core-hairline: oklch(1 0 0 / 0.28);
+  --vi-core-border: oklch(0.74 0.020 275);
+  --vi-core-border-strong: oklch(0.88 0.018 275);
+  --vi-core-accent: oklch(0.80 0.200 292);
+  --vi-core-chip-bg: oklch(1 0 0 / 0.12);
+  --vi-core-danger: oklch(0.82 0.200 20);
+  --vi-chart-series-a: oklch(0.82 0.150 250);
+  --vi-chart-series-b: oklch(0.86 0.160 75);
+  --vi-chart-grid: oklch(1 0 0 / 0.26);
+}
+
+.vi-core-scope {
+  container-type: inline-size;
+  container-name: vi-core-stage;
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--vi-core-ink);
+  font-family: var(--vi-core-font-sans);
+  box-sizing: border-box;
+}
+
+.vi-core-scope *,
+.vi-core-scope *::before,
+.vi-core-scope *::after {
+  box-sizing: border-box;
+}
+
+.vi-core-scope :focus-visible {
+  outline: 0.125rem solid var(--vi-core-accent);
+  outline-offset: 0.125rem;
+}
+
+.vi-core-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: 1.125rem;
+  border-radius: var(--vi-core-radius-card);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-card);
+}
+
+.vi-core-card--narrow {
+  max-inline-size: 46rem;
+}
+
+.vi-core-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+
+.vi-core-eyebrow {
+  margin: 0;
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-core-ink-muted);
+}
+
+.vi-core-title {
+  margin: 0;
+  font-size: clamp(1rem, 0.92rem + 0.5cqi, 1.25rem);
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+  color: var(--vi-core-ink);
+}
+
+.vi-core-copy {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--vi-core-ink-secondary);
+}
+
+.vi-core-meta {
+  margin: 0;
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-core-ink-muted);
+}
+
+.vi-core-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4375rem;
+  min-block-size: var(--vi-core-touch);
+  padding-inline: 0.875rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-border);
+  background-color: var(--vi-core-elevated);
+  color: var(--vi-core-ink);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--vi-core-dur) var(--vi-core-ease), opacity var(--vi-core-dur) var(--vi-core-ease);
+}
+
+.vi-core-btn:active:not(:disabled) {
+  transform: translateY(0.0625rem);
+}
+
+.vi-core-btn:disabled,
+.vi-core-btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vi-core-btn--primary {
+  border-color: var(--vi-core-accent);
+  background-color: var(--vi-core-accent-tint);
+}
+
+.vi-core-btn--danger {
+  border-color: var(--vi-core-danger);
+  background-color: var(--vi-core-danger-bg);
+  color: var(--vi-core-ink);
+}
+
+.vi-core-btn--ghost {
+  background-color: transparent;
+  border-color: var(--vi-core-hairline);
+  color: var(--vi-core-ink-secondary);
+}
+
+.vi-core-tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1875rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-canvas);
+}
+
+.vi-core-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--vi-core-touch);
+  padding-inline: 0.75rem;
+  border-radius: 0.375rem;
+  border: 0.0625rem solid transparent;
+  background: transparent;
+  color: var(--vi-core-ink-muted);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.vi-core-tab[aria-selected="true"],
+.vi-core-tab[aria-pressed="true"] {
+  background-color: var(--vi-core-elevated);
+  border-color: var(--vi-core-border);
+  color: var(--vi-core-ink);
+}
+
+.vi-core-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-core-ink-secondary);
+  white-space: nowrap;
+}
+
+.vi-core-dot {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--vi-core-radius-pill);
+  flex-shrink: 0;
+}
+
+.vi-core-dot--ok { background-color: var(--vi-core-ok); }
+.vi-core-dot--warn { background-color: var(--vi-core-warn); }
+.vi-core-dot--danger { background-color: var(--vi-core-danger); }
+.vi-core-dot--info { background-color: var(--vi-core-info); }
+.vi-core-dot--accent { background-color: var(--vi-core-accent); }
+
+.vi-core-input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--vi-core-touch);
+  padding-inline: 0.75rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-border);
+  background-color: var(--vi-core-canvas);
+  color: var(--vi-core-ink);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.8125rem;
+}
+
+.vi-core-input::placeholder {
+  color: var(--vi-core-ink-muted);
+}
+
+.vi-core-receipt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-shell);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-core-ink-muted);
+}
+
+/* ---------- 1. Combobox Multiselect ---------- */
+
+.vi-combo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.vi-combo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-inline-start: 0.625rem;
+  padding-inline-end: 0.125rem;
+  border-radius: var(--vi-core-radius-control);
+  background-color: var(--vi-core-elevated);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  color: var(--vi-core-ink);
+}
+
+.vi-combo-chip-rm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--vi-core-touch);
+  min-block-size: var(--vi-core-touch);
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--vi-core-ink-muted);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.vi-combo-chip-rm:hover {
+  color: var(--vi-core-ink);
+}
+
+.vi-combo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.375rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-shell);
+  max-block-size: 16rem;
+  overflow-y: auto;
+}
+
+.vi-combo-list[hidden] {
+  display: none;
+}
+
+.vi-combo-group-label {
+  padding: 0.375rem 0.625rem 0.1875rem;
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.72rem;
+  color: var(--vi-core-ink-muted);
+}
+
+.vi-combo-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625rem;
+  min-block-size: var(--vi-core-touch);
+  padding-inline: 0.75rem;
+  border-radius: 0.375rem;
+  border: 0.0625rem solid transparent;
+  background: transparent;
+  color: var(--vi-core-ink-secondary);
+  font-family: var(--vi-core-font-sans);
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vi-combo-option[hidden] {
+  display: none;
+}
+
+.vi-combo-option:hover,
+.vi-combo-option.is-active {
+  background-color: var(--vi-core-elevated);
+  border-color: var(--vi-core-border);
+  color: var(--vi-core-ink);
+}
+
+.vi-combo-option[aria-selected="true"] {
+  background-color: var(--vi-core-accent-tint);
+  color: var(--vi-core-ink);
+}
+
+.vi-combo-check {
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  color: var(--vi-core-ink-muted);
+}
+
+.vi-combo-empty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  border: 0.0625rem dashed var(--vi-core-border);
+  background-color: var(--vi-core-canvas);
+}
+
+.vi-combo-empty[hidden] {
+  display: none;
+}
+
+/* ---------- 2. Date Range Picker ---------- */
+
+.vi-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-shell);
+}
+
+.vi-cal-dow {
+  text-align: center;
+  padding-block: 0.25rem;
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.72rem;
+  color: var(--vi-core-ink-muted);
+}
+
+.vi-cal-day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--vi-core-touch);
+  inline-size: 100%;
+  padding: 0;
+  border-radius: 0.375rem;
+  border: 0.0625rem solid transparent;
+  background: transparent;
+  color: var(--vi-core-ink-secondary);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.vi-cal-day:hover {
+  background-color: var(--vi-core-elevated);
+  color: var(--vi-core-ink);
+}
+
+.vi-cal-day[data-muted="true"] {
+  color: var(--vi-core-ink-muted);
+  opacity: 0.55;
+}
+
+.vi-cal-day[data-in-range="true"] {
+  background-color: var(--vi-core-accent-tint);
+  color: var(--vi-core-ink);
+}
+
+.vi-cal-day[data-range-edge="start"],
+.vi-cal-day[data-range-edge="end"] {
+  background-color: var(--vi-core-elevated);
+  border-color: var(--vi-core-accent);
+  color: var(--vi-core-ink);
+  font-weight: 600;
+}
+
+/* ---------- 3. Tooltip & Hover Card ---------- */
+
+.vi-tip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vi-tip-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.vi-tooltip {
+  position: absolute;
+  inset-block-end: calc(100% + 0.5rem);
+  inset-inline-start: 0;
+  z-index: 15;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.375rem;
+  border: 0.0625rem solid var(--vi-core-border);
+  background-color: var(--vi-core-elevated);
+  color: var(--vi-core-ink);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(0.25rem);
+  transition: opacity var(--vi-core-dur) var(--vi-core-ease), transform var(--vi-core-dur) var(--vi-core-ease);
+}
+
+.vi-tip-wrap:hover .vi-tooltip,
+.vi-tip-wrap:focus-within .vi-tooltip,
+.vi-tip-wrap[data-tip-open="true"] .vi-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.vi-tip-wrap[data-tip-dismissed="true"] .vi-tooltip {
+  opacity: 0;
+  transform: translateY(0.25rem);
+}
+
+.vi-hover-card {
+  padding: 1rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-border);
+  background-color: var(--vi-core-elevated);
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  max-inline-size: 28rem;
+}
+
+.vi-hover-card[hidden] {
+  display: none;
+}
+
+.vi-hover-dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 9rem) minmax(0, 1fr);
+  gap: 0.375rem 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 0.0625rem solid var(--vi-core-hairline);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-hover-dl dt {
+  color: var(--vi-core-ink-muted);
+}
+
+.vi-hover-dl dd {
+  margin: 0;
+  color: var(--vi-core-ink);
+}
+
+/* ---------- 4. File Tree Explorer ---------- */
+
+.vi-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.vi-tree-group {
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 1.125rem;
+  border-inline-start: 0.0625rem solid var(--vi-core-hairline);
+  margin-inline-start: 0.625rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.vi-tree-group[hidden] {
+  display: none;
+}
+
+.vi-tree-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-block-size: var(--vi-core-touch);
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  border: 0.0625rem solid transparent;
+  cursor: pointer;
+}
+
+.vi-tree-row:hover {
+  background-color: var(--vi-core-elevated);
+}
+
+.vi-tree-row[aria-selected="true"] {
+  background-color: var(--vi-core-elevated);
+  border-color: var(--vi-core-border);
+}
+
+.vi-tree-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.8125rem;
+  color: var(--vi-core-ink);
+  overflow-wrap: anywhere;
+}
+
+.vi-tree-chev {
+  display: inline-block;
+  inline-size: 0.875rem;
+  color: var(--vi-core-ink-muted);
+  transition: transform var(--vi-core-dur) var(--vi-core-ease);
+}
+
+.vi-tree-row[aria-expanded="true"] .vi-tree-chev {
+  transform: rotate(90deg);
+}
+
+.vi-tree-right {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-core-ink-muted);
+}
+
+/* ---------- 5. Resizable Split Pane ---------- */
+
+.vi-split-stage {
+  --vi-split-pct: 42%;
+  display: grid;
+  grid-template-columns: minmax(0, var(--vi-split-pct)) 0.75rem minmax(0, 1fr);
+  min-block-size: 16rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-canvas);
+  overflow: hidden;
+}
+
+.vi-split-stage[data-split-dir="vertical"] {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(7rem, var(--vi-split-pct)) 0.75rem minmax(7rem, 1fr);
+  min-block-size: 20rem;
+}
+
+.vi-split-pane {
+  padding: 1rem;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: var(--vi-core-shell);
+}
+
+.vi-split-pane--secondary {
+  background-color: var(--vi-core-card);
+}
+
+.vi-split-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--vi-core-canvas);
+  border-inline: 0.0625rem solid var(--vi-core-hairline);
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.vi-split-stage[data-split-dir="vertical"] .vi-split-handle {
+  border-inline: 0;
+  border-block: 0.0625rem solid var(--vi-core-hairline);
+  cursor: row-resize;
+}
+
+.vi-split-grip {
+  inline-size: 0.1875rem;
+  block-size: 2.25rem;
+  border-radius: var(--vi-core-radius-pill);
+  background-color: var(--vi-core-border);
+}
+
+.vi-split-stage[data-split-dir="vertical"] .vi-split-grip {
+  inline-size: 2.25rem;
+  block-size: 0.1875rem;
+}
+
+.vi-split-handle:hover .vi-split-grip,
+.vi-split-handle:focus-visible .vi-split-grip {
+  background-color: var(--vi-core-accent);
+}
+
+/* ---------- 6. Telemetry Chart Card ---------- */
+
+.vi-chart-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem 1.25rem;
+}
+
+.vi-chart-big {
+  font-family: var(--vi-core-font-sans);
+  font-size: clamp(1.5rem, 1.2rem + 1.2cqi, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-core-ink);
+}
+
+.vi-chart-canvas {
+  inline-size: 100%;
+  padding: 0.875rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-canvas);
+}
+
+.vi-chart-svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.vi-chart-grid-line {
+  stroke: var(--vi-chart-grid);
+  stroke-width: 1;
+}
+
+.vi-chart-axis-text {
+  fill: var(--vi-core-ink-muted);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-chart-area-a {
+  fill: var(--vi-chart-series-a-fill);
+}
+
+.vi-chart-line-a {
+  fill: none;
+  stroke: var(--vi-chart-series-a);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vi-chart-point-a {
+  fill: var(--vi-chart-series-a);
+}
+
+.vi-chart-line-b {
+  fill: none;
+  stroke: var(--vi-chart-series-b);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vi-chart-bar-a {
+  fill: var(--vi-chart-series-a);
+  fill-opacity: 0.28;
+}
+
+.vi-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.vi-chart-swatch-a,
+.vi-chart-swatch-b {
+  display: inline-block;
+  inline-size: 1.125rem;
+  block-size: 0.1875rem;
+  border-radius: var(--vi-core-radius-pill);
+}
+
+.vi-chart-swatch-a {
+  background-color: var(--vi-chart-series-a);
+}
+
+.vi-chart-swatch-b {
+  border-top: 0.1875rem dashed var(--vi-chart-series-b);
+}
+
+.vi-core-table-wrap {
+  inline-size: 100%;
+  overflow-x: auto;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-shell);
+}
+
+.vi-core-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-core-table th,
+.vi-core-table td {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 0.0625rem solid var(--vi-core-hairline);
+}
+
+.vi-core-table th {
+  color: var(--vi-core-ink-muted);
+  background-color: var(--vi-core-elevated);
+}
+
+.vi-core-table tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ---------- 7. Reasoning Trace Block ---------- */
+
+.vi-trace-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-block-size: var(--vi-core-touch);
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-shell);
+  cursor: pointer;
+  list-style: none;
+}
+
+.vi-trace-summary::-webkit-details-marker {
+  display: none;
+}
+
+.vi-trace-pulse {
+  animation: vi-core-stream-pulse 1.4s ease-in-out infinite;
+}
+
+.vi-trace-block[data-trace-state="settled"] .vi-trace-pulse {
+  animation: none;
+  opacity: 1;
+}
+
+@keyframes vi-core-stream-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.vi-trace-steps {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0 0 0 0.875rem;
+  border-inline-start: 0.125rem solid var(--vi-core-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.vi-trace-step {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.vi-trace-ts {
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-core-ink-muted);
+}
+
+/* ---------- 8. Inline Citation Popover ---------- */
+
+.vi-cite-prose {
+  margin: 0;
+  max-inline-size: 68ch;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--vi-core-ink-secondary);
+  text-wrap: pretty;
+}
+
+.vi-cite-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--vi-core-touch);
+  min-block-size: var(--vi-core-touch);
+  padding-inline: 0.5rem;
+  margin-inline: 0.1875rem;
+  border-radius: 0.375rem;
+  border: 0.0625rem solid var(--vi-core-border);
+  background-color: var(--vi-core-elevated);
+  color: var(--vi-core-ink);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  vertical-align: baseline;
+  cursor: pointer;
+}
+
+.vi-cite-btn[aria-expanded="true"] {
+  border-color: var(--vi-core-accent);
+  background-color: var(--vi-core-accent-tint);
+}
+
+.vi-cite-popover {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-border);
+  background-color: var(--vi-core-elevated);
+  max-inline-size: 40rem;
+}
+
+.vi-cite-popover[hidden] {
+  display: none;
+}
+
+.vi-cite-quote {
+  margin: 0;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.375rem;
+  border-inline-start: 0.125rem solid var(--vi-core-accent);
+  background-color: var(--vi-core-canvas);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--vi-core-ink);
+  overflow-x: auto;
+}
+
+/* ---------- 9. Destructive Action Guard ---------- */
+
+.vi-danger-card {
+  border-color: var(--vi-core-danger);
+}
+
+.vi-blast-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 0.0625rem solid var(--vi-core-hairline);
+}
+
+.vi-blast-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-block: 0.5625rem;
+  border-bottom: 0.0625rem solid var(--vi-core-hairline);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-danger-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.625rem;
+}
+
+/* ---------- 10. System Error Boundary ---------- */
+
+.vi-err-code {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 0.375rem;
+  background-color: var(--vi-core-chip-bg);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-core-ink);
+}
+
+.vi-err-dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 10rem) minmax(0, 1fr);
+  gap: 0.4375rem 1rem;
+  padding: 0.875rem;
+  border-radius: var(--vi-core-radius-control);
+  border: 0.0625rem solid var(--vi-core-hairline);
+  background-color: var(--vi-core-canvas);
+  font-family: var(--vi-core-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-err-dl dt {
+  color: var(--vi-core-ink-muted);
+}
+
+.vi-err-dl dd {
+  margin: 0;
+  color: var(--vi-core-ink);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Container-Query Responsive Breakdowns (zero overflow at 320px / 768px / 1024px) ---------- */
+
+@container vi-core-stage (max-width: 30rem) {
+  .vi-core-card {
+    padding: 0.875rem;
+  }
+
+  .vi-cal-grid {
+    padding: 0.375rem;
+    gap: 0.125rem;
+  }
+
+  .vi-cal-day {
+    font-size: 0.75rem;
+  }
+
+  .vi-split-stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(7rem, auto) 0.75rem minmax(7rem, auto);
+  }
+
+  .vi-split-handle {
+    border-inline: 0;
+    border-block: 0.0625rem solid var(--vi-core-hairline);
+    cursor: row-resize;
+  }
+
+  .vi-split-grip {
+    inline-size: 2.25rem;
+    block-size: 0.1875rem;
+  }
+
+  .vi-hover-dl,
+  .vi-err-dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.1875rem;
+  }
+
+  .vi-trace-step {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.1875rem;
+  }
+}
+
+/* ---------- Instant Motion Freeze (data-motion="reduced" | "paused" & prefers-reduced-motion) ---------- */
+
+[data-motion="reduced"] .vi-core-scope *,
+[data-motion="reduced"] .vi-core-scope *::before,
+[data-motion="reduced"] .vi-core-scope *::after,
+[data-motion="paused"] .vi-core-scope *,
+[data-motion="paused"] .vi-core-scope *::before,
+[data-motion="paused"] .vi-core-scope *::after {
+  transition-duration: 0ms !important;
+  animation-duration: 0ms !important;
+  animation-play-state: paused !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vi-core-scope *,
+  .vi-core-scope *::before,
+  .vi-core-scope *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+    animation-play-state: paused !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .vi-core-card,
+  .vi-core-btn,
+  .vi-core-input,
+  .vi-hover-card,
+  .vi-cite-popover,
+  .vi-tooltip {
+    background-color: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+  }
+}

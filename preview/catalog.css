@@ -13,8 +13,8 @@
   --vi-surface-elevated: oklch(0.20 0.018 275);
 
   --vi-ink-primary: oklch(0.96 0.006 275);
-  --vi-ink-secondary: oklch(0.80 0.010 275);
-  --vi-ink-muted: oklch(0.66 0.012 275);
+  --vi-ink-secondary: oklch(0.82 0.010 275);
+  --vi-ink-muted: oklch(0.70 0.012 275);
   --vi-border-interactive: oklch(0.56 0.020 275);
   --vi-border-strong: oklch(0.68 0.022 275);
   --vi-border-subtle: oklch(1 0 0 / 0.08);
@@ -28,8 +28,8 @@
   --vi-hl-tag: oklch(0.74 0.16 292);
   --vi-hl-attr: oklch(0.78 0.14 215);
   --vi-hl-val: oklch(0.76 0.14 162);
-  --vi-hl-comment: oklch(0.66 0.012 275);
-  --vi-hl-punct: oklch(0.72 0.012 275);
+  --vi-hl-comment: oklch(0.70 0.012 275);
+  --vi-hl-punct: oklch(0.74 0.012 275);
 
   --vi-scrollbar-thumb: oklch(0.34 0.015 275);
   --vi-scrollbar-thumb-hover: oklch(0.46 0.02 275);
@@ -39,7 +39,8 @@
   --vi-glass-tint-a: oklch(0.58 0.18 292 / 0.22);
   --vi-glass-tint-b: oklch(0.66 0.14 190 / 0.18);
 
-  --vi-scroll-margin: 6.5rem;
+  --shell-topbar-h: 52px;
+  --vi-scroll-margin: calc(var(--shell-topbar-h, 52px) + 24px);
   --vi-shell-font-sans: var(--vi-typography-typography-family-sans-base, Geist, ui-sans-serif, system-ui, sans-serif);
   --vi-shell-font-mono: var(--vi-typography-typography-family-mono-base, Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   --vi-radius-outer: 12px;
@@ -729,7 +730,7 @@ html::-webkit-scrollbar-thumb:hover,
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  scroll-margin-top: var(--vi-scroll-margin);
+  scroll-margin-top: calc(var(--shell-topbar-h, 52px) + 24px);
 }
 
 .tier-header {
@@ -774,7 +775,7 @@ html::-webkit-scrollbar-thumb:hover,
   border: 1px solid var(--vi-border-subtle);
   border-radius: var(--vi-radius-outer);
   overflow: hidden;
-  scroll-margin-top: var(--vi-scroll-margin);
+  scroll-margin-top: calc(var(--shell-topbar-h, 52px) + 24px);
 }
 
 .fragment-section.is-focused-specimen {
@@ -1027,7 +1028,7 @@ html::-webkit-scrollbar-thumb:hover,
   flex-direction: column;
   justify-content: center;
   gap: 0.75rem;
-  min-height: 8.5rem;
+  min-height: 12rem;
   padding: 1.25rem;
   border-radius: var(--vi-shell-radius-control);
   border: 1px solid var(--vi-border-subtle);
@@ -1035,11 +1036,11 @@ html::-webkit-scrollbar-thumb:hover,
 }
 
 .specimen-skeleton--tall {
-  min-height: 22rem;
+  min-height: 30rem;
 }
 
 .specimen-skeleton--layout {
-  min-height: 36rem;
+  min-height: 38rem;
   margin: 1rem;
 }
 

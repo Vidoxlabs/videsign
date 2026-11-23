@@ -1,0 +1,108 @@
+<!--
+  Nocturne Museum: Telemetry Chart Card (ADR-024)
+  Inline SVG sparkline + 7-bucket time-series area/bar chart using OKLCH colorblind-safe
+  series tokens (cobalt blue solid vs warm amber dashed), tabular-nums axis ticks, and
+  an accessible summary table fallback. Solid surfaces only.
+-->
+<section class="vi-core-scope" aria-labelledby="telemetry-chart-title">
+  <div class="vi-core-card" data-vi-telemetry-chart>
+    <div class="vi-core-head">
+      <div>
+        <p class="vi-core-eyebrow">Workspace telemetry · 7d fixture window</p>
+        <h2 id="telemetry-chart-title" class="vi-core-title">Inference latency and throughput</h2>
+      </div>
+      <div role="group" aria-label="Chart series filter" class="vi-core-tabs">
+        <button type="button" aria-pressed="true" data-chart-mode="both" class="vi-core-tab h-action-min-default">Both</button>
+        <button type="button" aria-pressed="false" data-chart-mode="latency" class="vi-core-tab h-action-min-default">Latency</button>
+        <button type="button" aria-pressed="false" data-chart-mode="throughput" class="vi-core-tab h-action-min-default">Throughput</button>
+      </div>
+    </div>
+
+    <div class="vi-chart-metrics">
+      <span class="vi-chart-big" data-chart-value>142 ms</span>
+      <span class="vi-core-status">
+        <span aria-hidden="true" class="vi-core-dot vi-core-dot--ok"></span>
+        <span data-chart-delta>-11.4% vs 7d baseline</span>
+      </span>
+    </div>
+
+    <div class="vi-chart-canvas">
+      <svg class="vi-chart-svg" viewBox="0 0 640 210" role="img" aria-labelledby="telemetry-svg-title telemetry-svg-desc">
+        <title id="telemetry-svg-title">7-day latency and throughput trend</title>
+        <desc id="telemetry-svg-desc">p95 latency trends from 168 ms on Nov 16 down to 142 ms on Nov 22 while throughput rises from 1,420 to 1,840 tokens per second.</desc>
+        <line class="vi-chart-grid-line" x1="48" y1="24" x2="620" y2="24" />
+        <line class="vi-chart-grid-line" x1="48" y1="74" x2="620" y2="74" />
+        <line class="vi-chart-grid-line" x1="48" y1="124" x2="620" y2="124" />
+        <line class="vi-chart-grid-line" x1="48" y1="174" x2="620" y2="174" />
+
+        <text class="vi-chart-axis-text" x="8" y="28">200</text>
+        <text class="vi-chart-axis-text" x="8" y="78">150</text>
+        <text class="vi-chart-axis-text" x="8" y="128">100</text>
+        <text class="vi-chart-axis-text" x="16" y="178">50</text>
+
+        <g data-chart-series="latency">
+          <rect class="vi-chart-bar-a" x="72" y="112" width="22" height="62" rx="3" />
+          <rect class="vi-chart-bar-a" x="158" y="106" width="22" height="68" rx="3" />
+          <rect class="vi-chart-bar-a" x="244" y="118" width="22" height="56" rx="3" />
+          <rect class="vi-chart-bar-a" x="330" y="96" width="22" height="78" rx="3" />
+          <rect class="vi-chart-bar-a" x="416" y="104" width="22" height="70" rx="3" />
+          <rect class="vi-chart-bar-a" x="502" y="122" width="22" height="52" rx="3" />
+          <rect class="vi-chart-bar-a" x="588" y="128" width="22" height="46" rx="3" />
+          <path class="vi-chart-area-a" d="M 83 56 L 169 64 L 255 60 L 341 72 L 427 68 L 513 78 L 599 82 L 599 174 L 83 174 Z" />
+          <path class="vi-chart-line-a" d="M 83 56 L 169 64 L 255 60 L 341 72 L 427 68 L 513 78 L 599 82" />
+          <circle class="vi-chart-point-a" cx="83" cy="56" r="3.5" />
+          <circle class="vi-chart-point-a" cx="169" cy="64" r="3.5" />
+          <circle class="vi-chart-point-a" cx="255" cy="60" r="3.5" />
+          <circle class="vi-chart-point-a" cx="341" cy="72" r="3.5" />
+          <circle class="vi-chart-point-a" cx="427" cy="68" r="3.5" />
+          <circle class="vi-chart-point-a" cx="513" cy="78" r="3.5" />
+          <circle class="vi-chart-point-a" cx="599" cy="82" r="3.5" />
+        </g>
+
+        <g data-chart-series="throughput">
+          <path class="vi-chart-line-b" d="M 83 132 L 169 124 L 255 112 L 341 116 L 427 98 L 513 88 L 599 74" />
+        </g>
+
+        <text class="vi-chart-axis-text" x="66" y="196">Nov 16</text>
+        <text class="vi-chart-axis-text" x="152" y="196">Nov 17</text>
+        <text class="vi-chart-axis-text" x="238" y="196">Nov 18</text>
+        <text class="vi-chart-axis-text" x="324" y="196">Nov 19</text>
+        <text class="vi-chart-axis-text" x="410" y="196">Nov 20</text>
+        <text class="vi-chart-axis-text" x="496" y="196">Nov 21</text>
+        <text class="vi-chart-axis-text" x="580" y="196">Nov 22</text>
+      </svg>
+    </div>
+
+    <div class="vi-chart-legend">
+      <span class="vi-core-status"><span aria-hidden="true" class="vi-chart-swatch-a"></span><span>p95 latency (solid)</span></span>
+      <span class="vi-core-status"><span aria-hidden="true" class="vi-chart-swatch-b"></span><span>Throughput tok/s (dashed)</span></span>
+    </div>
+
+    <details>
+      <summary class="vi-trace-summary">
+        <span class="vi-core-meta">Accessible data table fallback · 7 buckets</span>
+        <span class="vi-core-meta">Expand rows</span>
+      </summary>
+      <div class="vi-core-table-wrap">
+        <table class="vi-core-table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">p95 latency</th>
+              <th scope="col">Throughput</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>2026-11-16</td><td>168 ms</td><td>1,420 tok/s</td></tr>
+            <tr><td>2026-11-17</td><td>160 ms</td><td>1,490 tok/s</td></tr>
+            <tr><td>2026-11-18</td><td>164 ms</td><td>1,580 tok/s</td></tr>
+            <tr><td>2026-11-19</td><td>152 ms</td><td>1,550 tok/s</td></tr>
+            <tr><td>2026-11-20</td><td>156 ms</td><td>1,670 tok/s</td></tr>
+            <tr><td>2026-11-21</td><td>146 ms</td><td>1,760 tok/s</td></tr>
+            <tr><td>2026-11-22</td><td>142 ms</td><td>1,840 tok/s</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+</section>

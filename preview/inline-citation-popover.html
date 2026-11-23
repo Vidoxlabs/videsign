@@ -1,0 +1,36 @@
+<!--
+  Nocturne Museum: Inline Citation Popover (ADR-016)
+  Reading prose with numbered inline citation chips ([1], [2], [3]) that open an anchored
+  solid source receipt popover displaying file path, line range, evidence status, and excerpt.
+-->
+<section class="vi-core-scope" aria-labelledby="citation-popover-title">
+  <div class="vi-core-card vi-core-card--narrow" data-vi-citation-demo>
+    <div class="vi-core-head">
+      <div>
+        <p class="vi-core-eyebrow">Workspace · source-anchored prose</p>
+        <h2 id="citation-popover-title" class="vi-core-title">Inline citation receipts</h2>
+      </div>
+      <span class="vi-core-meta">3 anchored sources · Esc closes</span>
+    </div>
+
+    <p class="vi-cite-prose">
+      Every dark-mode semantic ink token is gated programmatically against all four OKLCH elevation tiers before merge<button type="button" aria-expanded="true" aria-controls="vi-cite-pop-panel" data-cite-id="1" data-cite-path="scripts/lint-preview.js" data-cite-lines="L442-L492" data-cite-status="Observed" data-cite-quote="lintOklchContrastFloors() asserts primary &gt;= 0.75, muted &gt;= 0.45, and interactive border &gt;= 0.35 across dark, light, and high-contrast." class="vi-cite-btn h-action-min-default">[1]</button>,
+      while responsive specimen grids rely on CSS Subgrid and container queries so narrow stages collapse without clipping<button type="button" aria-expanded="false" aria-controls="vi-cite-pop-panel" data-cite-id="2" data-cite-path="lib/specimen-layouts.css" data-cite-lines="L74-L98" data-cite-status="Observed" data-cite-quote="@container (min-width: 42rem) maps viewport frames to 1.45fr / 1.1fr / 0.85fr with grid-template-rows: subgrid." class="vi-cite-btn h-action-min-default">[2]</button>.
+      Color tokens remain single-sourced in the repository specification<button type="button" aria-expanded="false" aria-controls="vi-cite-pop-panel" data-cite-id="3" data-cite-path="DESIGN.md" data-cite-lines="L18-L42" data-cite-status="Recorded" data-cite-quote="YAML front-matter defines canonical palette, typography, spacing, and motion tokens consumed by generate-tokens.js." class="vi-cite-btn h-action-min-default">[3]</button>.
+    </p>
+
+    <div id="vi-cite-pop-panel" role="region" aria-label="Citation receipt" class="vi-cite-popover" data-cite-popover>
+      <div class="vi-core-head">
+        <div>
+          <p class="vi-core-eyebrow"><span data-cite-path>scripts/lint-preview.js</span> · <span data-cite-lines>L442-L492</span></p>
+          <span class="vi-core-status">
+            <span aria-hidden="true" class="vi-core-dot vi-core-dot--ok"></span>
+            <span data-cite-status>Observed</span>
+          </span>
+        </div>
+        <button type="button" data-cite-close class="vi-core-btn vi-core-btn--ghost h-action-min-default">Close</button>
+      </div>
+      <blockquote class="vi-cite-quote" data-cite-quote>lintOklchContrastFloors() asserts primary >= 0.75, muted >= 0.45, and interactive border >= 0.35 across dark, light, and high-contrast.</blockquote>
+    </div>
+  </div>
+</section>

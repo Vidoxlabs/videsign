@@ -157,8 +157,8 @@ function emitCSS(tokens) {
     '  --vi-surface-card: oklch(0.16 0.016 275);',
     '  --vi-surface-elevated: oklch(0.20 0.018 275);',
     '  --vi-ink-primary: oklch(0.96 0.006 275);',
-    '  --vi-ink-secondary: oklch(0.80 0.010 275);',
-    '  --vi-ink-muted: oklch(0.66 0.012 275);',
+    '  --vi-ink-secondary: oklch(0.82 0.010 275);',
+    '  --vi-ink-muted: oklch(0.70 0.012 275);',
     '  --vi-border-subtle: oklch(1 0 0 / 0.08);',
     '  --vi-border-interactive: oklch(0.56 0.020 275);',
     '  --vi-border-strong: oklch(0.68 0.022 275);',
@@ -502,6 +502,18 @@ function emitSpecimenLayoutArtifacts() {
   };
 }
 
+/**
+ * Core production components: zero-hex oklch() stylesheet + CSP-safe vanilla JS controller
+ * for combobox, date-range-picker, tooltip/hover-card, file-tree, resizable split pane,
+ * telemetry chart, reasoning trace, inline citation popover, destructive guard, and error boundary.
+ */
+function emitCoreComponentArtifacts() {
+  return {
+    'core-components.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'core-components.css'), 'utf-8'),
+    'core-components.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'core-components.js'), 'utf-8'),
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -534,6 +546,7 @@ function main() {
     ...emitSettingsSurfaceArtifacts(),
     ...emitLibrarySurfaceArtifacts(),
     ...emitSpecimenLayoutArtifacts(),
+    ...emitCoreComponentArtifacts(),
   };
 
   if (dryRun) {
@@ -584,4 +597,5 @@ module.exports = {
   emitSettingsSurfaceArtifacts,
   emitLibrarySurfaceArtifacts,
   emitSpecimenLayoutArtifacts,
+  emitCoreComponentArtifacts,
 };

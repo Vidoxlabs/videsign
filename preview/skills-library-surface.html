@@ -1,8 +1,10 @@
 <!--
   Nocturne Museum: Skills Library surface (ADR-011, ADR-016, ADR-020, ADR-024, ADR-025)
   Progressive-disclosure Skills catalog with live search, ownership tabs, category pills,
-  Grid/List toggle, Subgrid-aligned cards, Auto-trigger vs Manual only switches, tabular
-  token budget metadata, and a solid slide-over SKILL.md inspector drawer.
+  Grid/List toggle, balanced 2-column Subgrid cards (zero orphan hole), title-first header
+  paired with compact Auto-trigger/Manual only switch, subtle borderless neutral tool chips,
+  full text-wrap: pretty descriptions (zero mid-word truncation), tabular token budget
+  metadata, and a solid slide-over SKILL.md inspector drawer.
   All surfaces are solid (0 vi-glass) and zero persona-accent tokens appear.
 -->
 <section class="vi-library-scope" aria-label="Skills library">
@@ -48,12 +50,12 @@
       </div>
     </div>
 
-    <ul class="vi-library-grid vi-library-grid--subgrid" data-skills-grid data-view="grid">
+    <ul class="vi-library-grid vi-library-grid--skills vi-library-grid--subgrid" data-skills-grid data-view="grid">
       <li class="vi-library-card" data-skill-card data-skill-owner="custom" data-skill-category="engineering" data-skill-tokens="~110 tok" data-skill-tools="vcs.diff.read, schema.lint.check" data-skill-directive="Read staged schema migrations via vcs.diff.read, run schema.lint.check, and list every breaking column or nullability shift with rollback steps before apply.">
         <div class="vi-library-card-head">
-          <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">/schema-audit</span>
-            <span class="vi-library-mono-pill">Custom</span>
+          <div class="vi-library-card-title-group">
+            <h2 class="vi-library-card-title">Schema migration audit</h2>
+            <p class="vi-library-meta-row"><span class="vi-library-meta-cmd">/schema-audit</span><span aria-hidden="true">&middot;</span><span>Custom</span></p>
           </div>
           <button type="button" role="switch" aria-checked="true" data-skill-trigger="/schema-audit" class="vi-library-switch h-action-min-default">
             <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
@@ -61,11 +63,10 @@
           </button>
         </div>
         <div class="vi-library-card-body">
-          <h2 class="vi-library-card-title">Schema migration audit</h2>
           <p class="vi-library-card-desc">Inspects schema diffs for lock risks, missing indexes, and backwards-compatibility breaks prior to rollout.</p>
           <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">vcs.diff.read</span>
-            <span class="vi-library-mono-pill">schema.lint.check</span>
+            <span class="vi-library-tool-chip">vcs.diff.read</span>
+            <span class="vi-library-tool-chip">schema.lint.check</span>
           </div>
         </div>
         <div class="vi-library-card-footer">
@@ -76,9 +77,9 @@
 
       <li class="vi-library-card" data-skill-card data-skill-owner="team" data-skill-category="governance" data-skill-tokens="~95 tok" data-skill-tools="release.gate.check, ci.run.inspect" data-skill-directive="Gather test receipts from ci.run.inspect, evaluate every required release gate via release.gate.check, and hold publication whenever a gate remains unconfirmed.">
         <div class="vi-library-card-head">
-          <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">/release-checklist</span>
-            <span class="vi-library-mono-pill">Team</span>
+          <div class="vi-library-card-title-group">
+            <h2 class="vi-library-card-title">Release gate checklist</h2>
+            <p class="vi-library-meta-row"><span class="vi-library-meta-cmd">/release-checklist</span><span aria-hidden="true">&middot;</span><span>Team</span></p>
           </div>
           <button type="button" role="switch" aria-checked="true" data-skill-trigger="/release-checklist" class="vi-library-switch h-action-min-default">
             <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
@@ -86,11 +87,10 @@
           </button>
         </div>
         <div class="vi-library-card-body">
-          <h2 class="vi-library-card-title">Release gate checklist</h2>
           <p class="vi-library-card-desc">Compiles local test evidence, changelog deltas, and rollback anchors into an explicit pre-ship gate receipt.</p>
           <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">release.gate.check</span>
-            <span class="vi-library-mono-pill">ci.run.inspect</span>
+            <span class="vi-library-tool-chip">release.gate.check</span>
+            <span class="vi-library-tool-chip">ci.run.inspect</span>
           </div>
         </div>
         <div class="vi-library-card-footer">
@@ -101,9 +101,9 @@
 
       <li class="vi-library-card" data-skill-card data-skill-owner="built-in" data-skill-category="engineering" data-skill-tokens="~130 tok" data-skill-tools="incident.log.read, ci.run.inspect" data-skill-directive="Collect the latest fault timeline from incident.log.read, cross-reference recent builds via ci.run.inspect, and separate confirmed causes from open hypotheses.">
         <div class="vi-library-card-head">
-          <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">/incident-triage</span>
-            <span class="vi-library-mono-pill">Built-in</span>
+          <div class="vi-library-card-title-group">
+            <h2 class="vi-library-card-title">Incident timeline triage</h2>
+            <p class="vi-library-meta-row"><span class="vi-library-meta-cmd">/incident-triage</span><span aria-hidden="true">&middot;</span><span>Built-in</span></p>
           </div>
           <button type="button" role="switch" aria-checked="false" data-skill-trigger="/incident-triage" class="vi-library-switch h-action-min-default">
             <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
@@ -111,11 +111,10 @@
           </button>
         </div>
         <div class="vi-library-card-body">
-          <h2 class="vi-library-card-title">Incident timeline triage</h2>
           <p class="vi-library-card-desc">Structures read-only fault logs, blast-radius bounds, and candidate mitigations without mutating live services.</p>
           <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">incident.log.read</span>
-            <span class="vi-library-mono-pill">ci.run.inspect</span>
+            <span class="vi-library-tool-chip">incident.log.read</span>
+            <span class="vi-library-tool-chip">ci.run.inspect</span>
           </div>
         </div>
         <div class="vi-library-card-footer">
@@ -126,9 +125,9 @@
 
       <li class="vi-library-card" data-skill-card data-skill-owner="custom" data-skill-category="design" data-skill-tokens="~85 tok" data-skill-tools="design.token.audit" data-skill-directive="Run design.token.audit against dark and light semantic pairs to confirm 4.5:1 text contrast, 3.0:1 border contrast, and zero raw hex literals.">
         <div class="vi-library-card-head">
-          <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">/contrast-check</span>
-            <span class="vi-library-mono-pill">Custom</span>
+          <div class="vi-library-card-title-group">
+            <h2 class="vi-library-card-title">Contrast floor audit</h2>
+            <p class="vi-library-meta-row"><span class="vi-library-meta-cmd">/contrast-check</span><span aria-hidden="true">&middot;</span><span>Custom</span></p>
           </div>
           <button type="button" role="switch" aria-checked="true" data-skill-trigger="/contrast-check" class="vi-library-switch h-action-min-default">
             <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
@@ -136,10 +135,9 @@
           </button>
         </div>
         <div class="vi-library-card-body">
-          <h2 class="vi-library-card-title">Contrast floor audit</h2>
           <p class="vi-library-card-desc">Computes perceptual contrast ratios across semantic surfaces and flags any token below WCAG 2.1 floors.</p>
           <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">design.token.audit</span>
+            <span class="vi-library-tool-chip">design.token.audit</span>
           </div>
         </div>
         <div class="vi-library-card-footer">
@@ -150,9 +148,9 @@
 
       <li class="vi-library-card" data-skill-card data-skill-owner="built-in" data-skill-category="research" data-skill-tokens="~120 tok" data-skill-tools="docs.index.read, memory.scope.inspect" data-skill-directive="Query scoped documents with docs.index.read, tag each claim with its observation date via memory.scope.inspect, and highlight unresolved evidence gaps.">
         <div class="vi-library-card-head">
-          <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">/evidence-digest</span>
-            <span class="vi-library-mono-pill">Built-in</span>
+          <div class="vi-library-card-title-group">
+            <h2 class="vi-library-card-title">Evidence synthesis digest</h2>
+            <p class="vi-library-meta-row"><span class="vi-library-meta-cmd">/evidence-digest</span><span aria-hidden="true">&middot;</span><span>Built-in</span></p>
           </div>
           <button type="button" role="switch" aria-checked="true" data-skill-trigger="/evidence-digest" class="vi-library-switch h-action-min-default">
             <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
@@ -160,11 +158,10 @@
           </button>
         </div>
         <div class="vi-library-card-body">
-          <h2 class="vi-library-card-title">Evidence synthesis digest</h2>
-          <p class="vi-library-card-desc">Summarizes primary design specs and test artifacts while keeping observation dates distinct from review notes.</p>
+          <p class="vi-library-card-desc">Summarizes primary design specs and test artifacts while keeping observation dates separate from review notes.</p>
           <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">docs.index.read</span>
-            <span class="vi-library-mono-pill">memory.scope.inspect</span>
+            <span class="vi-library-tool-chip">docs.index.read</span>
+            <span class="vi-library-tool-chip">memory.scope.inspect</span>
           </div>
         </div>
         <div class="vi-library-card-footer">
@@ -175,9 +172,9 @@
 
       <li class="vi-library-card" data-skill-card data-skill-owner="team" data-skill-category="engineering" data-skill-tokens="~105 tok" data-skill-tools="vcs.diff.read, docs.index.read" data-skill-directive="Diff target module boundaries with vcs.diff.read, compare against docs.index.read contracts, and output a step-by-step migration sequence.">
         <div class="vi-library-card-head">
-          <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">/migration-brief</span>
-            <span class="vi-library-mono-pill">Team</span>
+          <div class="vi-library-card-title-group">
+            <h2 class="vi-library-card-title">Contract migration brief</h2>
+            <p class="vi-library-meta-row"><span class="vi-library-meta-cmd">/migration-brief</span><span aria-hidden="true">&middot;</span><span>Team</span></p>
           </div>
           <button type="button" role="switch" aria-checked="false" data-skill-trigger="/migration-brief" class="vi-library-switch h-action-min-default">
             <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
@@ -185,11 +182,10 @@
           </button>
         </div>
         <div class="vi-library-card-body">
-          <h2 class="vi-library-card-title">Contract migration brief</h2>
-          <p class="vi-library-card-desc">Maps deprecated symbols, consumer call sites, and staged fallback rules into a single migration plan.</p>
+          <p class="vi-library-card-desc">Maps deprecated symbols, consumer call sites, and staged fallback rules into a clear migration sequence.</p>
           <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">vcs.diff.read</span>
-            <span class="vi-library-mono-pill">docs.index.read</span>
+            <span class="vi-library-tool-chip">vcs.diff.read</span>
+            <span class="vi-library-tool-chip">docs.index.read</span>
           </div>
         </div>
         <div class="vi-library-card-footer">
@@ -200,9 +196,9 @@
 
       <li class="vi-library-card" data-skill-card data-skill-owner="team" data-skill-category="governance" data-skill-tokens="~115 tok" data-skill-tools="release.gate.check, memory.scope.inspect" data-skill-directive="Audit memory retention boundaries with memory.scope.inspect and confirm shared-project isolation policies before publishing.">
         <div class="vi-library-card-head">
-          <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">/policy-review</span>
-            <span class="vi-library-mono-pill">Team</span>
+          <div class="vi-library-card-title-group">
+            <h2 class="vi-library-card-title">Scope and memory review</h2>
+            <p class="vi-library-meta-row"><span class="vi-library-meta-cmd">/policy-review</span><span aria-hidden="true">&middot;</span><span>Team</span></p>
           </div>
           <button type="button" role="switch" aria-checked="false" data-skill-trigger="/policy-review" class="vi-library-switch h-action-min-default">
             <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
@@ -210,11 +206,10 @@
           </button>
         </div>
         <div class="vi-library-card-body">
-          <h2 class="vi-library-card-title">Scope and memory review</h2>
           <p class="vi-library-card-desc">Checks shared workspace permissions, redaction boundaries, and private-realm isolation rules before handoff.</p>
           <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">release.gate.check</span>
-            <span class="vi-library-mono-pill">memory.scope.inspect</span>
+            <span class="vi-library-tool-chip">release.gate.check</span>
+            <span class="vi-library-tool-chip">memory.scope.inspect</span>
           </div>
         </div>
         <div class="vi-library-card-footer">
@@ -225,9 +220,9 @@
 
       <li class="vi-library-card" data-skill-card data-skill-owner="custom" data-skill-category="design" data-skill-tokens="~100 tok" data-skill-tools="design.token.audit, vcs.diff.read" data-skill-directive="Compare emitted semantic CSS variables against DESIGN.md via design.token.audit and report any unmapped consumer utilities.">
         <div class="vi-library-card-head">
-          <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">/token-sync</span>
-            <span class="vi-library-mono-pill">Custom</span>
+          <div class="vi-library-card-title-group">
+            <h2 class="vi-library-card-title">Design token sync</h2>
+            <p class="vi-library-meta-row"><span class="vi-library-meta-cmd">/token-sync</span><span aria-hidden="true">&middot;</span><span>Custom</span></p>
           </div>
           <button type="button" role="switch" aria-checked="true" data-skill-trigger="/token-sync" class="vi-library-switch h-action-min-default">
             <span class="vi-library-switch-track" aria-hidden="true"><span class="vi-library-switch-thumb"></span></span>
@@ -235,11 +230,10 @@
           </button>
         </div>
         <div class="vi-library-card-body">
-          <h2 class="vi-library-card-title">Design token sync</h2>
           <p class="vi-library-card-desc">Reconciles upstream oklch token changes with consumer stylesheets while preventing ad-hoc custom overrides.</p>
           <div class="vi-library-chip-row">
-            <span class="vi-library-mono-pill">design.token.audit</span>
-            <span class="vi-library-mono-pill">vcs.diff.read</span>
+            <span class="vi-library-tool-chip">design.token.audit</span>
+            <span class="vi-library-tool-chip">vcs.diff.read</span>
           </div>
         </div>
         <div class="vi-library-card-footer">
@@ -286,7 +280,7 @@ tools: [vcs.diff.read, schema.lint.check]
           <div class="vi-library-section">
             <h3 class="vi-library-section-title">Required tool effect classes</h3>
             <div class="vi-library-chip-row">
-              <span class="vi-library-mono-pill" data-skill-drawer-tools>vcs.diff.read, schema.lint.check</span>
+              <span class="vi-library-tool-chip" data-skill-drawer-tools>vcs.diff.read, schema.lint.check</span>
               <span class="vi-library-status">
                 <span aria-hidden="true" class="vi-library-dot vi-library-dot--success"></span>
                 <span>Read-only check</span>

@@ -1,0 +1,46 @@
+<!--
+  Nocturne Museum: System Error Boundary (ADR-024)
+  Production 404 / 500 / Offline recovery card displaying req_id, run_id, copyable
+  diagnostic payload, scenario switcher, and primary recovery CTA. Solid surfaces only.
+-->
+<section class="vi-core-scope" aria-labelledby="error-boundary-title">
+  <div role="alert" aria-labelledby="error-boundary-title" class="vi-core-card vi-core-card--narrow" data-vi-error-boundary>
+    <div class="vi-core-head">
+      <div>
+        <span class="vi-core-status">
+          <span aria-hidden="true" class="vi-core-dot vi-core-dot--danger"></span>
+          <span class="vi-err-code" data-err-code>HTTP 500 · Runtime fault</span>
+        </span>
+        <h2 id="error-boundary-title" class="vi-core-title" data-err-title>Renderer boundary caught an unexpected error</h2>
+      </div>
+      <div role="group" aria-label="Error scenario" class="vi-core-tabs">
+        <button type="button" aria-pressed="false" data-err-mode="404" class="vi-core-tab h-action-min-default">404</button>
+        <button type="button" aria-pressed="true" data-err-mode="500" class="vi-core-tab h-action-min-default">500</button>
+        <button type="button" aria-pressed="false" data-err-mode="offline" class="vi-core-tab h-action-min-default">Offline</button>
+      </div>
+    </div>
+
+    <p class="vi-core-copy" data-err-copy>The isolated stage stopped safely before mutating workspace state. Copy the diagnostic receipt or retry.</p>
+
+    <dl aria-label="Diagnostic identifiers" class="vi-err-dl">
+      <dt>req_id</dt>
+      <dd data-err-req>req_01j8m5r3z8</dd>
+      <dt>run_id</dt>
+      <dd data-err-run>run_01j8k5</dd>
+      <dt>timestamp</dt>
+      <dd>2026-11-22T22:14:08Z</dd>
+      <dt>route</dt>
+      <dd>/catalog/specimens</dd>
+    </dl>
+
+    <div class="vi-danger-actions">
+      <button type="button" data-err-copy-btn class="vi-core-btn h-action-min-default">Copy diagnostics</button>
+      <button type="button" data-err-cta class="vi-core-btn vi-core-btn--primary h-action-min-default">Retry request</button>
+    </div>
+
+    <div class="vi-core-receipt" role="status" aria-live="polite">
+      <span data-err-status>Diagnostic payload ready for req_01j8m5r3z8</span>
+      <span>No state lost</span>
+    </div>
+  </div>
+</section>

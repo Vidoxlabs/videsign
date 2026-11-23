@@ -1,0 +1,47 @@
+<!--
+  Nocturne Museum: Resizable Split Pane (ADR-024)
+  Horizontal/vertical split container with focusable role="separator" drag handle,
+  keyboard resizing (ArrowLeft, ArrowRight, Home, End, Enter), and collapse snap presets.
+-->
+<section class="vi-core-scope" aria-labelledby="split-pane-title">
+  <div class="vi-core-card" data-vi-split-pane>
+    <div class="vi-core-head">
+      <div>
+        <p class="vi-core-eyebrow">Primitives · keyboard and pointer split container</p>
+        <h2 id="split-pane-title" class="vi-core-title">Resizable split pane</h2>
+      </div>
+      <div class="vi-tip-row">
+        <div role="group" aria-label="Split orientation" class="vi-core-tabs">
+          <button type="button" aria-pressed="true" data-split-dir-btn="horizontal" class="vi-core-tab h-action-min-default">Horizontal</button>
+          <button type="button" aria-pressed="false" data-split-dir-btn="vertical" class="vi-core-tab h-action-min-default">Vertical</button>
+        </div>
+        <div role="group" aria-label="Snap presets" class="vi-core-tabs">
+          <button type="button" data-split-snap="20" class="vi-core-tab h-action-min-default">20%</button>
+          <button type="button" data-split-snap="50" class="vi-core-tab h-action-min-default">50%</button>
+          <button type="button" data-split-snap="80" class="vi-core-tab h-action-min-default">80%</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vi-split-stage" data-split-stage data-split-dir="horizontal">
+      <div class="vi-split-pane" aria-label="Primary specification pane">
+        <p class="vi-core-eyebrow">Primary pane · source spec</p>
+        <p class="vi-core-copy">Focus the center separator and press ArrowLeft or ArrowRight to adjust the ratio in 5% increments, Home or End to snap to bounds, or Enter to reset to 50%.</p>
+      </div>
+
+      <div role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize split panes" aria-valuemin="20" aria-valuemax="80" aria-valuenow="42" class="vi-split-handle">
+        <span aria-hidden="true" class="vi-split-grip"></span>
+      </div>
+
+      <div class="vi-split-pane vi-split-pane--secondary" aria-label="Secondary inspection pane">
+        <p class="vi-core-eyebrow">Secondary pane · live inspector</p>
+        <p class="vi-core-copy">Both panes hold min-inline-size: 0 and independent scrolling so narrow 320px viewports stack cleanly with zero horizontal overflow.</p>
+      </div>
+    </div>
+
+    <div class="vi-core-receipt" role="status" aria-live="polite">
+      <span data-split-readout>42% / 58% · horizontal</span>
+      <span>Separator focusable · Arrow keys step 5%</span>
+    </div>
+  </div>
+</section>

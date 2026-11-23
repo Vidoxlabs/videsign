@@ -1,0 +1,75 @@
+<!--
+  Nocturne Museum: Searchable Combobox Multiselect (ADR-024)
+  Single/multi-select combobox with keyboard arrow navigation, aria-activedescendant,
+  removable 44px selection chips, grouped options, and empty-match recovery. Solid surfaces only.
+-->
+<section class="vi-core-scope" aria-labelledby="combo-title">
+  <div class="vi-core-card vi-core-card--narrow" data-vi-combobox>
+    <div class="vi-core-head">
+      <div>
+        <p class="vi-core-eyebrow">Primitives · keyboard searchable multiselect</p>
+        <h2 id="combo-title" class="vi-core-title">Tool capability selector</h2>
+      </div>
+      <span class="vi-core-meta" role="status" aria-live="polite" data-combo-status>2 selected · 6 matching options</span>
+    </div>
+
+    <div class="vi-combo-chips" aria-label="Selected capabilities" data-combo-chips>
+      <span class="vi-combo-chip">
+        <span>vcs.diff.read</span>
+        <button type="button" class="vi-combo-chip-rm h-action-min-default" aria-label="Remove vcs.diff.read">&times;</button>
+      </span>
+      <span class="vi-combo-chip">
+        <span>design.token.audit</span>
+        <button type="button" class="vi-combo-chip-rm h-action-min-default" aria-label="Remove design.token.audit">&times;</button>
+      </span>
+    </div>
+
+    <div>
+      <label for="vi-combo-search" class="sr-only">Filter capabilities</label>
+      <input id="vi-combo-search" type="search" role="combobox" aria-expanded="true" aria-controls="vi-combo-listbox" aria-autocomplete="list" autocomplete="off" placeholder="Search capabilities (use Up/Down, Enter, Esc)..." data-combo-input class="vi-core-input h-action-min-default" />
+    </div>
+
+    <div id="vi-combo-listbox" role="listbox" aria-label="Available capabilities" aria-multiselectable="true" class="vi-combo-list" data-combo-list>
+      <div role="group" aria-labelledby="combo-grp-runtime" data-combo-group>
+        <div id="combo-grp-runtime" class="vi-combo-group-label">Core runtime</div>
+        <button type="button" id="combo-opt-1" role="option" aria-selected="true" data-option-value="vcs.diff.read" data-option-label="vcs.diff.read" class="vi-combo-option h-action-min-default">
+          <span>vcs.diff.read</span>
+          <span class="vi-combo-check" data-option-check>Selected</span>
+        </button>
+        <button type="button" id="combo-opt-2" role="option" aria-selected="false" data-option-value="ci.run.inspect" data-option-label="ci.run.inspect" class="vi-combo-option h-action-min-default">
+          <span>ci.run.inspect</span>
+          <span class="vi-combo-check" data-option-check>Select</span>
+        </button>
+      </div>
+
+      <div role="group" aria-labelledby="combo-grp-gates" data-combo-group>
+        <div id="combo-grp-gates" class="vi-combo-group-label">Governance gates</div>
+        <button type="button" id="combo-opt-3" role="option" aria-selected="true" data-option-value="design.token.audit" data-option-label="design.token.audit" class="vi-combo-option h-action-min-default">
+          <span>design.token.audit</span>
+          <span class="vi-combo-check" data-option-check>Selected</span>
+        </button>
+        <button type="button" id="combo-opt-4" role="option" aria-selected="false" data-option-value="release.gate.check" data-option-label="release.gate.check" class="vi-combo-option h-action-min-default">
+          <span>release.gate.check</span>
+          <span class="vi-combo-check" data-option-check>Select</span>
+        </button>
+      </div>
+
+      <div role="group" aria-labelledby="combo-grp-data" data-combo-group>
+        <div id="combo-grp-data" class="vi-combo-group-label">Data adapters</div>
+        <button type="button" id="combo-opt-5" role="option" aria-selected="false" data-option-value="schema.lint.check" data-option-label="schema.lint.check" class="vi-combo-option h-action-min-default">
+          <span>schema.lint.check</span>
+          <span class="vi-combo-check" data-option-check>Select</span>
+        </button>
+        <button type="button" id="combo-opt-6" role="option" aria-selected="false" data-option-value="memory.scope.inspect" data-option-label="memory.scope.inspect" class="vi-combo-option h-action-min-default">
+          <span>memory.scope.inspect</span>
+          <span class="vi-combo-check" data-option-check>Select</span>
+        </button>
+      </div>
+
+      <div class="vi-combo-empty" hidden data-combo-empty>
+        <span class="vi-core-meta">No capabilities match the active query.</span>
+        <button type="button" data-combo-reset class="vi-core-btn h-action-min-default">Reset search</button>
+      </div>
+    </div>
+  </div>
+</section>

@@ -94,7 +94,7 @@ test('preview/catalog.css, dist/tokens.css, dist/themes.css, and iframe styles e
     '--vi-surface-card: oklch(0.16 0.016 275)',
     '--vi-surface-elevated: oklch(0.20 0.018 275)',
     '--vi-ink-primary: oklch(0.96 0.006 275)',
-    '--vi-ink-muted: oklch(0.66 0.012 275)',
+    '--vi-ink-muted: oklch(0.70 0.012 275)',
     '--vi-border-subtle: oklch(1 0 0 / 0.08)',
     '--vi-border-interactive: oklch(0.56 0.020 275)',
     '--vi-radius-outer: 12px',
@@ -109,7 +109,7 @@ test('preview/catalog.css, dist/tokens.css, dist/themes.css, and iframe styles e
   for (const needle of [
     ':root[data-theme="light"]',
     ':root[data-theme="high-contrast"]',
-    'scroll-margin-top: var(--vi-scroll-margin)',
+    'scroll-margin-top: calc(var(--shell-topbar-h, 52px) + 24px)',
     'container-type: inline-size',
     'scrollbar-width: thin',
     'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -351,12 +351,12 @@ test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens
   assert.equal(parseHashState('#catalog?cat=layouts&specimen=layout-public-site').category, 'layouts');
 });
 
-test('manifest count equals active catalog count (93) and design-studio-canvas aligns with museum accent grammar', () => {
+test('manifest count equals active catalog count (103) and design-studio-canvas aligns with museum accent grammar', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf-8'));
   const indexHtml = fs.readFileSync(path.join(ROOT, 'preview', 'index.html'), 'utf-8');
   const activeCount = [...indexHtml.matchAll(/file:\s*'[^']+',\s*tier:\s*'([^']+)'/g)].filter((m) => m[1] !== 'legacy').length;
   assert.equal(manifest.componentCount, activeCount, 'manifest componentCount must equal active specimen count');
-  assert.equal(manifest.componentCount, 93);
+  assert.equal(manifest.componentCount, 103);
 
   const studio = fs.readFileSync(path.join(ROOT, 'preview', 'design-studio-canvas.html'), 'utf-8');
   assert.ok(studio.includes('bg-status-indicator-success-base'), 'sync ready uses semantic status-ok dot');
