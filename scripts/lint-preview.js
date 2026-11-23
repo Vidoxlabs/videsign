@@ -116,6 +116,7 @@ function lintFragment(name, html) {
   const isChrome = CHROME_FILES.has(name);
 
   if (/shadow-sm/.test(bare)) problems.push('shadow-sm violates ADR-001');
+  if (/\bshadow-2xl\b/.test(bare)) problems.push('shadow-2xl drop shadow banned on dark museum surfaces (use 1px hairline border)');
 
   for (const value of classAttributes(bare)) {
     for (const cls of value.split(/\s+/)) {
@@ -435,12 +436,69 @@ function accentLabelProblems(html) {
   return problems;
 }
 
+/**
+ * Programmatic OKLCH lightness-delta (ΔL = |L_fg - L_surface|) contrast gate across
+ * dark, light, and high-contrast themes on all 4 surface elevation tiers.
+ */
+function parseOklchLMap(block) {
+  const map = {};
+  for (const m of block.matchAll(/(--vi-[a-z0-9-]+):\s*oklch\(\s*([\d.]+)\s+[\d.]+\s+[\d.]+(?:\s*\/\s*[\d.]+)?\s*\)/g)) {
+    map[m[1]] = Number(m[2]);
+  }
+  return map;
+}
+
+function lintOklchContrastFloors(catalogCssPath = path.join(PREVIEW_DIR, 'catalog.css')) {
+  const problems = [];
+  if (!fs.existsSync(catalogCssPath)) return problems;
+  const css = fs.readFileSync(catalogCssPath, 'utf-8');
+  const suites = [
+    { name: 'dark', re: /:root,\s*:root\[data-theme="dark"\]\s*\{([\s\S]*?)\}/ },
+    { name: 'light', re: /:root\[data-theme="light"\]\s*\{([\s\S]*?)\}/ },
+    { name: 'high-contrast', re: /:root\[data-theme="high-contrast"\]\s*\{([\s\S]*?)\}/ },
+  ];
+  const tiers = ['--vi-surface-canvas', '--vi-surface-shell', '--vi-surface-card', '--vi-surface-elevated'];
+  const checks = [
+    { vars: ['--vi-ink-primary'], floor: 0.75, label: 'primary text' },
+    { vars: ['--vi-ink-secondary', '--vi-ink-muted'], floor: 0.45, label: 'secondary/muted text' },
+    { vars: ['--vi-border-interactive', '--vi-border-strong', '--vi-accent-focus'], floor: 0.35, label: 'interactive border/focus' },
+  ];
+  for (const suite of suites) {
+    const match = css.match(suite.re);
+    if (!match) {
+      problems.push(`preview/catalog.css: missing ${suite.name} theme token block`);
+      continue;
+    }
+    const vars = parseOklchLMap(match[1]);
+    for (const tier of tiers) {
+      if (vars[tier] === undefined) {
+        problems.push(`preview/catalog.css (${suite.name}): missing elevation tier ${tier}`);
+        continue;
+      }
+      for (const check of checks) {
+        for (const fg of check.vars) {
+          if (vars[fg] === undefined) {
+            problems.push(`preview/catalog.css (${suite.name}): missing ${fg}`);
+            continue;
+          }
+          const dl = Math.abs(vars[fg] - vars[tier]);
+          if (dl + 1e-9 < check.floor) {
+            problems.push(`preview/catalog.css (${suite.name}): ${fg} on ${tier} has ΔL=${dl.toFixed(3)} < ${check.floor} (${check.label})`);
+          }
+        }
+      }
+    }
+  }
+  return problems;
+}
+
 function lintAll() {
   const failures = [];
   for (const file of fs.readdirSync(PREVIEW_DIR).filter((f) => f.endsWith('.html')).sort()) {
     const problems = lintFragment(file, fs.readFileSync(path.join(PREVIEW_DIR, file), 'utf-8'));
     for (const p of problems) failures.push(`preview/${file}: ${p}`);
   }
+  failures.push(...lintOklchContrastFloors());
   return failures;
 }
 
@@ -448,10 +506,10 @@ if (require.main === module) {
   const failures = lintAll();
   if (failures.length) {
     process.stderr.write(`${failures.join('\n')}\n`);
-    process.stderr.write(`\n${failures.length} fragment problem(s).\n`);
+    process.stderr.write(`\n${failures.length} fragment/contrast problem(s).\n`);
     process.exit(1);
   }
-  process.stdout.write('preview fragments clean\n');
+  process.stdout.write('preview fragments and OKLCH ΔL contrast floors clean\n');
 }
 
-module.exports = { lintFragment, lintAll, accentLabelProblems };
+module.exports = { lintFragment, lintAll, accentLabelProblems, lintOklchContrastFloors };

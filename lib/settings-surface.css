@@ -59,6 +59,14 @@
   --vi-settings-scrim: oklch(0.20 0.02 265 / 0.45);
 }
 
+[data-theme="high-contrast"],
+[data-theme="high-contrast"] .vi-settings-scope,
+.vi-settings-scope[data-theme="high-contrast"] {
+  --vi-settings-border: oklch(0.74 0.020 275);
+  --vi-settings-border-strong: oklch(0.88 0.018 275);
+  --vi-settings-accent: oklch(0.80 0.200 292);
+}
+
 .vi-settings-scope {
   font-family: var(--vi-settings-font-sans);
   color: var(--vi-settings-ink);

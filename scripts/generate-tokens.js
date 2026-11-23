@@ -152,10 +152,17 @@ function emitCSS(tokens) {
   }
 
   lines.push(
-    '  --vi-surface-canvas: oklch(0.095 0.012 275);',
-    '  --vi-surface-shell: oklch(0.135 0.014 275);',
-    '  --vi-surface-card: oklch(0.175 0.015 275);',
-    '  --vi-surface-elevated: oklch(0.225 0.016 275);',
+    '  --vi-surface-canvas: oklch(0.10 0.012 275);',
+    '  --vi-surface-shell: oklch(0.13 0.014 275);',
+    '  --vi-surface-card: oklch(0.16 0.016 275);',
+    '  --vi-surface-elevated: oklch(0.20 0.018 275);',
+    '  --vi-ink-primary: oklch(0.96 0.006 275);',
+    '  --vi-ink-secondary: oklch(0.80 0.010 275);',
+    '  --vi-ink-muted: oklch(0.66 0.012 275);',
+    '  --vi-border-subtle: oklch(1 0 0 / 0.08);',
+    '  --vi-border-interactive: oklch(0.56 0.020 275);',
+    '  --vi-border-strong: oklch(0.68 0.022 275);',
+    '  --vi-accent-focus: oklch(0.66 0.220 292);',
     '  --vi-radius-outer: 12px;',
     '  --vi-radius-inner: 8px;',
   );
@@ -301,6 +308,17 @@ function emitGlassCSS(tokens) {
     fallbackRule('  '),
     '}',
     '',
+    '/* Runtime opaque material toggle (data-glass="opaque") */',
+    '[data-glass="opaque"] .vi-glass,',
+    '[data-glass="opaque"] .vi-glass-shell {',
+    solidFallback('  '),
+    '}',
+    '[data-glass="opaque"] .vi-glass--control:hover,',
+    '[data-glass="opaque"] .vi-glass--control:focus-within {',
+    `  background-color: ${solid};`,
+    `  box-shadow: ${rimShadow(rimHover)}, ${shadow};`,
+    '}',
+    '',
   ].join('\n');
 }
 
@@ -331,13 +349,52 @@ function emitThemeCSS(tokens) {
   for (const [key, value] of Object.entries(tokens.colors)) {
     if (key.endsWith('-light')) lines.push(`  --vi-colors-${key.slice(0, -6)}-base: ${value};`);
   }
-  lines.push(`  --vi-effects-glass-crystal-solid-base: ${tokens.effects['glass-crystal-solid-light']};`,
+  lines.push(
+    `  --vi-effects-glass-crystal-solid-base: ${tokens.effects['glass-crystal-solid-light']};`,
     `  --vi-effects-glass-crystal-core-base: ${tokens.effects['glass-crystal-solid-light']};`,
-    '  --vi-surface-canvas: oklch(0.945 0.007 275);',
-    '  --vi-surface-shell: oklch(0.972 0.005 275);',
+    '  --vi-surface-canvas: oklch(0.95 0.007 275);',
+    '  --vi-surface-shell: oklch(0.975 0.005 275);',
     '  --vi-surface-card: oklch(1 0 275);',
-    '  --vi-surface-elevated: oklch(0.920 0.009 275);', '}',
+    '  --vi-surface-elevated: oklch(0.92 0.009 275);',
+    '  --vi-ink-primary: oklch(0.16 0.020 275);',
+    '  --vi-ink-secondary: oklch(0.32 0.020 275);',
+    '  --vi-ink-muted: oklch(0.42 0.020 275);',
+    '  --vi-border-subtle: oklch(0.16 0.02 275 / 0.14);',
+    '  --vi-border-interactive: oklch(0.48 0.025 275);',
+    '  --vi-border-strong: oklch(0.36 0.025 275);',
+    '  --vi-accent-focus: oklch(0.46 0.240 292);',
+    '}',
     '[data-theme="dark"] { color-scheme: dark; }',
+    '[data-theme="high-contrast"] {',
+    '  color-scheme: dark;',
+    '  --vi-surface-canvas: oklch(0.06 0.008 275);',
+    '  --vi-surface-shell: oklch(0.09 0.010 275);',
+    '  --vi-surface-card: oklch(0.12 0.012 275);',
+    '  --vi-surface-elevated: oklch(0.16 0.014 275);',
+    '  --vi-ink-primary: oklch(0.99 0.002 275);',
+    '  --vi-ink-secondary: oklch(0.88 0.008 275);',
+    '  --vi-ink-muted: oklch(0.78 0.010 275);',
+    '  --vi-border-subtle: oklch(1 0 0 / 0.28);',
+    '  --vi-border-interactive: oklch(0.74 0.020 275);',
+    '  --vi-border-strong: oklch(0.88 0.018 275);',
+    '  --vi-accent-focus: oklch(0.80 0.200 292);',
+    '  --vi-colors-surface-background-primary-base: var(--vi-surface-canvas);',
+    '  --vi-colors-surface-background-secondary-base: var(--vi-surface-card);',
+    '  --vi-colors-surface-background-tertiary-base: var(--vi-surface-elevated);',
+    '  --vi-colors-text-content-primary-base: var(--vi-ink-primary);',
+    '  --vi-colors-text-content-secondary-base: var(--vi-ink-secondary);',
+    '  --vi-colors-border-separator-primary-base: var(--vi-border-interactive);',
+    '  --vi-colors-border-graph-line-base: var(--vi-border-strong);',
+    '  --vi-colors-surface-accent-violet-base: var(--vi-accent-focus);',
+    '}',
+    '[data-theme="high-contrast"] .vi-glass, [data-theme="high-contrast"] .vi-glass-shell, [data-theme="high-contrast"] .vi-glass--control:hover, [data-theme="high-contrast"] .vi-glass--control:focus-within {',
+    '  background: oklch(0.12 0.012 275);',
+    '  border: 0;',
+    '  backdrop-filter: none;',
+    '  -webkit-backdrop-filter: none;',
+    '  box-shadow: inset 0 0 0 1px oklch(0.74 0.020 275);',
+    '}',
+    '[data-theme="high-contrast"] .vi-glass-core { background: oklch(0.09 0.010 275); }',
     '[data-theme="light"] .vi-glass, [data-theme="light"] .vi-glass-shell, [data-theme="light"] .vi-glass--control:hover, [data-theme="light"] .vi-glass--control:focus-within {',
     `  background: ${tokens.effects['glass-crystal-solid-light']};`, '  border: 0;', '  backdrop-filter: none;', '  -webkit-backdrop-filter: none;',
     `  box-shadow: inset 0 0 0 1px ${tokens.effects['glass-crystal-rim-light']};`, '}',
@@ -435,6 +492,16 @@ function emitLibrarySurfaceArtifacts() {
   };
 }
 
+/**
+ * Responsive specimen layouts: zero-hex oklch() CSS Subgrid and @container layout utilities
+ * for viewport-frame-set, brief-contract-card, data-table, bento-feature-grid, and hero/KPI grids.
+ */
+function emitSpecimenLayoutArtifacts() {
+  return {
+    'specimen-layouts.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'specimen-layouts.css'), 'utf-8'),
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -466,6 +533,7 @@ function main() {
     ...emitDocsPortalArtifacts(),
     ...emitSettingsSurfaceArtifacts(),
     ...emitLibrarySurfaceArtifacts(),
+    ...emitSpecimenLayoutArtifacts(),
   };
 
   if (dryRun) {
@@ -515,4 +583,5 @@ module.exports = {
   emitDocsPortalArtifacts,
   emitSettingsSurfaceArtifacts,
   emitLibrarySurfaceArtifacts,
+  emitSpecimenLayoutArtifacts,
 };

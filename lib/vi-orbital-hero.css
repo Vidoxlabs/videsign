@@ -48,6 +48,20 @@ vi-orbital-field[data-theme="light"] {
   --vi-orbital-scrim-edge: oklch(0.985 0.004 285 / 0);
 }
 
+[data-theme="high-contrast"] .vi-orbital-host,
+.vi-orbital-host[data-theme="high-contrast"],
+[data-theme="high-contrast"] vi-orbital-field,
+vi-orbital-field[data-theme="high-contrast"] {
+  --vi-orbital-surface: oklch(0.06 0.008 275);
+  --vi-orbital-ink: oklch(0.99 0.002 275);
+  --vi-orbital-ink-muted: oklch(0.82 0.010 275);
+  --vi-orbital-border: oklch(0.74 0.020 275);
+  --vi-orbital-focus: oklch(0.80 0.200 292);
+  --vi-orbital-scrim-center: oklch(0.06 0.008 275 / 0.94);
+  --vi-orbital-scrim-mid: oklch(0.06 0.008 275 / 0.68);
+  --vi-orbital-scrim-edge: oklch(0.06 0.008 275 / 0);
+}
+
 .vi-orbital-canvas {
   grid-area: 1 / 1;
   position: absolute;

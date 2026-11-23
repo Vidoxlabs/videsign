@@ -2,15 +2,18 @@
 
 /**
  * Nocturne Museum Preview Shell & Specimen Craft Verification Suite:
- *   1. Zero-hex OKLCH discipline, exact 4-tier dark/light elevation ramp, WCAG 2.1
- *      contrast verification across all 4 tiers, dark OKLCH scrollbar styling,
- *      GPU-only transitions (transform + opacity) + instant 0ms motion pause/reduced.
+ *   1. Zero-hex OKLCH discipline, exact 4-tier dark/light/high-contrast elevation ramp
+ *      (0.10 / 0.13 / 0.16 / 0.20 dark), programmatic OKLCH ΔL contrast floors
+ *      (>= 0.75 primary, >= 0.45 muted, >= 0.35 interactive border/focus) + WCAG 2.1 ratios,
+ *      custom OKLCH scrollbars, GPU-only transitions + instant 0ms reduced-motion freeze.
  *   2. Zero hardcoded specimen totals (90, 93, 113) in shell markup/controller;
  *      build-time fixture metric synchronization via scripts/sync-fixture-metrics.js.
- *   3. Persona dialects responsive auto-fit grid + 5-track CSS Subgrid + text-wrap: pretty.
- *   4. Catalog controller unit checks: URL hash parse/serialize, token extraction,
- *      accessibility snapshot extraction, sidebar de-duplication & bottom legacy toggle,
- *      '/' search focus + 'Esc' clear, empty-filter recovery, and 4-tab Inspector Drawer.
+ *   3. Anti-slop specimen layouts: viewport-frame-set proportional asymmetric tracks + Subgrid,
+ *      brief-contract-card constrained 2-col ledger + flush framing, data-table populated rows,
+ *      bento-feature-grid weighted tracks + Subgrid + @container queries, persona-dialects Subgrid.
+ *   4. Catalog controller unit checks: URL hash parse/serialize, token extraction, OKLCH L math,
+ *      safe HTML syntax highlighting, accessibility snapshot (landmarks, headings, roles, focusable,
+ *      touch >= 44px), sticky toolbar scroll-margin-top, and runtime toggle contracts.
  */
 
 const { test, before } = require('node:test');
@@ -20,6 +23,8 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 
 const { contrastRatio } = require('../lib/contrast');
+const { parseFrontMatter, emitCSS, emitThemeCSS } = require('../scripts/generate-tokens');
+const { lintOklchContrastFloors } = require('../scripts/lint-preview');
 const { syncFixtureHtml } = require('../scripts/sync-fixture-metrics');
 const {
   IFRAME_BASE_CSS,
@@ -27,6 +32,7 @@ const {
   parseHashState,
   serializeHashState,
   extractTokenReferences,
+  colorToOklchL,
   buildAccessibilitySnapshot,
 } = require('../preview/catalog');
 
@@ -64,34 +70,47 @@ before(() => {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'generate-tokens.js')], { cwd: ROOT, stdio: 'ignore' });
 });
 
-test('preview/catalog.css, dist/tokens.css, and iframe styles enforce zero-hex OKLCH, 4-tier elevation, concentric radii, scrollbars, and GPU-only motion', () => {
+test('preview/catalog.css, dist/tokens.css, dist/themes.css, and iframe styles enforce 4-tier OKLCH elevation, ΔL floors, WCAG ratios, and GPU-only motion', () => {
   const css = fs.readFileSync(path.join(ROOT, 'preview', 'catalog.css'), 'utf-8');
-  const tokensCss = fs.readFileSync(path.join(ROOT, 'dist', 'tokens.css'), 'utf-8');
-  assert.doesNotMatch(css, /#[0-9a-fA-F]{3,8}\b/, 'catalog.css must not contain raw hex colors');
-  assert.doesNotMatch(css, /\brgba?\(/i, 'catalog.css must not contain rgb()/rgba()');
-  assert.doesNotMatch(css, /\bhsla?\(/i, 'catalog.css must not contain hsl()/hsla()');
-  assert.doesNotMatch(IFRAME_BASE_CSS, /#[0-9a-fA-F]{3,8}\b/, 'iframe CSS must not contain raw hex colors');
-  assert.doesNotMatch(ISOLATION_BASE_CSS, /#[0-9a-fA-F]{3,8}\b/, 'shadow isolation CSS must not contain raw hex colors');
+  const designTokens = parseFrontMatter(fs.readFileSync(path.join(ROOT, 'DESIGN.md'), 'utf-8'));
+  const tokensCss = emitCSS(designTokens);
+  const themesCss = emitThemeCSS(designTokens);
+  const specimenCss = fs.readFileSync(path.join(ROOT, 'lib', 'specimen-layouts.css'), 'utf-8');
+
+  for (const [label, sheet] of [
+    ['preview/catalog.css', css],
+    ['dist/specimen-layouts.css', specimenCss],
+    ['IFRAME_BASE_CSS', IFRAME_BASE_CSS],
+    ['ISOLATION_BASE_CSS', ISOLATION_BASE_CSS],
+  ]) {
+    assert.doesNotMatch(sheet, /#[0-9a-fA-F]{3,8}\b/, `${label} must not contain raw hex colors`);
+    assert.doesNotMatch(sheet, /\brgba?\(/i, `${label} must not contain rgb()/rgba()`);
+    assert.doesNotMatch(sheet, /\bhsla?\(/i, `${label} must not contain hsl()/hsla()`);
+  }
 
   for (const needle of [
-    '--vi-surface-canvas: oklch(0.095 0.012 275)',
-    '--vi-surface-shell: oklch(0.135 0.014 275)',
-    '--vi-surface-card: oklch(0.175 0.015 275)',
-    '--vi-surface-elevated: oklch(0.225 0.016 275)',
+    '--vi-surface-canvas: oklch(0.10 0.012 275)',
+    '--vi-surface-shell: oklch(0.13 0.014 275)',
+    '--vi-surface-card: oklch(0.16 0.016 275)',
+    '--vi-surface-elevated: oklch(0.20 0.018 275)',
+    '--vi-ink-primary: oklch(0.96 0.006 275)',
+    '--vi-ink-muted: oklch(0.66 0.012 275)',
+    '--vi-border-subtle: oklch(1 0 0 / 0.08)',
+    '--vi-border-interactive: oklch(0.56 0.020 275)',
     '--vi-radius-outer: 12px',
     '--vi-radius-inner: 8px',
   ]) {
     assert.ok(css.includes(needle), `preview/catalog.css missing required token: ${needle}`);
-    assert.ok(tokensCss.includes(needle), `dist/tokens.css missing required elevation/radius token: ${needle}`);
+    assert.ok(tokensCss.includes(needle), `dist/tokens.css missing required token: ${needle}`);
   }
 
+  assert.ok(themesCss.includes('[data-theme="high-contrast"]'), 'dist/themes.css must emit high-contrast theme');
+
   for (const needle of [
-    '--vi-ink-primary: oklch(0.95 0.006 275)',
-    '--vi-ink-secondary: oklch(0.78 0.010 275)',
-    '--vi-ink-muted: oklch(0.66 0.012 275)',
-    '--vi-border-interactive: oklch(0.54 0.02 275)',
-    '--vi-border-strong: oklch(0.64 0.02 275)',
     ':root[data-theme="light"]',
+    ':root[data-theme="high-contrast"]',
+    'scroll-margin-top: var(--vi-scroll-margin)',
+    'container-type: inline-size',
     'scrollbar-width: thin',
     'cubic-bezier(0.16, 1, 0.3, 1)',
     ':root[data-motion="paused"]',
@@ -102,6 +121,7 @@ test('preview/catalog.css, dist/tokens.css, and iframe styles enforce zero-hex O
     'letter-spacing: 0.06em',
     '.sidebar-link.is-active-spy',
     '.fragment-iso-pill',
+    '.vi-toggle-icon',
   ]) {
     assert.ok(css.includes(needle), `preview/catalog.css missing required token/rule: ${needle}`);
   }
@@ -109,6 +129,7 @@ test('preview/catalog.css, dist/tokens.css, and iframe styles enforce zero-hex O
   for (const iframeRule of [
     'color-scheme: dark',
     'color-scheme: light',
+    ':root[data-theme="high-contrast"]',
     'scrollbar-width: thin',
     'oklch(0.34 0.015 275)',
     '::-webkit-scrollbar-thumb',
@@ -116,28 +137,62 @@ test('preview/catalog.css, dist/tokens.css, and iframe styles enforce zero-hex O
     assert.ok(IFRAME_BASE_CSS.includes(iframeRule), `IFRAME_BASE_CSS missing required scrollbar/theme rule: ${iframeRule}`);
   }
 
-  // GPU-only transitions: ensure no transition animates layout/paint properties
-  for (const m of css.matchAll(/transition:\s*([^;]+);/g)) {
-    const decl = m[1];
-    assert.doesNotMatch(decl, /\b(width|height|background|border|color|backdrop-filter|all)\b/i, `non-GPU transition detected: ${decl}`);
+  // GPU-only transitions across catalog.css and specimen-layouts.css
+  for (const sheet of [css, specimenCss]) {
+    for (const m of sheet.matchAll(/transition:\s*([^;]+);/g)) {
+      const decl = m[1];
+      assert.doesNotMatch(decl, /\b(width|height|padding|margin|background|border|color|backdrop-filter|all)\b/i, `non-GPU transition detected: ${decl}`);
+    }
   }
 
-  // Verify WCAG 2.1 contrast on all 4 elevation tiers in dark and light modes
+  // Automated lint-preview OKLCH ΔL floor check must pass cleanly and catch violations
+  assert.deepEqual(lintOklchContrastFloors(), []);
+  const os = require('os');
+  const badCssPath = path.join(os.tmpdir(), `videsign-bad-contrast-${process.pid}.css`);
+  fs.writeFileSync(badCssPath, ':root, :root[data-theme="dark"] { --vi-surface-canvas: oklch(0.10 0.012 275); --vi-surface-shell: oklch(0.13 0.014 275); --vi-surface-card: oklch(0.16 0.016 275); --vi-surface-elevated: oklch(0.20 0.018 275); --vi-ink-primary: oklch(0.80 0.006 275); --vi-ink-secondary: oklch(0.55 0.010 275); --vi-ink-muted: oklch(0.55 0.012 275); --vi-border-interactive: oklch(0.45 0.02 275); --vi-border-strong: oklch(0.45 0.02 275); --vi-accent-focus: oklch(0.45 0.22 292); }', 'utf-8');
+  try {
+    const badProblems = lintOklchContrastFloors(badCssPath);
+    assert.ok(badProblems.some((p) => p.includes('--vi-ink-primary') && p.includes('< 0.75')), 'must flag primary ΔL < 0.75');
+    assert.ok(badProblems.some((p) => p.includes('--vi-ink-muted') && p.includes('< 0.45')), 'must flag muted ΔL < 0.45');
+    assert.ok(badProblems.some((p) => p.includes('--vi-border-interactive') && p.includes('< 0.35')), 'must flag interactive border ΔL < 0.35');
+  } finally {
+    fs.rmSync(badCssPath, { force: true });
+  }
+
+  // Verify OKLCH ΔL floors AND WCAG 2.1 contrast on all 4 elevation tiers in dark, light, and high-contrast modes
   const darkBlock = css.match(/:root,\s*:root\[data-theme="dark"\]\s*\{([\s\S]*?)\}/)[1];
   const lightBlock = css.match(/:root\[data-theme="light"\]\s*\{([\s\S]*?)\}/)[1];
+  const hcBlock = css.match(/:root\[data-theme="high-contrast"\]\s*\{([\s\S]*?)\}/)[1];
   const suites = [
     { name: 'dark', vars: parseOklchVars(darkBlock) },
     { name: 'light', vars: parseOklchVars(lightBlock) },
+    { name: 'high-contrast', vars: parseOklchVars(hcBlock) },
   ];
   for (const suite of suites) {
     const tiers = ['--vi-surface-canvas', '--vi-surface-shell', '--vi-surface-card', '--vi-surface-elevated'];
     for (const tier of tiers) {
+      const tierL = suite.vars[tier][0];
       const bg = oklchToRgb(...suite.vars[tier]);
+
+      const primaryDl = Math.abs(suite.vars['--vi-ink-primary'][0] - tierL);
+      assert.ok(primaryDl >= 0.75, `${suite.name} --vi-ink-primary on ${tier} ΔL=${primaryDl.toFixed(3)} must be >= 0.75`);
+
+      for (const ink of ['--vi-ink-secondary', '--vi-ink-muted']) {
+        const dl = Math.abs(suite.vars[ink][0] - tierL);
+        assert.ok(dl >= 0.45, `${suite.name} ${ink} on ${tier} ΔL=${dl.toFixed(3)} must be >= 0.45`);
+      }
+
       for (const ink of ['--vi-ink-primary', '--vi-ink-secondary', '--vi-ink-muted']) {
         const ratio = contrastRatio(oklchToRgb(...suite.vars[ink]), bg);
         assert.ok(ratio >= 4.5, `${suite.name} ${ink} on ${tier} must be >= 4.5:1, got ${ratio.toFixed(2)}`);
       }
-      for (const ctrl of ['--vi-border-interactive', '--vi-border-strong', '--vi-dot-active', '--vi-dot-accent', '--vi-dot-warn']) {
+
+      for (const ctrl of ['--vi-border-interactive', '--vi-border-strong', '--vi-accent-focus']) {
+        const dl = Math.abs(suite.vars[ctrl][0] - tierL);
+        assert.ok(dl >= 0.35, `${suite.name} ${ctrl} on ${tier} ΔL=${dl.toFixed(3)} must be >= 0.35`);
+      }
+
+      for (const ctrl of ['--vi-border-interactive', '--vi-border-strong', '--vi-accent-focus', '--vi-dot-active', '--vi-dot-accent', '--vi-dot-warn']) {
         const ratio = contrastRatio(oklchToRgb(...suite.vars[ctrl]), bg);
         assert.ok(ratio >= 3.0, `${suite.name} ${ctrl} on ${tier} must be >= 3.0:1, got ${ratio.toFixed(2)}`);
       }
@@ -145,26 +200,66 @@ test('preview/catalog.css, dist/tokens.css, and iframe styles enforce zero-hex O
   }
 });
 
-test('preview/index.html removes duplicate tier pills, avoids hardcoded totals, and includes Inspector + keyboard/runtime hooks', () => {
+test('preview/index.html enforces zero-JS runtime contract, distinct toggle icons, 4-tab ARIA Inspector, and Reset Filters recovery', () => {
   const html = fs.readFileSync(path.join(ROOT, 'preview', 'index.html'), 'utf-8');
   assert.doesNotMatch(html, /id="tier-filter-bar"/, 'duplicate top sidebar tier-filter pill block must be removed');
   assert.doesNotMatch(html, /\b(90|93|113)\s+(verified|specimens|active|legacy|components)/i, 'shell must not hardcode specimen totals');
-  for (const id of [
-    'data-theme="dark" data-motion="paused" data-glass="solid"',
+  assert.doesNotMatch(html, /vi-toggle-dot/, 'identical purple status dots must be replaced by distinct semantic icons');
+  for (const needle of [
+    'data-theme="dark" data-motion="full" data-glass="opaque"',
+    'href="../dist/specimen-layouts.css"',
     'id="filter-all-active"',
     'id="toggle-legacy"',
     'id="toggle-theme"',
     'id="toggle-motion"',
     'id="toggle-glass"',
+    'class="vi-toggle-icon"',
     'class="search-kbd"',
+    '>Reset Filters<',
     'id="specimen-inspector-backdrop"',
+    'role="tablist"',
+    'role="tabpanel"',
     'data-inspector-tab="preview"',
     'data-inspector-tab="markup"',
     'data-inspector-tab="tokens"',
     'data-inspector-tab="a11y"',
+    'Measured ΔL',
   ]) {
-    assert.ok(html.includes(id), `preview/index.html missing required shell hook: ${id}`);
+    assert.ok(html.includes(needle), `preview/index.html missing required shell hook: ${needle}`);
   }
+});
+
+test('anti-slop specimen refactors enforce proportional Subgrid frames, constrained brief ledger, grounded data-table rows, and container-query bento', () => {
+  const layoutCss = fs.readFileSync(path.join(ROOT, 'lib', 'specimen-layouts.css'), 'utf-8');
+  assert.ok(layoutCss.includes('minmax(0, 1.45fr) minmax(0, 1.1fr) minmax(0, 0.85fr)'), 'viewport frames must use proportional asymmetric tracks');
+  assert.ok(layoutCss.includes('grid-template-rows: subgrid'), 'specimen layouts must use CSS Subgrid');
+  assert.ok(layoutCss.includes('minmax(8.75rem, 13.75rem) minmax(0, 1fr)'), 'brief ledger must use structured 2-col grid (140px-220px)');
+  assert.ok(layoutCss.includes('text-wrap: pretty'), 'headings must apply text-wrap: pretty');
+  assert.ok(layoutCss.includes('clamp('), 'headings must apply fluid clamp() sizing');
+
+  const vpHtml = fs.readFileSync(path.join(ROOT, 'preview', 'viewport-frame-set.html'), 'utf-8');
+  assert.ok(vpHtml.includes('class="vi-viewport-frames"'));
+  assert.ok(vpHtml.includes('vi-viewport-card--active'));
+  assert.doesNotMatch(vpHtml, /lg:grid-cols-3/, 'rigid repeat(3, 1fr) must be removed from viewport-frame-set');
+
+  const briefHtml = fs.readFileSync(path.join(ROOT, 'preview', 'brief-contract-card.html'), 'utf-8');
+  assert.ok(briefHtml.includes('class="vi-brief-surface"'));
+  assert.ok(briefHtml.includes('class="vi-brief-ledger"'));
+  assert.ok(briefHtml.includes('vi-brief-contract-key--keep'));
+  assert.doesNotMatch(briefHtml, /justify-between[^>]*>\s*<dt/, 'full-width space-between voids must be removed from brief metadata rows');
+
+  const tableHtml = fs.readFileSync(path.join(ROOT, 'preview', 'data-table.html'), 'utf-8');
+  assert.ok(tableHtml.includes('<table class="vi-data-table">'));
+  assert.ok([...tableHtml.matchAll(/<tbody>[\s\S]*?<\/tbody>/g)][0][0].match(/<tr>/g).length >= 4, 'data-table must populate >= 4 grounded fixture rows');
+  for (const cell of ['run_01j8k2', 'Complete', 'videsign.tokens.emit', 'Running', 'Waiting', 'Failed']) {
+    assert.ok(tableHtml.includes(cell), `data-table missing grounded cell: ${cell}`);
+  }
+
+  const stageCss = fs.readFileSync(path.join(ROOT, 'lib', 'stage.css'), 'utf-8');
+  assert.ok(stageCss.includes('[data-motion="reduced"] .stage *'), 'stage.css must freeze immediately under data-motion="reduced"');
+
+  const orbEngine = fs.readFileSync(path.join(ROOT, 'lib', 'orbital-field-engine.ts'), 'utf-8');
+  assert.ok(orbEngine.includes("val === 'reduced'"), 'OrbitalFieldEngine must freeze immediately under data-motion="reduced"');
 });
 
 test('persona-dialects uses responsive auto-fit grid, 5-track CSS Subgrid, and text-wrap: pretty', () => {
@@ -188,7 +283,7 @@ test('scripts/sync-fixture-metrics.js deterministically binds data-manifest-metr
   );
 });
 
-test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens, and build accessibility snapshots', () => {
+test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens, compute OKLCH L, and build accessibility snapshots', () => {
   const parsed = parseHashState('#catalog?category=foundations&q=dialect&legacy=1&specimen=persona-dialects');
   assert.deepEqual(parsed, {
     category: 'foundations',
@@ -205,20 +300,31 @@ test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens
   });
   assert.equal(serializeHashState({ category: 'all', q: '', legacy: false, specimen: '' }), '#catalog');
 
+  // OKLCH lightness parsing & conversion checks
+  assert.equal(colorToOklchL('oklch(0.96 0.006 275)'), 0.96);
+  assert.equal(colorToOklchL('oklch(66% 0.012 275)'), 0.66);
+  assert.ok(Math.abs(colorToOklchL('#ffffff') - 1) < 0.005);
+  assert.ok(Math.abs(colorToOklchL('rgb(0, 0, 0)') - 0) < 0.005);
+
   const tokens = extractTokenReferences(
-    '<div class="vi-library-stage bg-surface-background-primary-base text-text-content-primary-base vi-glass"></div>',
+    '<div class="vi-brief-surface vi-library-stage bg-surface-background-primary-base text-text-content-primary-base vi-glass"></div>',
     new Set(),
   );
   assert.ok(tokens.includes('--vi-colors-surface-background-primary-base'));
   assert.ok(tokens.includes('--vi-colors-text-content-primary-base'));
   assert.ok(tokens.includes('--vi-effects-glass-crystal-surface-base'));
   assert.ok(tokens.includes('--vi-library-surface'));
+  assert.ok(tokens.includes('--vi-surface-card'));
+  assert.ok(tokens.includes('--vi-ink-primary'));
 
   const mockNode = {
     querySelector: () => null,
     querySelectorAll(sel) {
       if (sel.includes('header')) {
         return [{ tagName: 'NAV', getAttribute: (k) => (k === 'aria-label' ? 'Primary' : null), hasAttribute: () => false }];
+      }
+      if (sel.includes('data-specimen-heading')) {
+        return [{ tagName: 'DIV', getAttribute: (k) => (k === 'data-specimen-heading' ? 'h2' : null), hasAttribute: () => false, textContent: 'Design brief' }];
       }
       if (sel === '[role]') {
         return [{ tagName: 'BUTTON', getAttribute: (k) => (k === 'role' ? 'tab' : k === 'aria-selected' ? 'true' : null), hasAttribute: (k) => k === 'aria-selected', textContent: 'Overview' }];
@@ -235,7 +341,10 @@ test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens
   };
   const snap = buildAccessibilitySnapshot(mockNode);
   assert.equal(snap.landmarks.length, 1);
+  assert.equal(snap.headings.length, 1);
+  assert.equal(snap.headings[0].level, 'h2');
   assert.equal(snap.roles.length, 1);
+  assert.equal(snap.focusableCount, 1);
   assert.equal(snap.interactive.length, 1);
   assert.equal(snap.touchPass, 1);
   assert.equal(snap.touchWarn, 0);

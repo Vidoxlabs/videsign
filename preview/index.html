@@ -7,7 +7,7 @@
     python3 -m http.server 8000
 -->
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-motion="paused" data-glass="solid">
+<html lang="en" data-theme="dark" data-motion="full" data-glass="opaque">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="../dist/docs-portal.css" />
   <link rel="stylesheet" href="../dist/settings-surface.css" />
   <link rel="stylesheet" href="../dist/library-surface.css" />
+  <link rel="stylesheet" href="../dist/specimen-layouts.css" />
   <link rel="stylesheet" href="./catalog.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
@@ -87,17 +88,27 @@
           <a class="ctl-btn" href="../dist/standard.json">standard.json</a>
         </div>
         <div class="toolbar-actions">
-          <button type="button" class="ctl-btn runtime-toggle" id="toggle-theme" data-state="default" aria-pressed="false">
-            <span class="vi-toggle-dot" aria-hidden="true"></span>
+          <button type="button" class="ctl-btn runtime-toggle" id="toggle-theme" data-state="default" data-mode="dark" aria-pressed="false">
+            <span class="vi-toggle-icon" aria-hidden="true">
+              <svg class="vi-ico-primary" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 9.8A5.2 5.2 0 0 1 6.2 3.5a5.5 5.5 0 1 0 6.3 6.3Z" /></svg>
+              <svg class="vi-ico-alt" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.75" /><path d="M8 1.75v1.5M8 12.75v1.5M1.75 8h1.5M12.75 8h1.5M3.58 3.58l1.06 1.06M11.36 11.36l1.06 1.06M12.42 3.58l-1.06 1.06M4.64 11.36l-1.06 1.06" /></svg>
+              <svg class="vi-ico-third" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5" /><path d="M8 2.5a5.5 5.5 0 0 1 0 11Z" fill="currentColor" /></svg>
+            </span>
             <span data-toggle-label>Theme: dark</span>
           </button>
-          <button type="button" class="ctl-btn runtime-toggle" id="toggle-motion" data-state="default" aria-pressed="false">
-            <span class="vi-toggle-dot" aria-hidden="true"></span>
-            <span data-toggle-label>Motion: paused</span>
+          <button type="button" class="ctl-btn runtime-toggle" id="toggle-motion" data-state="active" data-mode="full" aria-pressed="false">
+            <span class="vi-toggle-icon" aria-hidden="true">
+              <svg class="vi-ico-primary" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 8c1.5-3 3-3 4.5 0s3 3 4.5 0 2-2.5 3-1" /></svg>
+              <svg class="vi-ico-alt" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M5.5 3.5v9M10.5 3.5v9" /></svg>
+            </span>
+            <span data-toggle-label>Motion: full</span>
           </button>
-          <button type="button" class="ctl-btn runtime-toggle" id="toggle-glass" data-state="default" aria-pressed="false">
-            <span class="vi-toggle-dot" aria-hidden="true"></span>
-            <span data-toggle-label>Glass: solid</span>
+          <button type="button" class="ctl-btn runtime-toggle" id="toggle-glass" data-state="default" data-mode="opaque" aria-pressed="false">
+            <span class="vi-toggle-icon" aria-hidden="true">
+              <svg class="vi-ico-primary" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="3" y="3" width="10" height="10" rx="2" fill="currentColor" fill-opacity="0.22" /></svg>
+              <svg class="vi-ico-alt" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2.25" y="4.75" width="8.5" height="8.5" rx="1.75" /><rect x="5.25" y="2.25" width="8.5" height="8.5" rx="1.75" stroke-dasharray="2 1.5" /></svg>
+            </span>
+            <span data-toggle-label>Glass: opaque</span>
           </button>
         </div>
       </div>
@@ -106,7 +117,7 @@
         <div class="empty-state" id="empty-state" role="status" aria-live="polite">
           <p class="empty-state-title">No matching specimens</p>
           <p class="empty-state-copy" id="empty-state-copy">No component specimens match the active filter.</p>
-          <button type="button" class="ctl-btn" id="reset-filters">Reset filters</button>
+          <button type="button" class="ctl-btn" id="reset-filters">Reset Filters</button>
         </div>
       </main>
     </div>
@@ -128,21 +139,28 @@
       </div>
 
       <div class="inspector-tabs" role="tablist" aria-label="Specimen inspection views">
-        <button type="button" role="tab" class="inspector-tab" data-inspector-tab="preview" aria-selected="true" tabindex="0">Interactive Preview</button>
-        <button type="button" role="tab" class="inspector-tab" data-inspector-tab="markup" aria-selected="false" tabindex="-1">Raw HTML Markup</button>
-        <button type="button" role="tab" class="inspector-tab" data-inspector-tab="tokens" aria-selected="false" tabindex="-1">Token/Theme Mappings</button>
-        <button type="button" role="tab" class="inspector-tab" data-inspector-tab="a11y" aria-selected="false" tabindex="-1">Accessibility Tree Snapshot</button>
+        <button type="button" role="tab" class="inspector-tab" id="inspector-tab-preview" aria-controls="inspector-panel-preview" data-inspector-tab="preview" aria-selected="true" tabindex="0">Interactive Preview</button>
+        <button type="button" role="tab" class="inspector-tab" id="inspector-tab-markup" aria-controls="inspector-panel-markup" data-inspector-tab="markup" aria-selected="false" tabindex="-1">Raw HTML Markup</button>
+        <button type="button" role="tab" class="inspector-tab" id="inspector-tab-tokens" aria-controls="inspector-panel-tokens" data-inspector-tab="tokens" aria-selected="false" tabindex="-1">Token/Theme Mappings</button>
+        <button type="button" role="tab" class="inspector-tab" id="inspector-tab-a11y" aria-controls="inspector-panel-a11y" data-inspector-tab="a11y" aria-selected="false" tabindex="-1">Accessibility Tree Snapshot</button>
       </div>
 
       <div class="inspector-body">
-        <section class="inspector-panel" data-inspector-panel="preview" aria-label="Interactive Preview">
+        <section class="inspector-panel" id="inspector-panel-preview" role="tabpanel" aria-labelledby="inspector-tab-preview" data-inspector-panel="preview">
           <div class="inspector-bar">
             <span class="inspector-badge" id="inspector-isolation-badge">Isolated preview</span>
+            <div class="vp-group" role="group" aria-label="Inspector preview width" id="inspector-vp-group">
+              <button type="button" class="vp-btn" data-inspector-vp="320" aria-pressed="false">320px</button>
+              <button type="button" class="vp-btn" data-inspector-vp="768" aria-pressed="false">768px</button>
+              <button type="button" class="vp-btn" data-inspector-vp="full" aria-pressed="true">Full</button>
+            </div>
           </div>
-          <div class="inspector-preview-stage" id="inspector-preview-host"></div>
+          <div class="inspector-preview-stage">
+            <div class="inspector-preview-slot" id="inspector-preview-host" data-stage-width="full"></div>
+          </div>
         </section>
 
-        <section class="inspector-panel" data-inspector-panel="markup" aria-label="Raw HTML Markup" hidden>
+        <section class="inspector-panel" id="inspector-panel-markup" role="tabpanel" aria-labelledby="inspector-tab-markup" data-inspector-panel="markup" hidden>
           <div class="inspector-bar">
             <span class="toolbar-status" id="inspector-copy-status" role="status" aria-live="polite"></span>
             <button type="button" class="ctl-btn" id="inspector-copy-html">Copy HTML</button>
@@ -150,7 +168,7 @@
           <pre class="inspector-code"><code id="inspector-markup-code"></code></pre>
         </section>
 
-        <section class="inspector-panel" data-inspector-panel="tokens" aria-label="Token and Theme Mappings" hidden>
+        <section class="inspector-panel" id="inspector-panel-tokens" role="tabpanel" aria-labelledby="inspector-tab-tokens" data-inspector-panel="tokens" hidden>
           <div class="inspector-bar">
             <span class="inspector-badge" id="inspector-tokens-theme">Computed tokens</span>
           </div>
@@ -159,13 +177,14 @@
               <tr>
                 <th scope="col">Custom property</th>
                 <th scope="col">Computed value</th>
+                <th scope="col">Measured ΔL</th>
               </tr>
             </thead>
             <tbody id="inspector-tokens-body"></tbody>
           </table>
         </section>
 
-        <section class="inspector-panel" data-inspector-panel="a11y" aria-label="Accessibility Tree Snapshot" hidden>
+        <section class="inspector-panel" id="inspector-panel-a11y" role="tabpanel" aria-labelledby="inspector-tab-a11y" data-inspector-panel="a11y" hidden>
           <div class="inspector-a11y-summary" id="inspector-a11y-summary"></div>
           <table class="inspector-table">
             <thead>

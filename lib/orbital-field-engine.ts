@@ -389,6 +389,10 @@ export class OrbitalFieldEngine {
     this.palette = readPaletteFromHost(this.host);
   }
 
+  public syncEnvironment(): void {
+    this.syncFromAttributes();
+  }
+
   public renderStaticFrame(): void {
     if (this.width <= 0 || this.height <= 0) return;
     const count = computeParticleCount(this.width, this.height);
@@ -443,8 +447,9 @@ export class OrbitalFieldEngine {
     const rootMotion = typeof document !== 'undefined' && document.documentElement
       ? document.documentElement.getAttribute('data-motion')
       : null;
+    const isStopped = (val: string | null): boolean => val === 'paused' || val === 'reduced';
     // Host-level data-motion overrides document-level data-motion when explicitly set.
-    this.pausedByAttr = hostMotion ? hostMotion === 'paused' : rootMotion === 'paused';
+    this.pausedByAttr = hostMotion ? isStopped(hostMotion) : isStopped(rootMotion);
   }
 
   private syncFromAttributes(): void {

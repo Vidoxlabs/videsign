@@ -1,16 +1,58 @@
-<!-- 
-  Nocturne Museum: Data Table Component
-  Demonstrates a tabular container for operator data.
+<!--
+  Nocturne Museum: Data Table Component (ADR-007, ADR-020)
+  Semantic operator data table with hairline row boundaries, tabular-nums identifiers,
+  and non-color-only status indicator pairs (dot + explicit text label) over grounded fixture rows.
 -->
-<div class="w-full bg-surface-background-secondary-base rounded-layout-radius-standard-base border border-border-separator-primary-base overflow-hidden flex flex-col">
-  <!-- Table Header -->
-  <div class="flex items-center px-layout-padding-medium-base py-layout-padding-small-base bg-surface-background-tertiary-base border-b border-border-separator-primary-base">
-    <div class="flex-1 font-typography-family-mono-base text-typography-size-xs-base font-typography-weight-medium-base text-text-content-secondary-base tracking-typography-tracking-widest-base">ID</div>
-    <div class="flex-1 font-typography-family-mono-base text-typography-size-xs-base font-typography-weight-medium-base text-text-content-secondary-base tracking-typography-tracking-widest-base">Status</div>
-    <div class="flex-1 font-typography-family-mono-base text-typography-size-xs-base font-typography-weight-medium-base text-text-content-secondary-base tracking-typography-tracking-widest-base">Target</div>
-  </div>
-  
-  <!-- Table Body (Rows go here) -->
-  <div class="flex flex-col w-full">
-  </div>
+<div class="vi-data-table-wrap">
+  <table class="vi-data-table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Status</th>
+        <th scope="col">Target</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tabular-nums">run_01j8k2</td>
+        <td>
+          <span class="vi-data-table-status">
+            <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>
+            <span>Complete</span>
+          </span>
+        </td>
+        <td class="vi-data-table-target">videsign.tokens.emit</td>
+      </tr>
+      <tr>
+        <td class="tabular-nums">run_01j8k3</td>
+        <td>
+          <span class="vi-data-table-status">
+            <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
+            <span>Running</span>
+          </span>
+        </td>
+        <td class="vi-data-table-target">seed.gate.evaluate</td>
+      </tr>
+      <tr>
+        <td class="tabular-nums">run_01j8k4</td>
+        <td>
+          <span class="vi-data-table-status">
+            <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-warning-base"></span>
+            <span>Waiting</span>
+          </span>
+        </td>
+        <td class="vi-data-table-target">vcs.diff.apply</td>
+      </tr>
+      <tr>
+        <td class="tabular-nums">run_01j8k5</td>
+        <td>
+          <span class="vi-data-table-status">
+            <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span>
+            <span>Failed</span>
+          </span>
+        </td>
+        <td class="vi-data-table-target">ci.contrast.audit</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

@@ -135,6 +135,8 @@ export class ViOrbitalFieldElement extends BaseElement {
       this.engine.setState(newValue);
     } else if (name === 'data-theme') {
       this.engine.refreshPalette();
+    } else if (name === 'data-motion') {
+      this.engine.syncEnvironment();
     }
   }
 

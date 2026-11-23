@@ -348,10 +348,18 @@
   }
 }
 
-/* The visitor's pause control (WCAG 2.2.2) and the system preference both stop every loop. */
+/* The visitor's pause / reduced-motion control (WCAG 2.2.2) and the system preference both stop every loop. */
 :root[data-motion="paused"] .stage *,
-:root[data-motion="paused"] .stage {
+:root[data-motion="paused"] .stage,
+:root[data-motion="reduced"] .stage *,
+:root[data-motion="reduced"] .stage,
+[data-motion="paused"] .stage *,
+[data-motion="paused"] .stage,
+[data-motion="reduced"] .stage *,
+[data-motion="reduced"] .stage {
   animation-play-state: paused;
+  animation-duration: 0ms;
+  transition-duration: 0ms;
 }
 
 /* Narrow screens scale the stage up behind more of the text; the ambient copy goes quieter.

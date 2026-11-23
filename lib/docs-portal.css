@@ -58,6 +58,14 @@
   --vi-docs-scrim: oklch(0.20 0.02 265 / 0.45);
 }
 
+[data-theme="high-contrast"],
+[data-theme="high-contrast"] .vi-docs-scope,
+.vi-docs-scope[data-theme="high-contrast"] {
+  --vi-docs-border-hairline: oklch(0.74 0.020 275);
+  --vi-docs-border-strong: oklch(0.88 0.018 275);
+  --vi-docs-accent: oklch(0.80 0.200 292);
+}
+
 .vi-docs-scope {
   font-family: var(--vi-docs-font-sans);
   color: var(--vi-docs-ink);
@@ -1467,7 +1475,9 @@
 }
 
 [data-motion="paused"] .vi-docs-qs-card:hover .vi-docs-qs-arrow,
-[data-motion="paused"] .vi-docs-qs-card:focus-within .vi-docs-qs-arrow {
+[data-motion="paused"] .vi-docs-qs-card:focus-within .vi-docs-qs-arrow,
+[data-motion="reduced"] .vi-docs-qs-card:hover .vi-docs-qs-arrow,
+[data-motion="reduced"] .vi-docs-qs-card:focus-within .vi-docs-qs-arrow {
   transform: none;
 }
 

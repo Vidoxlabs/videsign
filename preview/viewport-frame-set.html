@@ -1,52 +1,52 @@
 <!--
   Nocturne Museum: Studio viewport frame set (ADR-023)
-  The three standard studio viewports (1440px, 1024px, 390px) as labelled schematic
-  frames recomposing the same slot stack. Bands are static tertiary loading geometry
-  (no shimmer); frame widths resolve in the consuming product's viewport and are never
-  painted as arbitrary values here.
+  The three standard studio viewports (1440px, 1024px, 390px) rendered across content-proportional
+  asymmetric tracks (1.45fr / 1.1fr / 0.85fr) with CSS Subgrid baseline alignment across headers,
+  schematic stacks, and caption footers. Flush inside the specimen stage with a tactile hairline
+  and restrained active top accent indicator on the 1440px frame.
 -->
-<section aria-labelledby="viewport-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
+<section aria-labelledby="viewport-title" class="vi-stage-flush">
   <div class="flex flex-col gap-gap-compact-default">
     <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Studio viewport presets</p>
-    <h2 id="viewport-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Viewport frame set</h2>
-    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Each frame is schematic: the same public-site-landing slot stack recomposes at the three standard widths, resolved by the consuming product's viewport.</p>
+    <h2 id="viewport-title" class="vi-heading-fluid font-typography-family-sans-base font-typography-weight-semibold-base text-text-content-primary-base">Viewport frame set</h2>
+    <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base text-pretty max-w-prose">Each frame is schematic: the same public-site-landing slot stack recomposes across proportional tracks resolved by the consuming product's viewport.</p>
   </div>
-  <ul aria-label="Viewport frames" class="grid grid-cols-1 lg:grid-cols-3 gap-rhythm-5-base">
-    <li class="flex flex-col gap-gap-compact-default p-layout-padding-medium-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-primary-base">
-      <div class="flex items-center justify-between gap-gap-compact-default">
-        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">1440px · desktop</span>
-        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">7 slots</span>
+  <ul aria-label="Viewport frames" class="vi-viewport-frames">
+    <li class="vi-viewport-card vi-viewport-card--active">
+      <div class="vi-viewport-head">
+        <span class="vi-viewport-title font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base"><span aria-hidden="true" class="vi-viewport-active-dot"></span><span>1440px · desktop</span></span>
+        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">7 slots · active</span>
       </div>
-      <div aria-hidden="true" class="flex flex-col gap-gap-compact-default">
+      <div aria-hidden="true" class="vi-viewport-bars">
         <span class="h-icon-xs-base w-full rounded-layout-radius-control-base bg-surface-background-tertiary-base"></span>
         <span class="h-icon-sm-base w-full rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base"></span>
         <span class="h-icon-xs-base w-full rounded-layout-radius-control-base bg-surface-background-tertiary-base"></span>
         <span class="h-icon-xs-base w-full rounded-layout-radius-control-base bg-surface-background-tertiary-base"></span>
       </div>
-      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Primary frame · full slot stack</p>
+      <p class="vi-viewport-foot font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base">Primary frame · full slot stack</p>
     </li>
-    <li class="flex flex-col gap-gap-compact-default p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base">
-      <div class="flex items-center justify-between gap-gap-compact-default">
-        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">1024px · tablet</span>
+    <li class="vi-viewport-card">
+      <div class="vi-viewport-head">
+        <span class="vi-viewport-title font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">1024px · tablet</span>
         <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">7 slots</span>
       </div>
-      <div aria-hidden="true" class="flex flex-col gap-gap-compact-default">
+      <div aria-hidden="true" class="vi-viewport-bars">
         <span class="h-icon-xs-base w-full rounded-layout-radius-control-base bg-surface-background-tertiary-base"></span>
         <span class="h-icon-sm-base w-full rounded-layout-radius-control-base bg-surface-background-tertiary-base"></span>
         <span class="h-icon-xs-base w-full rounded-layout-radius-control-base bg-surface-background-tertiary-base"></span>
       </div>
-      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Same stack · inspector panels stack below</p>
+      <p class="vi-viewport-foot font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Same stack · inspector panels stack below</p>
     </li>
-    <li class="flex flex-col gap-gap-compact-default p-layout-padding-medium-base rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-primary-base">
-      <div class="flex items-center justify-between gap-gap-compact-default">
-        <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">390px · mobile</span>
+    <li class="vi-viewport-card">
+      <div class="vi-viewport-head">
+        <span class="vi-viewport-title font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">390px · mobile</span>
         <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">7 slots</span>
       </div>
-      <div aria-hidden="true" class="flex flex-col gap-gap-compact-default">
+      <div aria-hidden="true" class="vi-viewport-bars">
         <span class="h-icon-xs-base w-full rounded-layout-radius-control-base bg-surface-background-tertiary-base"></span>
         <span class="h-icon-sm-base w-full rounded-layout-radius-control-base bg-surface-background-tertiary-base"></span>
       </div>
-      <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Same stack · nav collapses into the island menu</p>
+      <p class="vi-viewport-foot font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Same stack · nav collapses into the island menu</p>
     </li>
   </ul>
   <p class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Widths resolve in the consuming product's viewport; frames never paint arbitrary values.</p>
