@@ -530,6 +530,52 @@ test('every brand SVG is scanned and matches the manifest digest', () => {
   assert.equal(names.some((name) => name.endsWith('.png')), false);
 });
 
+test('repo-banner exports match SHA256SUMS and stay outside the master scan', () => {
+  const scanned = listSvgFiles(BRAND);
+  assert.equal(scanned.ok, true, scanned.hits.join('\n'));
+  assert.equal(scanned.files.length, 11);
+
+  const dir = path.join(BRAND, 'repo-banners');
+  const sumsPath = path.join(dir, 'SHA256SUMS');
+  assert.equal(fs.existsSync(sumsPath), true);
+  const listed = new Map();
+  for (const line of fs.readFileSync(sumsPath, 'utf8').split('\n').filter(Boolean)) {
+    const match = line.match(/^([0-9a-f]{64})  (.+)$/);
+    assert.ok(match, line);
+    assert.equal(listed.has(match[2]), false, match[2]);
+    listed.set(match[2], match[1]);
+  }
+  assert.equal(listed.has('SHA256SUMS'), false);
+  assert.equal(listed.has('contact-sheet.png'), false);
+  assert.equal(listed.has('contact-sheet-closeup.png'), false);
+
+  const onDisk = fs.readdirSync(dir);
+  assert.equal(onDisk.includes('__pycache__'), false);
+  assert.equal(onDisk.includes('contact-sheet.png'), false);
+  const files = onDisk.filter((name) => name !== 'SHA256SUMS').sort();
+  assert.deepEqual(files, [...listed.keys()].sort());
+
+  let svgCount = 0;
+  let pngCount = 0;
+  for (const [name, digest] of listed) {
+    const bytes = fs.readFileSync(path.join(dir, name));
+    assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'), digest, name);
+    if (name.endsWith('.svg')) svgCount += 1;
+    if (name.endsWith('.png')) pngCount += 1;
+  }
+  assert.equal(svgCount, 32);
+  assert.equal(pngCount, 48);
+  assert.equal(listed.has('_build.py'), true);
+  assert.equal(listed.has('banners-spec.md'), true);
+  assert.equal(listed.has('LICENSE-Geist-OFL.txt'), true);
+
+  const hex = '0123456789abcdef'.repeat(4);
+  const { scanText } = require('../scripts/check-public-safety');
+  assert.equal(scanText(hex, { skipped: true }, { inRepoBanners: true }).hits.includes('long-id'), false);
+  assert.equal(scanText(hex, { skipped: true }, { inBrand: true }).hits.includes('long-id'), true);
+  assert.equal(scanText(['Abcdefghijklmnopqrstuvwxyz', '1'].join(''), { skipped: true }, { inRepoBanners: true }).hits.includes('long-id'), true);
+});
+
 test('shipped master viewBoxes match the recorded minimums and card sizes', () => {
   const spec = loadBrandSpec(read('brand/brand.json'));
   function viewBoxSize(rel) {
@@ -587,6 +633,16 @@ test('brand svgs are not ignored, and rasters under brand still are', () => {
   });
   assert.equal(raster.status, 0, raster.stderr);
   assert.match(raster.stdout, /\*\.png/);
+  const nestedRaster = spawnSync('git', ['check-ignore', '--no-index', '-q', '--', 'brand/other/example.png'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
+  assert.equal(nestedRaster.status, 0);
+  const bannerPng = spawnSync('git', ['check-ignore', '--no-index', '-q', '--', 'brand/repo-banners/seed-banner.png'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
+  assert.equal(bannerPng.status, 1);
 });
 
 test('ADR-011 is proposed and amends the raster ban', () => {

@@ -25,7 +25,7 @@ videsign/
 │   └── asset-service.js  Phase 0 read-only VI persona asset service Worker logic (ADR-022)
 ├── preview/         Pure, flat, semantic, state-free HTML component fragments + layout compositions
 ├── preview/index.html  Visual catalog (open in a browser)
-├── brand/           Brand v1 masters (text-only SVG) and MANIFEST.json digests (ADR-011)
+├── brand/           Brand v1 masters (text-only SVG) and MANIFEST.json digests (ADR-011). Family README banner exports live in brand/repo-banners/ (ADR-026)
 ├── pipeline/        Persona asset pipeline: animation spec, audit records, templates, and service/ (Phase 0 Worker + D1 migrations)
 ├── scripts/
 │   ├── generate-tokens.js        Token pipeline: DESIGN.md YAML → Tailwind config, CSS vars, JSON, themes, glass.css, catalog.css
@@ -152,7 +152,7 @@ To set it (a repository admin, once, and again whenever the handle list changes)
 
 ## Brand
 
-The brand v1 set (mark C), the favicon, lockups, and wordmarks are documented in [brand/README.md](brand/README.md). Full colour is for the dark field. On a lockup, `-dark` and `-light` name the field. On a mark or a wordmark, they name the ink. File digests are in `brand/MANIFEST.json`. Promoted masters use the path `design_system/brand/`.
+The brand v1 set (mark C), the favicon, lockups, and wordmarks are documented in [brand/README.md](brand/README.md). Full colour is for the dark field. On a lockup, `-dark` and `-light` name the field. On a mark or a wordmark, they name the ink. File digests are in `brand/MANIFEST.json`. Promoted masters use the path `design_system/brand/`. Family repository banners and social cards live in [brand/repo-banners/](brand/repo-banners/). That folder is a narrow exception to the raster ban (ADR-026).
 
 ## License
 

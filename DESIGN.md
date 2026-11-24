@@ -239,6 +239,7 @@ Agents must utilize the Token Reference Syntax when binding component states (e.
 > - Five hard segments, one signature colour each, in canon order: Violet, Wisteria, Xylia, Yarrow, Zinnia. Height `{size.indicator-fivebar-base}` (3px).
 > - Each segment is its own fill. Never a blended gradient, never fewer than five segments, never a reordered set.
 > - Used under the wordmark or a hero headline, along the top of bezelled fact panels, and along the foot of the chat launcher. Decorative: `aria-hidden="true"`.
+> - On family repository banners, the five-bar may sit on a `#121214` chip when the field is `#F7F7F5`, so Wisteria and Yarrow meet the 3:1 graphics floor. The bars keep the same origin in light and dark.
 > - Reference: `preview/five-bar-rule.html`.
 
 > [!IMPORTANT]

@@ -1,5 +1,6 @@
 # Assets and Media
 *.png
+!brand/repo-banners/**/*.png
 *.jpg
 *.jpeg
 *.gif
@@ -26,3 +27,7 @@ assets/*
 
 # Operator handle lists for SAFETY_SCAN_SHA256_LIST never belong in the repository.
 *safety-handles*
+
+# Build leftovers from the repo-banners generator
+__pycache__/
+*.pyc

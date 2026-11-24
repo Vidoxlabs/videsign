@@ -123,12 +123,14 @@ test('accepted status is limited to ratified items and Adopted/Proposed statuses
   const adoptedIds = ['ADR-013', 'ADR-016', 'ADR-017', 'ADR-018', 'ADR-019'];
   const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022', 'ADR-023', 'ADR-024', 'ADR-025'];
   const byId = new Map(statuses.map((adr) => [adr.id, adr.status]));
-  for (const id of ['ADR-010', 'ADR-011', 'ADR-012', ...adoptedIds, ...proposedIds]) {
+  for (const id of ['ADR-010', 'ADR-011', 'ADR-012', 'ADR-026', ...adoptedIds, ...proposedIds]) {
     assert.ok(byId.has(id), `missing **Status**: line for ${id}`);
   }
   for (const adr of statuses) {
     if (adr.id === 'ADR-012') {
       assert.equal(adr.status, 'Accepted 2026-10-27. Used by the web app redesign.');
+    } else if (adr.id === 'ADR-026') {
+      assert.equal(adr.status, 'Accepted by the owner on 2026-11-24. Amends ADR-002 and ADR-011, for this folder only.');
     } else if (adr.id === 'ADR-011') {
       assert.equal(adr.status, 'Proposed for items 1-6 and 8. Items 7, 9 and 10 are Accepted (7 and 10 on 2026-10-28; 9 on 2026-11-03). Amends ADR-002.');
     } else if (adr.id === 'ADR-010') {
