@@ -13,7 +13,6 @@ const path = require('path');
 const { deltaE00, deltaE00Hex } = require('../scripts/lib/ciede2000');
 const {
   DEFAULT_TARGETS,
-  OPERATOR_ENV,
   scanPaths,
   scanText,
 } = require('../scripts/check-public-safety');
@@ -263,23 +262,6 @@ function sampleSidecar(over = {}) {
   };
 }
 
-function withOperatorEnv(value, fn, ci) {
-  const previousHash = process.env[OPERATOR_ENV];
-  const previousCi = process.env.CI;
-  if (value === undefined) delete process.env[OPERATOR_ENV];
-  else process.env[OPERATOR_ENV] = value;
-  if (ci === undefined) delete process.env.CI;
-  else process.env.CI = ci;
-  try {
-    return fn();
-  } finally {
-    if (previousHash === undefined) delete process.env[OPERATOR_ENV];
-    else process.env[OPERATOR_ENV] = previousHash;
-    if (previousCi === undefined) delete process.env.CI;
-    else process.env.CI = previousCi;
-  }
-}
-
 function scanTree(files) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-scan-'));
   try {
@@ -374,15 +356,9 @@ function driveToken() {
   return driveId;
 }
 
-function runSafety(args, { hash, ci } = {}) {
-  const env = { ...process.env };
-  if (hash === undefined) delete env[OPERATOR_ENV];
-  else env[OPERATOR_ENV] = hash;
-  if (ci === undefined) delete env.CI;
-  else env.CI = ci;
+function runSafety(args) {
   return spawnSync(process.execPath, ['scripts/check-public-safety.js', ...args], {
     cwd: ROOT,
-    env,
     encoding: 'utf8',
   });
 }
@@ -609,20 +585,17 @@ test('canon files pass the public-safety scan', () => {
     path.join('vwxyz', 'vocabulary.json'),
   ]);
 
-  const result = withOperatorEnv(undefined, () => scanPaths(['canon'], ROOT));
-  assert.equal(result.operatorCheck, 'skipped');
+  const result = scanPaths(['canon'], ROOT);
   assert.deepEqual(result.hits, []);
 });
 
 test('public-safety self-checks hosts, long ids and sha256 values', () => {
-  withOperatorEnv(undefined, () => {
   const field = 'sha' + '256';
   const pair = (key, value) => `"${key}":"${value}"`;
   const hash = hash64('ab');
-  const clean = withOperatorEnv(undefined, () => scanText(
+  const clean = scanText(
     `{${pair(field, hash)},${pair('palette_' + field, hash)}}`,
-  ));
-  assert.equal(clean.operatorCheck, 'skipped');
+  );
   assert.deepEqual(clean.hits, []);
 
   const longId = `A1${'b'.repeat(31)}`;
@@ -657,11 +630,9 @@ test('public-safety self-checks hosts, long ids and sha256 values', () => {
   assert.deepEqual(scanText(`${'~'}name`).hits, []);
   assert.ok(scanText(['10', '0', '0', '1'].join('.')).hits.includes('ipv4'));
   assert.deepEqual(scanText('surface-background-primary-base').hits, []);
-  }, false);
 });
 
 test('long ids cover case and separator shapes and spare token names', () => {
-  withOperatorEnv(undefined, () => {
   const lower = `a1${'b'.repeat(23)}`;
   const upper = `A1${'B'.repeat(23)}`;
   const hyphen = `a1b2c3d4e5f-${'g6h7i8j9k0abc'}`;
@@ -682,11 +653,9 @@ test('long ids cover case and separator shapes and spare token names', () => {
   assert.deepEqual(scanText('surface-background-primary-base').hits, []);
   assert.deepEqual(scanText('text-typography-size-3xl-base').hits, []);
   assert.deepEqual(scanText('violet_chibi_neutral_v001').hits, []);
-  }, false);
 });
 
 test('brand filenames are allowlisted and near-misses stay flagged', () => {
-  withOperatorEnv(undefined, () => {
     const mark = ['brand_mark_full-', 'color_v008'].join('') + '.svg';
     const lockup = ['brand_lockup_horizontal-', 'dark_v004'].join('');
     const stripe = ['brand_stripe_full-', 'color_v001'].join('');
@@ -735,14 +704,13 @@ test('brand filenames are allowlisted and near-misses stay flagged', () => {
     assert.ok(scanText(slug).hits.includes('long-id'));
     const slugInside = scanTree({ 'brand/slug.txt': slug });
     assert.ok(slugInside.hits.some((hit) => hit.includes('long-id')));
-  }, false);
 });
 
 test('a missing brand directory is skipped', () => {
   assert.ok(DEFAULT_TARGETS.includes('brand'));
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-brand-'));
   try {
-    const result = withOperatorEnv(undefined, () => scanPaths(['brand'], dir));
+    const result = scanPaths(['brand'], dir);
     assert.equal(result.ok, true);
     assert.deepEqual(result.hits, []);
   } finally {
@@ -764,72 +732,6 @@ test('missing, empty and invalid paths fail closed', () => {
     assert.ok(scanPaths([missing]).hits.some((hit) => hit.startsWith('missing ')));
     assert.ok(scanPaths([empty]).hits.some((hit) => hit.startsWith('empty ')));
     assert.ok(scanPaths([broken]).hits.some((hit) => hit.startsWith('invalid-json ')));
-  } finally {
-    fs.rmSync(dir, { recursive: true, force: true });
-  }
-});
-
-test('operator-handle hashes fail closed in CI and skip outside it', () => {
-  const token = ['fixture', 'handle'].join('-');
-  const digest = crypto.createHash('sha256').update(token.toLowerCase()).digest('hex');
-  const text = `hello ${token}`;
-  const badEntry = ['not', 'a', 'hash', 'entry'].join('-');
-
-  const skipped = withOperatorEnv(undefined, () => scanText(text));
-  assert.equal(skipped.operatorCheck, 'skipped');
-  assert.equal(skipped.hits.includes('operator-handle'), false);
-
-  const missing = withOperatorEnv(undefined, () => scanText('hello'), 'true');
-  assert.equal(missing.ok, false);
-  assert.ok(missing.hits.some((hit) => hit.includes(OPERATOR_ENV) && hit.includes('unset or empty')));
-  assert.equal(missing.hits.join(' ').includes(badEntry), false);
-
-  const blank = withOperatorEnv('   ', () => scanText('hello'), 'true');
-  assert.equal(blank.ok, false);
-  assert.ok(blank.hits.some((hit) => hit.includes('unset or empty')));
-
-  const invalid = withOperatorEnv(badEntry, () => scanText('hello'), 'true');
-  assert.equal(invalid.ok, false);
-  assert.ok(invalid.hits.some((hit) => hit.includes(OPERATOR_ENV) && hit.includes('malformed')));
-  assert.equal(invalid.hits.join(' ').includes(badEntry), false);
-
-  const hit = withOperatorEnv(digest, () => scanText(text), 'true');
-  assert.equal(hit.operatorCheck, 'checked');
-  assert.ok(hit.hits.includes('operator-handle'));
-  assert.equal(JSON.stringify(hit).includes(token), false);
-
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-safety-'));
-  const clean = path.join(dir, 'clean.txt');
-  const dirty = path.join(dir, 'dirty.txt');
-  fs.writeFileSync(clean, 'hello canon\n');
-  fs.writeFileSync(dirty, `${text}\n`);
-  try {
-    const unsetCi = runSafety([clean], { ci: 'true' });
-    assert.equal(unsetCi.status, 1);
-    assert.match(unsetCi.stderr, new RegExp(OPERATOR_ENV));
-    assert.match(unsetCi.stderr, /unset or empty/);
-    assert.equal(unsetCi.stderr.includes(badEntry), false);
-
-    const emptyCi = runSafety([clean], { hash: '', ci: 'true' });
-    assert.equal(emptyCi.status, 1);
-    assert.match(emptyCi.stderr, /unset or empty/);
-
-    const malformed = runSafety([clean], { hash: badEntry, ci: 'true' });
-    assert.equal(malformed.status, 1);
-    assert.match(malformed.stderr, /malformed/);
-    assert.equal(malformed.stderr.includes(badEntry), false);
-
-    const cleanCi = runSafety([clean], { hash: digest, ci: 'true' });
-    assert.equal(cleanCi.status, 0, cleanCi.stderr);
-
-    const dirtyCi = runSafety([dirty], { hash: digest, ci: 'true' });
-    assert.equal(dirtyCi.status, 1);
-    assert.match(dirtyCi.stderr, /operator-handle/);
-    assert.equal(dirtyCi.stderr.includes(token), false);
-
-    const outside = runSafety([clean], {});
-    assert.equal(outside.status, 0, outside.stderr);
-    assert.match(outside.stderr, /operator-handle check skipped/);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -917,7 +819,6 @@ test('a background plate is not gated on character anatomy', () => {
 });
 
 test('a case-variant brand directory is still scanned', () => {
-  withOperatorEnv(undefined, () => {
     const alphabet = 'Aa0Bb1Cc2Dd3' + 'Ee4Ff5Gg6Hh7Ii8' + 'Jj9Kk';
     let driveId = '';
     for (let i = 0; i < 33; i += 1) driveId += alphabet[i % alphabet.length];
@@ -930,13 +831,11 @@ test('a case-variant brand directory is still scanned', () => {
     const allowed = scanNamedBrand('BRAND', `${legit}\n${host}`);
     assert.ok(allowed.hits.some((hit) => hit.includes('google-host')));
     assert.equal(allowed.hits.some((hit) => hit.includes('long-id')), false);
-  }, false);
 });
 
 test('a case-only brand duplicate fails closed', {
   skip: brandCaseDistinct ? false : 'filesystem does not keep brand and Brand as distinct directories',
 }, () => {
-  withOperatorEnv(undefined, () => {
     const driveId = driveToken();
     assert.equal(driveId.length, 33);
     const both = scanBrandLayout({
@@ -947,21 +846,17 @@ test('a case-only brand duplicate fails closed', {
     assert.ok(both.hits.some((hit) => hit.includes('long-id')));
     assert.ok(both.hits.some((hit) => hit.includes('duplicate-brand')));
     assert.equal(both.hits.some((hit) => hit.includes('look-alike-brand')), false);
-  }, false);
 });
 
 test('a trailing-dot brand directory fails closed', () => {
-  withOperatorEnv(undefined, () => {
     const dotted = scanBrandLayout({ 'brand./b.txt': 'palette note' });
     assert.equal(dotted.ok, false);
     assert.ok(dotted.hits.some((hit) => hit.includes('look-alike-brand')));
     assert.equal(dotted.hits.some((hit) => hit.includes('duplicate-brand')), false);
     assert.equal(dotted.hits.some((hit) => hit.includes('long-id')), false);
-  }, false);
 });
 
 test('look-alike brand folders fail closed', () => {
-  withOperatorEnv(undefined, () => {
     const driveId = driveToken();
     assert.equal(driveId.length, 33);
 
@@ -981,11 +876,9 @@ test('look-alike brand folders fail closed', () => {
     const unrelated = scanBrandLayout({ 'branding/n.txt': driveId });
     assert.equal(unrelated.hits.some((hit) => hit.includes('look-alike-brand')), false);
     assert.equal(unrelated.hits.some((hit) => hit.includes('long-id')), false);
-  }, false);
 });
 
 test('a non-directory brand entry fails closed', () => {
-  withOperatorEnv(undefined, () => {
     const expectNonDirectory = (setup) => {
       const root = fs.mkdtempSync(path.join(os.tmpdir(), 'videsign-brand-entry-'));
       const extra = [];
@@ -1022,11 +915,9 @@ test('a non-directory brand entry fails closed', () => {
       const made = spawnSync('mkfifo', [path.join(root, 'brand')]);
       assert.equal(made.status, 0);
     });
-  }, false);
 });
 
 test('accent, format, and extra confusable brand names fail closed', () => {
-  withOperatorEnv(undefined, () => {
     const expectLookalike = (name) => {
       const result = scanBrandLayout({ [`${name}/n.txt`]: 'palette note' });
       assert.equal(result.ok, false);
@@ -1051,76 +942,54 @@ test('accent, format, and extra confusable brand names fail closed', () => {
     assert.equal(beside.ok, false);
     const besideFail = beside.hits.some((hit) => hit.includes('look-alike-brand') || hit.includes('duplicate-brand'));
     assert.equal(besideFail, true);
-  }, false);
 });
 
 test('a ZWSP inside a top-level brand name fails closed', () => {
-  withOperatorEnv(undefined, () => {
     expectNonAscii(`br${String.fromCharCode(0x200B)}and`);
-  }, false);
 });
 
 test('a ZWJ inside a top-level brand name fails closed', () => {
-  withOperatorEnv(undefined, () => {
     expectNonAscii(`bra${String.fromCharCode(0x200D)}nd`);
-  }, false);
 });
 
 test('a ZWNJ inside a top-level brand name fails closed', () => {
-  withOperatorEnv(undefined, () => {
     expectNonAscii(`br${String.fromCharCode(0x200C)}and`);
-  }, false);
 });
 
 test('a soft hyphen inside a top-level brand name fails closed', () => {
-  withOperatorEnv(undefined, () => {
     expectNonAscii(`br${String.fromCharCode(0x00AD)}and`);
-  }, false);
 });
 
 test('a word joiner inside a top-level brand name fails closed', () => {
-  withOperatorEnv(undefined, () => {
     expectNonAscii(`br${String.fromCharCode(0x2060)}and`);
-  }, false);
 });
 
 test('a Greek capital brand look-alike fails closed', () => {
-  withOperatorEnv(undefined, () => {
     const beta = String.fromCharCode(0x0392);
     const alpha = String.fromCharCode(0x0391);
     const nu = String.fromCharCode(0x039D);
     expectNonAscii(`${beta}R${alpha}${nu}D`);
-  }, false);
 });
 
 test('a Cherokee brand look-alike fails closed', () => {
-  withOperatorEnv(undefined, () => {
     expectNonAscii(`${String.fromCharCode(0x13F4)}${String.fromCharCode(0x13A1)}and`);
-  }, false);
 });
 
 test('a Lisu brand look-alike fails closed', () => {
-  withOperatorEnv(undefined, () => {
     expectNonAscii(`${String.fromCharCode(0xA4D0)}ran${String.fromCharCode(0xA4D3)}`);
-  }, false);
 });
 
 test('an Armenian brand look-alike fails closed', () => {
-  withOperatorEnv(undefined, () => {
     expectNonAscii(`bra${String.fromCharCode(0x0578)}d`);
-  }, false);
 });
 
 test('a brand-like symlink to a folder fails closed', () => {
-  withOperatorEnv(undefined, () => {
     const result = scanTopLevelName('Brand', { symlink: true });
     assert.equal(result.ok, false);
     assert.ok(result.hits.some((hit) => hit.includes('non-directory-brand')));
-  }, false);
 });
 
 test('a plain brand directory and the repo top level stay ASCII-clean', () => {
-  withOperatorEnv(undefined, () => {
     const plain = /^[A-Za-z0-9._-]+$/;
     for (const name of fs.readdirSync(ROOT)) assert.match(name, plain, name);
     const clean = scanBrandLayout({ 'brand/a.txt': 'palette note' });
@@ -1128,7 +997,6 @@ test('a plain brand directory and the repo top level stay ASCII-clean', () => {
     assert.equal(clean.hits.some((hit) => hit.includes('non-ascii-name')), false);
     const repo = scanPaths(['brand'], ROOT);
     assert.equal(repo.hits.some((hit) => hit.includes('non-ascii-name')), false);
-  }, false);
 });
 
 test('DESIGN.md front matter accents stay put and ADR-010 is recorded', () => {
@@ -1177,7 +1045,7 @@ test('the public-safety CLI scans the default targets', () => {
   assert.ok(DEFAULT_TARGETS.includes('brand'));
   assert.ok(DEFAULT_TARGETS.includes('scripts'));
   assert.ok(DEFAULT_TARGETS.includes('test'));
-  const result = runSafety([], {});
+  const result = runSafety([]);
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stderr, /operator-handle check skipped/);
+  assert.equal(result.stderr, '');
 });

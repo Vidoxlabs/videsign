@@ -25,9 +25,6 @@ assets/*
 !assets/README.md
 !assets/.gitkeep
 
-# Operator handle lists for SAFETY_SCAN_SHA256_LIST never belong in the repository.
-*safety-handles*
-
 # Build leftovers from the repo-banners generator
 __pycache__/
 *.pyc

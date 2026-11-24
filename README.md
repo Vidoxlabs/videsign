@@ -129,27 +129,6 @@ initialization protocol.
 See `AGENTS.md` for the full agent initialization protocol and `SKILL.md` for
 architectural decision records.
 
-## CI secret: `SAFETY_SCAN_SHA256_LIST`
-
-CI runs a public-safety scan (`npm run safety:scan`) that blocks private *operator handles* from
-reaching committed files: a personal login or machine name, a private hostname, an internal
-codename. The handles themselves are never stored anywhere in the repository or in CI. CI holds
-only their SHA-256 hashes, in the repository secret `SAFETY_SCAN_SHA256_LIST`; the scan hashes
-every word it reads and fails on a match. In CI the scan **fails closed**: if the secret is missing
-or empty, the job stops, so a misconfigured pipeline can never pass silently.
-
-To set it (a repository admin, once, and again whenever the handle list changes):
-
-1. Write the handles, one per line, in a file **outside** this repository, or keep them in the
-   team vault and export them to such a file. Point `HANDLES_FILE` at it. One word per line:
-   letters, digits, `.`, `_` or `-`. Split a full name into separate lines. (`*safety-handles*`
-   files are git-ignored as a backstop.)
-2. Build the value: `npm run -s safety:hashes < "$HANDLES_FILE"`. It prints only the
-   comma-separated hashes; the handles are never printed.
-3. Optional local check: `SAFETY_SCAN_SHA256_LIST="$(npm run -s safety:hashes < "$HANDLES_FILE")" npm run safety:scan`.
-4. On GitHub: **Settings → Secrets and variables → Actions → New repository secret**. Name
-   `SAFETY_SCAN_SHA256_LIST`, value: the line from step 2. Save, then re-run the failed `validate` job.
-
 ## Brand
 
 The brand v1 set (mark C), the favicon, lockups, and wordmarks are documented in [brand/README.md](brand/README.md). Full colour is for the dark field. On a lockup, `-dark` and `-light` name the field. On a mark or a wordmark, they name the ink. File digests are in `brand/MANIFEST.json`. Promoted masters use the path `design_system/brand/`. Family repository banners and social cards live in [brand/repo-banners/](brand/repo-banners/). That folder is a narrow exception to the raster ban (ADR-026).

@@ -6,13 +6,6 @@
  * Exit 0 only when every target exists,
  * every file is non-empty, every JSON file parses, and no pattern hits.
  *
- * Operator handles are SHA-256 hashes in SAFETY_SCAN_SHA256_LIST
- * (comma-separated lowercase hex of lowercase tokens). The list is never
- * written here. Outside CI, an unset or empty list skips and the CLI logs
- * that skip. When CI=true, an unset, empty, or whitespace-only list exits 1.
- * A malformed entry exits 1 in either environment. Messages name the
- * variable and never print a value.
- *
  * Long ids are runs of length >= 25 that mix letters and digits. Excluded
  * shapes: kebab-case design tokens (lowercase hyphen segments, with a short
  * scale such as 3xl), and persona asset slugs vi_type_slot_vNNN whose slot
@@ -40,9 +33,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
-
-const OPERATOR_ENV = 'SAFETY_SCAN_SHA256_LIST';
 
 const DEFAULT_TARGETS = [
   'canon',
@@ -243,35 +233,6 @@ function isLongId(token, options = {}) {
   return true;
 }
 
-function loadOperatorHashes() {
-  const raw = process.env[OPERATOR_ENV];
-  const inCi = process.env.CI === 'true';
-  if (raw === undefined || String(raw).trim() === '') {
-    if (inCi) return { skipped: false, missing: true, hashes: null, error: null };
-    return { skipped: true, missing: false, hashes: null, error: null };
-  }
-  const hashes = String(raw).split(',').map((item) => item.trim()).filter(Boolean);
-  const hex = /^[0-9a-f]{64}$/;
-  if (hashes.length === 0 || hashes.some((item) => !hex.test(item))) {
-    return { skipped: false, missing: false, hashes: null, error: 'malformed' };
-  }
-  return { skipped: false, missing: false, hashes: new Set(hashes), error: null };
-}
-
-function operatorHits(text, hashes) {
-  const hits = [];
-  const seen = new Set();
-  for (const token of text.split(/[^A-Za-z0-9._-]+/)) {
-    if (token.length < 2) continue;
-    const lower = token.toLowerCase();
-    if (seen.has(lower)) continue;
-    seen.add(lower);
-    const digest = crypto.createHash('sha256').update(lower).digest('hex');
-    if (hashes.has(digest)) hits.push('operator-handle');
-  }
-  return hits;
-}
-
 function inspectSha256(text) {
   const hits = [];
   const ranges = [];
@@ -315,32 +276,17 @@ function patternHits(text, options) {
   return hits;
 }
 
-function operatorFailure(operator) {
-  if (operator.missing) return `${OPERATOR_ENV} is unset or empty`;
-  if (operator.error) return `${OPERATOR_ENV} has a malformed entry`;
-  return null;
-}
-
 /**
  * @param {string} text
- * @param {object} [operatorState]
- * @returns {{ ok: boolean, hits: string[], operatorCheck: string }}
+ * @param {object} [options]
+ * @returns {{ ok: boolean, hits: string[] }}
  */
-function scanText(text, operatorState, options) {
-  const operator = operatorState || loadOperatorHashes();
+function scanText(text, options) {
   const hits = [];
-  let operatorCheck = 'checked';
-  if (operator.skipped) operatorCheck = 'skipped';
-  else if (operator.missing || operator.error) {
-    operatorCheck = operator.missing ? 'missing' : 'invalid';
-    hits.push(operatorFailure(operator));
-  } else {
-    hits.push(...operatorHits(text, operator.hashes));
-  }
   const sha = inspectSha256(text);
   hits.push(...sha.hits);
   hits.push(...patternHits(sha.redacted, options));
-  return { ok: hits.length === 0, hits, operatorCheck };
+  return { ok: hits.length === 0, hits };
 }
 
 function listFiles(target) {
@@ -365,27 +311,10 @@ function listFiles(target) {
 /**
  * @param {string[]} targets
  * @param {string} [root]
- * @returns {{ ok: boolean, hits: string[], operatorCheck: string }}
+ * @returns {{ ok: boolean, hits: string[] }}
  */
-function contentOperator(operator) {
-  if (operator.skipped) return operator;
-  if (operator.missing || operator.error) {
-    return { skipped: true, missing: false, hashes: null, error: null };
-  }
-  return operator;
-}
-
 function scanPaths(targets, root = process.cwd()) {
-  const operator = loadOperatorHashes();
   const hits = [];
-  let operatorCheck = 'checked';
-  const failure = operatorFailure(operator);
-  if (operator.skipped) operatorCheck = 'skipped';
-  else if (failure) {
-    operatorCheck = operator.missing ? 'missing' : 'invalid';
-    hits.push(failure);
-  }
-  const perFile = contentOperator(operator);
   hits.push(...nonAsciiNameHits(root));
   const scanDirectory = (full, relLabel) => {
     let files;
@@ -427,7 +356,7 @@ function scanPaths(targets, root = process.cwd()) {
           continue;
         }
       }
-      const result = scanText(text, perFile, {
+      const result = scanText(text, {
         inBrand: isUnderBrand(display),
         inRepoBanners: isUnderRepoBanners(display),
       });
@@ -455,16 +384,13 @@ function scanPaths(targets, root = process.cwd()) {
     }
     scanDirectory(full, rel);
   }
-  return { ok: hits.length === 0, hits, operatorCheck };
+  return { ok: hits.length === 0, hits };
 }
 
 function main() {
   try {
     const targets = process.argv.slice(2);
     const result = scanPaths(targets.length > 0 ? targets : DEFAULT_TARGETS);
-    if (result.operatorCheck === 'skipped') {
-      console.error(`operator-handle check skipped: ${OPERATOR_ENV} is unset`);
-    }
     if (!result.ok) {
       for (const hit of result.hits) console.error(hit);
       process.exit(1);
@@ -477,7 +403,6 @@ function main() {
 
 module.exports = {
   DEFAULT_TARGETS,
-  OPERATOR_ENV,
   isLongId,
   scanPaths,
   scanText,

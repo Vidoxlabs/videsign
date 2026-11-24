@@ -571,9 +571,9 @@ test('repo-banner exports match SHA256SUMS and stay outside the master scan', ()
 
   const hex = '0123456789abcdef'.repeat(4);
   const { scanText } = require('../scripts/check-public-safety');
-  assert.equal(scanText(hex, { skipped: true }, { inRepoBanners: true }).hits.includes('long-id'), false);
-  assert.equal(scanText(hex, { skipped: true }, { inBrand: true }).hits.includes('long-id'), true);
-  assert.equal(scanText(['Abcdefghijklmnopqrstuvwxyz', '1'].join(''), { skipped: true }, { inRepoBanners: true }).hits.includes('long-id'), true);
+  assert.equal(scanText(hex, { inRepoBanners: true }).hits.includes('long-id'), false);
+  assert.equal(scanText(hex, { inBrand: true }).hits.includes('long-id'), true);
+  assert.equal(scanText(['Abcdefghijklmnopqrstuvwxyz', '1'].join(''), { inRepoBanners: true }).hits.includes('long-id'), true);
 });
 
 test('shipped master viewBoxes match the recorded minimums and card sizes', () => {
