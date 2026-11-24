@@ -317,6 +317,16 @@ test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens
   assert.ok(tokens.includes('--vi-surface-card'));
   assert.ok(tokens.includes('--vi-ink-primary'));
 
+  const extTokens = extractTokenReferences('<section class="vi-ext-scope"><div class="vi-ext-card"></div></section>', new Set());
+  assert.ok(extTokens.includes('--vi-ext-card'));
+  assert.ok(extTokens.includes('--vi-ext-accent'));
+  assert.ok(extTokens.includes('--vi-surface-card'));
+
+  const wsTokens = extractTokenReferences('<section class="vi-ws-scope"><div class="vi-ws-card"></div></section>', new Set());
+  assert.ok(wsTokens.includes('--vi-ws-card'));
+  assert.ok(wsTokens.includes('--vi-ws-accent'));
+  assert.ok(wsTokens.includes('--vi-surface-card'));
+
   const mockNode = {
     querySelector: () => null,
     querySelectorAll(sel) {
@@ -351,12 +361,12 @@ test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens
   assert.equal(parseHashState('#catalog?cat=layouts&specimen=layout-public-site').category, 'layouts');
 });
 
-test('manifest count equals active catalog count (103) and design-studio-canvas aligns with museum accent grammar', () => {
+test('manifest count equals active catalog count (111) and design-studio-canvas aligns with museum accent grammar', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf-8'));
   const indexHtml = fs.readFileSync(path.join(ROOT, 'preview', 'index.html'), 'utf-8');
   const activeCount = [...indexHtml.matchAll(/file:\s*'[^']+',\s*tier:\s*'([^']+)'/g)].filter((m) => m[1] !== 'legacy').length;
   assert.equal(manifest.componentCount, activeCount, 'manifest componentCount must equal active specimen count');
-  assert.equal(manifest.componentCount, 103);
+  assert.equal(manifest.componentCount, 111);
 
   const studio = fs.readFileSync(path.join(ROOT, 'preview', 'design-studio-canvas.html'), 'utf-8');
   assert.ok(studio.includes('bg-status-indicator-success-base'), 'sync ready uses semantic status-ok dot');

@@ -1,0 +1,115 @@
+<!--
+  Nocturne Museum: Avatar Group & Presence List (ADR-020)
+  Inline runtime monogram stack (LA head agent with violet accent ring, SR/HC/QA specialists
+  with neutral graph-line outline, zero persona-accent tokens), 44px +2 overflow button toggling
+  a clean solid roster popover, and explicit Active/Running/Idle/Offline status-dot + text rows.
+-->
+<section class="vi-ext-scope" aria-labelledby="avatar-presence-title">
+  <div class="vi-ext-card vi-ext-card--narrow" data-vi-avatar-group>
+    <div class="vi-ext-head">
+      <h2 id="avatar-presence-title" class="vi-ext-title">Team presence</h2>
+      <span class="vi-ext-meta" role="status" aria-live="polite" data-avatar-status>6 team members · overflow open</span>
+    </div>
+
+    <div class="vi-ext-avatar-bar">
+      <div class="vi-ext-avatar-stack" role="group" aria-label="Runtime agent monogram stack">
+        <span class="vi-ext-avatar vi-ext-avatar--lead" title="LA, Lead agent">LA</span>
+        <span class="vi-ext-avatar vi-ext-avatar--specialist" title="SR, Source reader">SR</span>
+        <span class="vi-ext-avatar vi-ext-avatar--specialist" title="HC, Hash checker">HC</span>
+        <span class="vi-ext-avatar vi-ext-avatar--specialist" title="QA, Gate reviewer">QA</span>
+        <button type="button" aria-haspopup="dialog" aria-expanded="true" aria-controls="vi-avatar-popover" aria-label="Show 2 more team members" data-avatar-overflow class="vi-ext-avatar-more h-action-min-default">+2</button>
+      </div>
+      <span class="vi-ext-meta">Head agent ringed</span>
+    </div>
+
+    <div id="vi-avatar-popover" role="region" aria-label="Additional team members" class="vi-ext-popover" data-avatar-popover>
+      <div class="vi-ext-popover-head">
+        <span class="vi-ext-meta">Overflow roster (2)</span>
+        <button type="button" data-avatar-close aria-label="Close additional team members" class="vi-ext-btn vi-ext-btn--ghost h-action-min-default">Close</button>
+      </div>
+      <ul class="vi-ext-presence-list" aria-label="Overflow members">
+        <li class="vi-ext-presence-row">
+          <div class="vi-ext-presence-agent">
+            <span aria-hidden="true" class="vi-ext-avatar vi-ext-avatar--specialist">SA</span>
+            <div class="vi-ext-presence-meta">
+              <span class="vi-ext-presence-name">Schema auditor</span>
+              <span class="vi-ext-presence-role">Deterministic checker</span>
+            </div>
+          </div>
+          <span class="vi-ext-status">
+            <span aria-hidden="true" class="vi-ext-dot vi-ext-dot--ok"></span>
+            <span>Active</span>
+          </span>
+        </li>
+        <li class="vi-ext-presence-row">
+          <div class="vi-ext-presence-agent">
+            <span aria-hidden="true" class="vi-ext-avatar vi-ext-avatar--specialist">DA</span>
+            <div class="vi-ext-presence-meta">
+              <span class="vi-ext-presence-name">Diff analyzer</span>
+              <span class="vi-ext-presence-role">Model specialist</span>
+            </div>
+          </div>
+          <span class="vi-ext-status">
+            <span aria-hidden="true" class="vi-ext-dot vi-ext-dot--warn"></span>
+            <span>Idle</span>
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <ul class="vi-ext-presence-list" aria-label="Primary team presence">
+      <li class="vi-ext-presence-row">
+        <div class="vi-ext-presence-agent">
+          <span aria-hidden="true" class="vi-ext-avatar vi-ext-avatar--lead">LA</span>
+          <div class="vi-ext-presence-meta">
+            <span class="vi-ext-presence-name">Lead agent</span>
+            <span class="vi-ext-presence-role">Coordinator</span>
+          </div>
+        </div>
+        <span class="vi-ext-status">
+          <span aria-hidden="true" class="vi-ext-dot vi-ext-dot--ok"></span>
+          <span>Active</span>
+        </span>
+      </li>
+      <li class="vi-ext-presence-row">
+        <div class="vi-ext-presence-agent">
+          <span aria-hidden="true" class="vi-ext-avatar vi-ext-avatar--specialist">SR</span>
+          <div class="vi-ext-presence-meta">
+            <span class="vi-ext-presence-name">Source reader</span>
+            <span class="vi-ext-presence-role">Model specialist</span>
+          </div>
+        </div>
+        <span class="vi-ext-status">
+          <span aria-hidden="true" class="vi-ext-dot vi-ext-dot--info"></span>
+          <span>Running</span>
+        </span>
+      </li>
+      <li class="vi-ext-presence-row">
+        <div class="vi-ext-presence-agent">
+          <span aria-hidden="true" class="vi-ext-avatar vi-ext-avatar--specialist">HC</span>
+          <div class="vi-ext-presence-meta">
+            <span class="vi-ext-presence-name">Hash checker</span>
+            <span class="vi-ext-presence-role">Deterministic checker</span>
+          </div>
+        </div>
+        <span class="vi-ext-status">
+          <span aria-hidden="true" class="vi-ext-dot vi-ext-dot--warn"></span>
+          <span>Idle</span>
+        </span>
+      </li>
+      <li class="vi-ext-presence-row">
+        <div class="vi-ext-presence-agent">
+          <span aria-hidden="true" class="vi-ext-avatar vi-ext-avatar--specialist">QA</span>
+          <div class="vi-ext-presence-meta">
+            <span class="vi-ext-presence-name">Gate reviewer</span>
+            <span class="vi-ext-presence-role">Quality specialist</span>
+          </div>
+        </div>
+        <span class="vi-ext-status">
+          <span aria-hidden="true" class="vi-ext-dot vi-ext-dot--offline"></span>
+          <span>Offline</span>
+        </span>
+      </li>
+    </ul>
+  </div>
+</section>

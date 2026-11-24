@@ -1,0 +1,77 @@
+<!--
+  Nocturne Museum: Input request card (ADR-021)
+  Structured agent clarification prompt (waiting_for_input) distinct from an owner
+  tool-approval gate. Pairs a neutral specialist monogram, a single question, a
+  role="radiogroup" option list with subtle recommendation cue, an optional custom-note
+  input, 44px Submit answer and Use default actions, and a collapsed answered receipt.
+-->
+<section class="vi-ws-scope" aria-labelledby="input-request-title">
+  <div class="vi-ws-card vi-ws-card--narrow" data-vi-input-request data-input-state="pending">
+    <div class="vi-ws-head">
+      <div class="vi-ws-title-group">
+        <h2 id="input-request-title" class="vi-ws-title">Input needed</h2>
+        <div class="vi-ws-agent-line">
+          <span class="vi-ws-monogram">SA</span>
+          <span class="vi-ws-meta">Schema auditor · specialist</span>
+        </div>
+      </div>
+      <span class="vi-ws-status" data-input-status>
+        <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--info" data-input-dot></span>
+        <span data-input-status-label>waiting_for_input</span>
+      </span>
+    </div>
+
+    <div class="vi-ws-prompt-body" data-input-body>
+      <p id="input-request-question" class="vi-ws-question">Which migration mode should run for the nullable slug column?</p>
+
+      <div role="radiogroup" aria-labelledby="input-request-question" class="vi-ws-radio-list" data-input-radiogroup>
+        <button type="button" role="radio" aria-checked="true" tabindex="0" data-radio-value="Backfill then enforce" data-radio-default="true" class="vi-ws-radio-row h-action-min-default">
+          <span aria-hidden="true" class="vi-ws-radio-mark"></span>
+          <span class="vi-ws-radio-content">
+            <span class="vi-ws-radio-head">
+              <span class="vi-ws-radio-label">Backfill then enforce</span>
+              <span class="vi-ws-recommended">Recommended</span>
+            </span>
+            <span class="vi-ws-radio-hint">Populate existing rows first, then apply the not-null constraint.</span>
+          </span>
+        </button>
+        <button type="button" role="radio" aria-checked="false" tabindex="-1" data-radio-value="Keep nullable" class="vi-ws-radio-row h-action-min-default">
+          <span aria-hidden="true" class="vi-ws-radio-mark"></span>
+          <span class="vi-ws-radio-content">
+            <span class="vi-ws-radio-head">
+              <span class="vi-ws-radio-label">Keep nullable</span>
+            </span>
+            <span class="vi-ws-radio-hint">Leave historical rows untouched and validate new writes only.</span>
+          </span>
+        </button>
+        <button type="button" role="radio" aria-checked="false" tabindex="-1" data-radio-value="Hold schema change" class="vi-ws-radio-row h-action-min-default">
+          <span aria-hidden="true" class="vi-ws-radio-mark"></span>
+          <span class="vi-ws-radio-content">
+            <span class="vi-ws-radio-head">
+              <span class="vi-ws-radio-label">Hold schema change</span>
+            </span>
+            <span class="vi-ws-radio-hint">Pause migration and open a manual review task before release.</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="vi-ws-field-group">
+        <label for="vi-ws-input-note" class="vi-ws-label">Optional note</label>
+        <input id="vi-ws-input-note" type="text" autocomplete="off" placeholder="Add a scope note for Schema auditor" data-input-note class="vi-ws-input h-action-min-default" />
+      </div>
+
+      <div class="vi-ws-actions">
+        <button type="button" data-input-submit class="vi-ws-btn vi-ws-btn--primary h-action-min-default">Submit answer</button>
+        <button type="button" data-input-default class="vi-ws-btn h-action-min-default">Use default</button>
+      </div>
+    </div>
+
+    <div class="vi-ws-receipt-collapsed" data-input-receipt role="status" aria-live="polite" hidden>
+      <div class="vi-ws-receipt-summary">
+        <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--ok"></span>
+        <span class="vi-ws-receipt-text" data-input-receipt-text>Answered · Backfill then enforce</span>
+      </div>
+      <button type="button" data-input-reopen class="vi-ws-btn vi-ws-btn--ghost h-action-min-default">Reopen</button>
+    </div>
+  </div>
+</section>

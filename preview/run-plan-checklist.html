@@ -1,0 +1,128 @@
+<!--
+  Nocturne Museum: Run plan checklist (ADR-021)
+  Compact live agent execution plan and step checklist with plain tabular-nums ratio,
+  All / Open filter controls, five hairline rows pairing semantic status dots, text
+  labels, and neutral ADR-020 specialist monograms, plus a blocker details receipt.
+-->
+<section class="vi-ws-scope" aria-labelledby="run-plan-title">
+  <div class="vi-ws-card vi-ws-card--narrow" data-vi-run-plan>
+    <div class="vi-ws-head">
+      <div class="vi-ws-title-row">
+        <h2 id="run-plan-title" class="vi-ws-title">Execution plan</h2>
+        <span class="vi-ws-meta" data-plan-ratio aria-live="polite">2 / 5 steps done</span>
+      </div>
+      <div role="group" aria-label="Filter plan steps" class="vi-ws-tabs">
+        <button type="button" aria-pressed="true" data-plan-filter="all" class="vi-ws-tab h-action-min-default">All</button>
+        <button type="button" aria-pressed="false" data-plan-filter="open" class="vi-ws-tab h-action-min-default">Open</button>
+      </div>
+    </div>
+
+    <ol aria-label="Execution steps" class="vi-ws-list" data-plan-list>
+      <li class="vi-ws-plan-row" data-plan-step data-step-status="done">
+        <div class="vi-ws-plan-main">
+          <span class="vi-ws-step-num">01</span>
+          <div class="vi-ws-plan-text">
+            <span class="vi-ws-plan-label">Collect baseline schema diff and dependency graph</span>
+            <span class="vi-ws-plan-note">Read-only workspace scan completed across 14 files.</span>
+          </div>
+        </div>
+        <div class="vi-ws-plan-meta">
+          <span class="vi-ws-status">
+            <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--ok"></span>
+            <span>Done</span>
+          </span>
+          <span class="vi-ws-monogram vi-ws-monogram--head" aria-label="Coordinator CA">CA</span>
+        </div>
+      </li>
+
+      <li class="vi-ws-plan-row" data-plan-step data-step-status="done">
+        <div class="vi-ws-plan-main">
+          <span class="vi-ws-step-num">02</span>
+          <div class="vi-ws-plan-text">
+            <span class="vi-ws-plan-label">Audit nullable columns and index locks</span>
+            <span class="vi-ws-plan-note">Identified 1 column requiring explicit backfill selection.</span>
+          </div>
+        </div>
+        <div class="vi-ws-plan-meta">
+          <span class="vi-ws-status">
+            <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--ok"></span>
+            <span>Done</span>
+          </span>
+          <span class="vi-ws-monogram" aria-label="Schema auditor SA">SA</span>
+        </div>
+      </li>
+
+      <li class="vi-ws-plan-row" data-plan-step data-step-status="in_progress" aria-current="step">
+        <div class="vi-ws-plan-main">
+          <span class="vi-ws-step-num">03</span>
+          <div class="vi-ws-plan-text">
+            <span class="vi-ws-plan-label">Draft migration script and rollback checks</span>
+            <span class="vi-ws-plan-note">Preparing deterministic SQL migration preview.</span>
+          </div>
+        </div>
+        <div class="vi-ws-plan-meta">
+          <span class="vi-ws-status">
+            <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--info"></span>
+            <span>In progress</span>
+          </span>
+          <span class="vi-ws-monogram" aria-label="Schema auditor SA">SA</span>
+        </div>
+      </li>
+
+      <li class="vi-ws-plan-row vi-ws-plan-row--blocker" data-plan-step data-step-status="blocked">
+        <div class="vi-ws-plan-row-top">
+          <div class="vi-ws-plan-main">
+            <span class="vi-ws-step-num">04</span>
+            <div class="vi-ws-plan-text">
+              <span class="vi-ws-plan-label">Run staging write gate on release branch</span>
+              <span class="vi-ws-plan-note">Paused until owner clears the write scope.</span>
+            </div>
+          </div>
+          <div class="vi-ws-plan-meta">
+            <span class="vi-ws-status">
+              <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--danger"></span>
+              <span>Blocked</span>
+            </span>
+            <span class="vi-ws-monogram" aria-label="Quality checker QA">QA</span>
+          </div>
+        </div>
+        <details class="vi-ws-blocker-details">
+          <summary class="vi-ws-blocker-summary">
+            <span class="vi-ws-blocker-toggle">
+              <span aria-hidden="true" class="vi-ws-blocker-chev">&rsaquo;</span>
+              <span>Blocker receipt</span>
+            </span>
+            <span class="vi-ws-meta">waiting_for_owner · step 04</span>
+          </summary>
+          <dl class="vi-ws-blocker-dl">
+            <div class="vi-ws-blocker-dl-row">
+              <dt>Gate</dt>
+              <dd>vcs.file.write on migrations/004_slug.sql</dd>
+            </div>
+            <div class="vi-ws-blocker-dl-row">
+              <dt>Owner check</dt>
+              <dd>Pending explicit Allow once decision</dd>
+            </div>
+          </dl>
+        </details>
+      </li>
+
+      <li class="vi-ws-plan-row" data-plan-step data-step-status="pending">
+        <div class="vi-ws-plan-main">
+          <span class="vi-ws-step-num">05</span>
+          <div class="vi-ws-plan-text">
+            <span class="vi-ws-plan-label">Publish release summary and close objective</span>
+            <span class="vi-ws-plan-note">Queued behind step 04 completion.</span>
+          </div>
+        </div>
+        <div class="vi-ws-plan-meta">
+          <span class="vi-ws-status">
+            <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--muted"></span>
+            <span>Pending</span>
+          </span>
+          <span class="vi-ws-monogram vi-ws-monogram--head" aria-label="Coordinator CA">CA</span>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>

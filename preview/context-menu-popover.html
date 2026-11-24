@@ -1,0 +1,84 @@
+<!--
+  Nocturne Museum: WAI-ARIA Context Menu Popover (ADR-024)
+  Dropdown/context menu with role="menu", menuitem, menuitemcheckbox, menuitemradio,
+  kbd shortcut hints, hairline dividers, aria-disabled item with reason, destructive
+  bottom item, and Esc, ArrowUp, ArrowDown, Home, and End roving focus. Solid surfaces only.
+-->
+<section class="vi-ext-scope" aria-labelledby="ctx-menu-title">
+  <div class="vi-ext-card vi-ext-card--narrow" data-vi-context-menu>
+    <div class="vi-ext-head">
+      <h2 id="ctx-menu-title" class="vi-ext-title">Workspace actions menu</h2>
+      <span class="vi-ext-meta" role="status" aria-live="polite" data-menu-status>Menu open</span>
+    </div>
+
+    <div class="vi-ext-menu-wrap">
+      <button type="button" id="ctx-menu-trigger" aria-haspopup="menu" aria-expanded="true" aria-controls="ctx-menu-popover" data-menu-trigger class="vi-ext-btn vi-ext-btn--primary h-action-min-default">
+        <span>Specimen actions</span>
+        <span aria-hidden="true" class="vi-ext-caret">v</span>
+      </button>
+
+      <div id="ctx-menu-popover" role="menu" aria-labelledby="ctx-menu-trigger" class="vi-ext-menu" data-menu-panel>
+        <div class="vi-ext-menu-group" role="group" aria-label="Document actions">
+          <button type="button" role="menuitem" tabindex="0" data-menu-item data-menu-label="Open fragment source" class="vi-ext-menu-item h-action-min-default">
+            <span>Open fragment source</span>
+            <kbd class="vi-ext-kbd">G S</kbd>
+          </button>
+          <button type="button" role="menuitem" tabindex="-1" data-menu-item data-menu-label="Copy token reference" class="vi-ext-menu-item h-action-min-default">
+            <span>Copy token reference</span>
+            <kbd class="vi-ext-kbd">Cmd+C</kbd>
+          </button>
+          <button type="button" role="menuitem" tabindex="-1" aria-disabled="true" data-menu-item data-menu-label="Publish snapshot" data-menu-reason="Read-only preview" class="vi-ext-menu-item h-action-min-default">
+            <span class="vi-ext-menu-item-main">
+              <span>Publish snapshot</span>
+              <span class="vi-ext-menu-reason">Read-only preview</span>
+            </span>
+          </button>
+        </div>
+
+        <div role="separator" class="vi-ext-menu-divider"></div>
+
+        <div class="vi-ext-menu-group" role="group" aria-label="Display options">
+          <button type="button" role="menuitemcheckbox" tabindex="-1" aria-checked="true" data-menu-item data-menu-label="Show line digests" class="vi-ext-menu-item h-action-min-default">
+            <span class="vi-ext-menu-item-left">
+              <span aria-hidden="true" class="vi-ext-menu-indicator"></span>
+              <span>Show line digests</span>
+            </span>
+            <kbd class="vi-ext-kbd">D</kbd>
+          </button>
+          <button type="button" role="menuitemcheckbox" tabindex="-1" aria-checked="false" data-menu-item data-menu-label="Wrap long lines" class="vi-ext-menu-item h-action-min-default">
+            <span class="vi-ext-menu-item-left">
+              <span aria-hidden="true" class="vi-ext-menu-indicator"></span>
+              <span>Wrap long lines</span>
+            </span>
+            <kbd class="vi-ext-kbd">W</kbd>
+          </button>
+        </div>
+
+        <div role="separator" class="vi-ext-menu-divider"></div>
+
+        <div class="vi-ext-menu-group" role="group" aria-label="Row density">
+          <span class="vi-ext-menu-group-label">Row density</span>
+          <button type="button" role="menuitemradio" tabindex="-1" aria-checked="true" data-menu-item data-radio-group="density" data-menu-label="Compact" class="vi-ext-menu-item h-action-min-default">
+            <span class="vi-ext-menu-item-left">
+              <span aria-hidden="true" class="vi-ext-menu-indicator vi-ext-menu-indicator--radio"></span>
+              <span>Compact</span>
+            </span>
+          </button>
+          <button type="button" role="menuitemradio" tabindex="-1" aria-checked="false" data-menu-item data-radio-group="density" data-menu-label="Comfortable" class="vi-ext-menu-item h-action-min-default">
+            <span class="vi-ext-menu-item-left">
+              <span aria-hidden="true" class="vi-ext-menu-indicator vi-ext-menu-indicator--radio"></span>
+              <span>Comfortable</span>
+            </span>
+          </button>
+        </div>
+
+        <div role="separator" class="vi-ext-menu-divider"></div>
+
+        <button type="button" role="menuitem" tabindex="-1" data-menu-item data-menu-destructive data-menu-label="Discard local draft" class="vi-ext-menu-item vi-ext-menu-item--danger h-action-min-default">
+          <span>Discard local draft</span>
+          <kbd class="vi-ext-kbd">Del</kbd>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

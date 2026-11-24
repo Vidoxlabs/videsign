@@ -1,0 +1,106 @@
+<!--
+  Nocturne Museum: Keyboard Shortcuts Reference Sheet (ADR-024)
+  Restrained ? reference dialog (role="dialog", aria-modal="false") with live quick-filter
+  search, empty-filter reset, 2-column hairline-row layout (Navigation, Workspace, Review),
+  and crisp kbd keycaps with zero nested card-in-card borders. Solid surfaces only.
+-->
+<section class="vi-ext-scope" aria-labelledby="shortcuts-title">
+  <div class="vi-ext-shortcuts-wrap" data-vi-shortcuts>
+    <div class="vi-ext-shortcuts-toolbar">
+      <button type="button" aria-haspopup="dialog" aria-expanded="true" aria-controls="vi-shortcuts-dialog" data-shortcuts-trigger class="vi-ext-btn vi-ext-btn--ghost h-action-min-default">
+        <kbd class="vi-ext-kbd">?</kbd>
+        <span>Keyboard shortcuts</span>
+      </button>
+    </div>
+
+    <div id="vi-shortcuts-dialog" role="dialog" aria-modal="false" aria-labelledby="shortcuts-title" class="vi-ext-card vi-ext-card--narrow" data-shortcuts-dialog>
+      <div class="vi-ext-head">
+        <h2 id="shortcuts-title" class="vi-ext-title">Keyboard shortcuts</h2>
+        <div class="vi-ext-shortcuts-toolbar">
+          <span class="vi-ext-meta" role="status" aria-live="polite" data-shortcuts-status>12 shortcuts</span>
+          <button type="button" data-shortcuts-close aria-label="Close keyboard shortcuts" class="vi-ext-btn vi-ext-btn--ghost h-action-min-default">Close</button>
+        </div>
+      </div>
+
+      <div>
+        <label for="vi-shortcuts-search" class="sr-only">Filter keyboard shortcuts</label>
+        <input id="vi-shortcuts-search" type="search" autocomplete="off" placeholder="Filter shortcuts by action or key..." data-shortcuts-input class="vi-ext-input h-action-min-default" />
+      </div>
+
+      <div class="vi-ext-shortcuts-grid">
+        <div class="vi-ext-shortcuts-group" data-shortcut-group>
+          <h3 class="vi-ext-shortcuts-group-title">Navigation</h3>
+          <ul class="vi-ext-shortcuts-list">
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="open command palette cmd k">
+              <span class="vi-ext-shortcut-label">Open command palette</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">Cmd</kbd><kbd class="vi-ext-kbd">K</kbd></span>
+            </li>
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="jump to catalog g c">
+              <span class="vi-ext-shortcut-label">Jump to catalog</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">G</kbd><kbd class="vi-ext-kbd">C</kbd></span>
+            </li>
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="focus search field slash">
+              <span class="vi-ext-shortcut-label">Focus search field</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">/</kbd></span>
+            </li>
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="toggle shortcuts sheet question">
+              <span class="vi-ext-shortcut-label">Toggle shortcuts sheet</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">?</kbd></span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="vi-ext-shortcuts-group" data-shortcut-group>
+          <h3 class="vi-ext-shortcuts-group-title">Workspace</h3>
+          <ul class="vi-ext-shortcuts-list">
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="toggle inspector drawer cmd period">
+              <span class="vi-ext-shortcut-label">Toggle inspector drawer</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">Cmd</kbd><kbd class="vi-ext-kbd">.</kbd></span>
+            </li>
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="switch workspace thread alt j">
+              <span class="vi-ext-shortcut-label">Switch workspace thread</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">Alt</kbd><kbd class="vi-ext-kbd">J</kbd></span>
+            </li>
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="pause background motion shift m">
+              <span class="vi-ext-shortcut-label">Pause background motion</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">Shift</kbd><kbd class="vi-ext-kbd">M</kbd></span>
+            </li>
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="copy active command cmd shift c">
+              <span class="vi-ext-shortcut-label">Copy active command</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">Cmd</kbd><kbd class="vi-ext-kbd">Shift</kbd><kbd class="vi-ext-kbd">C</kbd></span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="vi-ext-shortcuts-group vi-ext-shortcuts-group--wide" data-shortcut-group>
+          <h3 class="vi-ext-shortcuts-group-title">Review</h3>
+          <ul class="vi-ext-shortcuts-list vi-ext-shortcuts-list--two-col">
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="next diff hunk n">
+              <span class="vi-ext-shortcut-label">Next diff hunk</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">N</kbd></span>
+            </li>
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="previous diff hunk p">
+              <span class="vi-ext-shortcut-label">Previous diff hunk</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">P</kbd></span>
+            </li>
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="approve gate checkpoint a">
+              <span class="vi-ext-shortcut-label">Accept current patch</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">Shift</kbd><kbd class="vi-ext-kbd">A</kbd></span>
+            </li>
+            <li class="vi-ext-shortcut-row" data-shortcut-row data-shortcut-search="add critique note c">
+              <span class="vi-ext-shortcut-label">Add critique note</span>
+              <span class="vi-ext-shortcut-keys"><kbd class="vi-ext-kbd">C</kbd></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="vi-ext-empty" hidden data-shortcuts-empty>
+        <span class="vi-ext-meta">No shortcuts match the active filter.</span>
+        <button type="button" data-shortcuts-reset class="vi-ext-btn h-action-min-default">Reset filter</button>
+      </div>
+
+      <p class="vi-ext-meta">Press Esc to clear filter or close</p>
+    </div>
+  </div>
+</section>

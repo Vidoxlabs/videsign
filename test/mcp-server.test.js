@@ -206,7 +206,7 @@ test('component_catalog lists matching entries by consumer without html by defau
   assert.notEqual(mdCodeRes.isError, true, mdCodeRes.content[0].text);
   assert.deepEqual(
     JSON.parse(mdCodeRes.content[0].text).components.map((c) => c.id),
-    ['markdown-prose-renderer', 'code-and-diff-viewer', 'docs-code-tabs', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline'],
+    ['markdown-prose-renderer', 'code-and-diff-viewer', 'docs-code-tabs', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'copy-command-bar'],
   );
 
   const uiRes = await client.callTool({
@@ -216,7 +216,7 @@ test('component_catalog lists matching entries by consumer without html by defau
   assert.notEqual(uiRes.isError, true, uiRes.content[0].text);
   assert.deepEqual(
     JSON.parse(uiRes.content[0].text).components.map((c) => c.id),
-    ['form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'data-table', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'skeleton-row', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar', 'combobox-multiselect', 'date-range-picker', 'tooltip-hover-card', 'file-tree-explorer', 'resizable-split-pane', 'destructive-action-guard', 'system-error-boundary'],
+    ['form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'data-table', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'skeleton-row', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar', 'combobox-multiselect', 'date-range-picker', 'tooltip-hover-card', 'file-tree-explorer', 'resizable-split-pane', 'destructive-action-guard', 'system-error-boundary', 'context-menu-popover', 'keyboard-shortcuts-sheet', 'avatar-group-presence'],
   );
 
   assert.ok(siteIds.includes('api-reference-row'));
@@ -271,7 +271,7 @@ test('design_brief and scaffold_page tools plus components.manifest.json work ov
 
   const manifestRes = await client.readResource({ uri: 'file://dist/components.manifest.json' });
   const manifest = JSON.parse(manifestRes.contents[0].text);
-  assert.equal(manifest.componentCount, 103);
+  assert.equal(manifest.componentCount, 111);
   assert.ok(manifest.archetypes['public-site-landing']);
   assert.ok(manifest.archetypes['docs-portal']);
   assert.ok(manifest.archetypes['settings-workspace']);

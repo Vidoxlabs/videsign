@@ -1,21 +1,51 @@
 <!--
   Nocturne Museum: Usage and limits meter (ADR-020)
-  Solid secondary panel with polite live updates, tabular-nums mono model-call and
-  token totals, per-actor input/output/cache breakdown rows, and an explicit
-  unreported-tokens fallback row.
+  Solid secondary panel with polite live updates, visual token-budget bar,
+  tabular-nums mono model-call and token totals, structured per-actor input/output/cache
+  rows, and an explicit unreported-tokens fallback row.
 -->
 <section role="region" aria-label="Usage and limits" aria-live="polite" class="flex flex-col gap-gap-spacious-default p-layout-padding-medium-base bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base">
-  <details class="flex flex-col gap-gap-compact-default">
-    <summary class="flex flex-wrap items-center justify-between gap-gap-compact-default h-action-min-default cursor-pointer">
+  <div class="flex flex-col gap-gap-compact-default">
+    <div class="flex flex-wrap items-baseline justify-between gap-gap-compact-default">
       <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">3/6 model calls · 14,280 measured tokens</span>
       <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums tracking-typography-tracking-wide-base text-text-content-secondary-base">Token limit: 50,000</span>
-    </summary>
+    </div>
+    <div role="progressbar" aria-valuenow="14280" aria-valuemin="0" aria-valuemax="50000" aria-label="Measured token budget" class="w-full h-indicator-dot-base rounded-layout-radius-full-base bg-surface-background-tertiary-base overflow-hidden">
+      <div class="w-1/4 h-full rounded-layout-radius-full-base bg-status-indicator-success-base"></div>
+    </div>
+  </div>
+  <details class="flex flex-col gap-gap-compact-default border-t border-border-separator-primary-base pt-rhythm-2-base">
+    <summary class="cursor-pointer py-rhythm-2-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base">Per-actor breakdown (2 actors)</summary>
     <ul aria-label="Per-actor usage" class="flex flex-col border-t border-border-separator-primary-base">
-      <li class="py-inset-compact-default border-b border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Lead · Default model · input 3,120 · output 640 · cache read 1,024 · write 512 · USD unreported</li>
-      <li class="py-inset-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Source reader · Default model · input 8,410 · output 2,110 · cache read 4,096 · write 0 · USD unreported</li>
+      <li class="py-inset-compact-default border-b border-border-separator-primary-base flex flex-col gap-gap-dense-default">
+        <div class="flex flex-wrap items-baseline justify-between gap-gap-compact-default">
+          <span class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base">Lead</span>
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Default model</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+          <span>input <span class="text-text-content-primary-base">3,120</span></span>
+          <span>output <span class="text-text-content-primary-base">640</span></span>
+          <span>cache read <span class="text-text-content-primary-base">1,024</span></span>
+          <span>write <span class="text-text-content-primary-base">512</span></span>
+          <span>USD unreported</span>
+        </div>
+      </li>
+      <li class="py-inset-compact-default flex flex-col gap-gap-dense-default">
+        <div class="flex flex-wrap items-baseline justify-between gap-gap-compact-default">
+          <span class="font-typography-family-sans-base text-typography-size-sm-base font-typography-weight-medium-base text-text-content-primary-base">Source reader</span>
+          <span class="font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base">Default model</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-gap-compact-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
+          <span>input <span class="text-text-content-primary-base">8,410</span></span>
+          <span>output <span class="text-text-content-primary-base">2,110</span></span>
+          <span>cache read <span class="text-text-content-primary-base">4,096</span></span>
+          <span>write <span class="text-text-content-primary-base">0</span></span>
+          <span>USD unreported</span>
+        </div>
+      </li>
     </ul>
   </details>
-  <div class="flex items-center justify-between gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
+  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default pt-layout-padding-medium-base border-t border-border-separator-primary-base">
     <span class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Fallback receipt</span>
     <span class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">1/6 model calls · tokens unreported</span>
   </div>

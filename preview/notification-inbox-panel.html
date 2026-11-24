@@ -1,0 +1,106 @@
+<!--
+  Nocturne Museum: Notification inbox panel (ADR-021)
+  Persistent workspace attention and triage inbox with WAI-ARIA tablist (All, Unread,
+  Approvals), polite unread counter, 44px Mark all read action, four flat hairline rows
+  with individual Open and Mark read controls, and a dashed caught-up empty state.
+-->
+<section class="vi-ws-scope" aria-labelledby="inbox-title">
+  <div class="vi-ws-card vi-ws-card--narrow" data-vi-inbox>
+    <div class="vi-ws-head">
+      <div class="vi-ws-title-row">
+        <h2 id="inbox-title" class="vi-ws-title">Notifications</h2>
+        <span class="vi-ws-meta" data-inbox-count role="status" aria-live="polite">2 unread</span>
+      </div>
+      <button type="button" data-inbox-mark-all class="vi-ws-btn h-action-min-default">Mark all read</button>
+    </div>
+
+    <div role="tablist" aria-label="Notification filters" class="vi-ws-tabs" data-inbox-tabs>
+      <button type="button" role="tab" id="vi-inbox-tab-all" aria-selected="true" aria-controls="vi-inbox-panel" tabindex="0" data-inbox-tab="all" class="vi-ws-tab h-action-min-default">All</button>
+      <button type="button" role="tab" id="vi-inbox-tab-unread" aria-selected="false" aria-controls="vi-inbox-panel" tabindex="-1" data-inbox-tab="unread" class="vi-ws-tab h-action-min-default">Unread</button>
+      <button type="button" role="tab" id="vi-inbox-tab-approvals" aria-selected="false" aria-controls="vi-inbox-panel" tabindex="-1" data-inbox-tab="approvals" class="vi-ws-tab h-action-min-default">Approvals</button>
+    </div>
+
+    <div id="vi-inbox-panel" role="tabpanel" aria-labelledby="vi-inbox-tab-all" data-inbox-panel>
+      <ul aria-label="Workspace notifications" class="vi-ws-list" data-inbox-list>
+        <li class="vi-ws-inbox-row" data-inbox-item data-inbox-id="gate-write" data-read="false" data-category="approvals">
+          <div class="vi-ws-inbox-main">
+            <div class="vi-ws-inbox-top">
+              <span class="vi-ws-status">
+                <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--warn"></span>
+                <span>Pending owner gate</span>
+              </span>
+              <span class="vi-ws-meta">waiting_for_owner · 2m ago</span>
+            </div>
+            <p class="vi-ws-inbox-title" data-inbox-title>vcs.file.write requested on docs/architecture.md</p>
+          </div>
+          <div class="vi-ws-inbox-actions">
+            <button type="button" data-inbox-open aria-label="Open pending owner gate for docs/architecture.md" class="vi-ws-btn vi-ws-btn--primary h-action-min-default">Open</button>
+            <button type="button" data-inbox-mark-read aria-label="Mark pending owner gate read" class="vi-ws-btn vi-ws-btn--ghost h-action-min-default">Mark read</button>
+          </div>
+        </li>
+
+        <li class="vi-ws-inbox-row" data-inbox-item data-inbox-id="cross-team" data-read="false" data-category="question">
+          <div class="vi-ws-inbox-main">
+            <div class="vi-ws-inbox-top">
+              <span class="vi-ws-status">
+                <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--accent"></span>
+                <span>Cross-team question</span>
+              </span>
+              <span class="vi-ws-meta">Release team · 9m ago</span>
+            </div>
+            <p class="vi-ws-inbox-title" data-inbox-title>Can stage 1 contract modules ship before token sync completes?</p>
+          </div>
+          <div class="vi-ws-inbox-actions">
+            <button type="button" data-inbox-open aria-label="Open cross-team question from Release team" class="vi-ws-btn h-action-min-default">Open</button>
+            <button type="button" data-inbox-mark-read aria-label="Mark cross-team question read" class="vi-ws-btn vi-ws-btn--ghost h-action-min-default">Mark read</button>
+          </div>
+        </li>
+
+        <li class="vi-ws-inbox-row" data-inbox-item data-inbox-id="run-complete" data-read="true" data-category="run">
+          <div class="vi-ws-inbox-main">
+            <div class="vi-ws-inbox-top">
+              <span class="vi-ws-status">
+                <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--ok"></span>
+                <span>Completed run</span>
+              </span>
+              <span class="vi-ws-meta">run-4b9e · 28m ago</span>
+            </div>
+            <p class="vi-ws-inbox-title" data-inbox-title>Schema audit completed across 14 workspace files with 0 warnings</p>
+          </div>
+          <div class="vi-ws-inbox-actions">
+            <button type="button" data-inbox-open aria-label="Open completed run 4b9e" class="vi-ws-btn h-action-min-default">Open</button>
+            <button type="button" data-inbox-mark-read disabled aria-disabled="true" aria-label="Completed run notification already read" class="vi-ws-btn vi-ws-btn--ghost h-action-min-default">Read</button>
+          </div>
+        </li>
+
+        <li class="vi-ws-inbox-row" data-inbox-item data-inbox-id="failed-check" data-read="true" data-category="check">
+          <div class="vi-ws-inbox-main">
+            <div class="vi-ws-inbox-top">
+              <span class="vi-ws-status">
+                <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--danger"></span>
+                <span>Failed check</span>
+              </span>
+              <span class="vi-ws-meta">QA · 1h ago</span>
+            </div>
+            <p class="vi-ws-inbox-title" data-inbox-title>Contrast delta check held on draft migration summary</p>
+          </div>
+          <div class="vi-ws-inbox-actions">
+            <button type="button" data-inbox-open aria-label="Open failed contrast check" class="vi-ws-btn h-action-min-default">Open</button>
+            <button type="button" data-inbox-mark-read disabled aria-disabled="true" aria-label="Failed check notification already read" class="vi-ws-btn vi-ws-btn--ghost h-action-min-default">Read</button>
+          </div>
+        </li>
+      </ul>
+
+      <div class="vi-ws-empty" data-inbox-empty hidden>
+        <p class="vi-ws-empty-title" data-inbox-empty-title>All caught up</p>
+        <p class="vi-ws-copy" data-inbox-empty-copy>No unread notifications remain in this queue.</p>
+        <button type="button" data-inbox-restore class="vi-ws-btn vi-ws-btn--primary h-action-min-default">Restore demo items</button>
+      </div>
+    </div>
+
+    <div class="vi-ws-receipt" role="status" aria-live="polite">
+      <span data-inbox-receipt>2 unread items awaiting triage</span>
+      <button type="button" data-inbox-restore-inline class="vi-ws-btn vi-ws-btn--ghost h-action-min-default" hidden>Restore demo items</button>
+    </div>
+  </div>
+</section>

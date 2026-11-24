@@ -1,0 +1,32 @@
+<!--
+  Nocturne Museum: Single-line CLI & Install Copy Command Bar (ADR-024)
+  Segmented runner switcher (npm, pnpm, CLI), non-selectable $ prompt, horizontally
+  scrollable mono command, Include MCP config toggle switch, and 44px Copy button
+  with polite Copied status receipt. Solid surfaces only.
+-->
+<section class="vi-ext-scope" aria-labelledby="cmd-bar-title">
+  <div class="vi-ext-card vi-ext-card--narrow" data-vi-command-bar>
+    <div class="vi-ext-head">
+      <h2 id="cmd-bar-title" class="vi-ext-title">Install command</h2>
+      <div class="vi-ext-tabs" role="tablist" aria-label="Command runner">
+        <button type="button" role="tab" aria-selected="true" tabindex="0" data-runner="npm" data-cmd-base="npm install @vidoxlabs/videsign" data-cmd-mcp="npm install @vidoxlabs/videsign && npx @vidoxlabs/videsign --mcp" class="vi-ext-tab h-action-min-default">npm</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-runner="pnpm" data-cmd-base="pnpm add @vidoxlabs/videsign" data-cmd-mcp="pnpm add @vidoxlabs/videsign && pnpm dlx @vidoxlabs/videsign --mcp" class="vi-ext-tab h-action-min-default">pnpm</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-runner="cli" data-cmd-base="videsign tokens --check" data-cmd-mcp="videsign tokens --check --with-mcp" class="vi-ext-tab h-action-min-default">CLI</button>
+      </div>
+    </div>
+
+    <div class="vi-ext-cmd-strip">
+      <span aria-hidden="true" class="vi-ext-cmd-prompt">$</span>
+      <code class="vi-ext-cmd-code" data-cmd-text>npm install @vidoxlabs/videsign</code>
+      <button type="button" data-cmd-copy aria-label="Copy install command" class="vi-ext-btn vi-ext-btn--primary h-action-min-default">Copy</button>
+    </div>
+
+    <div class="vi-ext-cmd-foot">
+      <button type="button" role="switch" aria-checked="false" data-cmd-flag class="vi-ext-switch h-action-min-default">
+        <span class="vi-ext-switch-track" aria-hidden="true"><span class="vi-ext-switch-thumb"></span></span>
+        <span>Include MCP config</span>
+      </button>
+      <span class="vi-ext-meta" role="status" aria-live="polite" data-cmd-status>Ready to copy</span>
+    </div>
+  </div>
+</section>

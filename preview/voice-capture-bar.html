@@ -1,0 +1,85 @@
+<!--
+  Nocturne Museum: Voice capture bar (ADR-016)
+  Restrained dictation and transcript confirmation bar inside a single bordered composer
+  field. Offers Idle, Listening, Review, and Mic blocked specimen presets, a calm 7-bar
+  opacity-stepped level meter, tabular-nums timer, editable transcript input before send,
+  explicit mic recovery guidance, and 44px Hold to talk, Stop, Send, and Discard controls.
+-->
+<section class="vi-ws-scope" aria-labelledby="voice-capture-title">
+  <div class="vi-ws-card vi-ws-card--narrow" data-vi-voice-bar data-voice-state="listening">
+    <div class="vi-ws-head">
+      <h2 id="voice-capture-title" class="vi-ws-title">Voice capture bar</h2>
+      <div role="group" aria-label="Voice mode presets" class="vi-ws-tabs">
+        <button type="button" aria-pressed="false" data-voice-mode="idle" class="vi-ws-tab h-action-min-default">Idle</button>
+        <button type="button" aria-pressed="true" data-voice-mode="listening" class="vi-ws-tab h-action-min-default">Listening</button>
+        <button type="button" aria-pressed="false" data-voice-mode="review" class="vi-ws-tab h-action-min-default">Review</button>
+        <button type="button" aria-pressed="false" data-voice-mode="blocked" class="vi-ws-tab h-action-min-default">Mic blocked</button>
+      </div>
+    </div>
+
+    <div class="vi-ws-voice-field">
+      <div class="vi-ws-voice-panel" data-voice-panel="idle" hidden>
+        <span class="vi-ws-voice-prompt">Ready for dictation before sending</span>
+        <div class="vi-ws-actions">
+          <button type="button" data-voice-hold class="vi-ws-btn vi-ws-btn--primary h-action-min-default">Hold to talk</button>
+        </div>
+      </div>
+
+      <div class="vi-ws-voice-panel" data-voice-panel="listening">
+        <div class="vi-ws-voice-readout">
+          <span class="vi-ws-status">
+            <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--accent"></span>
+            <span>Listening</span>
+          </span>
+          <span aria-hidden="true" class="vi-ws-meter">
+            <span class="vi-ws-meter-bar vi-ws-meter-bar--1"></span>
+            <span class="vi-ws-meter-bar vi-ws-meter-bar--2"></span>
+            <span class="vi-ws-meter-bar vi-ws-meter-bar--3"></span>
+            <span class="vi-ws-meter-bar vi-ws-meter-bar--4"></span>
+            <span class="vi-ws-meter-bar vi-ws-meter-bar--5"></span>
+            <span class="vi-ws-meter-bar vi-ws-meter-bar--6"></span>
+            <span class="vi-ws-meter-bar vi-ws-meter-bar--7"></span>
+          </span>
+          <span class="vi-ws-meta" data-voice-timer>00:08 / 02:00</span>
+        </div>
+        <div class="vi-ws-actions">
+          <button type="button" data-voice-stop class="vi-ws-btn vi-ws-btn--primary h-action-min-default">Stop</button>
+          <button type="button" data-voice-discard class="vi-ws-btn vi-ws-btn--ghost h-action-min-default">Discard</button>
+        </div>
+      </div>
+
+      <div class="vi-ws-voice-panel vi-ws-voice-panel--stack" data-voice-panel="review" hidden>
+        <div class="vi-ws-voice-input-row">
+          <label for="vi-ws-voice-transcript" class="sr-only">Editable transcript before sending</label>
+          <input id="vi-ws-voice-transcript" type="text" autocomplete="off" value="Summarize the schema diff before release review" placeholder="Edit transcript before sending" data-voice-transcript class="vi-ws-input h-action-min-default" />
+        </div>
+        <div class="vi-ws-voice-review-foot">
+          <span class="vi-ws-meta">Review transcript before sending</span>
+          <div class="vi-ws-actions">
+            <button type="button" data-voice-discard class="vi-ws-btn vi-ws-btn--ghost h-action-min-default">Discard</button>
+            <button type="button" data-voice-send class="vi-ws-btn vi-ws-btn--primary h-action-min-default">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vi-ws-voice-panel vi-ws-voice-panel--stack" data-voice-panel="blocked" role="alert" hidden>
+        <div class="vi-ws-voice-blocked-copy">
+          <span class="vi-ws-status">
+            <span aria-hidden="true" class="vi-ws-dot vi-ws-dot--danger"></span>
+            <span>Mic blocked</span>
+          </span>
+          <p class="vi-ws-copy">Microphone access is denied in browser settings. Allow audio capture for this origin or type directly in the composer.</p>
+        </div>
+        <div class="vi-ws-actions">
+          <button type="button" data-voice-retry class="vi-ws-btn h-action-min-default">Retry mic</button>
+          <button type="button" data-voice-discard class="vi-ws-btn vi-ws-btn--ghost h-action-min-default">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vi-ws-receipt" role="status" aria-live="polite">
+      <span data-voice-receipt>Capturing locally · confirmation required before send</span>
+      <span class="vi-ws-meta" data-voice-mode-note>Listening state</span>
+    </div>
+  </div>
+</section>

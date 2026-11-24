@@ -25,12 +25,16 @@
   <link rel="stylesheet" href="../dist/library-surface.css" />
   <link rel="stylesheet" href="../dist/specimen-layouts.css" />
   <link rel="stylesheet" href="../dist/core-components.css" />
+  <link rel="stylesheet" href="../dist/extended-primitives.css" />
+  <link rel="stylesheet" href="../dist/workspace-components.css" />
   <link rel="stylesheet" href="./catalog.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
   <script defer src="../dist/settings-surface.js"></script>
   <script defer src="../dist/library-surface.js"></script>
   <script defer src="../dist/core-components.js"></script>
+  <script defer src="../dist/extended-primitives.js"></script>
+  <script defer src="../dist/workspace-components.js"></script>
   <script defer src="./catalog.js"></script>
 </head>
 <body>
@@ -240,6 +244,9 @@
         { file: 'feedback-and-empty-states.html', tier: 'primitives', label: 'Feedback and empty states', desc: 'Status-paired polite banners (success, error), progress bar, and dashed zero-match empty state with reset control (ADR-024).' },
         { file: 'toast-notification-stack.html', tier: 'primitives', label: 'Toast notification stack', desc: 'Polite status and assertive alert rows on solid surfaces with status dots, explicit labels, one recovery action, and 44px dismiss controls (ADR-024).' },
         { file: 'disclosure-and-modals.html', tier: 'primitives', label: 'Disclosure and modals', desc: 'Native details accordion rows, solid secondary modal confirm dialog, and role="menu" action rows (ADR-024).' },
+        { file: 'context-menu-popover.html', tier: 'primitives', label: 'Context menu popover', desc: 'WAI-ARIA dropdown and context menu with menuitemcheckbox, menuitemradio, kbd hints, disabled reason, destructive action, and roving keyboard focus (ADR-024).' },
+        { file: 'keyboard-shortcuts-sheet.html', tier: 'primitives', label: 'Keyboard shortcuts sheet', desc: 'Restrained ? shortcuts reference dialog with live quick-filter search, empty-filter reset, and two-column hairline rows across Navigation, Workspace, and Review (ADR-024).' },
+        { file: 'avatar-group-presence.html', tier: 'primitives', label: 'Avatar group and presence', desc: 'Compact runtime monogram stack (head agent violet ring, specialist graph-line outlines), 44px +2 overflow popover, and Active/Running/Idle/Offline presence rows (ADR-020).' },
         { file: 'command-palette-dialog.html', tier: 'primitives', label: 'Command palette dialog', desc: 'Solid keyboard-first command palette modal with focus-visible search input, grouped 44px command rows, shortcuts, and hint footer (ADR-024).' },
         { file: 'drawer-inspector-sheet.html', tier: 'primitives', label: 'Drawer inspector sheet', desc: 'Solid slide-over detail sheet with 44px Close button, section tabs, hairline metadata dl, JSON preview, and footer actions (ADR-024).' },
         { file: 'file-dropzone-upload.html', tier: 'primitives', label: 'File dropzone and upload queue', desc: 'Dashed file dropzone stating accepted MIME and size bounds beside a hairline upload queue with status-dot states and 44px Remove controls (ADR-024).' },
@@ -250,6 +257,7 @@
         { file: 'markdown-prose-renderer.html', tier: 'primitives', label: 'Markdown prose renderer', desc: 'Upgraded GFM Markdown surface with breadcrumb, claim badge, Raw .md, heading # anchors, Note/Warning/Scope boundary callouts, synced code tabs, sticky-column table, and Prev/Next pager (ADR-007, ADR-024).' },
         { file: 'docs-code-tabs.html', tier: 'primitives', label: 'Docs synced code tabs', desc: 'Height-stable multi-language code switcher (TypeScript, Python, cURL, CLI) with synced sibling tabs, localStorage memory, arrow-key roving, and Copy receipt (ADR-007, ADR-024).' },
         { file: 'code-and-diff-viewer.html', tier: 'primitives', label: 'Code and diff viewer', desc: 'Multi-tab code block, unified +/- diff rows with explicit status labels, and CLI receipt bar (ADR-007, ADR-024).' },
+        { file: 'copy-command-bar.html', tier: 'primitives', label: 'Copy command bar', desc: 'Single-line CLI install bar with role="tablist" runner switcher (npm, pnpm, CLI), non-selectable $ prompt, Include MCP config toggle switch, and 44px Copy receipt (ADR-024).' },
         { file: 'log-stream-viewer.html', tier: 'primitives', label: 'Log stream viewer', desc: 'Solid run-log console: polite role="log" region, tabular-nums timestamps, status-dot severity pairs with text labels, and a Pause tail toggle (ADR-013, ADR-024).' },
         { file: 'api-reference-row.html', tier: 'primitives', label: 'Endpoint reference rows', desc: 'Harness endpoint rows pairing protocol method chips and mono paths with effect classes (read, write, destructive, credential) and hairline parameter ledgers (ADR-021, ADR-024).' },
         { file: 'changelog-timeline.html', tier: 'primitives', label: 'Changelog timeline', desc: 'Release notes with version chips, tabular dates, an unreleased block, and Added / Changed / Fixed / Planned hairline ledger rows (ADR-007, ADR-024).' },
@@ -269,6 +277,10 @@
         { file: 'receipt-ledger-row.html', tier: 'workspace', label: 'Receipt ledger row', desc: 'Hairline-separated receipt rows in a polite live region: mono micro-label paired with a tabular mono value (ADR-017, ADR-020).' },
         { file: 'turn-state-chip.html', tier: 'workspace', label: 'Turn-state chip', desc: 'Status-token turn states (running, stopping, finished, failed) paired with visible text labels; never colour alone (ADR-020).' },
         { file: 'owner-approval-gate.html', tier: 'workspace', label: 'Owner approval gate', desc: 'Solid card for pending owner-gated tool requests with scannable Allow once / Always allow / Reject controls and collapsible audit receipt (ADR-020).' },
+        { file: 'voice-capture-bar.html', tier: 'workspace', label: 'Voice capture bar', desc: 'Restrained dictation and transcript confirmation bar with Idle/Listening/Review/Mic blocked presets, 7-bar level meter, and 44px controls (ADR-016).' },
+        { file: 'input-request-card.html', tier: 'workspace', label: 'Input request card', desc: 'Structured agent clarification prompt (waiting_for_input) with neutral specialist monogram, radiogroup choices, optional note, and collapsed answered receipt (ADR-021).' },
+        { file: 'run-plan-checklist.html', tier: 'workspace', label: 'Run plan checklist', desc: 'Compact live agent execution plan with tabular-nums step ratio, All/Open filters, hairline status rows, and expandable blocker receipt (ADR-021).' },
+        { file: 'notification-inbox-panel.html', tier: 'workspace', label: 'Notification inbox panel', desc: 'Workspace triage inbox with All/Unread/Approvals tablist, polite unread counter, 44px Mark all read/Open/Mark read actions, and dashed caught-up empty state (ADR-021).' },
         { file: 'tool-call-trace-card.html', tier: 'workspace', label: 'Tool call trace card', desc: 'Expandable details/summary trace card for neutral tool invocations showing status dot + label, latency, JSON arguments, output receipt, and Copy action (ADR-017, ADR-021).' },
         { file: 'shared-desktop-catalog.html', tier: 'workspace', label: 'Shared desktop catalog', desc: 'Folder-grouped shared files with 44px checkbox admission rows, revision badges, and Open controls (ADR-020).' },
         { file: 'artifact-lineage-reader.html', tier: 'workspace', label: 'Artifact lineage reader', desc: 'Solid dialog for reading produced Markdown revisions with collapsible input-file and prior-revision lineage drawer (ADR-020).' },

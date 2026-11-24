@@ -5,20 +5,14 @@
   byte sizes, status-dot + text transfer states, and distinct 44px Remove actions.
 -->
 <section aria-labelledby="dropzone-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
-  <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
-    <div class="flex flex-col gap-gap-dense-default">
-      <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Workspace attachments · bounded ingest</p>
-      <h2 id="dropzone-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Upload source files</h2>
-    </div>
-    <p aria-live="polite" class="inline-flex items-center gap-gap-compact-default px-inset-compact-default py-rhythm-1-base rounded-layout-radius-full-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-primary-base">
-      <span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span>
-      <span>2 queued · 1 rejected</span>
-    </p>
+  <div class="flex flex-wrap items-baseline justify-between gap-gap-compact-default">
+    <h2 id="dropzone-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Upload source files</h2>
+    <p aria-live="polite" class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">2 queued · 1 rejected</p>
   </div>
   <div class="border border-dashed border-border-graph-line-base focus-within:border-surface-accent-violet-base rounded-layout-radius-control-base bg-surface-background-primary-base p-layout-padding-large-base flex flex-col items-center justify-center gap-gap-comfortable-default text-center">
     <p class="font-typography-family-sans-base text-typography-size-md-base font-typography-weight-medium-base text-text-content-primary-base">Drop Markdown, JSON, CSV, or SVG files here</p>
-    <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Accepted: .md .json .csv .svg · max 8 MB per file · binary executables refused</p>
-    <label for="dropzone-file-input" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base cursor-pointer">
+    <p class="font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">Accepted: .md, .json, .csv, .svg (max 8 MB; binaries refused)</p>
+    <label for="dropzone-file-input" class="inline-flex items-center justify-center h-action-min-default px-rhythm-4-base rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base hover:bg-surface-background-secondary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base cursor-pointer transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">
       <span>Browse files</span>
       <input id="dropzone-file-input" type="file" multiple class="sr-only" />
     </label>
@@ -29,7 +23,7 @@
         <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base break-words">design-brief-v2.json</span>
         <span class="inline-flex flex-wrap items-center gap-gap-comfortable-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
           <span>18.4 KB</span>
-          <span class="inline-flex items-center gap-gap-compact-default text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span><span>Ready</span></span>
+          <span class="vi-inline-status"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span><span>Ready</span></span>
         </span>
       </div>
       <button type="button" aria-label="Remove design-brief-v2.json" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Remove</button>
@@ -39,7 +33,7 @@
         <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base break-words">constellation-nodes.csv</span>
         <span class="inline-flex flex-wrap items-center gap-gap-comfortable-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
           <span>1.2 MB</span>
-          <span class="inline-flex items-center gap-gap-compact-default text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>Uploading · 68%</span></span>
+          <span class="vi-inline-status"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-info-base"></span><span>Uploading · 68%</span></span>
         </span>
       </div>
       <button type="button" aria-label="Cancel upload for constellation-nodes.csv" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Cancel</button>
@@ -49,7 +43,7 @@
         <span class="font-typography-family-mono-base text-typography-size-sm-base text-text-content-primary-base break-words">raw-capture.bin</span>
         <span class="inline-flex flex-wrap items-center gap-gap-comfortable-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
           <span>14.6 MB</span>
-          <span class="inline-flex items-center gap-gap-compact-default text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span><span>Rejected · exceeds 8 MB ceiling</span></span>
+          <span class="vi-inline-status"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span><span>Rejected · exceeds 8 MB ceiling</span></span>
         </span>
       </div>
       <button type="button" aria-label="Dismiss rejected file raw-capture.bin" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base hover:text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Dismiss</button>

@@ -514,6 +514,28 @@ function emitCoreComponentArtifacts() {
   };
 }
 
+/**
+ * Extended UI primitives and command bar: zero-hex oklch() stylesheet + CSP-safe vanilla JS
+ * controller for context-menu-popover, keyboard-shortcuts-sheet, avatar-group-presence, and copy-command-bar.
+ */
+function emitExtendedPrimitivesArtifacts() {
+  return {
+    'extended-primitives.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'extended-primitives.css'), 'utf-8'),
+    'extended-primitives.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'extended-primitives.js'), 'utf-8'),
+  };
+}
+
+/**
+ * Workspace and conversation components: zero-hex oklch() stylesheet + CSP-safe vanilla JS
+ * controller for voice-capture-bar, input-request-card, run-plan-checklist, and notification-inbox-panel.
+ */
+function emitWorkspaceComponentsArtifacts() {
+  return {
+    'workspace-components.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'workspace-components.css'), 'utf-8'),
+    'workspace-components.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'workspace-components.js'), 'utf-8'),
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -547,6 +569,8 @@ function main() {
     ...emitLibrarySurfaceArtifacts(),
     ...emitSpecimenLayoutArtifacts(),
     ...emitCoreComponentArtifacts(),
+    ...emitExtendedPrimitivesArtifacts(),
+    ...emitWorkspaceComponentsArtifacts(),
   };
 
   if (dryRun) {
@@ -598,4 +622,6 @@ module.exports = {
   emitLibrarySurfaceArtifacts,
   emitSpecimenLayoutArtifacts,
   emitCoreComponentArtifacts,
+  emitExtendedPrimitivesArtifacts,
+  emitWorkspaceComponentsArtifacts,
 };

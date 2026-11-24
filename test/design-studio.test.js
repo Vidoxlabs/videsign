@@ -97,11 +97,26 @@ describe('collaborative design studio & reference contracts', () => {
     assert.ok(landingLight.stylesheets.includes('dist/glass.css'));
     assert.match(landingLight.html, /<html lang="en" data-theme="light">/);
 
-    const plain = scaffoldPage({ components: ['public-repo-card', 'browser-check-runner'], wrapDocument: true }, ROOT);
+    const plain = scaffoldPage({ components: ['locked-panel', 'browser-check-runner'], wrapDocument: true }, ROOT);
     assert.deepEqual(plain.stylesheets, ['dist/tokens.css', 'dist/catalog.css']);
 
+    const specimenRepo = scaffoldPage({ components: ['public-repo-card', 'browser-check-runner'], wrapDocument: true }, ROOT);
+    assert.deepEqual(specimenRepo.stylesheets, ['dist/tokens.css', 'dist/catalog.css', 'dist/specimen-layouts.css']);
+
     const detected = stylesheetsForSlots(
-      ['<div class="stage__glow"></div>', '<svg class="vi-mf-svg"></svg>', '<span class="vi-agent-badge"></span>', '<vi-orbital-field class="vi-orbital-host"></vi-orbital-field>', '<div class="vi-docs-portal"></div>', '<div class="vi-settings-shell"></div>', '<div class="vi-library-stage"></div>'],
+      [
+        '<div class="stage__glow"></div>',
+        '<svg class="vi-mf-svg"></svg>',
+        '<span class="vi-agent-badge"></span>',
+        '<vi-orbital-field class="vi-orbital-host"></vi-orbital-field>',
+        '<div class="vi-docs-portal"></div>',
+        '<div class="vi-settings-shell"></div>',
+        '<div class="vi-library-stage"></div>',
+        '<div class="vi-specimen-cq"><dl class="vi-ledger"><div class="vi-ledger-row"></div></dl></div>',
+        '<section class="vi-core-scope"></section>',
+        '<section class="vi-ext-scope"></section>',
+        '<section class="vi-ws-scope"></section>',
+      ],
       'light',
     );
     assert.ok(detected.includes('dist/themes.css'));
@@ -112,6 +127,10 @@ describe('collaborative design studio & reference contracts', () => {
     assert.ok(detected.includes('dist/docs-portal.css'));
     assert.ok(detected.includes('dist/settings-surface.css'));
     assert.ok(detected.includes('dist/library-surface.css'));
+    assert.ok(detected.includes('dist/specimen-layouts.css'));
+    assert.ok(detected.includes('dist/core-components.css'));
+    assert.ok(detected.includes('dist/extended-primitives.css'));
+    assert.ok(detected.includes('dist/workspace-components.css'));
     assert.equal(detected.includes('dist/glass.css'), false);
   });
 
@@ -120,7 +139,7 @@ describe('collaborative design studio & reference contracts', () => {
     const expected = buildComponentsManifest(COMPONENT_CATALOG, tokens);
     const actual = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf8'));
     assert.deepEqual(actual, expected);
-    assert.equal(actual.componentCount, 103);
+    assert.equal(actual.componentCount, 111);
     assert.deepEqual(actual.categories, CATALOG_CATEGORIES);
     assert.deepEqual(actual.consumers, CATALOG_CONSUMERS);
     assert.equal(Object.keys(actual.archetypes).length, 12);

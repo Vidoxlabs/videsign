@@ -27,7 +27,7 @@ let css = '';
 
 before(() => {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'generate-tokens.js')], { cwd: ROOT, stdio: 'ignore' });
-  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css', 'settings-surface.css', 'library-surface.css', 'specimen-layouts.css', 'core-components.css']
+  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css', 'settings-surface.css', 'library-surface.css', 'specimen-layouts.css', 'core-components.css', 'extended-primitives.css', 'workspace-components.css']
     .map((f) => fs.readFileSync(path.join(ROOT, 'dist', f), 'utf-8'))
     .join('\n');
 });
@@ -81,7 +81,7 @@ test('every class used by a fragment resolves to generated CSS', () => {
 
 test('the catalog loads the generated stylesheets and lists every fragment', () => {
   const index = fs.readFileSync(path.join(PREVIEW, 'index.html'), 'utf-8');
-  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css', '../dist/settings-surface.css', '../dist/library-surface.css', '../dist/specimen-layouts.css', '../dist/core-components.css']) {
+  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css', '../dist/settings-surface.css', '../dist/library-surface.css', '../dist/specimen-layouts.css', '../dist/core-components.css', '../dist/extended-primitives.css', '../dist/workspace-components.css']) {
     assert.ok(index.includes(`href="${sheet}"`), `catalog must load ${sheet}`);
   }
   const unlisted = FRAGMENTS.filter((f) => f !== 'index.html' && !index.includes(`'${f}'`) && !index.includes(`"${f}"`));
@@ -89,7 +89,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'group-conversation', 'context-attachment-tray', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'credential-activity-ledger', 'policy-rule-matrix', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'article-toc-and-meta', 'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'systems-constellation-map', 'persona-deliberation-stepper', 'markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'form-controls', 'button-variants', 'navigation-primitives', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'feedback-and-empty-states', 'disclosure-and-modals', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar', 'mobile-navigation-sheet', 'bento-feature-grid', 'comparison-matrix', 'session-checkpoint-card', 'provider-model-selector']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'context-attachment-tray', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'credential-activity-ledger', 'policy-rule-matrix', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'article-toc-and-meta', 'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'systems-constellation-map', 'persona-deliberation-stepper', 'markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'form-controls', 'button-variants', 'navigation-primitives', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'feedback-and-empty-states', 'disclosure-and-modals', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar', 'mobile-navigation-sheet', 'bento-feature-grid', 'comparison-matrix', 'session-checkpoint-card', 'provider-model-selector', 'context-menu-popover', 'keyboard-shortcuts-sheet', 'avatar-group-presence', 'copy-command-bar', 'voice-capture-bar', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });
@@ -878,7 +878,8 @@ test('modularity and cross-surface continuity fragments follow ADR-021, ADR-023,
   assert.match(chips, /aria-label="Remove filter: harness contracts"/);
   assert.match(searchBar, /<select id="catalog-filter-sort"/);
   assert.ok(searchBar.includes('>Clear all<'));
-  assert.match(searchBar, /role="status" aria-live="polite" class="[^"]*tabular-nums[^"]*">Showing 12 of 103 modules</);
+  const liveCount = COMPONENT_CATALOG.length;
+  assert.match(searchBar, new RegExp(`role="status" aria-live="polite" class="[^"]*tabular-nums[^"]*">Showing 12 of ${liveCount} modules<`));
 
   // 4. mobile-navigation-sheet.html
   const sheet = read('mobile-navigation-sheet.html');
@@ -906,7 +907,7 @@ test('modularity and cross-surface continuity fragments follow ADR-021, ADR-023,
   assert.ok([...bento.matchAll(/text-balance/g)].length >= 6, 'balanced card headings');
   assert.ok([...bento.matchAll(/mt-auto/g)].length >= 6, 'bottom-aligned actions');
   assert.match(bento, /tabular-nums/);
-  assert.ok(bento.includes('>103</dd>'), 'catalog counter follows the live component count');
+  assert.ok(bento.includes(`>${COMPONENT_CATALOG.length}</dd>`), 'catalog counter follows the live component count');
 
   // 6. comparison-matrix.html
   const matrix = read('comparison-matrix.html');
@@ -950,11 +951,40 @@ test('modularity and cross-surface continuity fragments follow ADR-021, ADR-023,
   assert.doesNotMatch(provider, /localhost|\.lan\b|\.internal\b/, 'no internal hostnames');
 });
 
-test('ADR-025 anti-slop linter rejects em-dashes, AI cliches, h-screen, and bare outline-none', () => {
+test('ADR-025 anti-slop linter rejects em-dashes, AI cliches, h-screen, bare outline-none, td pill-soup, deep box-in-box nesting, and middle-dot chains', () => {
   assert.ok(lintFragment('bad.html', '<p>Clean interface — built fast.</p>').some((p) => /em-dash/i.test(p)));
   assert.ok(lintFragment('bad.html', '<p>Elevate your workflow seamlessly.</p>').some((p) => /cliche/i.test(p)));
+  for (const cliche of ['supercharge', 'revolutionize', 'effortlessly', 'cutting-edge', 'synergy', 'holistic']) {
+    assert.ok(
+      lintFragment('bad-cliche.html', `<p>Teams ${cliche} delivery.</p>`).some((p) => /cliche/i.test(p)),
+      `must reject expanded AI cliche "${cliche}"`,
+    );
+  }
   assert.ok(lintFragment('bad.html', '<div class="min-h-screen"></div>').some((p) => /viewport height/i.test(p)));
   assert.ok(lintFragment('bad.html', '<form><textarea class="outline-none"></textarea></form>').some((p) => /outline-none/i.test(p)));
+  assert.ok(
+    lintFragment('bad-td-pill.html', '<table><tbody><tr><td><span class="rounded-layout-radius-full-base border border-border-separator-primary-base">Allow</span></td></tr></tbody></table>')
+      .some((p) => /pill-soup inside <td>/i.test(p)),
+  );
+  assert.deepEqual(
+    lintFragment('good-td-dot.html', '<table><tbody><tr><td><span><span aria-hidden="true" class="w-indicator-dot-base rounded-layout-radius-full-base border"></span>Allow</span></td></tr></tbody></table>'),
+    [],
+  );
+  assert.ok(
+    lintFragment('bad-depth.html', '<div class="border rounded-layout-radius-standard-base"><div class="border rounded-layout-radius-standard-base"><div class="border rounded-layout-radius-control-base"><div class="border rounded-layout-radius-control-base">Too deep</div></div></div></div>')
+      .some((p) => /box-in-box nesting/i.test(p)),
+  );
+  assert.deepEqual(
+    lintFragment('good-depth.html', '<div class="border rounded-layout-radius-standard-base"><div class="border rounded-layout-radius-standard-base"><div class="border rounded-layout-radius-control-base"><button type="button" class="border rounded-layout-radius-control-base">Action</button></div></div></div>'),
+    [],
+  );
+  assert.ok(
+    lintFragment('bad-dots.html', '<p>Alpha · Beta · Gamma · Delta</p>').some((p) => /middle-dot chain/i.test(p)),
+  );
+  assert.deepEqual(
+    lintFragment('good-mask.html', '<p>cred ···· 7f3a · active</p>'),
+    [],
+  );
   assert.deepEqual(
     lintFragment('good.html', '<form class="focus-within:border-surface-accent-violet-base"><textarea class="outline-none"></textarea></form>'),
     [],

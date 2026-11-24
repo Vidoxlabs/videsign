@@ -29,6 +29,9 @@
  *     `leading-*`); use typography weight/tracking/leading tokens
  *   - signature colours (ADR-011, ADR-013): no Xylia text, no Xylia without the
  *     other four, and no signature colour as a gradient stop (`from-`, `via-`, `to-`)
+ *   - anti-slop geometry & copy (ADR-025): no bordered pills inside `<td>`, no deep
+ *     box-in-box nesting (border depth >= 4), no 3+ middle-dot chains in a text node,
+ *     and expanded AI copywriting cliche ban
  */
 
 const fs = require('fs');
@@ -62,7 +65,9 @@ const CHROME_FILES = new Set(['index.html']);
 const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
 const EMPHASIS = new Set(['em', 'strong', 'i', 'b', 'mark']);
 const GLASS_FORBIDDEN_TAGS = new Set(['p', 'section', 'article', 'li', 'ul', 'ol', 'table', 'thead', 'tbody', 'tr', 'td', 'th', 'h1', 'h2', 'h3', 'h4', 'span']);
+const INTERACTIVE_TAGS = new Set(['button', 'input', 'select', 'textarea', 'a']);
 const MAX_GLASS_LAYERS = 3;
+const MAX_BORDER_DEPTH = 4;
 
 function classAttributes(html) {
   const values = [];
@@ -154,7 +159,7 @@ function lintFragment(name, html) {
   if (!isChrome && /[—–]/.test(text)) {
     problems.push('em-dash or en-dash in visible UI copy (use punctuation, hyphen, or layout separation, ADR-025)');
   }
-  const clicheMatch = !isChrome && text.match(/\b(elevate|seamless|unleash|next-gen|game-changer|delve|tapestry|john doe|jane smith|acme corp|lorem ipsum)\b/i);
+  const clicheMatch = !isChrome && text.match(/\b(elevate|seamless|unleash|next-gen|game-changer|delve|tapestry|supercharge|revolutionize|effortlessly|cutting-edge|synergy|holistic|john doe|jane smith|acme corp|lorem ipsum)\b/i);
   if (clicheMatch) {
     problems.push(`AI copywriting cliche "${clicheMatch[0]}" (use plain functional copy, ADR-025)`);
   }
@@ -166,10 +171,26 @@ function lintFragment(name, html) {
     problems.push(`external placeholder image service "${placeholderMatch[0]}" (use a local solid-color placeholder div, SKILL.md negative constraints)`);
   }
 
-  // Glass scope: walk tags with a small stack.
+  if (!isChrome) {
+    for (const rawNode of bare.split(/<[^>]+>/)) {
+      const normalized = rawNode
+        .replace(/&middot;|&#183;|&#xb7;/gi, '·')
+        .replace(/·{4,}/g, '')
+        .trim();
+      const dotCount = (normalized.match(/·/g) || []).length;
+      if (dotCount >= 3) {
+        problems.push(`middle-dot chain (${dotCount} middle dots in one visible text node; split into structured spans or commas)`);
+      }
+    }
+  }
+
+  // Glass scope, table-cell pill-soup, and border-nesting depth: walk tags with a small stack.
+  const tags = [...bare.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g)];
   const stack = [];
   let layers = 0;
-  for (const m of bare.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g)) {
+  let maxBorderDepth = 0;
+  let tdPillCount = 0;
+  for (const m of tags) {
     const [, closing, rawTag, attrs] = m;
     const tag = rawTag.toLowerCase();
     if (closing) {
@@ -185,9 +206,34 @@ function lintFragment(name, html) {
       if (GLASS_FORBIDDEN_TAGS.has(tag)) problems.push(`glass on <${tag}> (glass marks controls and lenses, never content)`);
       if (stack.some((s) => s.glass)) problems.push(`glass nested in glass on <${tag}>`);
     }
-    if (!VOID.has(tag) && !/\/\s*$/.test(attrs)) stack.push({ tag, glass: isGlass });
+    const hasBorder = hasBorderUtility(classes);
+    let isBorderedBox = false;
+    if (!isChrome) {
+      if (stack.some((s) => s.tag === 'td') && classes.includes('rounded-layout-radius-full-base') && hasBorder) {
+        const selfClosing = /\/\s*$/.test(attrs) || VOID.has(tag);
+        const inner = selfClosing ? '' : bare.slice(m.index + m[0].length, closeIndex(bare, tags, m));
+        const isEmptyIndicatorDot = /\baria-hidden\s*=\s*(?:"true"|'true')/i.test(attrs)
+          && classes.some((cls) => /^w-indicator-(?:dot|mark)-base$/.test(utilityOf(cls)))
+          && !elementText(inner);
+        if (!isEmptyIndicatorDot) tdPillCount += 1;
+      }
+      isBorderedBox = !INTERACTIVE_TAGS.has(tag)
+        && hasBorder
+        && classes.some((cls) => utilityOf(cls).startsWith('rounded-'));
+      if (isBorderedBox) {
+        const depth = stack.filter((s) => s.borderedBox).length + 1;
+        if (depth > maxBorderDepth) maxBorderDepth = depth;
+      }
+    }
+    if (!VOID.has(tag) && !/\/\s*$/.test(attrs)) stack.push({ tag, glass: isGlass, borderedBox: isBorderedBox });
   }
   if (layers > MAX_GLASS_LAYERS) problems.push(`${layers} glass layers (max ${MAX_GLASS_LAYERS})`);
+  if (!isChrome && tdPillCount > 0) {
+    problems.push(`pill-soup inside <td> (${tdPillCount} bordered rounded-full element(s); use borderless inline status)`);
+  }
+  if (!isChrome && maxBorderDepth >= MAX_BORDER_DEPTH) {
+    problems.push(`deep box-in-box nesting (border depth ${maxBorderDepth} >= ${MAX_BORDER_DEPTH}; flatten nested rounded borders)`);
+  }
 
   problems.push(...accentLabelProblems(html));
   problems.push(...signatureColourProblems(bare));
@@ -205,6 +251,10 @@ function utilityOf(cls) {
   const colon = cls.lastIndexOf(':');
   const utility = colon === -1 ? cls : cls.slice(colon + 1);
   return stripImportant(utility);
+}
+
+function hasBorderUtility(classes) {
+  return classes.some((cls) => /^border(?:-(?:2|4))?$/.test(utilityOf(cls)));
 }
 
 /** Unprefixed classes only. Variant prefixes never count as base metrics. */

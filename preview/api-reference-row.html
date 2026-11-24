@@ -7,7 +7,6 @@
 -->
 <section aria-labelledby="api-ref-title" class="bg-surface-background-secondary-base border border-border-separator-primary-base rounded-layout-radius-standard-base p-layout-padding-large-base flex flex-col gap-rhythm-6-base">
   <div class="flex flex-col gap-gap-compact-default">
-    <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Harness run API · endpoint reference</p>
     <h2 id="api-ref-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">Run lifecycle routes</h2>
     <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Every route pairs a protocol method with an effect class; the effect label travels with the row, never carried by colour alone.</p>
   </div>
@@ -40,7 +39,7 @@
       <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Read the run's lifecycle state, current stage and receipt links.</p>
       <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
         <div class="flex flex-wrap items-center gap-gap-spacious-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
-          <span>run_id <span class="text-text-content-primary-base">string</span> · path · required</span>
+          <span>run_id <span class="text-text-content-primary-base">string</span> (path, required)</span>
         </div>
         <button type="button" aria-label="Copy path /v1/runs/:run_id (GET)" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Copy path</button>
       </div>
@@ -56,7 +55,7 @@
       <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Stop a run and drop its scratch state; the run receipt stays queryable.</p>
       <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
         <div class="flex flex-wrap items-center gap-gap-spacious-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
-          <span>run_id <span class="text-text-content-primary-base">string</span> · path · required</span>
+          <span>run_id <span class="text-text-content-primary-base">string</span> (path, required)</span>
         </div>
         <button type="button" aria-label="Copy path /v1/runs/:run_id (DELETE)" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Copy path</button>
       </div>
@@ -72,7 +71,7 @@
       <p class="font-typography-family-sans-base text-typography-size-sm-base text-text-content-secondary-base">Bind a scope-limited credential to the run; the secret value is never returned.</p>
       <div class="flex flex-wrap items-center justify-between gap-gap-compact-default">
         <div class="flex flex-wrap items-center gap-gap-spacious-default font-typography-family-mono-base text-typography-size-xs-base tabular-nums text-text-content-secondary-base">
-          <span>run_id <span class="text-text-content-primary-base">string</span> · path · required</span>
+          <span>run_id <span class="text-text-content-primary-base">string</span> (path, required)</span>
           <span>scope <span class="text-text-content-primary-base">string</span> · required</span>
         </div>
         <button type="button" aria-label="Copy path /v1/runs/:run_id/credentials (POST)" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base hover:border-surface-accent-violet-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Copy path</button>

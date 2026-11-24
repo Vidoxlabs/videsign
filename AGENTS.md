@@ -24,7 +24,10 @@ design system — the shared visual language for all Vidoxlabs products and appl
   catalog only). Run `npm run tokens` to regenerate.
 - **scripts/lint-preview.js**: Static checks for `preview/*.html` (arbitrary values,
   `shadow-sm`, inline style or script, emoji, overclaiming text, glass scope, nesting and
-  layer limit, signature-colour rules). `npm run lint` runs ESLint and then this script.
+  layer limit, signature-colour rules, plus ADR-025 anti-slop rules: em/en-dash ban,
+  expanded AI copywriting cliches, `<td>` pill-soup ban, box-in-box border depth >= 4,
+  middle-dot chains >= 3, bare `outline-none`, raw `h-screen`/`min-h-screen`, external
+  placeholder image URLs, and OKLCH ΔL contrast floors). `npm run lint` runs ESLint and then this script.
 - **scripts/generate-standard.js**: Emits `dist/standard.json` and `dist/standard.md`, the
   machine-readable rule set (glass, typography, geometry, motion and ambient loops, stage
   backdrop, five-bar rule, graph line, chat dock, conversation surface, explorable instrument, memory field, accessibility) plus the ADR index and the
@@ -43,7 +46,8 @@ design system — the shared visual language for all Vidoxlabs products and appl
   deterministic constellation layout, SVG, text equivalent, link contrast report and the memory
   pipeline figure. After changing `lib/memory-field.js`, run `npm run memory-field:fragment`.
   `lib/asset-service.js` implements the consolidated Phase 0 read-only persona asset Worker logic (ADR-022).
-  `lib/design-studio.js` owns the 70-component catalog, 9 archetypes, proactive Design Read + 3-dial (`variance`, `motion`, `visualDensity`) brief compiler, anti-slop pre-flight checklist, reference contract, `dist/components.manifest.json` generator, and multi-slot page scaffolder (ADR-023, ADR-024, ADR-025).
+  `lib/specimen-layouts.css`, `lib/core-components.css|js`, `lib/extended-primitives.css|js`, and `lib/workspace-components.css|js` provide zero-hex `oklch()` container-query layouts, core UI controls, extended UI primitives, and workspace/conversation controllers.
+  `lib/design-studio.js` owns the 111-component catalog, 12 archetypes, proactive Design Read + 3-dial (`variance`, `motion`, `visualDensity`) brief compiler, anti-slop pre-flight checklist, reference contract, `dist/components.manifest.json` generator, and multi-slot page scaffolder (ADR-023, ADR-024, ADR-025).
 - **pipeline/**: Persona asset pipeline (`animation/`, `audit/`, `templates/`) and `pipeline/service/` (`worker.js`, `wrangler.toml`, `migrations/` D1 SQL schema + SHA-256 `manifest.json`, `README.md`) consolidated from `vi-assets` under ADR-022.
 - **mcp-server.js**: The MCP server that exposes this design system to product
   repositories for cross-repo token and fragment fetching. Tools: `resolve_token` (one token
@@ -95,7 +99,7 @@ Within the `videsign` repository, agents are restricted to the following command
   `dist/stage-ambient.svg`, `dist/stage-hero.svg`, `dist/memory-field.css`,
   `dist/memory-field-sample.svg`, `dist/memory-pipeline-sample.svg`, `dist/tokens.ts`,
   `dist/ViTokens.swift`, `dist/videsign_tokens.py`, `dist/tokens.dtcg.json`, `dist/dialects.css`,
-  `dist/dialects.json`, `dist/components.manifest.json` and `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
+  `dist/dialects.json`, `dist/specimen-layouts.css`, `dist/core-components.css`, `dist/core-components.js`, `dist/extended-primitives.css`, `dist/extended-primitives.js`, `dist/workspace-components.css`, `dist/workspace-components.js`, `dist/components.manifest.json` and `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
 - `npm test`: Runs `node --test test/*.test.js`: the MCP stdio smoke test
   (`test/mcp-server.test.js`), the token contract (`test/tokens.test.js`),
   the theme contract (`test/themes.test.js`), the preview fragment contract

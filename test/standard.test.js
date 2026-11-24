@@ -389,22 +389,22 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
   assert.deepEqual(modularComponents.planes, ['surfaces', 'harness', 'providers', 'authority stores']);
   assert.deepEqual(modularComponents.runStates, ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete', 'stopping', 'stopped', 'failed']);
   assert.deepEqual(modularComponents.toolEffects, ['read', 'write', 'destructive', 'credential']);
-  assert.equal(modularComponents.catalog.length, 103);
+  assert.equal(modularComponents.catalog.length, 111);
   assert.deepEqual(modularComponents.catalog, COMPONENT_CATALOG);
   const expectedIds = [
-    'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips', 'question-bar', 'context-attachment-tray', 'session-checkpoint-card',
+    'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips', 'question-bar', 'context-attachment-tray', 'session-checkpoint-card', 'voice-capture-bar',
     'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace',
     'settings-quick-menu', 'settings-surface', 'layout-settings',
     'skills-library-surface', 'agents-library-surface', 'projects-library-surface',
     'persona-console', 'layout-dashboard', 'layout-graph',
-    'telemetry-chart-card', 'reasoning-trace-block', 'inline-citation-popover',
+    'telemetry-chart-card', 'reasoning-trace-block', 'inline-citation-popover', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel',
     'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner',
     'public-repo-card', 'ecosystem-plane-map', 'comparison-matrix', 'site-header-island', 'mobile-navigation-sheet', 'site-footer', 'hero-billboard', 'bento-feature-grid', 'filterable-catalog-grid', 'client-install-switcher', 'persona-companion-stage', 'evidence-exhibit-figure',
     'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'article-toc-and-meta',
     'docs-sidebar-nav', 'docs-quickstart-grid', 'docs-page-actions', 'layout-docs-portal',
     'form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'data-table', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'skeleton-row', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar',
-    'combobox-multiselect', 'date-range-picker', 'tooltip-hover-card', 'file-tree-explorer', 'resizable-split-pane', 'destructive-action-guard', 'system-error-boundary',
-    'markdown-prose-renderer', 'code-and-diff-viewer', 'docs-code-tabs', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline',
+    'combobox-multiselect', 'date-range-picker', 'tooltip-hover-card', 'file-tree-explorer', 'resizable-split-pane', 'destructive-action-guard', 'system-error-boundary', 'context-menu-popover', 'keyboard-shortcuts-sheet', 'avatar-group-presence',
+    'markdown-prose-renderer', 'code-and-diff-viewer', 'docs-code-tabs', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'copy-command-bar',
     'systems-constellation-map', 'stage-backdrop', 'vi-orbital-field', 'memory-field', 'memory-pipeline', 'evidence-lens', 'coverage-grid',
     'persona-deliberation-stepper', 'persona-identity-badge', 'persona-dialects', 'five-bar-rule', 'persona-switcher',
     'instrument', 'statement-proof-row',
@@ -565,6 +565,14 @@ test('standard carries ADR-024 base UI, markdown, graphic maps and chibi rules a
     'preview/file-dropzone-upload.html',
     'preview/kpi-metric-strip.html',
     'preview/drawer-inspector-sheet.html',
+    'preview/context-menu-popover.html',
+    'preview/keyboard-shortcuts-sheet.html',
+    'preview/avatar-group-presence.html',
+    'preview/copy-command-bar.html',
+    'preview/voice-capture-bar.html',
+    'preview/input-request-card.html',
+    'preview/run-plan-checklist.html',
+    'preview/notification-inbox-panel.html',
   ]) {
     assert.ok(prose.includes(phrase), `DESIGN.md missing: ${phrase}`);
   }
@@ -588,6 +596,9 @@ test('standard carries ADR-025 proactive design craft, visual hierarchy and anti
     'design read and three dials',
     'visual hierarchy scaffolding',
     'mechanical anti-slop checks',
+    'pill-soup inside `<td>`',
+    'box-in-box nesting',
+    'middle-dot chains',
     'interactive and full-output completeness',
   ]) {
     assert.ok(prose.includes(phrase), `DESIGN.md missing ADR-025 phrase: ${phrase}`);
