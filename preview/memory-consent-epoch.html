@@ -1,0 +1,111 @@
+<!--
+  Nocturne Museum: Myosotis Memory Classes, Consent Ledger & Forget Epoch (records.md, consent.md, forget.md)
+  Separates the 4 closed memory classes, renders sequence-ordered consent (Grant -> Revoke -> Re-consent),
+  and drives atomic structural forget (epoch bump, digest-only tombstone, stale projection refusal, rebuild).
+-->
+<section class="vi-fc-scope" aria-labelledby="mem-epoch-title">
+  <div class="vi-fc-card vi-fc-card--wide" data-vi-memory-epoch data-epoch="4" data-stamp="4">
+    <div class="vi-fc-head">
+      <h2 id="mem-epoch-title" class="vi-fc-title">Memory classes, consent, and forget epoch</h2>
+      <span class="vi-fc-meta" role="status" aria-live="polite" data-mem-status>store.epoch = 4 · stamp = 4 current</span>
+    </div>
+
+    <div class="vi-fc-notice vi-fc-notice--ok">
+      <span class="vi-fc-mono" data-mem-continuity>continuity: active</span>
+      <span class="vi-fc-meta" data-mem-recall-note>Prompt summary includes mem-17 at stamp 4.</span>
+    </div>
+
+    <dl class="vi-fc-ledger" aria-label="Projection stamp state">
+      <div class="vi-fc-ledger-row">
+        <dt>store.epoch</dt>
+        <dd data-mem-epoch-val>4</dd>
+      </div>
+      <div class="vi-fc-ledger-row">
+        <dt>cached prompt summary</dt>
+        <dd data-mem-proj-val>stamp = 4 · current</dd>
+      </div>
+    </dl>
+
+    <div>
+      <h3 class="vi-fc-section-title">Closed memory classes (4)</h3>
+      <ul class="vi-fc-list" aria-label="Memory records by closed class">
+        <li class="vi-fc-row">
+          <div class="vi-fc-row-head">
+            <span class="vi-fc-mono">organizational · mem-04</span>
+            <span class="vi-fc-tag">No consent required</span>
+          </div>
+          <p class="vi-fc-copy">Team architecture note: ledger rows keep tabular numerals across themes.</p>
+        </li>
+        <li class="vi-fc-row">
+          <div class="vi-fc-row-head">
+            <span class="vi-fc-mono">personal-consented · mem-17</span>
+            <span class="vi-fc-tag">provenance: explicit-user</span>
+          </div>
+          <div data-mem-active-record>
+            <p class="vi-fc-copy">Preferred editor timezone UTC-05:00 (supersedes mem-12).</p>
+            <div class="vi-fc-row-meta">
+              <span>sensitivity: internal (or restricted)</span>
+              <span>state: active</span>
+              <span>sha256: 79d0938</span>
+            </div>
+          </div>
+          <div class="vi-fc-tombstone" hidden data-mem-tombstone>
+            <span>tombstone: mem-17 and mem-12 erased (no text retained)</span>
+            <span>sha256: 79d0938 · epoch 5</span>
+          </div>
+        </li>
+        <li class="vi-fc-row">
+          <div class="vi-fc-row-head">
+            <span class="vi-fc-mono">active-thread · mem-21</span>
+            <span class="vi-fc-tag">Ephemeral</span>
+          </div>
+          <p class="vi-fc-copy">Current conversation context; never promoted silently to durable memory.</p>
+        </li>
+        <li class="vi-fc-row">
+          <div class="vi-fc-row-head">
+            <span class="vi-fc-mono">unconfirmed · mem-24</span>
+            <span class="vi-fc-tag">Unconfirmed</span>
+          </div>
+          <p class="vi-fc-copy">Observed repeated CLI flag preference; stays unconfirmed until explicitly declared.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="vi-fc-section-title">Consent ledger (subject == grantedBy)</h3>
+      <ol class="vi-fc-list" aria-label="Sequence-ordered consent records">
+        <li class="vi-fc-row vi-fc-row--compact">
+          <span class="vi-fc-mono">seq 1: Grant · scope: workspace:session-owner</span>
+          <span class="vi-fc-meta">subject: principal-01, grantedBy: principal-01</span>
+        </li>
+        <li class="vi-fc-row vi-fc-row--compact">
+          <span class="vi-fc-mono">seq 2: Revoke · kills seq 1 grant</span>
+          <span class="vi-fc-meta">subject: principal-01</span>
+        </li>
+        <li class="vi-fc-row vi-fc-row--compact">
+          <span class="vi-fc-mono">seq 3: Re-consent · live grant active</span>
+          <span class="vi-fc-status">
+            <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+            <span class="vi-fc-mono">subject: principal-01, grantedBy: principal-01</span>
+          </span>
+        </li>
+      </ol>
+    </div>
+
+    <div class="vi-fc-row">
+      <div class="vi-fc-row-head">
+        <h3 class="vi-fc-section-title">Structural forget</h3>
+        <span class="vi-fc-mono" data-mem-key>key: fg-2026-11-24-01</span>
+      </div>
+      <label for="vi-mem-confirm" class="vi-fc-check-row">
+        <input id="vi-mem-confirm" type="checkbox" data-mem-confirm class="vi-fc-checkbox h-action-min-default" />
+        <span>Erase mem-17 and its supersede chain</span>
+      </label>
+      <div class="vi-fc-btn-row">
+        <button type="button" disabled aria-disabled="true" data-mem-forget class="vi-fc-btn vi-fc-btn--danger h-action-min-default">Confirm forget</button>
+        <button type="button" disabled aria-disabled="true" data-mem-rebuild class="vi-fc-btn vi-fc-btn--primary h-action-min-default">Rebuild projection</button>
+        <button type="button" data-mem-reset class="vi-fc-btn vi-fc-btn--ghost h-action-min-default">Reset</button>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,247 @@
+<!--
+  Nocturne Museum: Capability ledger panel (docs CAP-01 and CAP-02)
+  Filterable capability timeline ledger (All, Now, Next, Later) showing Lead, Touches,
+  Milestones (M0..M9), and two-field status (landed, in-progress, proposed) plus claim
+  (implemented, specified, observed, planned) without bordered table pills, paired with a
+  docs/sources/<repo>/ sync freshness strip toggling between match and fail-closed drift refusal.
+-->
+<section class="vi-fs-scope" aria-labelledby="cap-ledger-title">
+  <div class="vi-fs-card vi-fs-card--wide" data-vi-cap-ledger>
+    <div class="vi-fs-head">
+      <div class="vi-fs-title-row">
+        <h2 id="cap-ledger-title" class="vi-fs-title">Capability ledger</h2>
+        <span class="vi-fs-meta">CAP-01 / CAP-02</span>
+      </div>
+      <div role="group" aria-label="Filter capabilities by horizon" class="vi-fs-tabs">
+        <button type="button" aria-pressed="true" data-cap-horizon="all" class="vi-fs-tab h-action-min-default">All</button>
+        <button type="button" aria-pressed="false" data-cap-horizon="now" class="vi-fs-tab h-action-min-default">Now</button>
+        <button type="button" aria-pressed="false" data-cap-horizon="next" class="vi-fs-tab h-action-min-default">Next</button>
+        <button type="button" aria-pressed="false" data-cap-horizon="later" class="vi-fs-tab h-action-min-default">Later</button>
+      </div>
+    </div>
+
+    <div class="vi-fs-table-wrap">
+      <table class="vi-fs-table" aria-label="Family capability status and claim ledger">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Lead</th>
+            <th scope="col">Touches</th>
+            <th scope="col">Milestone</th>
+            <th scope="col">Status</th>
+            <th scope="col">Claim</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-cap-row data-cap-hz="now">
+            <th scope="row" class="vi-fs-code">CAP-01</th>
+            <td class="vi-fs-code vi-fs-nowrap">docs</td>
+            <td class="vi-fs-meta vi-fs-wrap-col">seed, capillary, myosotis, aestivation, drosera, trellis, bloom</td>
+            <td class="vi-fs-code vi-fs-nowrap">M0</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--info"></span>
+                <span>in-progress</span>
+              </span>
+            </td>
+            <td>
+              <span class="vi-fs-inline-status vi-fs-inline-status--muted">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>planned</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-cap-row data-cap-hz="now">
+            <th scope="row" class="vi-fs-code">CAP-03</th>
+            <td class="vi-fs-code vi-fs-nowrap">seed</td>
+            <td class="vi-fs-meta vi-fs-wrap-col">drosera, bloom</td>
+            <td class="vi-fs-code vi-fs-nowrap">M2</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--info"></span>
+                <span>in-progress</span>
+              </span>
+            </td>
+            <td>
+              <span class="vi-fs-inline-status vi-fs-inline-status--muted">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--info"></span>
+                <span>specified</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-cap-row data-cap-hz="now">
+            <th scope="row" class="vi-fs-code">CAP-04</th>
+            <td class="vi-fs-code vi-fs-nowrap">bloom</td>
+            <td class="vi-fs-meta vi-fs-wrap-col">drosera</td>
+            <td class="vi-fs-code vi-fs-nowrap">M2</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--info"></span>
+                <span>in-progress</span>
+              </span>
+            </td>
+            <td>
+              <span class="vi-fs-inline-status vi-fs-inline-status--muted">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--info"></span>
+                <span>specified</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-cap-row data-cap-hz="now">
+            <th scope="row" class="vi-fs-code">CAP-05</th>
+            <td class="vi-fs-code vi-fs-nowrap">capillary</td>
+            <td class="vi-fs-meta vi-fs-wrap-col">drosera, bloom, trellis</td>
+            <td class="vi-fs-code vi-fs-nowrap">M2</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>proposed</span>
+              </span>
+            </td>
+            <td>
+              <span class="vi-fs-inline-status vi-fs-inline-status--muted">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>planned</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-cap-row data-cap-hz="next">
+            <th scope="row" class="vi-fs-code">CAP-07</th>
+            <td class="vi-fs-code vi-fs-nowrap">aestivation</td>
+            <td class="vi-fs-meta vi-fs-wrap-col">seed, bloom</td>
+            <td class="vi-fs-code vi-fs-nowrap">M3</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>proposed</span>
+              </span>
+            </td>
+            <td>
+              <span class="vi-fs-inline-status vi-fs-inline-status--muted">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>planned</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-cap-row data-cap-hz="next">
+            <th scope="row" class="vi-fs-code">CAP-09</th>
+            <td class="vi-fs-code vi-fs-nowrap">drosera</td>
+            <td class="vi-fs-meta vi-fs-wrap-col">bloom, seed</td>
+            <td class="vi-fs-code vi-fs-nowrap">M3</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>proposed</span>
+              </span>
+            </td>
+            <td>
+              <span class="vi-fs-inline-status vi-fs-inline-status--muted">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>planned</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-cap-row data-cap-hz="next">
+            <th scope="row" class="vi-fs-code">CAP-11</th>
+            <td class="vi-fs-code vi-fs-nowrap">myosotis</td>
+            <td class="vi-fs-meta vi-fs-wrap-col">bloom, capillary</td>
+            <td class="vi-fs-code vi-fs-nowrap">M3</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>proposed</span>
+              </span>
+            </td>
+            <td>
+              <span class="vi-fs-inline-status vi-fs-inline-status--muted">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>planned</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-cap-row data-cap-hz="next">
+            <th scope="row" class="vi-fs-code">CAP-16</th>
+            <td class="vi-fs-code vi-fs-nowrap">seed</td>
+            <td class="vi-fs-meta vi-fs-wrap-col">trellis, bloom</td>
+            <td class="vi-fs-code vi-fs-nowrap">M4</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--ok"></span>
+                <span>landed</span>
+              </span>
+            </td>
+            <td>
+              <span class="vi-fs-inline-status vi-fs-inline-status--muted">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--ok"></span>
+                <span>implemented</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-cap-row data-cap-hz="later">
+            <th scope="row" class="vi-fs-code">CAP-17</th>
+            <td class="vi-fs-code vi-fs-nowrap">seed</td>
+            <td class="vi-fs-meta vi-fs-wrap-col">bloom</td>
+            <td class="vi-fs-code vi-fs-nowrap">M9</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--muted"></span>
+                <span>proposed</span>
+              </span>
+            </td>
+            <td>
+              <span class="vi-fs-inline-status vi-fs-inline-status--muted">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--warn"></span>
+                <span>observed</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="vi-fs-sync-section">
+      <div class="vi-fs-head">
+        <div class="vi-fs-title-row">
+          <h3 class="vi-fs-subtitle">Synced sources freshness</h3>
+          <span class="vi-fs-meta">docs/sources/&lt;repo&gt;/ · manifest.json</span>
+        </div>
+        <div role="group" aria-label="Sync freshness state" class="vi-fs-tabs">
+          <button type="button" aria-pressed="true" data-sync-mode="match" class="vi-fs-tab h-action-min-default">All digests match</button>
+          <button type="button" aria-pressed="false" data-sync-mode="drift" class="vi-fs-tab h-action-min-default">Drift refused</button>
+        </div>
+      </div>
+
+      <div class="vi-fs-banner vi-fs-banner--danger" role="alert" data-sync-drift-banner hidden>
+        <span class="vi-fs-inline-status">
+          <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--danger"></span>
+          <span>Fail-closed sync hold</span>
+        </span>
+        <span class="vi-fs-meta">manifest.json sha256 mismatch on docs/sources/seed/ · partial sync refused</span>
+      </div>
+
+      <ul aria-label="Synced repository manifest rows" class="vi-fs-sync-rows">
+        <li class="vi-fs-sync-row">
+          <span>docs/sources/seed/ · head d9c6f7d</span>
+          <span>sha256: a98b4035</span>
+          <span class="vi-fs-inline-status">
+            <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--ok" data-sync-seed-dot></span>
+            <span data-sync-seed-label>Digests match manifest</span>
+          </span>
+        </li>
+        <li class="vi-fs-sync-row">
+          <span>docs/sources/bloom/ · head db52ad4</span>
+          <span>sha256: 71016924</span>
+          <span class="vi-fs-inline-status">
+            <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--ok"></span>
+            <span>Digests match manifest</span>
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="vi-fs-receipt" role="status" aria-live="polite">
+      <span data-cap-status>Showing 9 capabilities · all source digests match manifest</span>
+      <span>Two-field status and claim</span>
+    </div>
+  </div>
+</section>

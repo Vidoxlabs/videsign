@@ -385,7 +385,7 @@ function emitThemeCSS(tokens) {
     '  --vi-colors-text-content-secondary-base: var(--vi-ink-secondary);',
     '  --vi-colors-border-separator-primary-base: var(--vi-border-interactive);',
     '  --vi-colors-border-graph-line-base: var(--vi-border-strong);',
-    '  --vi-colors-surface-accent-violet-base: var(--vi-accent-focus);',
+    '  --vi-colors-surface-accent-violet-base: oklch(0.42 0.240 292);',
     '}',
     '[data-theme="high-contrast"] .vi-glass, [data-theme="high-contrast"] .vi-glass-shell, [data-theme="high-contrast"] .vi-glass--control:hover, [data-theme="high-contrast"] .vi-glass--control:focus-within {',
     '  background: oklch(0.12 0.012 275);',
@@ -536,6 +536,28 @@ function emitWorkspaceComponentsArtifacts() {
   };
 }
 
+/**
+ * Family contract inspector components (Capillary, Myosotis, Aestivation, Drosera, Trellis):
+ * zero-hex oklch() stylesheet + CSP-safe vanilla JS controller.
+ */
+function emitFamilyContractsArtifacts() {
+  return {
+    'family-contracts.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'family-contracts.css'), 'utf-8'),
+    'family-contracts.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'family-contracts.js'), 'utf-8'),
+  };
+}
+
+/**
+ * Family workbench surface components (Seed model profile, Bloom trace/eval, Docs ledger/stack):
+ * zero-hex oklch() stylesheet + CSP-safe vanilla JS controller.
+ */
+function emitFamilySurfacesArtifacts() {
+  return {
+    'family-surfaces.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'family-surfaces.css'), 'utf-8'),
+    'family-surfaces.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'family-surfaces.js'), 'utf-8'),
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -571,6 +593,8 @@ function main() {
     ...emitCoreComponentArtifacts(),
     ...emitExtendedPrimitivesArtifacts(),
     ...emitWorkspaceComponentsArtifacts(),
+    ...emitFamilyContractsArtifacts(),
+    ...emitFamilySurfacesArtifacts(),
   };
 
   if (dryRun) {
@@ -624,4 +648,6 @@ module.exports = {
   emitCoreComponentArtifacts,
   emitExtendedPrimitivesArtifacts,
   emitWorkspaceComponentsArtifacts,
+  emitFamilyContractsArtifacts,
+  emitFamilySurfacesArtifacts,
 };

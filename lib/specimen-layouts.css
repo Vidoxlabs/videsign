@@ -413,3 +413,18 @@
     gap: 0.25rem;
   }
 }
+
+.min-h-action-min-default {
+  min-block-size: var(--vi-size-action-min-default, 2.75rem);
+}
+
+.min-w-action-min-default {
+  min-inline-size: var(--vi-size-action-min-default, 2.75rem);
+}
+
+.vi-glass-core details > summary {
+  min-block-size: var(--vi-size-action-min-default, 2.75rem);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}

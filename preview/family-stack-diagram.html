@@ -1,0 +1,101 @@
+<!--
+  Nocturne Museum: Family stack diagram (docs + videsign + vidoxlabs.dev)
+  Interactive schematic architecture map of the ratified nine-repo Vidoxlabs family:
+  Composer (bloom), Independent peers (capillary, myosotis, aestivation, drosera),
+  Foundation contracts (seed), and Aside (trellis, docs, videsign). Clicking any node
+  updates the polite inspection ledger below. Solid surfaces only.
+-->
+<section class="vi-fs-scope" aria-labelledby="family-stack-title">
+  <div class="vi-fs-card vi-fs-card--wide" data-vi-family-stack>
+    <div class="vi-fs-head">
+      <h2 id="family-stack-title" class="vi-fs-title">Vidoxlabs 9-repo family stack</h2>
+      <span class="vi-fs-meta">Ratified 2026-11-23 · peers never import each other</span>
+    </div>
+
+    <div class="vi-fs-stack-tiers">
+      <div class="vi-fs-stack-tier">
+        <span class="vi-fs-meta">Top tier: Composer</span>
+        <button type="button" aria-pressed="false" data-stack-repo="bloom" class="vi-fs-stack-node h-action-min-default">
+          <span class="vi-fs-stack-name">bloom</span>
+          <span class="vi-fs-stack-role">Team workspace and coding loop orchestrator</span>
+        </button>
+      </div>
+
+      <div class="vi-fs-stack-tier">
+        <span class="vi-fs-meta">Middle tier: Independent peers (never import each other)</span>
+        <div class="vi-fs-stack-grid">
+          <button type="button" aria-pressed="false" data-stack-repo="capillary" class="vi-fs-stack-node h-action-min-default">
+            <span class="vi-fs-stack-name">capillary</span>
+            <span class="vi-fs-stack-role">Context retrieval</span>
+          </button>
+          <button type="button" aria-pressed="false" data-stack-repo="myosotis" class="vi-fs-stack-node h-action-min-default">
+            <span class="vi-fs-stack-name">myosotis</span>
+            <span class="vi-fs-stack-role">Memory fabric</span>
+          </button>
+          <button type="button" aria-pressed="false" data-stack-repo="aestivation" class="vi-fs-stack-node h-action-min-default">
+            <span class="vi-fs-stack-name">aestivation</span>
+            <span class="vi-fs-stack-role">Admission and review</span>
+          </button>
+          <button type="button" aria-pressed="false" data-stack-repo="drosera" class="vi-fs-stack-node h-action-min-default">
+            <span class="vi-fs-stack-name">drosera</span>
+            <span class="vi-fs-stack-role">Tools, skills, hooks</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="vi-fs-stack-tier">
+        <span class="vi-fs-meta">Floor tier: Foundation contracts</span>
+        <button type="button" aria-pressed="true" data-stack-repo="seed" class="vi-fs-stack-node h-action-min-default">
+          <span class="vi-fs-stack-name">seed</span>
+          <span class="vi-fs-stack-role">Run records, tool-ID grammar, provider seam, model profiles</span>
+        </button>
+      </div>
+
+      <div class="vi-fs-stack-tier">
+        <span class="vi-fs-meta">Aside: Outside the call path and plain-named siblings</span>
+        <div class="vi-fs-stack-grid vi-fs-stack-grid--aside">
+          <button type="button" aria-pressed="false" data-stack-repo="trellis" class="vi-fs-stack-node h-action-min-default">
+            <span class="vi-fs-stack-name">trellis</span>
+            <span class="vi-fs-stack-role">4-point test probes</span>
+          </button>
+          <button type="button" aria-pressed="false" data-stack-repo="docs" class="vi-fs-stack-node h-action-min-default">
+            <span class="vi-fs-stack-name">docs</span>
+            <span class="vi-fs-stack-role">Timeline and sync hub</span>
+          </button>
+          <button type="button" aria-pressed="false" data-stack-repo="videsign" class="vi-fs-stack-node h-action-min-default">
+            <span class="vi-fs-stack-name">videsign</span>
+            <span class="vi-fs-stack-role">Nocturne design canon</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <dl aria-label="Selected repository details" aria-live="polite" class="vi-fs-ledger">
+      <div class="vi-fs-ledger-row">
+        <dt>Repository</dt>
+        <dd data-stack-detail-repo>seed (Floor tier · Foundation contracts)</dd>
+      </div>
+      <div class="vi-fs-ledger-row">
+        <dt>Role</dt>
+        <dd data-stack-detail-role>Harness foundation: run records, tool-ID grammar, provider seam, model profiles.</dd>
+      </div>
+      <div class="vi-fs-ledger-row">
+        <dt>Key contracts</dt>
+        <dd data-stack-detail-contracts>docs/contracts/run-model.md, tool-id.md, provider.md, CAP-03, CAP-16</dd>
+      </div>
+      <div class="vi-fs-ledger-row">
+        <dt>Stack rule</dt>
+        <dd data-stack-detail-rule>Foundation floor below peers; zero network calls inside seed.</dd>
+      </div>
+      <div class="vi-fs-ledger-row">
+        <dt>GitHub</dt>
+        <dd><a href="https://github.com/Vidoxlabs/seed" class="vi-fs-link h-action-min-default" data-stack-detail-url>https://github.com/Vidoxlabs/seed</a></dd>
+      </div>
+    </dl>
+
+    <div class="vi-fs-receipt" role="status" aria-live="polite">
+      <span data-stack-status>Selected seed (Floor tier · Foundation contracts)</span>
+      <span>9 repositories</span>
+    </div>
+  </div>
+</section>

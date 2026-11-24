@@ -391,7 +391,7 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
   assert.deepEqual(modularComponents.planes, ['surfaces', 'harness', 'providers', 'authority stores']);
   assert.deepEqual(modularComponents.runStates, ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete', 'stopping', 'stopped', 'failed']);
   assert.deepEqual(modularComponents.toolEffects, ['read', 'write', 'destructive', 'credential']);
-  assert.equal(modularComponents.catalog.length, 111);
+  assert.equal(modularComponents.catalog.length, 121);
   assert.deepEqual(modularComponents.catalog, COMPONENT_CATALOG);
   const expectedIds = [
     'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips', 'question-bar', 'context-attachment-tray', 'session-checkpoint-card', 'voice-capture-bar',
@@ -399,18 +399,19 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
     'settings-quick-menu', 'settings-surface', 'layout-settings',
     'skills-library-surface', 'agents-library-surface', 'projects-library-surface',
     'persona-console', 'layout-dashboard', 'layout-graph',
-    'telemetry-chart-card', 'reasoning-trace-block', 'inline-citation-popover', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel',
+    'telemetry-chart-card', 'reasoning-trace-block', 'inline-citation-popover', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel', 'model-profile-card', 'trace-replay-panel', 'eval-harness-report',
     'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner',
     'public-repo-card', 'ecosystem-plane-map', 'comparison-matrix', 'site-header-island', 'mobile-navigation-sheet', 'site-footer', 'hero-billboard', 'bento-feature-grid', 'filterable-catalog-grid', 'client-install-switcher', 'persona-companion-stage', 'evidence-exhibit-figure',
     'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'article-toc-and-meta',
-    'docs-sidebar-nav', 'docs-quickstart-grid', 'docs-page-actions', 'layout-docs-portal',
+    'docs-sidebar-nav', 'docs-quickstart-grid', 'docs-page-actions', 'layout-docs-portal', 'capability-ledger-panel',
     'form-controls', 'button-variants', 'navigation-primitives', 'feedback-and-empty-states', 'disclosure-and-modals', 'data-table', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'skeleton-row', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar',
     'combobox-multiselect', 'date-range-picker', 'tooltip-hover-card', 'file-tree-explorer', 'resizable-split-pane', 'destructive-action-guard', 'system-error-boundary', 'context-menu-popover', 'keyboard-shortcuts-sheet', 'avatar-group-presence',
     'markdown-prose-renderer', 'code-and-diff-viewer', 'docs-code-tabs', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'copy-command-bar',
-    'systems-constellation-map', 'stage-backdrop', 'vi-orbital-field', 'memory-field', 'memory-pipeline', 'evidence-lens', 'coverage-grid',
+    'systems-constellation-map', 'stage-backdrop', 'vi-orbital-field', 'memory-field', 'memory-pipeline', 'evidence-lens', 'coverage-grid', 'family-stack-diagram',
     'persona-deliberation-stepper', 'persona-identity-badge', 'persona-dialects', 'five-bar-rule', 'persona-switcher',
     'instrument', 'statement-proof-row',
     'credential-activity-ledger', 'policy-rule-matrix', 'provider-model-selector', 'locked-panel',
+    'context-packet-inspector', 'memory-consent-epoch', 'assembly-gate-card', 'hook-chain-inspector', 'trellis-probe-matrix',
   ];
   assert.deepEqual(modularComponents.catalog.map((c) => c.id), expectedIds);
   for (const entry of modularComponents.catalog) {
@@ -575,6 +576,16 @@ test('standard carries ADR-024 base UI, markdown, graphic maps and chibi rules a
     'preview/input-request-card.html',
     'preview/run-plan-checklist.html',
     'preview/notification-inbox-panel.html',
+    'preview/context-packet-inspector.html',
+    'preview/memory-consent-epoch.html',
+    'preview/assembly-gate-card.html',
+    'preview/hook-chain-inspector.html',
+    'preview/trellis-probe-matrix.html',
+    'preview/model-profile-card.html',
+    'preview/trace-replay-panel.html',
+    'preview/eval-harness-report.html',
+    'preview/capability-ledger-panel.html',
+    'preview/family-stack-diagram.html',
   ]) {
     assert.ok(prose.includes(phrase), `DESIGN.md missing: ${phrase}`);
   }

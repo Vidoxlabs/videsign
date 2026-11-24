@@ -1,0 +1,718 @@
+/* Nocturne Museum: Family Surfaces Stylesheet (zero-hex OKLCH, @container).
+   Styles the 5 cross-family contract and timeline surfaces: model-profile-card,
+   trace-replay-panel, eval-harness-report, capability-ledger-panel, and
+   family-stack-diagram. Enforces 4-tier OKLCH elevation, ΔL contrast floors,
+   44px touch targets, GPU-only motion, and instant reduced-motion freeze. */
+
+:root,
+.vi-fs-scope {
+  --vi-fs-canvas: var(--vi-surface-canvas, oklch(0.10 0.012 275));
+  --vi-fs-shell: var(--vi-surface-shell, oklch(0.13 0.014 275));
+  --vi-fs-card: var(--vi-surface-card, oklch(0.16 0.016 275));
+  --vi-fs-elevated: var(--vi-surface-elevated, oklch(0.20 0.018 275));
+
+  --vi-fs-ink: var(--vi-ink-primary, oklch(0.96 0.006 275));
+  --vi-fs-ink-secondary: var(--vi-ink-secondary, oklch(0.82 0.010 275));
+  --vi-fs-ink-muted: var(--vi-ink-muted, oklch(0.70 0.012 275));
+
+  --vi-fs-hairline: var(--vi-border-subtle, oklch(1 0 0 / 0.08));
+  --vi-fs-border: var(--vi-border-interactive, oklch(0.56 0.020 275));
+  --vi-fs-border-strong: var(--vi-border-strong, oklch(0.68 0.022 275));
+  --vi-fs-accent: var(--vi-accent-focus, oklch(0.66 0.220 292));
+  --vi-fs-accent-tint: oklch(0.66 0.220 292 / 0.16);
+  --vi-fs-chip-bg: oklch(1 0 0 / 0.05);
+
+  --vi-fs-ok: oklch(0.74 0.160 162);
+  --vi-fs-warn: oklch(0.78 0.160 75);
+  --vi-fs-danger: oklch(0.68 0.210 20);
+  --vi-fs-danger-bg: oklch(0.22 0.050 20);
+  --vi-fs-info: oklch(0.72 0.140 230);
+
+  --vi-fs-font-sans: var(--vi-typography-typography-family-sans-base, Geist, ui-sans-serif, system-ui, sans-serif);
+  --vi-fs-font-mono: var(--vi-typography-typography-family-mono-base, Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  --vi-fs-radius-card: 0.75rem;
+  --vi-fs-radius-control: 0.5rem;
+  --vi-fs-radius-pill: 9999rem;
+  --vi-fs-touch: 2.75rem;
+  --vi-fs-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --vi-fs-dur: 150ms;
+}
+
+[data-theme="light"],
+[data-theme="light"] .vi-fs-scope,
+.vi-fs-scope[data-theme="light"] {
+  --vi-fs-canvas: var(--vi-surface-canvas, oklch(0.95 0.007 275));
+  --vi-fs-shell: var(--vi-surface-shell, oklch(0.975 0.005 275));
+  --vi-fs-card: var(--vi-surface-card, oklch(1 0 275));
+  --vi-fs-elevated: var(--vi-surface-elevated, oklch(0.92 0.009 275));
+
+  --vi-fs-ink: var(--vi-ink-primary, oklch(0.16 0.020 275));
+  --vi-fs-ink-secondary: var(--vi-ink-secondary, oklch(0.32 0.020 275));
+  --vi-fs-ink-muted: var(--vi-ink-muted, oklch(0.42 0.020 275));
+
+  --vi-fs-hairline: var(--vi-border-subtle, oklch(0.16 0.020 275 / 0.14));
+  --vi-fs-border: var(--vi-border-interactive, oklch(0.48 0.025 275));
+  --vi-fs-border-strong: var(--vi-border-strong, oklch(0.36 0.025 275));
+  --vi-fs-accent: var(--vi-accent-focus, oklch(0.46 0.240 292));
+  --vi-fs-accent-tint: oklch(0.46 0.240 292 / 0.10);
+  --vi-fs-chip-bg: oklch(0.16 0.020 275 / 0.06);
+
+  --vi-fs-ok: oklch(0.46 0.140 162);
+  --vi-fs-warn: oklch(0.48 0.150 75);
+  --vi-fs-danger: oklch(0.48 0.200 20);
+  --vi-fs-danger-bg: oklch(0.95 0.020 20);
+  --vi-fs-info: oklch(0.46 0.140 230);
+}
+
+[data-theme="high-contrast"],
+[data-theme="high-contrast"] .vi-fs-scope,
+.vi-fs-scope[data-theme="high-contrast"] {
+  --vi-fs-canvas: oklch(0.06 0.008 275);
+  --vi-fs-shell: oklch(0.09 0.010 275);
+  --vi-fs-card: oklch(0.12 0.012 275);
+  --vi-fs-elevated: oklch(0.16 0.014 275);
+
+  --vi-fs-ink: oklch(0.99 0.002 275);
+  --vi-fs-ink-secondary: oklch(0.88 0.008 275);
+  --vi-fs-ink-muted: oklch(0.78 0.010 275);
+
+  --vi-fs-hairline: oklch(1 0 0 / 0.28);
+  --vi-fs-border: oklch(0.74 0.020 275);
+  --vi-fs-border-strong: oklch(0.88 0.018 275);
+  --vi-fs-accent: oklch(0.80 0.200 292);
+  --vi-fs-accent-tint: oklch(0.80 0.200 292 / 0.18);
+  --vi-fs-chip-bg: oklch(1 0 0 / 0.12);
+
+  --vi-fs-ok: oklch(0.84 0.150 162);
+  --vi-fs-warn: oklch(0.86 0.150 75);
+  --vi-fs-danger: oklch(0.82 0.200 20);
+  --vi-fs-danger-bg: oklch(0.20 0.050 20);
+  --vi-fs-info: oklch(0.82 0.140 230);
+}
+
+.vi-fs-scope {
+  container-type: inline-size;
+  container-name: vi-fs-stage;
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--vi-fs-ink);
+  font-family: var(--vi-fs-font-sans);
+  box-sizing: border-box;
+}
+
+.vi-fs-scope *,
+.vi-fs-scope *::before,
+.vi-fs-scope *::after {
+  box-sizing: border-box;
+}
+
+.vi-fs-scope :focus-visible {
+  outline: 0.125rem solid var(--vi-fs-accent);
+  outline-offset: 0.125rem;
+}
+
+.vi-fs-scope .h-action-min-default {
+  block-size: auto;
+  min-block-size: var(--vi-fs-touch);
+}
+
+.vi-fs-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: 1.125rem;
+  border-radius: var(--vi-fs-radius-card);
+  border: 0.0625rem solid var(--vi-fs-hairline);
+  background-color: var(--vi-fs-card);
+}
+
+.vi-fs-card--wide {
+  max-inline-size: 72rem;
+}
+
+.vi-fs-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+
+.vi-fs-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  min-inline-size: 0;
+}
+
+.vi-fs-title {
+  margin: 0;
+  font-size: clamp(1rem, 0.92rem + 0.5cqi, 1.25rem);
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+  color: var(--vi-fs-ink);
+}
+
+.vi-fs-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--vi-fs-ink);
+}
+
+.vi-fs-copy {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--vi-fs-ink-secondary);
+  overflow-wrap: anywhere;
+}
+
+.vi-fs-meta {
+  margin: 0;
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-fs-ink-muted);
+  overflow-wrap: anywhere;
+}
+
+.vi-fs-code {
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-fs-ink);
+  overflow-wrap: break-word;
+}
+
+.vi-fs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4375rem;
+  min-inline-size: var(--vi-fs-touch);
+  min-block-size: var(--vi-fs-touch);
+  padding-inline: 0.875rem;
+  border-radius: var(--vi-fs-radius-control);
+  border: 0.0625rem solid var(--vi-fs-border);
+  background-color: var(--vi-fs-elevated);
+  color: var(--vi-fs-ink);
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--vi-fs-dur) var(--vi-fs-ease), opacity var(--vi-fs-dur) var(--vi-fs-ease);
+}
+
+.vi-fs-btn:active:not(:disabled) {
+  transform: translateY(0.0625rem);
+}
+
+.vi-fs-btn:disabled,
+.vi-fs-btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vi-fs-btn--primary {
+  border-color: var(--vi-fs-accent);
+  background-color: var(--vi-fs-accent-tint);
+}
+
+.vi-fs-btn--ghost {
+  background-color: transparent;
+  border-color: var(--vi-fs-hairline);
+  color: var(--vi-fs-ink-secondary);
+}
+
+.vi-fs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+}
+
+.vi-fs-tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.25rem;
+  padding: 0.1875rem;
+  border-radius: var(--vi-fs-radius-control);
+  border: 0.0625rem solid var(--vi-fs-hairline);
+  background-color: var(--vi-fs-canvas);
+  max-inline-size: 100%;
+}
+
+.vi-fs-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--vi-fs-touch);
+  min-block-size: var(--vi-fs-touch);
+  padding-inline: 0.75rem;
+  border-radius: 0.375rem;
+  border: 0.0625rem solid transparent;
+  background: transparent;
+  color: var(--vi-fs-ink-muted);
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--vi-fs-dur) var(--vi-fs-ease), opacity var(--vi-fs-dur) var(--vi-fs-ease);
+}
+
+.vi-fs-tab[aria-selected="true"],
+.vi-fs-tab[aria-pressed="true"] {
+  background-color: var(--vi-fs-elevated);
+  border-color: var(--vi-fs-border);
+  color: var(--vi-fs-ink);
+}
+
+.vi-fs-inline-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-fs-ink);
+  white-space: nowrap;
+}
+
+.vi-fs-inline-status--muted {
+  color: var(--vi-fs-ink-secondary);
+}
+
+.vi-fs-dot {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--vi-fs-radius-pill);
+  flex-shrink: 0;
+}
+
+.vi-fs-dot--ok { background-color: var(--vi-fs-ok); }
+.vi-fs-dot--warn { background-color: var(--vi-fs-warn); }
+.vi-fs-dot--danger { background-color: var(--vi-fs-danger); }
+.vi-fs-dot--info { background-color: var(--vi-fs-info); }
+.vi-fs-dot--accent { background-color: var(--vi-fs-accent); }
+.vi-fs-dot--muted {
+  border: 0.0625rem solid var(--vi-fs-border);
+  background-color: transparent;
+}
+
+.vi-fs-ledger {
+  margin: 0;
+  border-top: 0.0625rem solid var(--vi-fs-hairline);
+  min-inline-size: 0;
+}
+
+.vi-fs-ledger-row {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, 13.5rem) minmax(0, 1fr);
+  gap: 0.375rem 1rem;
+  align-items: baseline;
+  padding-block: 0.5625rem;
+  border-bottom: 0.0625rem solid var(--vi-fs-hairline);
+}
+
+.vi-fs-ledger-row dt {
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  color: var(--vi-fs-ink-muted);
+}
+
+.vi-fs-ledger-row dd {
+  margin: 0;
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-fs-ink);
+  overflow-wrap: anywhere;
+}
+
+.vi-fs-table-wrap {
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow-x: auto;
+  border-top: 0.0625rem solid var(--vi-fs-hairline);
+  border-bottom: 0.0625rem solid var(--vi-fs-hairline);
+}
+
+.vi-fs-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-fs-table th,
+.vi-fs-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5rem 0.625rem;
+  border-bottom: 0.0625rem solid var(--vi-fs-hairline);
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.vi-fs-table th {
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--vi-fs-ink-muted);
+  white-space: nowrap;
+}
+
+.vi-fs-table th[scope="row"],
+.vi-fs-table td.vi-fs-nowrap {
+  white-space: nowrap;
+}
+
+.vi-fs-table td.vi-fs-wrap-col {
+  min-inline-size: 8.5rem;
+}
+
+.vi-fs-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.vi-fs-table tbody tr[hidden] {
+  display: none;
+}
+
+.vi-fs-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.875rem;
+  padding: 0.75rem 0.875rem;
+  border-inline-start: 0.125rem solid var(--vi-fs-warn);
+  background-color: var(--vi-fs-shell);
+  min-inline-size: 0;
+}
+
+.vi-fs-banner--danger {
+  border-inline-start-color: var(--vi-fs-danger);
+}
+
+.vi-fs-banner[hidden] {
+  display: none;
+}
+
+.vi-fs-receipt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.875rem;
+  padding-top: 0.75rem;
+  border-top: 0.0625rem solid var(--vi-fs-hairline);
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-fs-ink-muted);
+  min-inline-size: 0;
+}
+
+.vi-fs-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding-block: 0.625rem;
+  border-top: 0.0625rem solid var(--vi-fs-hairline);
+  border-bottom: 0.0625rem solid var(--vi-fs-hairline);
+  min-inline-size: 0;
+}
+
+.vi-fs-kpi-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-inline-size: 0;
+}
+
+.vi-fs-kpi-val {
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--vi-fs-ink);
+}
+
+/* ---------- Trace Replay Panel ---------- */
+
+.vi-fs-trace-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+
+.vi-fs-trace-corr {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.625rem;
+  padding-block: 0.625rem;
+  border-top: 0.0625rem solid var(--vi-fs-hairline);
+  border-bottom: 0.0625rem solid var(--vi-fs-hairline);
+  min-inline-size: 0;
+}
+
+.vi-fs-trace-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+
+.vi-fs-trace-panel[hidden] {
+  display: none;
+}
+
+.vi-fs-trace-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 0.0625rem solid var(--vi-fs-hairline);
+  min-inline-size: 0;
+}
+
+.vi-fs-trace-event {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 6rem) minmax(7rem, 9rem) minmax(0, 1fr);
+  gap: 0.375rem 0.75rem;
+  align-items: baseline;
+  padding-block: 0.5625rem;
+  border-bottom: 0.0625rem solid var(--vi-fs-hairline);
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.vi-fs-trace-event[data-trace-active="true"] {
+  border-inline-start: 0.125rem solid var(--vi-fs-accent);
+  padding-inline-start: 0.625rem;
+}
+
+.vi-fs-trace-event[hidden] {
+  display: none;
+}
+
+/* ---------- Capability Sync Strip ---------- */
+
+.vi-fs-sync-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 0.0625rem solid var(--vi-fs-hairline);
+  min-inline-size: 0;
+}
+
+.vi-fs-sync-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 0.0625rem solid var(--vi-fs-hairline);
+  min-inline-size: 0;
+}
+
+.vi-fs-sync-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-block: 0.5625rem;
+  border-bottom: 0.0625rem solid var(--vi-fs-hairline);
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  min-inline-size: 0;
+}
+
+/* ---------- Family Stack Diagram ---------- */
+
+.vi-fs-stack-tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-inline-size: 0;
+}
+
+.vi-fs-stack-tier {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 0.0625rem solid var(--vi-fs-hairline);
+  min-inline-size: 0;
+}
+
+.vi-fs-stack-tier:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.vi-fs-stack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  min-inline-size: 0;
+}
+
+.vi-fs-stack-grid--aside {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.vi-fs-stack-node {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.1875rem;
+  inline-size: 100%;
+  min-inline-size: var(--vi-fs-touch);
+  min-block-size: var(--vi-fs-touch);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--vi-fs-radius-control);
+  border: 0.0625rem solid var(--vi-fs-border);
+  background-color: var(--vi-fs-shell);
+  color: var(--vi-fs-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--vi-fs-dur) var(--vi-fs-ease), opacity var(--vi-fs-dur) var(--vi-fs-ease);
+}
+
+.vi-fs-stack-node:active {
+  transform: translateY(0.0625rem);
+}
+
+.vi-fs-stack-node[aria-pressed="true"] {
+  border-color: var(--vi-fs-accent);
+  background-color: var(--vi-fs-accent-tint);
+}
+
+.vi-fs-stack-name {
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--vi-fs-ink);
+  white-space: nowrap;
+}
+
+.vi-fs-stack-role {
+  font-family: var(--vi-fs-font-sans);
+  font-size: 0.75rem;
+  color: var(--vi-fs-ink-secondary);
+}
+
+.vi-fs-link {
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: var(--vi-fs-touch);
+  min-block-size: var(--vi-fs-touch);
+  font-family: var(--vi-fs-font-mono);
+  font-size: 0.75rem;
+  color: var(--vi-fs-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Responsive Container & Narrow Viewport Rules ---------- */
+
+@container vi-fs-stage (max-width: 30rem) {
+  .vi-fs-card {
+    padding: 0.875rem;
+  }
+
+  .vi-fs-ledger-row,
+  .vi-fs-trace-event {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.1875rem;
+  }
+
+  .vi-fs-kpi-strip,
+  .vi-fs-trace-corr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vi-fs-stack-grid,
+  .vi-fs-stack-grid--aside {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .vi-fs-card {
+    padding: 0.875rem;
+  }
+
+  .vi-fs-ledger-row,
+  .vi-fs-trace-event {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.1875rem;
+  }
+
+  .vi-fs-kpi-strip,
+  .vi-fs-trace-corr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vi-fs-stack-grid,
+  .vi-fs-stack-grid--aside {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Instant Motion Freeze (data-motion="reduced" | "paused" & prefers-reduced-motion) ---------- */
+
+[data-motion="reduced"] .vi-fs-scope *,
+[data-motion="reduced"] .vi-fs-scope *::before,
+[data-motion="reduced"] .vi-fs-scope *::after,
+[data-motion="paused"] .vi-fs-scope *,
+[data-motion="paused"] .vi-fs-scope *::before,
+[data-motion="paused"] .vi-fs-scope *::after {
+  transition-duration: 0ms !important;
+  animation-duration: 0ms !important;
+  animation-play-state: paused !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vi-fs-scope *,
+  .vi-fs-scope *::before,
+  .vi-fs-scope *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+    animation-play-state: paused !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .vi-fs-card,
+  .vi-fs-btn,
+  .vi-fs-tabs,
+  .vi-fs-stack-node,
+  .vi-fs-banner {
+    background-color: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+  }
+}

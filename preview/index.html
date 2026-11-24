@@ -27,6 +27,8 @@
   <link rel="stylesheet" href="../dist/core-components.css" />
   <link rel="stylesheet" href="../dist/extended-primitives.css" />
   <link rel="stylesheet" href="../dist/workspace-components.css" />
+  <link rel="stylesheet" href="../dist/family-contracts.css" />
+  <link rel="stylesheet" href="../dist/family-surfaces.css" />
   <link rel="stylesheet" href="./catalog.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
@@ -35,6 +37,8 @@
   <script defer src="../dist/core-components.js"></script>
   <script defer src="../dist/extended-primitives.js"></script>
   <script defer src="../dist/workspace-components.js"></script>
+  <script defer src="../dist/family-contracts.js"></script>
+  <script defer src="../dist/family-surfaces.js"></script>
   <script defer src="./catalog.js"></script>
 </head>
 <body>
@@ -303,6 +307,14 @@
         { file: 'instrument.html', tier: 'workspace', label: 'Explorable instrument', desc: 'Interactive panel for articles and proofs: readout diagram, switch rows, range, segmented presets, and a ledger receipt (ADR-017).' },
         { file: 'statement-proof-row.html', tier: 'workspace', label: 'Statement-to-proof row', desc: 'Numbered statement beside its proof record. Solid, never glass (ADR-016).' },
         { file: 'locked-panel.html', tier: 'workspace', label: 'Locked panel', desc: 'Fail-closed panel: disabled composer with listed unlock conditions (ADR-016).' },
+        { file: 'context-packet-inspector.html', tier: 'workspace', label: 'Context packet inspector', desc: 'Bounded capillary retrieval packet showing untrusted framing, packet budgets, Mid-read forget refusal guard, and Admitted/Omitted/Unknown tabs with separate relevance and recency (ADR-021).' },
+        { file: 'memory-consent-epoch.html', tier: 'workspace', label: 'Memory consent and forget epoch', desc: 'Myosotis four closed memory classes, sequence-ordered consent ledger, projection stamp readout, and atomic structural forget to digest-only tombstone and rebuild (ADR-021).' },
+        { file: 'assembly-gate-card.html', tier: 'workspace', label: 'Assembly gate evaluation', desc: 'Aestivation plan gate evaluator with five deterministic baseline rules, append-only verdict ledger, and four interactive precedence scenarios (ADR-021).' },
+        { file: 'hook-chain-inspector.html', tier: 'workspace', label: 'Hook chain and skill safety inspector', desc: 'Drosera pack-ordered fail-closed hook evaluations paired with collapsible CAP-19 skill safety scan hazards and workspace-coding cookbook pack bindings (ADR-021).' },
+        { file: 'trellis-probe-matrix.html', tier: 'workspace', label: 'Family probe matrix', desc: 'Trellis four-point family probe matrix across seed, capillary, myosotis, aestivation, drosera, and Cross-family proving fail outranks unknown (ADR-021).' },
+        { file: 'model-profile-card.html', tier: 'workspace', label: 'Model profile card', desc: 'Closed five-slot seed CAP-16 capability profile pairing probed/reported/unknown provenance, separated requestedAlias vs backendModel, and endpoint privacy notice (ADR-021).' },
+        { file: 'trace-replay-panel.html', tier: 'workspace', label: 'Trace replay panel', desc: 'Read-only append-only bloom trace replay with Full state, Deltas, Debug, and Token deltas views, monotonic seq stepper, redacted team.recall digests, and five-field usage (ADR-021).' },
+        { file: 'eval-harness-report.html', tier: 'workspace', label: 'Eval harness report', desc: 'Smoke evaluation harness table pairing six deterministic evaluators with an explicitly subordinate judge outcome, baseline delta, duration, and usage (ADR-021).' },
         { file: 'persona-console.html', tier: 'workspace', label: 'Sovereign persona console', desc: 'Identity header, viewport, evidence trail with unavailable slots, and command bar (ADR-013).' },
 
         // Public site, maps and studio
@@ -310,8 +322,10 @@
         { file: 'mobile-navigation-sheet.html', tier: 'public', label: 'Mobile navigation sheet', desc: 'Solid secondary mobile drawer with six bounded routes, aria-current page state, 44px rows, motion pause, and footer continuity strip (ADR-023, ADR-025).' },
         { file: 'hero-billboard.html', tier: 'public', label: 'Hero billboard', desc: 'Fluid hero headline, five-bar signature rule, computed facts rail, and four-plane overview (ADR-005, ADR-013, ADR-023).' },
         { file: 'bento-feature-grid.html', tier: 'public', label: 'Bento feature grid', desc: 'Gapless asymmetric bento grid with exact six-card cell math, tabular evidence counters, and bottom-aligned 44px actions across the public ecosystem planes (ADR-023, ADR-025).' },
-        { file: 'public-repo-card.html', tier: 'public', label: 'Public repository cards', desc: 'Two-column showcase grid for seed, bloom, videsign, and vitools using generalized lexicon roles and 44px action links (ADR-021).' },
+        { file: 'public-repo-card.html', tier: 'public', label: 'Public repository cards', desc: 'Two-column showcase grid for seed, bloom, videsign, and drosera using generalized lexicon roles and 44px action links (ADR-021).' },
         { file: 'ecosystem-plane-map.html', tier: 'public', label: 'Ecosystem plane map', desc: 'Four-plane public architecture container (Surfaces, Harness, Providers, Authority stores) paired with the generalized lexicon ledger (ADR-021).' },
+        { file: 'family-stack-diagram.html', tier: 'public', label: 'Vidoxlabs 9-repo family stack', desc: 'Interactive schematic map of the nine-repo Vidoxlabs family across Composer, independent Peers, Foundation contracts, and Aside siblings (ADR-024).' },
+        { file: 'capability-ledger-panel.html', tier: 'public', label: 'Family capability ledger', desc: 'Horizon-filterable docs capability ledger separating two-field status and claim without table pills, paired with fail-closed source sync freshness (ADR-021).' },
         { file: 'comparison-matrix.html', tier: 'public', label: 'Comparison matrix', desc: 'Accessible multi-column capability table with semantic row headers, Supported, Planned, and Out of scope state pairs, and an observation-scope footnote (ADR-021).' },
         { file: 'filterable-catalog-grid.html', tier: 'public', label: 'Filterable catalog grid', desc: 'Search input, four facet selects, polite live count, two-column skill/agent cards, and empty-filter fallback (ADR-023).' },
         { file: 'client-install-switcher.html', tier: 'public', label: 'Client install switcher', desc: 'Client selector, copyable MCP/skill snippet, unsupported-client gap row, raw markdown links, and provenance ledger (ADR-023).' },

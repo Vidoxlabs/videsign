@@ -1,0 +1,83 @@
+<!--
+  Nocturne Museum: Aestivation Assembly Gate Card (plan.md, verdict.md, gate.md)
+  Shows planId, 64-hex prefix planDigest, 5 deterministic baseline rules, append-only
+  verdict ledger ("Reviewer approval never ratifies owner gate"), and 4 interactive
+  gate precedence scenarios (Permitted, Review stale, Revisions requested, Plan invalid).
+-->
+<section class="vi-fc-scope" aria-labelledby="gate-card-title">
+  <div class="vi-fc-card vi-fc-card--wide" data-vi-gate-card>
+    <div class="vi-fc-head">
+      <div>
+        <h2 id="gate-card-title" class="vi-fc-title">Assembly gate evaluation</h2>
+        <p class="vi-fc-meta">planId: plan-release-04 · <span data-gate-replan>Replan 1 / 2</span></p>
+      </div>
+      <span class="vi-fc-tag" data-gate-digest>sha256: b85cf91</span>
+    </div>
+
+    <div class="vi-fc-tabs" role="tablist" aria-label="Assembly gate scenarios">
+      <button type="button" role="tab" aria-selected="true" tabindex="0" data-gate-scenario="permitted" class="vi-fc-tab h-action-min-default">Permitted</button>
+      <button type="button" role="tab" aria-selected="false" tabindex="-1" data-gate-scenario="review-stale" class="vi-fc-tab h-action-min-default">Review stale</button>
+      <button type="button" role="tab" aria-selected="false" tabindex="-1" data-gate-scenario="revisions-requested" class="vi-fc-tab h-action-min-default">Revisions requested</button>
+      <button type="button" role="tab" aria-selected="false" tabindex="-1" data-gate-scenario="plan-invalid" class="vi-fc-tab h-action-min-default">Plan invalid</button>
+    </div>
+
+    <div class="vi-fc-notice vi-fc-notice--ok" data-gate-banner role="status" aria-live="polite">
+      <span class="vi-fc-status">
+        <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok" data-gate-dot></span>
+        <span class="vi-fc-mono" data-gate-verdict>permitted: true</span>
+      </span>
+      <span data-gate-reason>Valid plan, sound verdict ledger, and approve verdict on sha256: b85cf91.</span>
+    </div>
+
+    <div>
+      <h3 class="vi-fc-section-title">Deterministic baseline rules (5)</h3>
+      <ol class="vi-fc-list" aria-label="Plan validation rules">
+        <li class="vi-fc-row vi-fc-row--compact">
+          <span class="vi-fc-mono">1. Non-empty</span>
+          <span class="vi-fc-meta">Pass</span>
+        </li>
+        <li class="vi-fc-row vi-fc-row--compact">
+          <span class="vi-fc-mono">2. Known stages</span>
+          <span class="vi-fc-meta">Pass</span>
+        </li>
+        <li class="vi-fc-row vi-fc-row--compact">
+          <span class="vi-fc-mono">3. Titled</span>
+          <span class="vi-fc-meta">Pass</span>
+        </li>
+        <li class="vi-fc-row vi-fc-row--compact">
+          <span class="vi-fc-mono">4. Review before assemble</span>
+          <span class="vi-fc-meta" data-gate-order-rule>Pass (review precedes assemble)</span>
+        </li>
+        <li class="vi-fc-row vi-fc-row--compact">
+          <span class="vi-fc-mono">5. Verify is final</span>
+          <span class="vi-fc-meta">Pass</span>
+        </li>
+      </ol>
+    </div>
+
+    <div>
+      <div class="vi-fc-head">
+        <h3 class="vi-fc-section-title">Append-only verdict ledger</h3>
+        <span class="vi-fc-meta">Reviewer approval never ratifies owner gate.</span>
+      </div>
+      <dl class="vi-fc-ledger" aria-label="Latest verdict record">
+        <div class="vi-fc-ledger-row">
+          <dt>judge</dt>
+          <dd data-gate-v-judge>reviewer-01</dd>
+        </div>
+        <div class="vi-fc-ledger-row">
+          <dt>planDigest</dt>
+          <dd data-gate-v-digest>sha256: b85cf91</dd>
+        </div>
+        <div class="vi-fc-ledger-row">
+          <dt>decision</dt>
+          <dd data-gate-v-decision>approve</dd>
+        </div>
+        <div class="vi-fc-ledger-row">
+          <dt>reasons</dt>
+          <dd data-gate-v-reasons>Rules pass; steps scoped within workspace</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,130 @@
+<!--
+  Nocturne Museum: Trellis Family-Wide 4-Point Probe Matrix (grid.md, trellis 0.8.0 evidence)
+  Displays Shape, Behavior, Consistency, and Operational counts across seed, capillary, myosotis,
+  aestivation, drosera, and Cross-family (*) with commit SHAs and interactive 3-scenario rollup
+  math proving fail outranks unknown with zero averaging across 10+ passes.
+-->
+<section class="vi-fc-scope" aria-labelledby="trellis-matrix-title">
+  <div class="vi-fc-card vi-fc-card--wide" data-vi-trellis>
+    <div class="vi-fc-head">
+      <h2 id="trellis-matrix-title" class="vi-fc-title">Family probe matrix</h2>
+      <span class="vi-fc-status" role="status" aria-live="polite">
+        <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok" data-trellis-dot></span>
+        <span class="vi-fc-mono" data-trellis-verdict>verdict: pass · 62 pass, 0 fail, 0 unknown</span>
+      </span>
+    </div>
+
+    <div class="vi-fc-tabs" role="tablist" aria-label="Grid rollup scenarios">
+      <button type="button" role="tab" aria-selected="true" tabindex="0" data-trellis-scenario="clean" class="vi-fc-tab h-action-min-default">Clean bundle run (pass)</button>
+      <button type="button" role="tab" aria-selected="false" tabindex="-1" data-trellis-scenario="unknown" class="vi-fc-tab h-action-min-default">Older seed checkout (unknown)</button>
+      <button type="button" role="tab" aria-selected="false" tabindex="-1" data-trellis-scenario="fail" class="vi-fc-tab h-action-min-default">Single behavior fail (fail)</button>
+    </div>
+
+    <p class="vi-fc-copy" data-trellis-note>Exit code 0 across all 62 probes; every subject clean.</p>
+
+    <div class="vi-fc-table-wrap">
+      <table class="vi-fc-table">
+        <caption class="sr-only">Trellis 0.8.0 four-point family probe matrix</caption>
+        <thead>
+          <tr>
+            <th scope="col">Member</th>
+            <th scope="col">Commit</th>
+            <th scope="col">Shape</th>
+            <th scope="col">Behavior</th>
+            <th scope="col">Consistency</th>
+            <th scope="col">Operational</th>
+            <th scope="col">Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">seed (0.8.0)</th>
+            <td>7c0cdae</td>
+            <td>1 pass</td>
+            <td data-trellis-seed-behavior>11 pass</td>
+            <td>1 pass</td>
+            <td data-trellis-seed-op>1 pass</td>
+            <td>
+              <span class="vi-fc-cell-inline">
+                <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok" data-trellis-seed-dot></span>
+                <span data-trellis-seed-verdict>pass</span>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">capillary (1.3.0)</th>
+            <td>a9f0554</td>
+            <td>1 pass</td>
+            <td>13 pass</td>
+            <td>-</td>
+            <td>1 pass</td>
+            <td>
+              <span class="vi-fc-cell-inline">
+                <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+                <span>pass</span>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">myosotis (1.2.0)</th>
+            <td>79d0938</td>
+            <td>1 pass</td>
+            <td>8 pass</td>
+            <td>-</td>
+            <td>1 pass</td>
+            <td>
+              <span class="vi-fc-cell-inline">
+                <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+                <span>pass</span>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">aestivation (0.5.0)</th>
+            <td>b85cf91</td>
+            <td>1 pass</td>
+            <td>7 pass</td>
+            <td>-</td>
+            <td>1 pass</td>
+            <td>
+              <span class="vi-fc-cell-inline">
+                <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+                <span>pass</span>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">drosera (2.2.0)</th>
+            <td>d05aff0</td>
+            <td>1 pass</td>
+            <td data-trellis-drosera-behavior>9 pass</td>
+            <td>-</td>
+            <td>1 pass</td>
+            <td>
+              <span class="vi-fc-cell-inline">
+                <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok" data-trellis-drosera-dot></span>
+                <span data-trellis-drosera-verdict>pass</span>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Cross-family (*)</th>
+            <td>bundle</td>
+            <td>-</td>
+            <td>-</td>
+            <td>3 pass</td>
+            <td>-</td>
+            <td>
+              <span class="vi-fc-cell-inline">
+                <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+                <span>pass</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="vi-fc-meta">Observed trellis 0.8.0 run on 2026-11-23 (UTC). Rollup order: fail outranks unknown; ten passes never average out one fail.</p>
+  </div>
+</section>

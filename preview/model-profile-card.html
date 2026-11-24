@@ -1,0 +1,110 @@
+<!--
+  Nocturne Museum: Model profile card (seed CAP-16 + bloom doctor probe)
+  Displays the closed five PROFILE_SLOTS with explicit probed, reported, or unknown
+  provenance, separates requestedAlias from backendModel (no silent model substitution),
+  states endpoint privacy rules, and provides interactive Probed local, Partial unknown,
+  and Deprecated alias presets. Solid surfaces only.
+-->
+<section class="vi-fs-scope" aria-labelledby="model-profile-title">
+  <div class="vi-fs-card vi-fs-card--wide" data-vi-model-profile>
+    <div class="vi-fs-head">
+      <div class="vi-fs-title-row">
+        <h2 id="model-profile-title" class="vi-fs-title">Model profile</h2>
+        <span class="vi-fs-meta">seed CAP-16 · bloom doctor --probe</span>
+      </div>
+      <div role="group" aria-label="Model profile presets" class="vi-fs-tabs">
+        <button type="button" aria-pressed="true" data-profile-preset="probed-local" class="vi-fs-tab h-action-min-default">Probed local</button>
+        <button type="button" aria-pressed="false" data-profile-preset="partial-unknown" class="vi-fs-tab h-action-min-default">Partial unknown</button>
+        <button type="button" aria-pressed="false" data-profile-preset="deprecated-alias" class="vi-fs-tab h-action-min-default">Deprecated alias</button>
+      </div>
+    </div>
+
+    <dl aria-label="Alias and backend model identity" class="vi-fs-ledger">
+      <div class="vi-fs-ledger-row">
+        <dt>requestedAlias</dt>
+        <dd data-profile-requested>local-fast</dd>
+      </div>
+      <div class="vi-fs-ledger-row">
+        <dt>backendModel</dt>
+        <dd><span data-profile-backend>inkling-2-mini-q4</span> (No silent model substitution)</dd>
+      </div>
+    </dl>
+
+    <div class="vi-fs-banner" role="status" data-profile-deprecated hidden>
+      <span class="vi-fs-inline-status">
+        <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--warn"></span>
+        <span>Deprecated alias</span>
+      </span>
+      <span class="vi-fs-meta" data-profile-deprecated-text>replacedBy: local-fast (label only; caller decides)</span>
+    </div>
+
+    <div class="vi-fs-table-wrap">
+      <table class="vi-fs-table" aria-label="Closed five-slot model capability profile">
+        <thead>
+          <tr>
+            <th scope="col">PROFILE_SLOTS</th>
+            <th scope="col">Value</th>
+            <th scope="col">Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-profile-slot="model">
+            <th scope="row" class="vi-fs-code">model</th>
+            <td class="vi-fs-code vi-fs-nowrap" data-slot-value>inkling-2-mini-q4</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--ok" data-slot-dot></span>
+                <span data-slot-source>probed</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-profile-slot="contextLength">
+            <th scope="row" class="vi-fs-code">contextLength</th>
+            <td class="vi-fs-code vi-fs-nowrap" data-slot-value>32768</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--info" data-slot-dot></span>
+                <span data-slot-source>reported</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-profile-slot="toolCalling">
+            <th scope="row" class="vi-fs-code">toolCalling</th>
+            <td class="vi-fs-code vi-fs-nowrap" data-slot-value>true</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--info" data-slot-dot></span>
+                <span data-slot-source>reported</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-profile-slot="constrainedOutput">
+            <th scope="row" class="vi-fs-code">constrainedOutput</th>
+            <td class="vi-fs-code vi-fs-nowrap" data-slot-value>false</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--info" data-slot-dot></span>
+                <span data-slot-source>reported</span>
+              </span>
+            </td>
+          </tr>
+          <tr data-profile-slot="streaming">
+            <th scope="row" class="vi-fs-code">streaming</th>
+            <td class="vi-fs-code vi-fs-nowrap" data-slot-value>true</td>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--ok" data-slot-dot></span>
+                <span data-slot-source>probed</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="vi-fs-receipt" role="status" aria-live="polite">
+      <span data-profile-status>Probed local profile loaded · 5 closed slots</span>
+      <span>Profiles store no endpoint host, URL, or credential.</span>
+    </div>
+  </div>
+</section>

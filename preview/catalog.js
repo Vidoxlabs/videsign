@@ -46,6 +46,8 @@
     '../dist/core-components.css',
     '../dist/extended-primitives.css',
     '../dist/workspace-components.css',
+    '../dist/family-contracts.css',
+    '../dist/family-surfaces.css',
   ];
 
   var ISOLATION_BASE_CSS = [
@@ -117,6 +119,7 @@
     '  --vi-colors-text-content-primary-base: var(--vi-ink-primary);',
     '  --vi-colors-text-content-secondary-base: var(--vi-ink-secondary);',
     '  --vi-colors-border-separator-primary-base: var(--vi-border-interactive);',
+    '  --vi-colors-surface-accent-violet-base: oklch(0.42 0.240 292);',
     '  scrollbar-color: oklch(0.56 0.015 275) transparent;',
     '}',
     '.vi-specimen-root ::-webkit-scrollbar { width: 8px; height: 8px; }',
@@ -191,6 +194,7 @@
     '  --vi-colors-text-content-primary-base: var(--vi-ink-primary);',
     '  --vi-colors-text-content-secondary-base: var(--vi-ink-secondary);',
     '  --vi-colors-border-separator-primary-base: var(--vi-border-interactive);',
+    '  --vi-colors-surface-accent-violet-base: oklch(0.42 0.240 292);',
     '  --vi-iframe-thumb: oklch(0.56 0.015 275);',
     '  --vi-iframe-thumb-hover: oklch(0.72 0.02 275);',
     '}',
@@ -354,7 +358,29 @@
         found.add('--vi-ws-border');
         found.add('--vi-ws-accent');
       }
-      if (base.indexOf('vi-viewport-') === 0 || base.indexOf('vi-brief-') === 0 || base.indexOf('vi-data-table') === 0 || base.indexOf('vi-bento-') === 0 || base.indexOf('vi-specimen-') === 0 || base.indexOf('vi-ledger') === 0 || base.indexOf('vi-inline-status') === 0 || base.indexOf('vi-kpi-') === 0 || base.indexOf('vi-hero-') === 0 || base.indexOf('vi-tactile-btn') === 0 || base.indexOf('vi-core-') === 0 || base.indexOf('vi-combo-') === 0 || base.indexOf('vi-cal-') === 0 || base.indexOf('vi-tip-') === 0 || base.indexOf('vi-tree') === 0 || base.indexOf('vi-split-') === 0 || base.indexOf('vi-chart-') === 0 || base.indexOf('vi-trace-') === 0 || base.indexOf('vi-cite-') === 0 || base.indexOf('vi-danger-') === 0 || base.indexOf('vi-err-') === 0 || base.indexOf('vi-ext-') === 0 || base.indexOf('vi-ws-') === 0) {
+      if (base.indexOf('vi-fc-') === 0) {
+        found.add('--vi-fc-canvas');
+        found.add('--vi-fc-shell');
+        found.add('--vi-fc-card');
+        found.add('--vi-fc-elevated');
+        found.add('--vi-fc-ink');
+        found.add('--vi-fc-ink-secondary');
+        found.add('--vi-fc-ink-muted');
+        found.add('--vi-fc-border');
+        found.add('--vi-fc-accent');
+      }
+      if (base.indexOf('vi-fs-') === 0) {
+        found.add('--vi-fs-canvas');
+        found.add('--vi-fs-shell');
+        found.add('--vi-fs-card');
+        found.add('--vi-fs-elevated');
+        found.add('--vi-fs-ink');
+        found.add('--vi-fs-ink-secondary');
+        found.add('--vi-fs-ink-muted');
+        found.add('--vi-fs-border');
+        found.add('--vi-fs-accent');
+      }
+      if (base.indexOf('vi-viewport-') === 0 || base.indexOf('vi-brief-') === 0 || base.indexOf('vi-data-table') === 0 || base.indexOf('vi-bento-') === 0 || base.indexOf('vi-specimen-') === 0 || base.indexOf('vi-ledger') === 0 || base.indexOf('vi-inline-status') === 0 || base.indexOf('vi-kpi-') === 0 || base.indexOf('vi-hero-') === 0 || base.indexOf('vi-tactile-btn') === 0 || base.indexOf('vi-core-') === 0 || base.indexOf('vi-combo-') === 0 || base.indexOf('vi-cal-') === 0 || base.indexOf('vi-tip-') === 0 || base.indexOf('vi-tree') === 0 || base.indexOf('vi-split-') === 0 || base.indexOf('vi-chart-') === 0 || base.indexOf('vi-trace-') === 0 || base.indexOf('vi-cite-') === 0 || base.indexOf('vi-danger-') === 0 || base.indexOf('vi-err-') === 0 || base.indexOf('vi-ext-') === 0 || base.indexOf('vi-ws-') === 0 || base.indexOf('vi-fc-') === 0 || base.indexOf('vi-fs-') === 0) {
         found.add('--vi-surface-canvas');
         found.add('--vi-surface-card');
         found.add('--vi-surface-elevated');
@@ -711,6 +737,8 @@
         '<script defer src="../dist/core-components.js"></scr' + 'ipt>' +
         '<script defer src="../dist/extended-primitives.js"></scr' + 'ipt>' +
         '<script defer src="../dist/workspace-components.js"></scr' + 'ipt>' +
+        '<script defer src="../dist/family-contracts.js"></scr' + 'ipt>' +
+        '<script defer src="../dist/family-surfaces.js"></scr' + 'ipt>' +
         '<style>' + IFRAME_BASE_CSS + '</style>' +
         '</head><body>' + html + '</body></html>';
     }
@@ -772,6 +800,12 @@
       }
       if (win.ViWorkspaceComponents && typeof win.ViWorkspaceComponents.initWorkspaceComponents === 'function') {
         register(win.ViWorkspaceComponents.initWorkspaceComponents(container));
+      }
+      if (win.ViFamilyContracts && typeof win.ViFamilyContracts.initFamilyContracts === 'function') {
+        register(win.ViFamilyContracts.initFamilyContracts(container));
+      }
+      if (win.ViFamilySurfaces && typeof win.ViFamilySurfaces.initFamilySurfaces === 'function') {
+        register(win.ViFamilySurfaces.initFamilySurfaces(container));
       }
       Array.prototype.slice.call(container.querySelectorAll('img[data-chibi-fallback]')).forEach(function (img) {
         img.addEventListener('error', function () {
@@ -1070,7 +1104,7 @@
           tdVal.appendChild(sw);
           var tokenL = colorToOklchL(val);
           if (tokenL !== null && surfaceL !== null) {
-            var isSurfaceToken = name.indexOf('surface-canvas') !== -1 || name.indexOf('surface-shell') !== -1 || name.indexOf('surface-card') !== -1 || name.indexOf('surface-elevated') !== -1 || name.indexOf('surface-background') !== -1 || /-(?:ext|ws)-(?:canvas|shell|card|elevated)$/.test(name);
+            var isSurfaceToken = name.indexOf('surface-canvas') !== -1 || name.indexOf('surface-shell') !== -1 || name.indexOf('surface-card') !== -1 || name.indexOf('surface-elevated') !== -1 || name.indexOf('surface-background') !== -1 || /-(?:ext|ws|fc|fs)-(?:canvas|shell|card|elevated)$/.test(name);
             var dl = Math.abs(tokenL - surfaceL);
             var pill = rootDoc.createElement('span');
             pill.className = 'inspector-dl-pill';

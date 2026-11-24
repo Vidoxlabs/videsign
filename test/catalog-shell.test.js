@@ -327,6 +327,16 @@ test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens
   assert.ok(wsTokens.includes('--vi-ws-accent'));
   assert.ok(wsTokens.includes('--vi-surface-card'));
 
+  const fcTokens = extractTokenReferences('<section class="vi-fc-scope"><div class="vi-fc-card"></div></section>', new Set());
+  assert.ok(fcTokens.includes('--vi-fc-card'));
+  assert.ok(fcTokens.includes('--vi-fc-accent'));
+  assert.ok(fcTokens.includes('--vi-surface-card'));
+
+  const fsTokens = extractTokenReferences('<section class="vi-fs-scope"><div class="vi-fs-card"></div></section>', new Set());
+  assert.ok(fsTokens.includes('--vi-fs-card'));
+  assert.ok(fsTokens.includes('--vi-fs-accent'));
+  assert.ok(fsTokens.includes('--vi-surface-card'));
+
   const mockNode = {
     querySelector: () => null,
     querySelectorAll(sel) {
@@ -361,12 +371,12 @@ test('preview/catalog.js pure helpers parse/serialize URL hashes, extract tokens
   assert.equal(parseHashState('#catalog?cat=layouts&specimen=layout-public-site').category, 'layouts');
 });
 
-test('manifest count equals active catalog count (111) and design-studio-canvas aligns with museum accent grammar', () => {
+test('manifest count equals active catalog count (121) and design-studio-canvas aligns with museum accent grammar', () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf-8'));
   const indexHtml = fs.readFileSync(path.join(ROOT, 'preview', 'index.html'), 'utf-8');
   const activeCount = [...indexHtml.matchAll(/file:\s*'[^']+',\s*tier:\s*'([^']+)'/g)].filter((m) => m[1] !== 'legacy').length;
   assert.equal(manifest.componentCount, activeCount, 'manifest componentCount must equal active specimen count');
-  assert.equal(manifest.componentCount, 111);
+  assert.equal(manifest.componentCount, 121);
 
   const studio = fs.readFileSync(path.join(ROOT, 'preview', 'design-studio-canvas.html'), 'utf-8');
   assert.ok(studio.includes('bg-status-indicator-success-base'), 'sync ready uses semantic status-ok dot');

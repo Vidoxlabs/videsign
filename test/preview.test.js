@@ -27,7 +27,7 @@ let css = '';
 
 before(() => {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'generate-tokens.js')], { cwd: ROOT, stdio: 'ignore' });
-  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css', 'settings-surface.css', 'library-surface.css', 'specimen-layouts.css', 'core-components.css', 'extended-primitives.css', 'workspace-components.css']
+  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css', 'settings-surface.css', 'library-surface.css', 'specimen-layouts.css', 'core-components.css', 'extended-primitives.css', 'workspace-components.css', 'family-contracts.css', 'family-surfaces.css']
     .map((f) => fs.readFileSync(path.join(ROOT, 'dist', f), 'utf-8'))
     .join('\n');
 });
@@ -81,7 +81,7 @@ test('every class used by a fragment resolves to generated CSS', () => {
 
 test('the catalog loads the generated stylesheets and lists every fragment', () => {
   const index = fs.readFileSync(path.join(PREVIEW, 'index.html'), 'utf-8');
-  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css', '../dist/settings-surface.css', '../dist/library-surface.css', '../dist/specimen-layouts.css', '../dist/core-components.css', '../dist/extended-primitives.css', '../dist/workspace-components.css']) {
+  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css', '../dist/settings-surface.css', '../dist/library-surface.css', '../dist/specimen-layouts.css', '../dist/core-components.css', '../dist/extended-primitives.css', '../dist/workspace-components.css', '../dist/family-contracts.css', '../dist/family-surfaces.css']) {
     assert.ok(index.includes(`href="${sheet}"`), `catalog must load ${sheet}`);
   }
   const unlisted = FRAGMENTS.filter((f) => f !== 'index.html' && !index.includes(`'${f}'`) && !index.includes(`"${f}"`));
@@ -89,7 +89,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'group-conversation', 'context-attachment-tray', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'credential-activity-ledger', 'policy-rule-matrix', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'article-toc-and-meta', 'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'systems-constellation-map', 'persona-deliberation-stepper', 'markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'form-controls', 'button-variants', 'navigation-primitives', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'feedback-and-empty-states', 'disclosure-and-modals', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar', 'mobile-navigation-sheet', 'bento-feature-grid', 'comparison-matrix', 'session-checkpoint-card', 'provider-model-selector', 'context-menu-popover', 'keyboard-shortcuts-sheet', 'avatar-group-presence', 'copy-command-bar', 'voice-capture-bar', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'context-attachment-tray', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'credential-activity-ledger', 'policy-rule-matrix', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'article-toc-and-meta', 'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'systems-constellation-map', 'persona-deliberation-stepper', 'markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'form-controls', 'button-variants', 'navigation-primitives', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'feedback-and-empty-states', 'disclosure-and-modals', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar', 'mobile-navigation-sheet', 'bento-feature-grid', 'comparison-matrix', 'session-checkpoint-card', 'provider-model-selector', 'context-menu-popover', 'keyboard-shortcuts-sheet', 'avatar-group-presence', 'copy-command-bar', 'voice-capture-bar', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel', 'context-packet-inspector', 'memory-consent-epoch', 'assembly-gate-card', 'hook-chain-inspector', 'trellis-probe-matrix', 'model-profile-card', 'trace-replay-panel', 'eval-harness-report', 'capability-ledger-panel', 'family-stack-diagram']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });
@@ -542,7 +542,7 @@ test('Seed contract and public-repo continuity fragments enforce solid surfaces,
   assert.match(registry, /Vendor identity lives in the connector binding, never in the tool ID\./);
   for (const [toolId, connector, effect, realm] of [
     ['vcs.file.read', 'local-git', 'read', 'workspace'],
-    ['memory.context.read', 'memory-fabric', 'read', 'team-shared'],
+    ['memory.context.read', 'myosotis', 'read', 'team-shared'],
     ['ingest.job.create', 'queue-adapter', 'write', 'external'],
     ['compute.rows.check', 'deterministic-checker', 'read', 'artifact-store'],
   ]) {
@@ -555,7 +555,7 @@ test('Seed contract and public-repo continuity fragments enforce solid surfaces,
   // 4. public-repo-card.html
   const cards = read('public-repo-card.html');
   assert.equal([...cards.matchAll(/<article\b/g)].length, 4, 'public-repo-card must render 4 article cards');
-  for (const repo of ['seed', 'bloom', 'videsign', 'vitools']) {
+  for (const repo of ['seed', 'bloom', 'videsign', 'drosera']) {
     assert.match(cards, new RegExp(`>${repo}<`), `missing repo card heading ${repo}`);
   }
   const cardLinks = [...cards.matchAll(/<a\b[^>]*class="([^"]*)"[^>]*>/g)];
@@ -570,7 +570,7 @@ test('Seed contract and public-repo continuity fragments enforce solid surfaces,
   for (const plane of ['Surfaces', 'Harness', 'Providers', 'Authority stores']) {
     assert.match(map, new RegExp(plane), `missing ecosystem plane ${plane}`);
   }
-  for (const noun of ['seed', 'bloom', 'videsign', 'vitools']) {
+  for (const noun of ['seed', 'capillary', 'myosotis', 'aestivation', 'drosera', 'bloom', 'trellis', 'docs', 'videsign']) {
     assert.match(map, new RegExp(`\\b${noun}\\b`), `missing public proper noun ${noun}`);
   }
   for (const term of ['the native client', 'coding workspace', 'the memory fabric', 'the storage triangle', 'the documentation base', 'coordinator', 'model-backed specialist', 'deterministic checker', 'the local cluster']) {
@@ -625,7 +625,7 @@ test('deslopped public-site and design-studio fragments follow ADR-023 contracts
   assert.match(header, /aria-label="Toggle navigation"/);
 
   const footer = read('site-footer.html');
-  for (const repo of ['seed', 'bloom', 'videsign', 'vitools']) assert.match(footer, new RegExp(`>${repo}<`));
+  for (const repo of ['seed', 'bloom', 'drosera', 'videsign', 'docs']) assert.match(footer, new RegExp(`>${repo}<`));
   assert.match(footer, /aria-pressed="false"[\s\S]*>Pause background motion</);
 
   const hero = read('hero-billboard.html');
@@ -891,7 +891,7 @@ test('modularity and cross-surface continuity fragments follow ADR-021, ADR-023,
   assert.equal(routes.includes('/apps'), false, 'no unreleased storefront route');
   assert.equal([...sheetNav.matchAll(/aria-current="page"/g)].length, 1, 'one current page');
   assert.match(sheet, /aria-pressed="false"[^>]*>Pause background motion/);
-  for (const repo of ['seed', 'bloom', 'videsign', 'vitools']) {
+  for (const repo of ['seed', 'bloom', 'videsign', 'drosera']) {
     assert.ok(sheet.includes(`>${repo}<`), `footer continuity link missing: ${repo}`);
     assert.ok(sheet.includes(`href="https://github.com/Vidoxlabs/${repo}"`), `footer continuity URL missing: ${repo}`);
   }

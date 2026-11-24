@@ -1,0 +1,124 @@
+<!--
+  Nocturne Museum: Eval harness report (bloom CAP-14)
+  Displays bloom eval --smoke summary metrics, All cases / Passed / Failed filters, six
+  deterministic evaluators (exact, contains, schema-valid, tool-trajectory, files-changed,
+  tests-pass), explicitly labeled judge score that cannot override deterministic failure,
+  baseline delta, duration, and token usage. Solid surfaces only, zero td pills.
+-->
+<section class="vi-fs-scope" aria-labelledby="eval-report-title">
+  <div class="vi-fs-card vi-fs-card--wide" data-vi-eval-report>
+    <div class="vi-fs-head">
+      <div class="vi-fs-title-row">
+        <h2 id="eval-report-title" class="vi-fs-title">Eval harness report</h2>
+        <span class="vi-fs-meta">bloom eval --smoke</span>
+      </div>
+      <div role="group" aria-label="Filter evaluation cases" class="vi-fs-tabs">
+        <button type="button" aria-pressed="true" data-eval-filter="all" class="vi-fs-tab h-action-min-default">All cases</button>
+        <button type="button" aria-pressed="false" data-eval-filter="passed" class="vi-fs-tab h-action-min-default">Passed</button>
+        <button type="button" aria-pressed="false" data-eval-filter="failed" class="vi-fs-tab h-action-min-default">Failed</button>
+      </div>
+    </div>
+
+    <div class="vi-fs-kpi-strip" aria-label="Smoke evaluation summary">
+      <div class="vi-fs-kpi-item">
+        <span class="vi-fs-meta">Dataset</span>
+        <span class="vi-fs-kpi-val">4 cases</span>
+      </div>
+      <div class="vi-fs-kpi-item">
+        <span class="vi-fs-meta">Passed</span>
+        <span class="vi-fs-kpi-val">3</span>
+      </div>
+      <div class="vi-fs-kpi-item">
+        <span class="vi-fs-meta">Failed</span>
+        <span class="vi-fs-kpi-val">1</span>
+      </div>
+      <div class="vi-fs-kpi-item">
+        <span class="vi-fs-meta">Baseline delta</span>
+        <span class="vi-fs-kpi-val">+1 vs base</span>
+      </div>
+      <div class="vi-fs-kpi-item">
+        <span class="vi-fs-meta">Token usage</span>
+        <span class="vi-fs-kpi-val">4,180 tok</span>
+      </div>
+    </div>
+
+    <div class="vi-fs-table-wrap">
+      <table class="vi-fs-table" aria-label="Smoke evaluation case outcomes">
+        <thead>
+          <tr>
+            <th scope="col">Case ID</th>
+            <th scope="col">Verdict</th>
+            <th scope="col">Deterministic evaluators</th>
+            <th scope="col">Judge</th>
+            <th scope="col">Delta</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-eval-case data-eval-verdict="passed">
+            <th scope="row" class="vi-fs-code">case-01-alias-resolve</th>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--ok"></span>
+                <span>passed</span>
+              </span>
+            </td>
+            <td class="vi-fs-code vi-fs-wrap-col">exact: pass, schema-valid: pass</td>
+            <td class="vi-fs-meta vi-fs-nowrap">not run</td>
+            <td class="vi-fs-code vi-fs-nowrap">0 ms</td>
+            <td class="vi-fs-code vi-fs-nowrap">42 ms</td>
+            <td class="vi-fs-code vi-fs-nowrap">in 410, out 95</td>
+          </tr>
+          <tr data-eval-case data-eval-verdict="passed">
+            <th scope="row" class="vi-fs-code">case-02-packet-budget</th>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--ok"></span>
+                <span>passed</span>
+              </span>
+            </td>
+            <td class="vi-fs-code vi-fs-wrap-col">contains: pass, tool-trajectory: pass</td>
+            <td class="vi-fs-code vi-fs-nowrap">judge 0.92 (pass)</td>
+            <td class="vi-fs-code vi-fs-nowrap">-18 ms</td>
+            <td class="vi-fs-code vi-fs-nowrap">118 ms</td>
+            <td class="vi-fs-code vi-fs-nowrap">in 1120, out 310</td>
+          </tr>
+          <tr data-eval-case data-eval-verdict="passed">
+            <th scope="row" class="vi-fs-code">case-03-patch-apply</th>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--ok"></span>
+                <span>passed</span>
+              </span>
+            </td>
+            <td class="vi-fs-code vi-fs-wrap-col">files-changed: pass, tests-pass: pass</td>
+            <td class="vi-fs-meta vi-fs-nowrap">not run</td>
+            <td class="vi-fs-code vi-fs-nowrap">-6 ms</td>
+            <td class="vi-fs-code vi-fs-nowrap">264 ms</td>
+            <td class="vi-fs-code vi-fs-nowrap">in 980, out 425</td>
+          </tr>
+          <tr data-eval-case data-eval-verdict="failed">
+            <th scope="row" class="vi-fs-code">case-04-profile-json</th>
+            <td>
+              <span class="vi-fs-inline-status">
+                <span aria-hidden="true" class="vi-fs-dot vi-fs-dot--danger"></span>
+                <span>failed</span>
+              </span>
+            </td>
+            <td class="vi-fs-code vi-fs-wrap-col">schema-valid: fail, contains: pass</td>
+            <td class="vi-fs-code vi-fs-wrap-col">judge 0.9 (pass; held by schema-valid)</td>
+            <td class="vi-fs-code vi-fs-nowrap">regressed</td>
+            <td class="vi-fs-code vi-fs-nowrap">154 ms</td>
+            <td class="vi-fs-code vi-fs-nowrap">in 620, out 220</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="vi-fs-receipt" role="status" aria-live="polite">
+      <span data-eval-status>Showing 4 case(s) · judge never overrides failing deterministic checks</span>
+      <span>Offline scripted doubles</span>
+    </div>
+  </div>
+</section>

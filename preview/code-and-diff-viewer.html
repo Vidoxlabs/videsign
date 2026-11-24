@@ -9,38 +9,50 @@
       <p class="font-typography-family-mono-base text-typography-size-xs-base tracking-typography-tracking-wide-base text-text-content-secondary-base">Code &amp; patch inspection</p>
       <h2 id="code-diff-title" class="font-typography-family-sans-base text-typography-size-lg-base font-typography-weight-semibold-base text-text-content-primary-base text-balance">lib/design-studio.js</h2>
     </div>
-    <div role="tablist" aria-label="View mode" class="flex items-center gap-gap-compact-default">
+    <div role="tablist" aria-label="View mode" class="flex flex-wrap items-center gap-gap-compact-default">
       <button type="button" role="tab" aria-selected="true" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-surface-accent-violet-base bg-surface-background-tertiary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Unified diff</button>
       <button type="button" role="tab" aria-selected="false" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-secondary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Full file</button>
       <button type="button" class="inline-flex items-center h-action-min-default px-inset-operator-default rounded-layout-radius-control-base border border-border-separator-primary-base font-typography-family-mono-base text-typography-size-xs-base text-text-content-primary-base transition-colors duration-transition-duration-fast-base ease-transition-easing-standard-base whitespace-nowrap">Copy snippet</button>
     </div>
   </div>
   <div class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base overflow-hidden font-typography-family-mono-base text-typography-size-xs-base">
-    <div class="flex items-center justify-between px-inset-operator-default py-rhythm-2-base bg-surface-background-tertiary-base border-b border-border-separator-primary-base text-text-content-secondary-base">
+    <div class="flex flex-wrap items-center justify-between gap-gap-compact-default px-inset-operator-default py-rhythm-2-base bg-surface-background-tertiary-base border-b border-border-separator-primary-base text-text-content-secondary-base">
       <span>@@ -415,4 +415,6 @@ stylesheetsForSlots</span>
       <span>1 removed · 2 added</span>
     </div>
-    <div class="flex flex-col divide-y divide-border-separator-primary-base">
-      <div class="grid grid-cols-12 items-center px-inset-operator-default py-rhythm-1-base text-text-content-secondary-base">
-        <span class="col-span-2 tabular-nums">415 415</span>
-        <span class="col-span-2">context</span>
-        <code class="col-span-8 overflow-x-auto">const sheets = ['dist/tokens.css', 'dist/catalog.css'];</code>
-      </div>
-      <div class="grid grid-cols-12 items-center px-inset-operator-default py-rhythm-1-base border-l-2 border-status-indicator-error-base text-text-content-secondary-base">
-        <span class="col-span-2 tabular-nums">416 -</span>
-        <span class="col-span-2 inline-flex items-center gap-gap-dense-default text-text-content-primary-base"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span>- removed</span>
-        <code class="col-span-8 overflow-x-auto">return sheets;</code>
-      </div>
-      <div class="grid grid-cols-12 items-center px-inset-operator-default py-rhythm-1-base border-l-2 border-status-indicator-success-base bg-surface-background-tertiary-base text-text-content-primary-base">
-        <span class="col-span-2 tabular-nums">- 417</span>
-        <span class="col-span-2 inline-flex items-center gap-gap-dense-default"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>+ added</span>
-        <code class="col-span-8 overflow-x-auto">if (/vi-glass/.test(combined)) sheets.push('dist/glass.css');</code>
-      </div>
-      <div class="grid grid-cols-12 items-center px-inset-operator-default py-rhythm-1-base border-l-2 border-status-indicator-success-base bg-surface-background-tertiary-base text-text-content-primary-base">
-        <span class="col-span-2 tabular-nums">- 418</span>
-        <span class="col-span-2 inline-flex items-center gap-gap-dense-default"><span aria-hidden="true" class="w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>+ added</span>
-        <code class="col-span-8 overflow-x-auto">return sheets;</code>
-      </div>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-left">
+        <caption class="sr-only">Patch diff for lib/design-studio.js stylesheetsForSlots</caption>
+        <thead class="sr-only">
+          <tr>
+            <th scope="col">Line numbers</th>
+            <th scope="col">Change</th>
+            <th scope="col">Source</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border-separator-primary-base">
+          <tr class="text-text-content-secondary-base">
+            <td class="px-inset-operator-default py-rhythm-1-base tabular-nums whitespace-nowrap">415 415</td>
+            <td class="px-inset-operator-default py-rhythm-1-base whitespace-nowrap">context</td>
+            <td class="px-inset-operator-default py-rhythm-1-base"><code class="whitespace-nowrap">const sheets = ['dist/tokens.css', 'dist/catalog.css'];</code></td>
+          </tr>
+          <tr class="text-text-content-secondary-base">
+            <td class="px-inset-operator-default py-rhythm-1-base border-l-2 border-status-indicator-error-base tabular-nums whitespace-nowrap">416 -</td>
+            <td class="px-inset-operator-default py-rhythm-1-base whitespace-nowrap"><span class="inline-flex items-center gap-gap-dense-default text-text-content-primary-base"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-error-base"></span>- removed</span></td>
+            <td class="px-inset-operator-default py-rhythm-1-base"><code class="whitespace-nowrap">return sheets;</code></td>
+          </tr>
+          <tr class="bg-surface-background-tertiary-base text-text-content-primary-base">
+            <td class="px-inset-operator-default py-rhythm-1-base border-l-2 border-status-indicator-success-base tabular-nums whitespace-nowrap">- 417</td>
+            <td class="px-inset-operator-default py-rhythm-1-base whitespace-nowrap"><span class="inline-flex items-center gap-gap-dense-default"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>+ added</span></td>
+            <td class="px-inset-operator-default py-rhythm-1-base"><code class="whitespace-nowrap">if (/vi-glass/.test(combined)) sheets.push('dist/glass.css');</code></td>
+          </tr>
+          <tr class="bg-surface-background-tertiary-base text-text-content-primary-base">
+            <td class="px-inset-operator-default py-rhythm-1-base border-l-2 border-status-indicator-success-base tabular-nums whitespace-nowrap">- 418</td>
+            <td class="px-inset-operator-default py-rhythm-1-base whitespace-nowrap"><span class="inline-flex items-center gap-gap-dense-default"><span aria-hidden="true" class="shrink-0 w-indicator-dot-base h-indicator-dot-base rounded-layout-radius-full-base bg-status-indicator-success-base"></span>+ added</span></td>
+            <td class="px-inset-operator-default py-rhythm-1-base"><code class="whitespace-nowrap">return sheets;</code></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <div class="bg-surface-background-primary-base border border-border-separator-primary-base rounded-layout-radius-control-base p-layout-padding-medium-base font-typography-family-mono-base text-typography-size-xs-base flex flex-wrap items-center justify-between gap-gap-compact-default">

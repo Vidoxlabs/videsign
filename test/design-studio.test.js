@@ -116,6 +116,8 @@ describe('collaborative design studio & reference contracts', () => {
         '<section class="vi-core-scope"></section>',
         '<section class="vi-ext-scope"></section>',
         '<section class="vi-ws-scope"></section>',
+        '<section class="vi-fc-scope"></section>',
+        '<section class="vi-fs-scope"></section>',
       ],
       'light',
     );
@@ -131,6 +133,8 @@ describe('collaborative design studio & reference contracts', () => {
     assert.ok(detected.includes('dist/core-components.css'));
     assert.ok(detected.includes('dist/extended-primitives.css'));
     assert.ok(detected.includes('dist/workspace-components.css'));
+    assert.ok(detected.includes('dist/family-contracts.css'));
+    assert.ok(detected.includes('dist/family-surfaces.css'));
     assert.equal(detected.includes('dist/glass.css'), false);
   });
 
@@ -139,7 +143,7 @@ describe('collaborative design studio & reference contracts', () => {
     const expected = buildComponentsManifest(COMPONENT_CATALOG, tokens);
     const actual = JSON.parse(fs.readFileSync(path.join(ROOT, 'dist', 'components.manifest.json'), 'utf8'));
     assert.deepEqual(actual, expected);
-    assert.equal(actual.componentCount, 111);
+    assert.equal(actual.componentCount, 121);
     assert.deepEqual(actual.categories, CATALOG_CATEGORIES);
     assert.deepEqual(actual.consumers, CATALOG_CONSUMERS);
     assert.equal(Object.keys(actual.archetypes).length, 12);

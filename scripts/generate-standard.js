@@ -73,6 +73,8 @@ function buildStandard(tokens, designMd, skillMd) {
           'dist/core-components.css',
           'dist/extended-primitives.css',
           'dist/workspace-components.css',
+          'dist/family-contracts.css',
+          'dist/family-surfaces.css',
         ],
         tailwind: 'dist/tailwind.config.js',
         typescript: 'dist/tokens.ts',

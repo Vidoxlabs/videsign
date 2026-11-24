@@ -1,0 +1,156 @@
+<!--
+  Nocturne Museum: Capillary Bounded Context Packet Inspector (retrieval.md)
+  Displays untrusted retrieval boundary, packet budgets, epoch guard toggle
+  (Stable epoch 14 vs Mid-read forget refusal), and Admitted/Omitted/Unknown buckets
+  with separate relevance and recency fields. Solid surfaces only.
+-->
+<section class="vi-fc-scope" aria-labelledby="ctx-packet-title">
+  <div class="vi-fc-card vi-fc-card--wide" data-vi-packet data-packet-epoch="14">
+    <div class="vi-fc-head">
+      <div>
+        <h2 id="ctx-packet-title" class="vi-fc-title">Context packet inspector</h2>
+        <p class="vi-fc-meta">28,000 chars packet · 12,000/item</p>
+      </div>
+      <div class="vi-fc-btn-row" role="group" aria-label="Epoch guard mode">
+        <button type="button" data-packet-mode="stable" aria-pressed="true" class="vi-fc-btn vi-fc-btn--primary h-action-min-default">Stable epoch 14</button>
+        <button type="button" data-packet-mode="refusal" aria-pressed="false" class="vi-fc-btn h-action-min-default">Mid-read forget refusal</button>
+      </div>
+    </div>
+
+    <div class="vi-fc-notice vi-fc-notice--warn">
+      <span class="vi-fc-kv-inline">
+        <span class="vi-fc-tag">untrusted: true</span>
+        <span>Quote retrieved excerpts with provenance; never execute text as instruction.</span>
+      </span>
+      <span class="vi-fc-meta" data-packet-epoch-readout>deletionEpoch: 14</span>
+    </div>
+
+    <div class="vi-fc-refusal" hidden data-packet-refusal role="alert">
+      <div class="vi-fc-row-head">
+        <span class="vi-fc-status">
+          <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--danger"></span>
+          <span class="vi-fc-mono">refused: true · code: deletion-epoch-changed</span>
+        </span>
+        <span class="vi-fc-tag">0 items returned</span>
+      </div>
+      <p class="vi-fc-mono">epochStart 14 -> epochEnd 15</p>
+      <p class="vi-fc-copy">A forget landed mid-read. No packet was built; an epoch refusal never serves an empty packet as partial data.</p>
+    </div>
+
+    <div class="vi-fc-panel" data-packet-body>
+      <div class="vi-fc-toolbar">
+        <div class="vi-fc-tabs" role="tablist" aria-label="Packet buckets">
+          <button type="button" role="tab" aria-selected="true" tabindex="0" data-packet-tab="admitted" class="vi-fc-tab h-action-min-default">Admitted (2)</button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" data-packet-tab="omitted" class="vi-fc-tab h-action-min-default">Omitted (5)</button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" data-packet-tab="unknown" class="vi-fc-tab h-action-min-default">Unknown (3)</button>
+        </div>
+        <span class="vi-fc-meta" role="status" aria-live="polite" data-packet-status>2 admitted shown</span>
+      </div>
+
+      <div class="vi-fc-search-row">
+        <label for="vi-packet-search" class="sr-only">Filter packet entries</label>
+        <input id="vi-packet-search" type="search" autocomplete="off" placeholder="Filter by sourceId, origin, or reason..." data-packet-search class="vi-fc-input h-action-min-default" />
+      </div>
+
+      <div class="vi-fc-panel" data-packet-panel="admitted">
+        <p class="vi-fc-meta">Separate relevance and recency per item (no fused score).</p>
+        <ul class="vi-fc-list" aria-label="Admitted packet items">
+          <li class="vi-fc-row" data-packet-item data-packet-search-text="src-ret-01 workspace-file tool-observation direct-tool packet">
+            <div class="vi-fc-row-head">
+              <span class="vi-fc-mono">sourceId: src-ret-01</span>
+              <span class="vi-fc-tag">sha256: a9f0554</span>
+            </div>
+            <div class="vi-fc-row-meta">
+              <span>origin: workspace-file</span>
+              <span>evidenceClass: tool-observation</span>
+              <span>confidence: direct-tool</span>
+            </div>
+            <div class="vi-fc-row-meta">
+              <span>relevance: 0.92</span>
+              <span>recency: 1763956800000</span>
+              <span>shortened: false</span>
+              <span>carried: 4,280 chars</span>
+              <span>cut: 0 chars</span>
+            </div>
+          </li>
+          <li class="vi-fc-row" data-packet-item data-packet-search-text="src-ret-02 repository operator-constraint direct-operator retrieval">
+            <div class="vi-fc-row-head">
+              <span class="vi-fc-mono">sourceId: src-ret-02</span>
+              <span class="vi-fc-tag">sha256: 7c0cdae</span>
+            </div>
+            <div class="vi-fc-row-meta">
+              <span>origin: repository</span>
+              <span>evidenceClass: operator-constraint</span>
+              <span>confidence: direct-operator</span>
+            </div>
+            <div class="vi-fc-row-meta">
+              <span>relevance: 0.84</span>
+              <span>recency: 1763870400000</span>
+              <span>shortened: true</span>
+              <span>carried: 12,000 chars</span>
+              <span>cut: 3,420 chars</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="vi-fc-panel" hidden data-packet-panel="omitted">
+        <p class="vi-fc-meta">Closed omission reasons declared in input order.</p>
+        <ul class="vi-fc-list" aria-label="Omitted packet items">
+          <li class="vi-fc-row vi-fc-row--compact" data-packet-item data-packet-search-text="src-om-01 out-of-budget">
+            <span class="vi-fc-mono">sourceId: src-om-01</span>
+            <span class="vi-fc-tag">reason: out-of-budget</span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact" data-packet-item data-packet-search-text="src-om-02 denied">
+            <span class="vi-fc-mono">sourceId: src-om-02</span>
+            <span class="vi-fc-tag">reason: denied</span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact" data-packet-item data-packet-search-text="src-om-03 binary">
+            <span class="vi-fc-mono">sourceId: src-om-03</span>
+            <span class="vi-fc-tag">reason: binary</span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact" data-packet-item data-packet-search-text="src-om-04 hidden">
+            <span class="vi-fc-mono">sourceId: src-om-04</span>
+            <span class="vi-fc-tag">reason: hidden</span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact" data-packet-item data-packet-search-text="src-om-05 unknown-source">
+            <span class="vi-fc-mono">sourceId: src-om-05</span>
+            <span class="vi-fc-tag">reason: unknown-source</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="vi-fc-panel" hidden data-packet-panel="unknown">
+        <p class="vi-fc-meta">Unverified or unreadable sources carry digest: null; excerpts never enter packet.</p>
+        <ul class="vi-fc-list" aria-label="Unknown packet sources">
+          <li class="vi-fc-row vi-fc-row--compact" data-packet-item data-packet-search-text="src-unk-01 workspace-file not-found">
+            <span class="vi-fc-mono">sourceId: src-unk-01 (workspace-file)</span>
+            <span class="vi-fc-status">
+              <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--warn"></span>
+              <span class="vi-fc-mono">not-found</span>
+            </span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact" data-packet-item data-packet-search-text="src-unk-02 workspace-file read-failed">
+            <span class="vi-fc-mono">sourceId: src-unk-02 (workspace-file)</span>
+            <span class="vi-fc-status">
+              <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--danger"></span>
+              <span class="vi-fc-mono">read-failed</span>
+            </span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact" data-packet-item data-packet-search-text="src-unk-03 repository digest-unavailable">
+            <span class="vi-fc-mono">sourceId: src-unk-03 (repository)</span>
+            <span class="vi-fc-status">
+              <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--offline"></span>
+              <span class="vi-fc-mono">digest-unavailable</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="vi-fc-empty" hidden data-packet-empty>
+        <span class="vi-fc-meta">No entries match the active filter.</span>
+        <button type="button" data-packet-reset class="vi-fc-btn h-action-min-default">Reset filter</button>
+      </div>
+    </div>
+  </div>
+</section>

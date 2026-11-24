@@ -1,0 +1,115 @@
+<!--
+  Nocturne Museum: Trace replay panel (bloom CAP-10)
+  Read-only append-only event stream replay (bloom trace) with Full state, Deltas, Debug,
+  and Token deltas views, Prev/Next monotonic seq stepper, correlation ledger (run, attempt,
+  step, seat), redacted team.recall digests, tool.updated receipts, and five-field usage
+  preserving unreported metrics as unreported rather than zero. Solid surfaces only.
+-->
+<section class="vi-fs-scope" aria-labelledby="trace-replay-title">
+  <div class="vi-fs-card vi-fs-card--wide" data-vi-trace-replay>
+    <div class="vi-fs-head">
+      <div class="vi-fs-title-row">
+        <h2 id="trace-replay-title" class="vi-fs-title">Trace replay</h2>
+        <span class="vi-fs-meta">bloom trace run-9a4f</span>
+      </div>
+      <div class="vi-fs-actions">
+        <span class="vi-fs-meta" data-trace-seq-label>seq 4 / 6 · tool.updated</span>
+        <button type="button" data-trace-prev class="vi-fs-btn h-action-min-default">Prev step</button>
+        <button type="button" data-trace-next class="vi-fs-btn h-action-min-default">Next step</button>
+      </div>
+    </div>
+
+    <div role="tablist" aria-label="Trace projection views" class="vi-fs-tabs">
+      <button type="button" role="tab" id="vi-fs-trace-tab-full" aria-selected="true" aria-controls="vi-fs-trace-panel-full" tabindex="0" data-trace-view="full" class="vi-fs-tab h-action-min-default">Full state</button>
+      <button type="button" role="tab" id="vi-fs-trace-tab-deltas" aria-selected="false" aria-controls="vi-fs-trace-panel-deltas" tabindex="-1" data-trace-view="deltas" class="vi-fs-tab h-action-min-default">Deltas</button>
+      <button type="button" role="tab" id="vi-fs-trace-tab-debug" aria-selected="false" aria-controls="vi-fs-trace-panel-debug" tabindex="-1" data-trace-view="debug" class="vi-fs-tab h-action-min-default">Debug</button>
+      <button type="button" role="tab" id="vi-fs-trace-tab-tokens" aria-selected="false" aria-controls="vi-fs-trace-panel-tokens" tabindex="-1" data-trace-view="tokens" class="vi-fs-tab h-action-min-default">Token deltas</button>
+    </div>
+
+    <div class="vi-fs-trace-corr" aria-label="Correlation identifiers">
+      <div class="vi-fs-kpi-item">
+        <span class="vi-fs-meta">run</span>
+        <span class="vi-fs-code" data-corr-run>run-9a4f</span>
+      </div>
+      <div class="vi-fs-kpi-item">
+        <span class="vi-fs-meta">attempt</span>
+        <span class="vi-fs-code" data-corr-attempt>1</span>
+      </div>
+      <div class="vi-fs-kpi-item">
+        <span class="vi-fs-meta">step</span>
+        <span class="vi-fs-code" data-corr-step>4</span>
+      </div>
+      <div class="vi-fs-kpi-item">
+        <span class="vi-fs-meta">seat</span>
+        <span class="vi-fs-code" data-corr-seat>coherence</span>
+      </div>
+    </div>
+
+    <div id="vi-fs-trace-panel-full" role="tabpanel" aria-labelledby="vi-fs-trace-tab-full" class="vi-fs-trace-panel" data-trace-panel="full">
+      <ol aria-label="Monotonic trace events" class="vi-fs-trace-list">
+        <li class="vi-fs-trace-event" data-trace-seq="1" data-trace-active="false">
+          <span class="vi-fs-meta">seq 1 · chair</span>
+          <span class="vi-fs-code">turn.started</span>
+          <span>Attempt 1 started on local-fast for model profile audit</span>
+        </li>
+        <li class="vi-fs-trace-event" data-trace-seq="2" data-trace-active="false">
+          <span class="vi-fs-meta">seq 2 · framing</span>
+          <span class="vi-fs-code">team.recall</span>
+          <span>count 2, digests sha256:9f2c81a4, sha256:4b1e70d3 (raw private notes redacted)</span>
+        </li>
+        <li class="vi-fs-trace-event" data-trace-seq="3" data-trace-active="false">
+          <span class="vi-fs-meta">seq 3 · risk</span>
+          <span class="vi-fs-code">model.call</span>
+          <span>Model call 1, durationMs 412, in 640, out 184</span>
+        </li>
+        <li class="vi-fs-trace-event" data-trace-seq="4" data-trace-active="true">
+          <span class="vi-fs-meta">seq 4 · coherence</span>
+          <span class="vi-fs-code">tool.updated</span>
+          <span>toolId vcs.file.read, durationMs 28, exitCode 0, bytes 3412, truncatedBytes 0, outputSha256 sha256:4a91e802c1f7</span>
+        </li>
+        <li class="vi-fs-trace-event" data-trace-seq="5" data-trace-active="false" hidden>
+          <span class="vi-fs-meta">seq 5 · sequencing</span>
+          <span class="vi-fs-code">assistant.delta</span>
+          <span>Streamed +18 tokens: Validated 5 closed slots; unknown capabilities stay null.</span>
+        </li>
+        <li class="vi-fs-trace-event" data-trace-seq="6" data-trace-active="false" hidden>
+          <span class="vi-fs-meta">seq 6 · chair</span>
+          <span class="vi-fs-code">turn.finished</span>
+          <span>status complete, reason objective-settled</span>
+        </li>
+      </ol>
+    </div>
+
+    <div id="vi-fs-trace-panel-deltas" role="tabpanel" aria-labelledby="vi-fs-trace-tab-deltas" class="vi-fs-trace-panel" data-trace-panel="deltas" hidden>
+      <dl class="vi-fs-ledger">
+        <div class="vi-fs-ledger-row">
+          <dt>Step delta</dt>
+          <dd data-trace-delta-out>toolId vcs.file.read finished (exitCode 0, 28 ms, 3412 bytes)</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div id="vi-fs-trace-panel-debug" role="tabpanel" aria-labelledby="vi-fs-trace-tab-debug" class="vi-fs-trace-panel" data-trace-panel="debug" hidden>
+      <dl class="vi-fs-ledger">
+        <div class="vi-fs-ledger-row">
+          <dt>Debug receipt</dt>
+          <dd data-trace-debug-out>toolId=vcs.file.read | durationMs=28 | exitCode=0 | bytes=3412 | truncatedBytes=0 | outputSha256=sha256:4a91e802c1f7</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div id="vi-fs-trace-panel-tokens" role="tabpanel" aria-labelledby="vi-fs-trace-tab-tokens" class="vi-fs-trace-panel" data-trace-panel="tokens" hidden>
+      <dl class="vi-fs-ledger">
+        <div class="vi-fs-ledger-row">
+          <dt>Stream chunk</dt>
+          <dd data-trace-token-out>No streamed assistant text delta at seq 4</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="vi-fs-receipt" role="status" aria-live="polite">
+      <span data-trace-usage-out>input: 640, output: 184, total: 824, cacheRead: unreported, cacheWrite: unreported, costUSD: unreported</span>
+      <span data-trace-status>Read-only view full at seq 4</span>
+    </div>
+  </div>
+</section>

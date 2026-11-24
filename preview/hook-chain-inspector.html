@@ -1,0 +1,167 @@
+<!--
+  Nocturne Museum: Drosera Hook Chain & CAP-19 Safety Scan Inspector (hooks.md, CAP-19)
+  Filterable pack-ordered fail-closed hooks ("Zero scope widening · deterministic fn"),
+  collapsible CAP-19 skill safety scan (4 hazard classes; 1 critical blocks skill-promoted),
+  and workspace-coding cookbook recipe binding toolPack and skillPack steps.
+-->
+<section class="vi-fc-scope" aria-labelledby="hook-chain-title">
+  <div class="vi-fc-card vi-fc-card--wide" data-vi-hooks>
+    <div class="vi-fc-head">
+      <h2 id="hook-chain-title" class="vi-fc-title">Hook chain and skill safety inspector</h2>
+      <span class="vi-fc-tag">Zero scope widening · deterministic fn</span>
+    </div>
+
+    <div class="vi-fc-toolbar">
+      <div class="vi-fc-tabs" role="tablist" aria-label="Hook events">
+        <button type="button" role="tab" aria-selected="true" tabindex="0" data-hook-filter="all" class="vi-fc-tab h-action-min-default">All</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-hook-filter="before-model" class="vi-fc-tab h-action-min-default">before-model</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-hook-filter="before-tool" class="vi-fc-tab h-action-min-default">before-tool</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-hook-filter="after-tool" class="vi-fc-tab h-action-min-default">after-tool</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-hook-filter="skill-promoted" class="vi-fc-tab h-action-min-default">skill-promoted</button>
+      </div>
+      <span class="vi-fc-meta" role="status" aria-live="polite" data-hook-status>5 hooks shown (1 blocked)</span>
+    </div>
+
+    <ul class="vi-fc-list" aria-label="Pack-ordered hook evaluations">
+      <li class="vi-fc-row" data-hook-row data-hook-event="before-model" data-hook-outcome="passed">
+        <div class="vi-fc-row-head">
+          <span class="vi-fc-mono">id: context-fence-check</span>
+          <span class="vi-fc-status">
+            <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+            <span class="vi-fc-mono">passed</span>
+          </span>
+        </div>
+        <p class="vi-fc-copy">Untrusted retrieval excerpts carry explicit boundary framing before model dispatch.</p>
+        <div class="vi-fc-row-meta">
+          <span>event: before-model</span>
+          <span>0.9 ms</span>
+          <span>Zero scope widening · deterministic fn</span>
+        </div>
+      </li>
+
+      <li class="vi-fc-row" data-hook-row data-hook-event="before-tool" data-hook-outcome="passed">
+        <div class="vi-fc-row-head">
+          <span class="vi-fc-mono">id: tool-args-schema</span>
+          <span class="vi-fc-status">
+            <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+            <span class="vi-fc-mono">passed</span>
+          </span>
+        </div>
+        <p class="vi-fc-copy">Tool arguments are well-formed against the declared neutral tool face schema.</p>
+        <div class="vi-fc-row-meta">
+          <span>event: before-tool</span>
+          <span>0.6 ms</span>
+          <span>Zero scope widening · deterministic fn</span>
+        </div>
+      </li>
+
+      <li class="vi-fc-row" data-hook-row data-hook-event="before-tool" data-hook-outcome="passed">
+        <div class="vi-fc-row-head">
+          <span class="vi-fc-mono">id: scope-boundary-check</span>
+          <span class="vi-fc-status">
+            <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+            <span class="vi-fc-mono">passed</span>
+          </span>
+        </div>
+        <p class="vi-fc-copy">Target file paths remain inside admitted workspace roots without traversal.</p>
+        <div class="vi-fc-row-meta">
+          <span>event: before-tool</span>
+          <span>0.4 ms</span>
+          <span>Zero scope widening · deterministic fn</span>
+        </div>
+      </li>
+
+      <li class="vi-fc-row" data-hook-row data-hook-event="after-tool" data-hook-outcome="passed">
+        <div class="vi-fc-row-head">
+          <span class="vi-fc-mono">id: output-digest-stamp</span>
+          <span class="vi-fc-status">
+            <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+            <span class="vi-fc-mono">passed</span>
+          </span>
+        </div>
+        <p class="vi-fc-copy">Tool output byte count and SHA-256 digest are recorded before context entry.</p>
+        <div class="vi-fc-row-meta">
+          <span>event: after-tool</span>
+          <span>1.1 ms</span>
+          <span>Zero scope widening · deterministic fn</span>
+        </div>
+      </li>
+
+      <li class="vi-fc-row vi-fc-row--blocked" data-hook-row data-hook-event="skill-promoted" data-hook-outcome="blocked">
+        <div class="vi-fc-row-head">
+          <span class="vi-fc-mono">id: skill-safety-gate</span>
+          <span class="vi-fc-status">
+            <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--danger"></span>
+            <span class="vi-fc-mono">blocked · fail-closed</span>
+          </span>
+        </div>
+        <p class="vi-fc-copy">CAP-19 safety scanner found 1 critical credential-reading instruction; promotion blocked.</p>
+        <div class="vi-fc-row-meta">
+          <span>event: skill-promoted</span>
+          <span>1.4 ms</span>
+          <span>Zero scope widening · deterministic fn</span>
+        </div>
+      </li>
+    </ul>
+
+    <details class="vi-fc-details" open>
+      <summary class="vi-fc-summary h-action-min-default">
+        <span>CAP-19 skill safety scan</span>
+        <span class="vi-fc-status">
+          <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--danger"></span>
+          <span>1 critical blocks skill-promoted</span>
+        </span>
+      </summary>
+      <div class="vi-fc-details-body">
+        <ul class="vi-fc-list" aria-label="CAP-19 hazard classes">
+          <li class="vi-fc-row vi-fc-row--compact">
+            <span class="vi-fc-mono">Outside-workspace reach</span>
+            <span class="vi-fc-status"><span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span><span>Clear</span></span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact vi-fc-row--blocked">
+            <span class="vi-fc-mono">Credential reading (line 18 token store instruction)</span>
+            <span class="vi-fc-status"><span aria-hidden="true" class="vi-fc-dot vi-fc-dot--danger"></span><span>Critical</span></span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact">
+            <span class="vi-fc-mono">Skipping tests</span>
+            <span class="vi-fc-status"><span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span><span>Clear</span></span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact">
+            <span class="vi-fc-mono">Claiming authority</span>
+            <span class="vi-fc-status"><span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span><span>Clear</span></span>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="vi-fc-details">
+      <summary class="vi-fc-summary h-action-min-default">
+        <span>workspace-coding cookbook recipe</span>
+        <span class="vi-fc-status">
+          <span aria-hidden="true" class="vi-fc-dot vi-fc-dot--ok"></span>
+          <span>4 steps matched</span>
+        </span>
+      </summary>
+      <div class="vi-fc-details-body">
+        <ol class="vi-fc-list" aria-label="Cookbook pack step bindings">
+          <li class="vi-fc-row vi-fc-row--compact">
+            <span class="vi-fc-mono">1. skill: repo-conventions</span>
+            <span class="vi-fc-meta">skillPack bound</span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact">
+            <span class="vi-fc-mono">2. tool: vcs.diff.read</span>
+            <span class="vi-fc-meta">toolPack bound</span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact">
+            <span class="vi-fc-mono">3. tool: repo.test.run</span>
+            <span class="vi-fc-meta">toolPack bound</span>
+          </li>
+          <li class="vi-fc-row vi-fc-row--compact">
+            <span class="vi-fc-mono">4. skill: patch-review-check</span>
+            <span class="vi-fc-meta">skillPack bound (CAP-19 gated)</span>
+          </li>
+        </ol>
+      </div>
+    </details>
+  </div>
+</section>

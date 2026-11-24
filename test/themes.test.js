@@ -354,3 +354,14 @@ test('accent-fill CTAs use only the on-accent text token', () => {
   assert.deepEqual(bad, []);
   assert.deepEqual(seen, ['button-variants.html', 'button.html', 'island-nav.html', 'persona-console.html', 'question-bar.html']);
 });
+test('high-contrast theme sets solid violet CTA token to oklch(0.42 0.240 292) while preserving high-contrast focus accent', () => {
+  const themeCss = emitThemeCSS(tokens);
+  const hcStart = themeCss.indexOf('[data-theme="high-contrast"] {');
+  assert.notEqual(hcStart, -1);
+  const hcBlock = themeCss.slice(hcStart, themeCss.indexOf('}', hcStart) + 1);
+  assert.ok(hcBlock.includes('--vi-accent-focus: oklch(0.80 0.200 292);'));
+  assert.ok(hcBlock.includes('--vi-colors-surface-accent-violet-base: oklch(0.42 0.240 292);'));
+
+  const catalogJs = fs.readFileSync(path.join(root, 'preview', 'catalog.js'), 'utf8');
+  assert.equal([...catalogJs.matchAll(/--vi-colors-surface-accent-violet-base:\s*oklch\(0\.42 0\.240 292\)/g)].length, 2);
+});
