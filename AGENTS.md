@@ -111,17 +111,15 @@ Within the `videsign` repository, agents are restricted to the following command
   the collaborative design studio contract (`test/design-studio.test.js`),
   the stage primitive contract (`test/stage.test.js`), the memory field contract
   (`test/memory-field.test.js`), the platform token contract (`test/platforms.test.js`),
-  the persona dialect contract (`test/dialects.test.js`), and the safety hash builder
-  (`test/safety-hashes.test.js`).
+  the persona dialect contract (`test/dialects.test.js`).
   Run this after changing `mcp-server.js`, `DESIGN.md` tokens, `canon/vwxyz/`, `brand/`, or any fragment.
 - `npm run canon:check`: Runs the persona canon contract on its own.
 - `npm run stage:fragment`: Regenerates `preview/stage-backdrop.html` from `lib/stage.js`.
 - `npm run memory-field:fragment`: Regenerates `preview/memory-field.html` and
   `preview/memory-pipeline.html` from `lib/memory-field.js`.
 - `npm run dialects:fragment`: Regenerates `preview/persona-dialects.html` from `lib/dialects.js`.
-- `npm run safety:scan`: Runs the public-safety scan. `npm run safety:hashes` reads handles on
-  stdin and prints the `SAFETY_SCAN_SHA256_LIST` value (README, "CI secret"). Never put a handle in
-  a command argument, a committed file or a log.
+- `npm run safety:scan`: Runs the public-safety scan on canon, docs, previews, workflows, the MCP
+  server, scripts, shared primitives, tests and the asset pipeline. It does not require a secret.
 - `npm run consumer:sync`: Runs the consumer token sync from `consumer/`. Requires
   `--source`, `--glass` and `--sha`; see `consumer/README.md`.
 - `npm run consumer:test`: Runs the consumer contract test,
