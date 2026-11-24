@@ -249,6 +249,8 @@ function listSvgFiles(dir) {
   function walk(current) {
     for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
       const full = path.join(current, entry.name);
+      // ADR-026: generated repo banners are checked separately, not as masters.
+      if (entry.isDirectory() && entry.name === 'repo-banners') continue;
       if (entry.isDirectory()) walk(full);
       else if (entry.isFile() && entry.name.endsWith('.svg')) files.push(full);
     }

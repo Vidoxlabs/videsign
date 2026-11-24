@@ -452,3 +452,17 @@ Light glass uses the canonical solid light surface and rim, with blur disabled. 
 5.  **Nocturne ADR supremacy over external skill defaults.** External frontend/motion skills never override Nocturne's locked dark field (`#0A0A0E`/`#12121A`/`#1C1C24`), Tailwind v3 pin (`^3.4.19`), Geist + Geist Mono sentence case (ADR-007), browser-native CSS/View-Transitions/Popover primitives without JS animation libraries (ADR-003), crystal-glass control/lens ceiling (ADR-006), or VWXYZ palette isolation (ADR-004, ADR-010, ADR-011).
 
 **Consequences**: `dist/standard.json`, `dist/standard.md`, `dist/components.manifest.json`, `design_brief`, `scaffold_page`, and `scripts/lint-preview.js` carry the proactive design protocol and pre-flight checklist as first-class machine contracts, and existing `preview/` fragments are upgraded to clear every mechanical anti-slop rule.
+
+## ADR-026: Repository banner exports under brand/repo-banners/
+
+**Status**: Accepted by the owner on 2026-11-24. Amends ADR-002 and ADR-011, for this folder only.
+
+**Context**: The family repositories need README banners and GitHub social cards that follow brand fields, mark minimums, and unmodified lockups. Those exports include PNGs and SVGs larger than the 8 KB master limit, which ADR-002 and ADR-011 otherwise ban under `brand/`.
+
+**Decision**:
+
+1. `brand/repo-banners/` is a narrow exception. Generated repository-banner exports may include PNGs and SVGs over the 8 KB master limit.
+2. The rest of the canon rules still apply in that folder: brand fields and palette, mark minimums, and unmodified lockups. Full colour stays off the light field.
+3. Nothing else under `brand/` changes. The eleven brand masters stay pinned to `brand/MANIFEST.json` and the existing allow-list. Rasters outside `brand/repo-banners/` stay banned and gitignored.
+
+**Consequences**: Family README and social exports live in `brand/repo-banners/` with their generator, typeface license, spec, and digest list. The brand SVG checker and the eleven-file master pin skip that folder. Public-safety scanning allowlists exact 64-hex digests there only.

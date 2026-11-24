@@ -32,8 +32,10 @@
  * a longer slot or variant, or the same filename
  * outside brand/ remains a long id. A trailing extension is not part of the
  * id run.
- * A 64-hex value of a key ending in sha256 stays allowlisted. The brand
- * directory is optional: a missing brand target is skipped.
+ * A 64-hex value of a key ending in sha256 stays allowlisted. Exact 64-hex
+ * digests under brand/repo-banners/ (ADR-026) are allowlisted the same way;
+ * other long ids in that folder still fail. The brand directory is optional:
+ * a missing brand target is skipped.
  */
 
 const fs = require('fs');
@@ -189,6 +191,15 @@ function isUnderBrand(display) {
   return brandSkeleton(head) === 'brand';
 }
 
+function isUnderRepoBanners(display) {
+  const normalized = String(display).split(path.sep).join('/');
+  return normalized === 'brand/repo-banners' || normalized.startsWith('brand/repo-banners/');
+}
+
+function isExactSha256Hex(token) {
+  return /^[0-9a-f]{64}$/.test(token);
+}
+
 function isRealDirectory(root, entry) {
   if (entry.isSymbolicLink()) return false;
   if (entry.isDirectory()) return true;
@@ -228,6 +239,7 @@ function isLongId(token, options = {}) {
   if (!/[A-Za-z]/.test(token) || !/[0-9]/.test(token)) return false;
   if (isKebabToken(token) || isAssetSlug(token)) return false;
   if (options.inBrand && isBrandFile(token)) return false;
+  if (options.inRepoBanners && isExactSha256Hex(token)) return false;
   return true;
 }
 
@@ -397,6 +409,11 @@ function scanPaths(targets, root = process.cwd()) {
           hits.push(`empty ${display}`);
           continue;
         }
+        // ADR-026: repo-banner PNGs are binary exports. Scanning them as
+        // text produces false home-path and long-id hits from compressed
+        // bytes. Still require a non-empty file. Text files in the same
+        // folder keep the ordinary scan.
+        if (isUnderRepoBanners(display) && file.endsWith('.png')) continue;
         text = fs.readFileSync(file, 'utf8');
       } catch (err) {
         hits.push(`unreadable ${display}`);
@@ -410,7 +427,10 @@ function scanPaths(targets, root = process.cwd()) {
           continue;
         }
       }
-      const result = scanText(text, perFile, { inBrand: isUnderBrand(display) });
+      const result = scanText(text, perFile, {
+        inBrand: isUnderBrand(display),
+        inRepoBanners: isUnderRepoBanners(display),
+      });
       for (const hit of result.hits) hits.push(`${display}: ${hit}`);
     }
   };
