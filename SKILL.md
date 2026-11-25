@@ -2,6 +2,7 @@
 name: "videsign"
 description: "Workflow, architectural decisions, and constraints for the videsign repository"
 ---
+<!-- Managed file. Propose changes by pull request; they are carried into the shared templates. hash: 79ca700b6fcfe908 -->
 
 # Workflow and Decision Ledger
 
