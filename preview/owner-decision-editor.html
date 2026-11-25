@@ -1,0 +1,81 @@
+<!--
+  Nocturne Museum: Owner Gate Decision Editor (CAP-06)
+  Supports approve, edit, respond, and reject across standard, credential, and destructive
+  effect tiers. Switching to credential or destructive automatically disables respond with
+  an explicit guard explanation; edit validates JSON args and reject captures a reason.
+-->
+<section class="vi-hr-scope" aria-labelledby="owner-decision-title">
+  <div class="vi-hr-card vi-hr-card--wide" data-vi-owner-decision>
+    <div class="vi-hr-head">
+      <div>
+        <h2 id="owner-decision-title" class="vi-hr-title">Owner gate decision editor</h2>
+        <p class="vi-hr-meta">callId: call-09 · thirdPartyEgress: false</p>
+      </div>
+      <div class="vi-hr-tabs" role="tablist" aria-label="Effect risk tiers">
+        <button type="button" role="tab" aria-selected="true" tabindex="0" data-risk-tier="standard" class="vi-hr-tab h-action-min-default">standard</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-risk-tier="credential" class="vi-hr-tab h-action-min-default">credential</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-risk-tier="destructive" class="vi-hr-tab h-action-min-default">destructive</button>
+      </div>
+    </div>
+
+    <dl class="vi-hr-ledger" aria-label="Pending owner gate binding">
+      <div class="vi-hr-ledger-row">
+        <dt>toolId</dt>
+        <dd data-owner-tool>workspace.file.update</dd>
+      </div>
+      <div class="vi-hr-ledger-row">
+        <dt>effect</dt>
+        <dd data-owner-effect>write</dd>
+      </div>
+      <div class="vi-hr-ledger-row">
+        <dt>argsDigest</dt>
+        <dd data-owner-digest>sha256: 4b9e1d0</dd>
+      </div>
+    </dl>
+
+    <div>
+      <h3 class="vi-hr-section-title">Decision kind</h3>
+      <div class="vi-hr-btn-row" role="radiogroup" aria-label="Owner decision kind">
+        <button type="button" role="radio" aria-checked="true" data-decision-kind="approve" class="vi-hr-btn h-action-min-default">approve</button>
+        <button type="button" role="radio" aria-checked="false" data-decision-kind="edit" class="vi-hr-btn h-action-min-default">edit</button>
+        <button type="button" role="radio" aria-checked="false" aria-disabled="false" data-decision-kind="respond" class="vi-hr-btn h-action-min-default">respond</button>
+        <button type="button" role="radio" aria-checked="false" data-decision-kind="reject" class="vi-hr-btn vi-hr-btn--danger h-action-min-default">reject</button>
+      </div>
+    </div>
+
+    <div class="vi-hr-notice vi-hr-notice--warn" hidden data-decision-guard>
+      <span class="vi-hr-mono">respond disabled: credential and destructive effects forbid text-only owner replies (CAP-06).</span>
+    </div>
+
+    <div class="vi-hr-field" hidden data-decision-edit-panel>
+      <label for="vi-owner-edit-json" class="vi-hr-section-title">Replacement arguments JSON (re-validated against inputSchema)</label>
+      <textarea id="vi-owner-edit-json" rows="4" spellcheck="false" data-decision-edit-json class="vi-hr-textarea h-action-min-default">{
+  "path": "src/index.mjs",
+  "oldText": "v1",
+  "newText": "v2"
+}</textarea>
+    </div>
+
+    <div class="vi-hr-field" hidden data-decision-respond-panel>
+      <label for="vi-owner-respond-input" class="vi-hr-section-title">Owner reply (labeled as owner input; tool skipped)</label>
+      <input id="vi-owner-respond-input" type="text" value="Keep existing header copy" data-decision-respond-text class="vi-hr-input h-action-min-default" />
+    </div>
+
+    <div class="vi-hr-field" hidden data-decision-reject-panel>
+      <label for="vi-owner-reject-input" class="vi-hr-section-title">Rejection reason (required before commit)</label>
+      <input id="vi-owner-reject-input" type="text" value="Scope exceeds target file" data-decision-reject-reason class="vi-hr-input h-action-min-default" />
+    </div>
+
+    <div class="vi-hr-notice vi-hr-notice--accent" role="status" aria-live="polite" data-decision-receipt>
+      <span class="vi-hr-status">
+        <span aria-hidden="true" class="vi-hr-dot vi-hr-dot--accent" data-decision-receipt-dot></span>
+        <span class="vi-hr-mono" data-decision-receipt-text>waiting_for_owner: pending decision on workspace.file.update</span>
+      </span>
+    </div>
+
+    <div class="vi-hr-btn-row">
+      <button type="button" data-decision-commit class="vi-hr-btn vi-hr-btn--primary h-action-min-default">Commit decision</button>
+      <button type="button" data-decision-reset class="vi-hr-btn vi-hr-btn--ghost h-action-min-default">Reset</button>
+    </div>
+  </div>
+</section>

@@ -558,6 +558,28 @@ function emitFamilySurfacesArtifacts() {
   };
 }
 
+/**
+ * Harness runtime components (CAP-03 schema repair, CAP-17 sandbox policy, CAP-06 owner decision, CAP-12 step graph):
+ * zero-hex oklch() stylesheet + CSP-safe vanilla JS controller.
+ */
+function emitHarnessRuntimeArtifacts() {
+  return {
+    'harness-runtime.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'harness-runtime.css'), 'utf-8'),
+    'harness-runtime.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'harness-runtime.js'), 'utf-8'),
+  };
+}
+
+/**
+ * Bloom and Capillary workflow components (session setup composer, symbol-outline token map, seat fanout, research flow):
+ * zero-hex oklch() stylesheet + CSP-safe vanilla JS controller.
+ */
+function emitBloomWorkflowsArtifacts() {
+  return {
+    'bloom-workflows.css': fs.readFileSync(path.join(__dirname, '..', 'lib', 'bloom-workflows.css'), 'utf-8'),
+    'bloom-workflows.js': fs.readFileSync(path.join(__dirname, '..', 'lib', 'bloom-workflows.js'), 'utf-8'),
+  };
+}
+
 function emitJSON(tokens) {
   return JSON.stringify(tokens, null, 2) + '\n';
 }
@@ -595,6 +617,8 @@ function main() {
     ...emitWorkspaceComponentsArtifacts(),
     ...emitFamilyContractsArtifacts(),
     ...emitFamilySurfacesArtifacts(),
+    ...emitHarnessRuntimeArtifacts(),
+    ...emitBloomWorkflowsArtifacts(),
   };
 
   if (dryRun) {
@@ -650,4 +674,6 @@ module.exports = {
   emitWorkspaceComponentsArtifacts,
   emitFamilyContractsArtifacts,
   emitFamilySurfacesArtifacts,
+  emitHarnessRuntimeArtifacts,
+  emitBloomWorkflowsArtifacts,
 };

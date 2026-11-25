@@ -1,0 +1,115 @@
+<!--
+  Nocturne Museum: Research flow tracker (bloom + capillary + aestivation + drosera, CAP-15)
+  Staged research pipeline (research, analysis, processing) with explicit research.source.search
+  thirdPartyEgress and ownerGate boundary, separate Cited claims vs Uncited gaps views, and
+  recorded capillary source SHA-256 and provenance URI inspection.
+-->
+<section class="vi-bw-scope" aria-labelledby="research-flow-title">
+  <div class="vi-bw-card vi-bw-card--wide" data-vi-research-flow>
+    <div class="vi-bw-head">
+      <div class="vi-bw-title-row">
+        <h2 id="research-flow-title" class="vi-bw-title">Research flow tracker</h2>
+        <span class="vi-bw-meta">Step 3 / 8 max · Revisions 1 / 2 max</span>
+      </div>
+      <span class="vi-bw-inline-status">
+        <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--warn"></span>
+        <span>research.source.search · thirdPartyEgress: true</span>
+      </span>
+    </div>
+
+    <ol aria-label="Typed research pipeline stages" class="vi-bw-stage-list">
+      <li class="vi-bw-stage-item" data-stage-active="false">
+        <span class="vi-bw-code">research</span>
+        <span class="vi-bw-meta">ownerGate: true (approved)</span>
+      </li>
+      <li class="vi-bw-stage-item" data-stage-active="false">
+        <span class="vi-bw-code">analysis</span>
+        <span class="vi-bw-meta">capillary sources hashed</span>
+      </li>
+      <li class="vi-bw-stage-item" data-stage-active="true">
+        <span class="vi-bw-code">processing</span>
+        <span class="vi-bw-meta">aestivation plan checked</span>
+      </li>
+    </ol>
+
+    <div role="tablist" aria-label="Research claim findings" class="vi-bw-tabs">
+      <button type="button" role="tab" id="vi-bw-research-tab-cited" aria-selected="true" aria-controls="vi-bw-research-panel" tabindex="0" data-research-tab="cited" class="vi-bw-tab h-action-min-default">Cited claims</button>
+      <button type="button" role="tab" id="vi-bw-research-tab-gaps" aria-selected="false" aria-controls="vi-bw-research-panel" tabindex="-1" data-research-tab="gaps" class="vi-bw-tab h-action-min-default">Uncited gaps</button>
+    </div>
+
+    <div id="vi-bw-research-panel" role="tabpanel" aria-labelledby="vi-bw-research-tab-cited" data-research-panel>
+      <ul aria-label="Recorded findings and evidence gaps" class="vi-bw-list">
+        <li class="vi-bw-row" data-research-item data-claim-kind="cited">
+          <div class="vi-bw-row-top">
+            <div class="vi-bw-row-main">
+              <span class="vi-bw-code">clm-01 · src-seed-provider</span>
+              <span class="vi-bw-copy">Missing provider metrics stay null rather than zero or fabricated counts.</span>
+            </div>
+            <button type="button" aria-pressed="true" data-inspect-claim="clm-01" class="vi-bw-btn h-action-min-default">Inspect provenance</button>
+          </div>
+        </li>
+
+        <li class="vi-bw-row" data-research-item data-claim-kind="cited">
+          <div class="vi-bw-row-top">
+            <div class="vi-bw-row-main">
+              <span class="vi-bw-code">clm-02 · src-capillary-retrieval</span>
+              <span class="vi-bw-copy">Packed repository excerpts carry untrusted: true framing and SHA-256 digests.</span>
+            </div>
+            <button type="button" aria-pressed="false" data-inspect-claim="clm-02" class="vi-bw-btn h-action-min-default">Inspect provenance</button>
+          </div>
+        </li>
+
+        <li class="vi-bw-row" data-research-item data-claim-kind="gaps" hidden>
+          <div class="vi-bw-row-top">
+            <div class="vi-bw-row-main">
+              <span class="vi-bw-code">gap-01 · uncited</span>
+              <span class="vi-bw-copy">Default step cap and revision cap values remain open for owner confirmation.</span>
+            </div>
+            <button type="button" aria-pressed="false" data-inspect-claim="gap-01" class="vi-bw-btn h-action-min-default">Inspect provenance</button>
+          </div>
+        </li>
+
+        <li class="vi-bw-row" data-research-item data-claim-kind="gaps" hidden>
+          <div class="vi-bw-row-top">
+            <div class="vi-bw-row-main">
+              <span class="vi-bw-code">gap-02 · uncited</span>
+              <span class="vi-bw-copy">Permitted public search connector bindings lack a recorded source digest.</span>
+            </div>
+            <button type="button" aria-pressed="false" data-inspect-claim="gap-02" class="vi-bw-btn h-action-min-default">Inspect provenance</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <dl aria-label="Provenance URI inspection" aria-live="polite" class="vi-bw-ledger">
+      <div class="vi-bw-ledger-row">
+        <dt>Claim ID</dt>
+        <dd data-prov-id>clm-01</dd>
+      </div>
+      <div class="vi-bw-ledger-row">
+        <dt>Evidence status</dt>
+        <dd data-prov-status>cited</dd>
+      </div>
+      <div class="vi-bw-ledger-row">
+        <dt>Source ID</dt>
+        <dd data-prov-source>src-seed-provider</dd>
+      </div>
+      <div class="vi-bw-ledger-row">
+        <dt>SHA-256 digest</dt>
+        <dd data-prov-digest>sha256:a98b4035f2c1</dd>
+      </div>
+      <div class="vi-bw-ledger-row">
+        <dt>Provenance URI</dt>
+        <dd>
+          <a href="https://github.com/Vidoxlabs/seed/blob/main/docs/contracts/provider.md" class="vi-bw-link h-action-min-default" data-prov-uri>https://github.com/Vidoxlabs/seed/blob/main/docs/contracts/provider.md</a>
+          <span class="vi-bw-meta" data-prov-none hidden>None recorded (explicitly labeled uncited gap)</span>
+        </dd>
+      </div>
+    </dl>
+
+    <div class="vi-bw-receipt" role="status" aria-live="polite">
+      <span data-research-status>Showing 2 cited claims backed by capillary sources</span>
+      <span>ownerGate: true before egress</span>
+    </div>
+  </div>
+</section>

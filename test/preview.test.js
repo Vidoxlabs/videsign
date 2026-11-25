@@ -27,7 +27,7 @@ let css = '';
 
 before(() => {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'generate-tokens.js')], { cwd: ROOT, stdio: 'ignore' });
-  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css', 'settings-surface.css', 'library-surface.css', 'specimen-layouts.css', 'core-components.css', 'extended-primitives.css', 'workspace-components.css', 'family-contracts.css', 'family-surfaces.css']
+  css = ['catalog.css', 'glass.css', 'tokens.css', 'stage.css', 'memory-field.css', 'dialects.css', 'vi-orbital-hero.css', 'docs-portal.css', 'settings-surface.css', 'library-surface.css', 'specimen-layouts.css', 'core-components.css', 'extended-primitives.css', 'workspace-components.css', 'family-contracts.css', 'family-surfaces.css', 'harness-runtime.css', 'bloom-workflows.css']
     .map((f) => fs.readFileSync(path.join(ROOT, 'dist', f), 'utf-8'))
     .join('\n');
 });
@@ -62,6 +62,22 @@ test('the linter flags what it claims to flag', () => {
   assert.ok(lintFragment('sq.html', "<span class='shadow-sm'>x</span>").some((problem) => problem.includes('shadow-sm')));
   const four = lintFragment('z.html', '<nav class="vi-glass"></nav><nav class="vi-glass"></nav><nav class="vi-glass"></nav><nav class="vi-glass"></nav>');
   assert.ok(four.some((p) => p.includes('glass layers')));
+
+  // Hardened mechanical anti-slop rules (shadow-*, transition-all, animate-*, numbered meta-eyebrows)
+  const slop = lintFragment('slop.html', [
+    '<div class="shadow-md shadow-lg shadow-xl transition-all animate-spin animate-bounce animate-ping"></div>',
+    '<span>01 · Surfaces</span>',
+    '<p>Stage 2: Verification</p>',
+  ].join('\n'));
+  for (const needle of ['shadow-md', 'shadow-lg', 'shadow-xl', 'transition-all', 'animate-spin', 'animate-bounce', 'animate-ping', 'numbered meta-eyebrow "01 · Surfaces"', 'numbered meta-eyebrow "Stage 2: Verification"']) {
+    assert.ok(slop.some((p) => p.includes(needle)), `expected lint problem mentioning ${needle}: ${slop.join(' | ')}`);
+  }
+  const cleanDigits = lintFragment('clean-digits.html', [
+    '<div><span>01</span><span>seq 1 / 6</span><span>2026-11-01</span><span>Nov 01</span><span>Stage 2 halted · ok</span></div>',
+    '<ol><li><span>01 · Ordered step</span></li></ol>',
+    '<pre><code><span>Stage 1: Example</span></code></pre>',
+  ].join('\n'));
+  assert.deepEqual(cleanDigits, []);
 });
 
 test('every class used by a fragment resolves to generated CSS', () => {
@@ -81,7 +97,7 @@ test('every class used by a fragment resolves to generated CSS', () => {
 
 test('the catalog loads the generated stylesheets and lists every fragment', () => {
   const index = fs.readFileSync(path.join(PREVIEW, 'index.html'), 'utf-8');
-  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css', '../dist/settings-surface.css', '../dist/library-surface.css', '../dist/specimen-layouts.css', '../dist/core-components.css', '../dist/extended-primitives.css', '../dist/workspace-components.css', '../dist/family-contracts.css', '../dist/family-surfaces.css']) {
+  for (const sheet of ['../dist/tokens.css', '../dist/glass.css', '../dist/catalog.css', '../dist/stage.css', '../dist/memory-field.css', '../dist/dialects.css', '../dist/vi-orbital-hero.css', '../dist/docs-portal.css', '../dist/settings-surface.css', '../dist/library-surface.css', '../dist/specimen-layouts.css', '../dist/core-components.css', '../dist/extended-primitives.css', '../dist/workspace-components.css', '../dist/family-contracts.css', '../dist/family-surfaces.css', '../dist/harness-runtime.css', '../dist/bloom-workflows.css']) {
     assert.ok(index.includes(`href="${sheet}"`), `catalog must load ${sheet}`);
   }
   const unlisted = FRAGMENTS.filter((f) => f !== 'index.html' && !index.includes(`'${f}'`) && !index.includes(`"${f}"`));
@@ -89,7 +105,7 @@ test('the catalog loads the generated stylesheets and lists every fragment', () 
 });
 
 test('required new fragments exist', () => {
-  for (const f of ['conversation-surface', 'group-conversation', 'context-attachment-tray', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'credential-activity-ledger', 'policy-rule-matrix', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'article-toc-and-meta', 'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'systems-constellation-map', 'persona-deliberation-stepper', 'markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'form-controls', 'button-variants', 'navigation-primitives', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'feedback-and-empty-states', 'disclosure-and-modals', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar', 'mobile-navigation-sheet', 'bento-feature-grid', 'comparison-matrix', 'session-checkpoint-card', 'provider-model-selector', 'context-menu-popover', 'keyboard-shortcuts-sheet', 'avatar-group-presence', 'copy-command-bar', 'voice-capture-bar', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel', 'context-packet-inspector', 'memory-consent-epoch', 'assembly-gate-card', 'hook-chain-inspector', 'trellis-probe-matrix', 'model-profile-card', 'trace-replay-panel', 'eval-harness-report', 'capability-ledger-panel', 'family-stack-diagram']) {
+  for (const f of ['conversation-surface', 'group-conversation', 'context-attachment-tray', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace', 'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'credential-activity-ledger', 'policy-rule-matrix', 'public-repo-card', 'ecosystem-plane-map', 'site-header-island', 'site-footer', 'hero-billboard', 'filterable-catalog-grid', 'client-install-switcher', 'browser-check-runner', 'persona-companion-stage', 'evidence-exhibit-figure', 'article-toc-and-meta', 'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'systems-constellation-map', 'persona-deliberation-stepper', 'markdown-prose-renderer', 'code-and-diff-viewer', 'log-stream-viewer', 'api-reference-row', 'changelog-timeline', 'form-controls', 'button-variants', 'navigation-primitives', 'command-palette-dialog', 'file-dropzone-upload', 'kpi-metric-strip', 'drawer-inspector-sheet', 'feedback-and-empty-states', 'disclosure-and-modals', 'starter-chips', 'instrument', 'island-nav', 'question-bar', 'evidence-lens', 'field-node', 'field-edge', 'statement-proof-row', 'coverage-grid', 'persona-switcher', 'skeleton-row', 'locked-panel', 'toast-notification-stack', 'multi-step-stepper', 'search-and-filter-bar', 'mobile-navigation-sheet', 'bento-feature-grid', 'comparison-matrix', 'session-checkpoint-card', 'provider-model-selector', 'context-menu-popover', 'keyboard-shortcuts-sheet', 'avatar-group-presence', 'copy-command-bar', 'voice-capture-bar', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel', 'context-packet-inspector', 'memory-consent-epoch', 'assembly-gate-card', 'hook-chain-inspector', 'trellis-probe-matrix', 'model-profile-card', 'trace-replay-panel', 'eval-harness-report', 'capability-ledger-panel', 'family-stack-diagram', 'schema-validation-repair', 'sandbox-scope-policy', 'owner-decision-editor', 'step-graph-checkpoint', 'session-setup-composer', 'symbol-outline-token-map', 'seat-fanout-orchestrator', 'research-flow-tracker']) {
     assert.ok(FRAGMENTS.includes(`${f}.html`), `missing preview/${f}.html`);
   }
 });

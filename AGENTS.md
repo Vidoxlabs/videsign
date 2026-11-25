@@ -46,8 +46,8 @@ design system — the shared visual language for all Vidoxlabs products and appl
   deterministic constellation layout, SVG, text equivalent, link contrast report and the memory
   pipeline figure. After changing `lib/memory-field.js`, run `npm run memory-field:fragment`.
   `lib/asset-service.js` implements the consolidated Phase 0 read-only persona asset Worker logic (ADR-022).
-  `lib/specimen-layouts.css`, `lib/core-components.css|js`, `lib/extended-primitives.css|js`, `lib/workspace-components.css|js`, `lib/family-contracts.css|js`, and `lib/family-surfaces.css|js` provide zero-hex `oklch()` container-query layouts, core UI controls, extended UI primitives, workspace/conversation controllers, and family contract/workbench surfaces.
-  `lib/design-studio.js` owns the 121-component catalog, 12 archetypes, proactive Design Read + 3-dial (`variance`, `motion`, `visualDensity`) brief compiler, anti-slop pre-flight checklist, reference contract, `dist/components.manifest.json` generator, and multi-slot page scaffolder (ADR-023, ADR-024, ADR-025).
+  `lib/specimen-layouts.css`, `lib/core-components.css|js`, `lib/extended-primitives.css|js`, `lib/workspace-components.css|js`, `lib/family-contracts.css|js`, `lib/family-surfaces.css|js`, `lib/harness-runtime.css|js`, and `lib/bloom-workflows.css|js` provide zero-hex `oklch()` container-query layouts, core UI controls, extended UI primitives, workspace/conversation controllers, family contract/workbench surfaces, and runtime/workflow controllers with unified 14px/10px canonical radii.
+  `lib/design-studio.js` owns the 129-component catalog, 12 archetypes, proactive Design Read + 3-dial (`variance`, `motion`, `visualDensity`) brief compiler, anti-slop pre-flight checklist, reference contract, `dist/components.manifest.json` generator, and multi-slot page scaffolder (ADR-023, ADR-024, ADR-025).
 - **pipeline/**: Persona asset pipeline (`animation/`, `audit/`, `templates/`) and `pipeline/service/` (`worker.js`, `wrangler.toml`, `migrations/` D1 SQL schema + SHA-256 `manifest.json`, `README.md`) consolidated from `vi-assets` under ADR-022.
 - **mcp-server.js**: The MCP server that exposes this design system to product
   repositories for cross-repo token and fragment fetching. Tools: `resolve_token` (one token
@@ -99,7 +99,7 @@ Within the `videsign` repository, agents are restricted to the following command
   `dist/stage-ambient.svg`, `dist/stage-hero.svg`, `dist/memory-field.css`,
   `dist/memory-field-sample.svg`, `dist/memory-pipeline-sample.svg`, `dist/tokens.ts`,
   `dist/ViTokens.swift`, `dist/videsign_tokens.py`, `dist/tokens.dtcg.json`, `dist/dialects.css`,
-  `dist/dialects.json`, `dist/specimen-layouts.css`, `dist/core-components.css`, `dist/core-components.js`, `dist/extended-primitives.css`, `dist/extended-primitives.js`, `dist/workspace-components.css`, `dist/workspace-components.js`, `dist/family-contracts.css`, `dist/family-contracts.js`, `dist/family-surfaces.css`, `dist/family-surfaces.js`, `dist/components.manifest.json` and `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
+  `dist/dialects.json`, `dist/specimen-layouts.css`, `dist/core-components.css`, `dist/core-components.js`, `dist/extended-primitives.css`, `dist/extended-primitives.js`, `dist/workspace-components.css`, `dist/workspace-components.js`, `dist/family-contracts.css`, `dist/family-contracts.js`, `dist/family-surfaces.css`, `dist/family-surfaces.js`, `dist/harness-runtime.css`, `dist/harness-runtime.js`, `dist/bloom-workflows.css`, `dist/bloom-workflows.js`, `dist/components.manifest.json` and `dist/canon-style-pack.json`. Run this after modifying tokens in `DESIGN.md` or rules in `SKILL.md`.
 - `npm test`: Runs `node --test test/*.test.js`: the MCP stdio smoke test
   (`test/mcp-server.test.js`), the token contract (`test/tokens.test.js`),
   the theme contract (`test/themes.test.js`), the preview fragment contract

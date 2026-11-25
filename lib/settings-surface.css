@@ -68,6 +68,9 @@
 }
 
 .vi-settings-scope {
+  container-type: inline-size;
+  container-name: vi-settings-shell;
+  inline-size: 100%;
   font-family: var(--vi-settings-font-sans);
   color: var(--vi-settings-ink);
   box-sizing: border-box;
@@ -138,8 +141,6 @@
 
 /* Specimen 2: Unified Two-Pane Settings Shell (solid surface, container-query driven) */
 .vi-settings-shell {
-  container-type: inline-size;
-  container-name: vi-settings-shell;
   inline-size: 100%;
   display: grid;
   grid-template-columns: minmax(13.5rem, 16.5rem) minmax(0, 1fr);
@@ -174,6 +175,7 @@
   font-size: 1.0625rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+  text-wrap: balance;
   color: var(--vi-settings-ink);
 }
 
@@ -341,6 +343,7 @@
 
 .vi-settings-pane-inner {
   inline-size: 100%;
+  min-inline-size: 0;
   max-inline-size: 46rem;
   padding: clamp(1rem, 3cqi, 1.75rem);
   display: flex;
@@ -384,6 +387,7 @@
   max-inline-size: 58ch;
   font-size: 0.875rem;
   line-height: 1.5;
+  text-wrap: pretty;
   color: var(--vi-settings-ink-muted);
 }
 
@@ -399,6 +403,7 @@
   font-family: var(--vi-settings-font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.04em;
+  text-wrap: balance;
   color: var(--vi-settings-ink-muted);
 }
 
@@ -482,6 +487,7 @@
   font-family: var(--vi-settings-font-sans);
   font-size: 0.8125rem;
   line-height: 1.45;
+  text-wrap: pretty;
   color: var(--vi-settings-ink-muted);
 }
 
@@ -491,6 +497,8 @@
   align-items: center;
   gap: 0.5rem;
   justify-content: flex-end;
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 
 /* Controls: buttons, inputs, selects, segmented groups, switches */
@@ -561,8 +569,10 @@
 
 .vi-settings-segmented {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.25rem;
+  max-inline-size: 100%;
   padding: 0.1875rem;
   border-radius: var(--vi-settings-radius-control);
   border: 0.0625rem solid var(--vi-settings-border);

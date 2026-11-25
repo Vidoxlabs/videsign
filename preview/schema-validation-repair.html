@@ -1,0 +1,79 @@
+<!--
+  Nocturne Museum: Typed Tool I/O Schema Validation & 1-Turn Repair (CAP-03)
+  Displays closed schema subset rules, JSON pointer diagnostics (/sandbox/allowShell, /args/path)
+  with no secret echo, and bounded 1-turn repair budget (Inspect failing payload, Apply 1-turn repair, Reset).
+-->
+<section class="vi-hr-scope" aria-labelledby="schema-repair-title">
+  <div class="vi-hr-card vi-hr-card--wide" data-vi-schema-repair>
+    <div class="vi-hr-head">
+      <div>
+        <h2 id="schema-repair-title" class="vi-hr-title">Typed tool schema validation and repair</h2>
+        <p class="vi-hr-meta">Closed subset validator (zero secret echo)</p>
+      </div>
+      <span class="vi-hr-tag" data-schema-budget>Turn 1 of 1</span>
+    </div>
+
+    <div class="vi-hr-notice vi-hr-notice--warn" role="status" aria-live="polite">
+      <span class="vi-hr-status">
+        <span aria-hidden="true" class="vi-hr-dot vi-hr-dot--warn" data-schema-dot></span>
+        <span class="vi-hr-mono" data-schema-status>schema-invalid (pre-dispatch validation blocked)</span>
+      </span>
+      <span class="vi-hr-meta">No tool execution until valid</span>
+    </div>
+
+    <div>
+      <h3 class="vi-hr-section-title">Closed schema subset rules</h3>
+      <dl class="vi-hr-ledger" aria-label="Closed schema subset">
+        <div class="vi-hr-ledger-row">
+          <dt>Allowed types</dt>
+          <dd>object, array, string, number, integer, boolean, null</dd>
+        </div>
+        <div class="vi-hr-ledger-row">
+          <dt>Object and array</dt>
+          <dd>properties, required, additionalProperties: false, items, maxItems</dd>
+        </div>
+        <div class="vi-hr-ledger-row">
+          <dt>Scalar bounds</dt>
+          <dd>enum, minLength, maxLength, minimum, maximum</dd>
+        </div>
+        <div class="vi-hr-ledger-row">
+          <dt>Unsupported keywords</dt>
+          <dd>Unknown keywords ($ref, oneOf, pattern) refused fail-closed</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="vi-hr-field">
+      <span class="vi-hr-section-title">Candidate tool call payload</span>
+      <pre class="vi-hr-pre"><code data-schema-payload>{"tool":"workspace.file.write","args":{"path":"","content":"ok"},"sandbox":{"allowShell":true}}</code></pre>
+    </div>
+
+    <ul class="vi-hr-list" aria-label="JSON pointer diagnostics" data-schema-diags>
+      <li class="vi-hr-row vi-hr-row--blocked">
+        <div class="vi-hr-row-head">
+          <span class="vi-hr-mono">/sandbox/allowShell</span>
+          <span class="vi-hr-tag">additionalProperties: false</span>
+        </div>
+        <p class="vi-hr-copy">Unlisted property rejected; raw value withheld from diagnostic error.</p>
+      </li>
+      <li class="vi-hr-row vi-hr-row--blocked">
+        <div class="vi-hr-row-head">
+          <span class="vi-hr-mono">/args/path</span>
+          <span class="vi-hr-tag">minLength: 1</span>
+        </div>
+        <p class="vi-hr-copy">Expected non-empty workspace-relative string; no silent coercion.</p>
+      </li>
+    </ul>
+
+    <div class="vi-hr-notice vi-hr-notice--ok" hidden data-schema-valid-banner>
+      <span class="vi-hr-mono">inputSchema and outputSchema checks ready (0 pointer errors)</span>
+      <span class="vi-hr-meta">Output validation shares 1-turn repair budget</span>
+    </div>
+
+    <div class="vi-hr-btn-row">
+      <button type="button" data-schema-inspect class="vi-hr-btn h-action-min-default">Inspect failing payload</button>
+      <button type="button" data-schema-repair class="vi-hr-btn vi-hr-btn--primary h-action-min-default">Apply 1-turn repair</button>
+      <button type="button" data-schema-reset class="vi-hr-btn vi-hr-btn--ghost h-action-min-default">Reset</button>
+    </div>
+  </div>
+</section>

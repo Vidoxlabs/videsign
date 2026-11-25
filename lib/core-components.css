@@ -37,9 +37,9 @@
 
   --vi-core-font-sans: var(--vi-typography-typography-family-sans-base, Geist, ui-sans-serif, system-ui, sans-serif);
   --vi-core-font-mono: var(--vi-typography-typography-family-mono-base, Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  --vi-core-radius-card: 0.75rem;
-  --vi-core-radius-control: 0.5rem;
-  --vi-core-radius-pill: 9999rem;
+  --vi-core-radius-card: var(--vi-spacing-layout-radius-standard-base, 0.875rem);
+  --vi-core-radius-control: var(--vi-spacing-layout-radius-control-base, 0.625rem);
+  --vi-core-radius-pill: var(--vi-spacing-layout-radius-full-base, 9999rem);
   --vi-core-touch: 2.75rem;
   --vi-core-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --vi-core-dur: 150ms;
@@ -157,7 +157,7 @@
   font-weight: 600;
   line-height: 1.28;
   letter-spacing: -0.02em;
-  text-wrap: pretty;
+  text-wrap: balance;
   color: var(--vi-core-ink);
 }
 

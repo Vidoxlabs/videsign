@@ -1,0 +1,70 @@
+<!--
+  Nocturne Museum: Step Graph Checkpoint & Interrupt Bar (CAP-12)
+  Displays durability mode selector (per-step, on-interrupt, none), checkpoint sequence
+  frontier with parentCheckpointId and stateDigest, interrupt trigger, and Resume from
+  checkpoint obeying intent-first rule 3.
+-->
+<section class="vi-hr-scope" aria-labelledby="step-graph-title">
+  <div class="vi-hr-card vi-hr-card--wide" data-vi-step-graph>
+    <div class="vi-hr-head">
+      <h2 id="step-graph-title" class="vi-hr-title">Step graph checkpoint and interrupt</h2>
+      <span class="vi-hr-status" role="status" aria-live="polite">
+        <span aria-hidden="true" class="vi-hr-dot vi-hr-dot--info" data-graph-dot></span>
+        <span class="vi-hr-mono" data-graph-status>Running · frontier seq 2 (cp-02)</span>
+      </span>
+    </div>
+
+    <div>
+      <h3 class="vi-hr-section-title">Run durability mode</h3>
+      <div class="vi-hr-tabs" role="tablist" aria-label="Checkpoint durability mode">
+        <button type="button" role="tab" aria-selected="true" tabindex="0" data-durability-mode="per-step" class="vi-hr-tab h-action-min-default">per-step</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-durability-mode="on-interrupt" class="vi-hr-tab h-action-min-default">on-interrupt</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-durability-mode="none" class="vi-hr-tab h-action-min-default">none</button>
+      </div>
+    </div>
+
+    <div class="vi-hr-notice vi-hr-notice--accent">
+      <span class="vi-hr-copy" data-graph-durability-note>Persist checkpoint after every step before advancing; never silently downgraded.</span>
+    </div>
+
+    <dl class="vi-hr-ledger" aria-label="Checkpoint sequence frontier">
+      <div class="vi-hr-ledger-row">
+        <dt>Checkpoint frontier</dt>
+        <dd data-graph-frontier>cp-02 (parent: cp-01; mode: per-step)</dd>
+      </div>
+      <div class="vi-hr-ledger-row">
+        <dt>stateDigest</dt>
+        <dd>sha256: 91d4a8c (completedWrites: 2)</dd>
+      </div>
+      <div class="vi-hr-ledger-row">
+        <dt>Resume rule 3</dt>
+        <dd>Interrupted step re-runs from start after reading recordedIntents; prior checkpoints skip.</dd>
+      </div>
+    </dl>
+
+    <ol class="vi-hr-list" aria-label="Step graph nodes">
+      <li class="vi-hr-row vi-hr-row--compact">
+        <span class="vi-hr-mono">step-01: gather-evidence (merge: append)</span>
+        <span class="vi-hr-meta">Checkpointed (cp-01)</span>
+      </li>
+      <li class="vi-hr-row vi-hr-row--compact">
+        <span class="vi-hr-mono">step-02: produce-patch (merge: replace)</span>
+        <span class="vi-hr-meta">Checkpointed (cp-02)</span>
+      </li>
+      <li class="vi-hr-row vi-hr-row--compact vi-hr-row--active" data-graph-step="review">
+        <span class="vi-hr-mono">step-03: review-verdict (merge: reducer)</span>
+        <span class="vi-hr-meta" data-graph-step-state="review">Active</span>
+      </li>
+      <li class="vi-hr-row vi-hr-row--compact">
+        <span class="vi-hr-mono">step-04: deterministic-check (route: on-pass)</span>
+        <span class="vi-hr-meta">Pending</span>
+      </li>
+    </ol>
+
+    <div class="vi-hr-btn-row">
+      <button type="button" data-graph-interrupt class="vi-hr-btn h-action-min-default">Trigger interrupt</button>
+      <button type="button" disabled aria-disabled="true" data-graph-resume class="vi-hr-btn vi-hr-btn--primary h-action-min-default">Resume from checkpoint</button>
+      <button type="button" data-graph-reset class="vi-hr-btn vi-hr-btn--ghost h-action-min-default">Reset</button>
+    </div>
+  </div>
+</section>

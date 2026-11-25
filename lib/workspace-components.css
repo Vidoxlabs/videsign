@@ -30,9 +30,9 @@
 
   --vi-ws-font-sans: var(--vi-typography-typography-family-sans-base, Geist, ui-sans-serif, system-ui, sans-serif);
   --vi-ws-font-mono: var(--vi-typography-typography-family-mono-base, Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  --vi-ws-radius-card: 0.75rem;
-  --vi-ws-radius-control: 0.5rem;
-  --vi-ws-radius-pill: 9999rem;
+  --vi-ws-radius-card: var(--vi-spacing-layout-radius-standard-base, 0.875rem);
+  --vi-ws-radius-control: var(--vi-spacing-layout-radius-control-base, 0.625rem);
+  --vi-ws-radius-pill: var(--vi-spacing-layout-radius-full-base, 9999rem);
   --vi-ws-touch: 2.75rem;
   --vi-ws-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --vi-ws-dur: 150ms;
@@ -162,7 +162,7 @@
   font-weight: 600;
   line-height: 1.28;
   letter-spacing: -0.02em;
-  text-wrap: pretty;
+  text-wrap: balance;
   color: var(--vi-ws-ink);
 }
 
@@ -704,6 +704,7 @@
 .vi-ws-plan-note {
   font-size: 0.8125rem;
   line-height: 1.45;
+  text-wrap: pretty;
   color: var(--vi-ws-ink-muted);
   overflow-wrap: anywhere;
 }
@@ -824,6 +825,7 @@
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.45;
+  text-wrap: balance;
   color: var(--vi-ws-ink);
   overflow-wrap: anywhere;
 }
@@ -861,6 +863,7 @@
   margin: 0;
   font-size: 0.9375rem;
   font-weight: 600;
+  text-wrap: balance;
   color: var(--vi-ws-ink);
 }
 

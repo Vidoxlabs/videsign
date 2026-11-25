@@ -1,0 +1,148 @@
+<!--
+  Nocturne Museum: Seat fanout orchestrator (bloom + seed CAP-08)
+  Advisory team orchestration panel storing closed role IDs only (chair, framing, risk,
+  coherence, sequencing), checkRegistryDocuments pre-run validation badge, bounded parallel
+  fan-out limits, deterministic plan-order merge, and interactive seat inspection.
+-->
+<section class="vi-bw-scope" aria-labelledby="seat-fanout-title">
+  <div class="vi-bw-card vi-bw-card--wide" data-vi-seat-fanout>
+    <div class="vi-bw-head">
+      <div class="vi-bw-title-row">
+        <h2 id="seat-fanout-title" class="vi-bw-title">Seat orchestration</h2>
+        <span class="vi-bw-inline-status">
+          <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--ok"></span>
+          <span>checkRegistryDocuments: valid</span>
+        </span>
+      </div>
+      <div class="vi-bw-actions">
+        <button type="button" data-fanout-run class="vi-bw-btn vi-bw-btn--primary h-action-min-default">Run ordered fan-out</button>
+        <button type="button" data-fanout-reset class="vi-bw-btn vi-bw-btn--ghost h-action-min-default">Reset</button>
+      </div>
+    </div>
+
+    <div class="vi-bw-kpi-strip" aria-label="Bounded fan-out limits">
+      <div class="vi-bw-kpi-item">
+        <span class="vi-bw-meta">Registry</span>
+        <span class="vi-bw-kpi-val">5 closed role IDs</span>
+      </div>
+      <div class="vi-bw-kpi-item">
+        <span class="vi-bw-meta">Concurrency</span>
+        <span class="vi-bw-kpi-val">max 2 parallel</span>
+      </div>
+      <div class="vi-bw-kpi-item">
+        <span class="vi-bw-meta">Step timeout</span>
+        <span class="vi-bw-kpi-val">30s per step</span>
+      </div>
+      <div class="vi-bw-kpi-item">
+        <span class="vi-bw-meta">Merge order</span>
+        <span class="vi-bw-kpi-val">Plan order 1 to 5</span>
+      </div>
+    </div>
+
+    <ol aria-label="Ordered seat assignments" class="vi-bw-list">
+      <li class="vi-bw-row" data-seat-row="chair">
+        <div class="vi-bw-row-top">
+          <div class="vi-bw-row-main">
+            <span class="vi-bw-code">chair · step 1</span>
+            <span class="vi-bw-meta">plan · workspace.tree.list, context.repo.pack.read</span>
+          </div>
+          <div class="vi-bw-actions">
+            <span class="vi-bw-inline-status">
+              <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--ok" data-seat-state-dot></span>
+              <span data-seat-state-label>done</span>
+            </span>
+            <button type="button" aria-pressed="true" data-seat-select="chair" class="vi-bw-btn h-action-min-default">Inspect chair</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="vi-bw-row" data-seat-row="framing">
+        <div class="vi-bw-row-top">
+          <div class="vi-bw-row-main">
+            <span class="vi-bw-code">framing · step 2 (fan-out)</span>
+            <span class="vi-bw-meta">fanout · context.repo.pack.read, workspace.file.outline.read</span>
+          </div>
+          <div class="vi-bw-actions">
+            <span class="vi-bw-inline-status">
+              <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--muted" data-seat-state-dot></span>
+              <span data-seat-state-label>queued</span>
+            </span>
+            <button type="button" aria-pressed="false" data-seat-select="framing" class="vi-bw-btn h-action-min-default">Inspect framing</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="vi-bw-row" data-seat-row="risk">
+        <div class="vi-bw-row-top">
+          <div class="vi-bw-row-main">
+            <span class="vi-bw-code">risk · step 3 (fan-out)</span>
+            <span class="vi-bw-meta">fanout · vcs.repo.diff.read, vcs.repo.log.read</span>
+          </div>
+          <div class="vi-bw-actions">
+            <span class="vi-bw-inline-status">
+              <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--muted" data-seat-state-dot></span>
+              <span data-seat-state-label>queued</span>
+            </span>
+            <button type="button" aria-pressed="false" data-seat-select="risk" class="vi-bw-btn h-action-min-default">Inspect risk</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="vi-bw-row" data-seat-row="coherence">
+        <div class="vi-bw-row-top">
+          <div class="vi-bw-row-main">
+            <span class="vi-bw-code">coherence · step 4</span>
+            <span class="vi-bw-meta">review · deterministic check (0 model calls)</span>
+          </div>
+          <div class="vi-bw-actions">
+            <span class="vi-bw-inline-status">
+              <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--muted" data-seat-state-dot></span>
+              <span data-seat-state-label>queued</span>
+            </span>
+            <button type="button" aria-pressed="false" data-seat-select="coherence" class="vi-bw-btn h-action-min-default">Inspect coherence</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="vi-bw-row" data-seat-row="sequencing">
+        <div class="vi-bw-row-top">
+          <div class="vi-bw-row-main">
+            <span class="vi-bw-code">sequencing · step 5</span>
+            <span class="vi-bw-meta">merge · workspace.tree.list</span>
+          </div>
+          <div class="vi-bw-actions">
+            <span class="vi-bw-inline-status">
+              <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--muted" data-seat-state-dot></span>
+              <span data-seat-state-label>queued</span>
+            </span>
+            <button type="button" aria-pressed="false" data-seat-select="sequencing" class="vi-bw-btn h-action-min-default">Inspect sequencing</button>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <dl aria-label="Selected seat inspection" aria-live="polite" class="vi-bw-ledger">
+      <div class="vi-bw-ledger-row">
+        <dt>Selected roleId</dt>
+        <dd data-seat-detail-role>chair · phase plan</dd>
+      </div>
+      <div class="vi-bw-ledger-row">
+        <dt>Plan index</dt>
+        <dd data-seat-detail-step>1 of 5</dd>
+      </div>
+      <div class="vi-bw-ledger-row">
+        <dt>allowedTools subset</dt>
+        <dd data-seat-detail-tools>workspace.tree.list, context.repo.pack.read</dd>
+      </div>
+      <div class="vi-bw-ledger-row">
+        <dt>Constraint</dt>
+        <dd data-seat-detail-note>Plans bounded assignments; stores closed roleId only.</dd>
+      </div>
+    </dl>
+
+    <div class="vi-bw-receipt" role="status" aria-live="polite">
+      <span data-fanout-status>Ready · chair planned bounded parallel fan-out (cap 2)</span>
+      <span>No instruction files; role IDs only</span>
+    </div>
+  </div>
+</section>

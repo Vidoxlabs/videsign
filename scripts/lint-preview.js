@@ -10,7 +10,8 @@
  * A prefixed accent fill still triggers the label checks. Unprefixed classes alone can satisfy on-accent, size and weight; a prefix never satisfies or rescues that base. Every prefixed size or weight on the fill and on a text-bearing child is still evaluated, and the label fails when any of them drops below bold xl or 2xl. Inheritance uses only the fill's unprefixed metrics. sr-only and visually-hidden children are not sized. Inline emphasis without its own size classes inherits the fill.
  *
  * Rules:
- *   - no `shadow-sm` (ADR-001), no arbitrary Tailwind values (`w-[15px]`)
+ *   - no `shadow-sm|md|lg|xl|2xl` (ADR-001 / museum hairline standard), no arbitrary Tailwind values (`w-[15px]`)
+ *   - no `transition-all` (transition explicit GPU or color properties only)
  *   - no inline `style=` attribute and no `<script>` (site CSP posture, ADR-003)
  *   - no emoji (DESIGN.md imagery rule)
  *   - no text that claims verification or action authority ("verified",
@@ -24,7 +25,7 @@
  *     three glass layers per fragment
  *   - no legacy glass utilities (`backdrop-blur-*`, `bg-white/*`) — crystal only
  *   - no `uppercase` (ADR-007: eyebrows and labels are sentence case)
- *   - no `animate-pulse` (decorative loop)
+ *   - no `animate-pulse|spin|bounce|ping` (decorative loops)
  *   - no raw type utilities (`font-medium|bold|semibold`, bare `tracking-*` /
  *     `leading-*`); use typography weight/tracking/leading tokens
  *   - signature colours (ADR-011, ADR-013): no Xylia text, no Xylia without the
@@ -126,11 +127,18 @@ function lintFragment(name, html) {
   for (const value of classAttributes(bare)) {
     for (const cls of value.split(/\s+/)) {
       if (!cls) continue;
+      const util = utilityOf(cls);
+      if (/^shadow-(?:md|lg|xl)$/.test(util)) {
+        problems.push(`${cls} drop shadow banned on dark museum surfaces (use 1px hairline border)`);
+      }
+      if (util === 'transition-all') {
+        problems.push('transition-all banned (transition explicit GPU or color properties only)');
+      }
       if (cls.includes('[') && !cls.includes('ASSET_BASE')) problems.push(`arbitrary Tailwind value "${cls}"`);
       if (/^backdrop-blur(-|$)/.test(cls)) problems.push(`legacy glass utility "${cls}"`);
       if (/^bg-white(\/|$)/.test(cls)) problems.push(`legacy glass utility "${cls}"`);
       if (cls === 'uppercase') problems.push('uppercase (use sentence case, ADR-007)');
-      if (cls === 'animate-pulse') problems.push('animate-pulse (decorative loop)');
+      if (/^animate-(?:pulse|spin|bounce|ping)$/.test(util)) problems.push(`${cls} (decorative loop)`);
       if (/^(?:min-)?h-screen$/.test(cls)) problems.push(`raw viewport height "${cls}" (use min-h-dvh / h-dvh for mobile stability, ADR-025)`);
       if (/^font-(medium|semibold|bold)$/.test(cls)) {
         problems.push(`raw type utility "${cls}" (use font-typography-weight-*)`);
@@ -223,6 +231,18 @@ function lintFragment(name, html) {
       if (isBorderedBox) {
         const depth = stack.filter((s) => s.borderedBox).length + 1;
         if (depth > maxBorderDepth) maxBorderDepth = depth;
+      }
+      if ((tag === 'span' || tag === 'p') && !stack.some((s) => s.tag === 'code' || s.tag === 'pre' || s.tag === 'ol')) {
+        const selfClosing = /\/\s*$/.test(attrs);
+        if (!selfClosing) {
+          const inner = bare
+            .slice(m.index + m[0].length, closeIndex(bare, tags, m))
+            .replace(/<(code|pre)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ');
+          const labelText = elementText(inner.replace(/&middot;|&#183;|&#xb7;/gi, '·'));
+          if (/^(?:0[1-9]\s*[·/-]\s*[A-Za-z]|Stage\s+[0-9]+\s*[:/-])/.test(labelText)) {
+            problems.push(`numbered meta-eyebrow "${labelText}" inside <${tag}> (use plain label or <ol>)`);
+          }
+        }
       }
     }
     if (!VOID.has(tag) && !/\/\s*$/.test(attrs)) stack.push({ tag, glass: isGlass, borderedBox: isBorderedBox });

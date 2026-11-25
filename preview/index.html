@@ -29,6 +29,8 @@
   <link rel="stylesheet" href="../dist/workspace-components.css" />
   <link rel="stylesheet" href="../dist/family-contracts.css" />
   <link rel="stylesheet" href="../dist/family-surfaces.css" />
+  <link rel="stylesheet" href="../dist/harness-runtime.css" />
+  <link rel="stylesheet" href="../dist/bloom-workflows.css" />
   <link rel="stylesheet" href="./catalog.css" />
   <script type="module" src="../dist/vi-orbital-field.js"></script>
   <script defer src="../dist/docs-portal.js"></script>
@@ -39,6 +41,8 @@
   <script defer src="../dist/workspace-components.js"></script>
   <script defer src="../dist/family-contracts.js"></script>
   <script defer src="../dist/family-surfaces.js"></script>
+  <script defer src="../dist/harness-runtime.js"></script>
+  <script defer src="../dist/bloom-workflows.js"></script>
   <script defer src="./catalog.js"></script>
 </head>
 <body>
@@ -315,6 +319,14 @@
         { file: 'model-profile-card.html', tier: 'workspace', label: 'Model profile card', desc: 'Closed five-slot seed CAP-16 capability profile pairing probed/reported/unknown provenance, separated requestedAlias vs backendModel, and endpoint privacy notice (ADR-021).' },
         { file: 'trace-replay-panel.html', tier: 'workspace', label: 'Trace replay panel', desc: 'Read-only append-only bloom trace replay with Full state, Deltas, Debug, and Token deltas views, monotonic seq stepper, redacted team.recall digests, and five-field usage (ADR-021).' },
         { file: 'eval-harness-report.html', tier: 'workspace', label: 'Eval harness report', desc: 'Smoke evaluation harness table pairing six deterministic evaluators with an explicitly subordinate judge outcome, baseline delta, duration, and usage (ADR-021).' },
+        { file: 'schema-validation-repair.html', tier: 'workspace', label: 'Typed tool schema validation and repair', desc: 'Closed schema subset validator with zero-secret JSON pointer diagnostics, bounded 1-turn repair budget, and Inspect/Apply/Reset controls (ADR-021).' },
+        { file: 'sandbox-scope-policy.html', tier: 'workspace', label: 'Sandbox scope and shell command gate', desc: 'Immutable per-attempt workspace roots with allowShell: false default switch, closed node/npm/git allowlist, banned flag checks, and interactive 4-probe evaluator (ADR-021).' },
+        { file: 'owner-decision-editor.html', tier: 'workspace', label: 'Owner gate decision editor', desc: 'Digest-bound owner decision editor (approve, edit, respond, reject) disabling respond on credential and destructive tiers with JSON validation and rejection reason capture (ADR-021).' },
+        { file: 'step-graph-checkpoint.html', tier: 'workspace', label: 'Step graph checkpoint and interrupt', desc: 'Step-graph durability selector (per-step, on-interrupt, none), checkpoint sequence frontier readout, interrupt trigger, and Resume from checkpoint obeying intent-first rule 3 (ADR-021).' },
+        { file: 'session-setup-composer.html', tier: 'workspace', label: 'Coding session setup composer', desc: 'Workspace session composer matching Bloom interface contract with Lead head agent, jurisdiction, Model and limits (Calls 1 to 20, Token limit), sample starters, and live validation (ADR-021).' },
+        { file: 'symbol-outline-token-map.html', tier: 'workspace', label: 'Symbol outline and token map', desc: 'Deterministic codebase context packer with 8k/16k/32k presets, largest-first estimate bars, JS/Markdown/JSON symbol outlines, unknown fallback for binary files, and toggles (ADR-021).' },
+        { file: 'seat-fanout-orchestrator.html', tier: 'workspace', label: 'Seat fanout orchestrator', desc: 'Closed five-role advisory team orchestrator with checkRegistryDocuments badge, max-2 parallel bounds, ordered plan simulation, and per-seat detail ledger (ADR-021).' },
+        { file: 'research-flow-tracker.html', tier: 'workspace', label: 'Research flow tracker', desc: 'Staged research pipeline marking research.source.search thirdPartyEgress and ownerGate boundaries, Cited claims vs Uncited gaps views, and provenance URI inspection (ADR-021).' },
         { file: 'persona-console.html', tier: 'workspace', label: 'Sovereign persona console', desc: 'Identity header, viewport, evidence trail with unavailable slots, and command bar (ADR-013).' },
 
         // Public site, maps and studio

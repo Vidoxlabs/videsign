@@ -196,7 +196,7 @@ test('component_catalog lists matching entries by consumer without html by defau
   const contractsBody = JSON.parse(contractsRes.content[0].text);
   assert.deepEqual(
     contractsBody.components.map((c) => c.id),
-    ['claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner', 'instrument', 'statement-proof-row', 'credential-activity-ledger', 'policy-rule-matrix', 'provider-model-selector', 'locked-panel', 'context-packet-inspector', 'memory-consent-epoch', 'assembly-gate-card', 'hook-chain-inspector', 'trellis-probe-matrix'],
+    ['claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner', 'instrument', 'statement-proof-row', 'credential-activity-ledger', 'policy-rule-matrix', 'provider-model-selector', 'locked-panel', 'context-packet-inspector', 'memory-consent-epoch', 'assembly-gate-card', 'hook-chain-inspector', 'trellis-probe-matrix', 'schema-validation-repair', 'sandbox-scope-policy', 'owner-decision-editor', 'step-graph-checkpoint'],
   );
 
   const mdCodeRes = await client.callTool({
@@ -271,7 +271,7 @@ test('design_brief and scaffold_page tools plus components.manifest.json work ov
 
   const manifestRes = await client.readResource({ uri: 'file://dist/components.manifest.json' });
   const manifest = JSON.parse(manifestRes.contents[0].text);
-  assert.equal(manifest.componentCount, 121);
+  assert.equal(manifest.componentCount, 129);
   assert.ok(manifest.archetypes['public-site-landing']);
   assert.ok(manifest.archetypes['docs-portal']);
   assert.ok(manifest.archetypes['settings-workspace']);

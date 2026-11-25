@@ -1,0 +1,161 @@
+<!--
+  Nocturne Museum: Symbol outline and token map (capillary + drosera + bloom, CAP-05 + CAP-18)
+  Deterministic codebase-to-context packer showing largest-first estimate token bars via
+  CSS width utility classes, JS/Markdown/JSON symbol outlines, explicit unknown fallback
+  on unsupported binary files, interactive budget presets (8k, 16k, 32k), and file toggles.
+-->
+<section class="vi-bw-scope" aria-labelledby="token-map-title">
+  <div class="vi-bw-card vi-bw-card--wide" data-vi-token-map>
+    <div class="vi-bw-head">
+      <div class="vi-bw-title-row">
+        <h2 id="token-map-title" class="vi-bw-title">Symbol outline and token map</h2>
+        <span class="vi-bw-meta">capillary CAP-05 / CAP-18 · estimate</span>
+      </div>
+      <div role="group" aria-label="Context token budget presets" class="vi-bw-tabs">
+        <button type="button" aria-pressed="false" data-budget-preset="8000" class="vi-bw-tab h-action-min-default">8k</button>
+        <button type="button" aria-pressed="true" data-budget-preset="16000" class="vi-bw-tab h-action-min-default">16k</button>
+        <button type="button" aria-pressed="false" data-budget-preset="32000" class="vi-bw-tab h-action-min-default">32k</button>
+      </div>
+    </div>
+
+    <div class="vi-bw-kpi-strip" aria-label="Token budget summary">
+      <div class="vi-bw-kpi-item">
+        <span class="vi-bw-meta">Packed budget</span>
+        <span class="vi-bw-kpi-val" data-token-total>8,640 / 16,000 est. tokens</span>
+      </div>
+      <div class="vi-bw-kpi-item">
+        <span class="vi-bw-meta">Measure rule</span>
+        <span class="vi-bw-kpi-val">estimate (char / 4)</span>
+      </div>
+      <div class="vi-bw-kpi-item">
+        <span class="vi-bw-meta">Sort order</span>
+        <span class="vi-bw-kpi-val">Largest estimate first</span>
+      </div>
+      <div class="vi-bw-kpi-item">
+        <span class="vi-bw-meta">Omissions</span>
+        <span class="vi-bw-kpi-val" data-token-omissions>0 out-of-budget · 1 unknown</span>
+      </div>
+    </div>
+
+    <ul aria-label="Context candidate files and symbol outlines" class="vi-bw-list">
+      <li class="vi-bw-row" data-token-file="src/packer.mjs" data-file-estimate="4200" data-file-included="true">
+        <div class="vi-bw-row-top">
+          <div class="vi-bw-row-main">
+            <span class="vi-bw-code">src/packer.mjs</span>
+            <span class="vi-bw-meta">JavaScript · 4,200 est. tok</span>
+          </div>
+          <div class="vi-bw-actions">
+            <span class="vi-bw-inline-status">
+              <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--ok" data-file-dot></span>
+              <span data-file-state>admitted</span>
+            </span>
+            <button type="button" aria-pressed="true" data-file-toggle class="vi-bw-btn h-action-min-default">Included</button>
+          </div>
+        </div>
+        <div class="vi-bw-bar-track" aria-hidden="true">
+          <span class="vi-bw-bar-fill vi-bw-bar-fill--30" data-file-bar></span>
+        </div>
+        <details class="vi-bw-details">
+          <summary class="vi-bw-summary h-action-min-default">
+            <span>Outline symbols (JS)</span>
+            <span class="vi-bw-meta">2 symbols · L14-L192</span>
+          </summary>
+          <div class="vi-bw-details-body">
+            <ul class="vi-bw-outline-list">
+              <li>export function packContext (L14-L118)</li>
+              <li>export class TokenMap (L124-L192)</li>
+            </ul>
+          </div>
+        </details>
+      </li>
+
+      <li class="vi-bw-row" data-token-file="docs/contracts/retrieval.md" data-file-estimate="2840" data-file-included="true">
+        <div class="vi-bw-row-top">
+          <div class="vi-bw-row-main">
+            <span class="vi-bw-code">docs/contracts/retrieval.md</span>
+            <span class="vi-bw-meta">Markdown · 2,840 est. tok</span>
+          </div>
+          <div class="vi-bw-actions">
+            <span class="vi-bw-inline-status">
+              <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--ok" data-file-dot></span>
+              <span data-file-state>admitted</span>
+            </span>
+            <button type="button" aria-pressed="true" data-file-toggle class="vi-bw-btn h-action-min-default">Included</button>
+          </div>
+        </div>
+        <div class="vi-bw-bar-track" aria-hidden="true">
+          <span class="vi-bw-bar-fill vi-bw-bar-fill--20" data-file-bar></span>
+        </div>
+        <details class="vi-bw-details">
+          <summary class="vi-bw-summary h-action-min-default">
+            <span>Outline headings (Markdown)</span>
+            <span class="vi-bw-meta">3 headings · L1-L94</span>
+          </summary>
+          <div class="vi-bw-details-body">
+            <ul class="vi-bw-outline-list">
+              <li>H1 Retrieval contract (L1)</li>
+              <li>H2 Untrusted envelope (L24)</li>
+              <li>H2 Omission reasons (L58)</li>
+            </ul>
+          </div>
+        </details>
+      </li>
+
+      <li class="vi-bw-row" data-token-file="docs/capabilities/index.json" data-file-estimate="1600" data-file-included="true">
+        <div class="vi-bw-row-top">
+          <div class="vi-bw-row-main">
+            <span class="vi-bw-code">docs/capabilities/index.json</span>
+            <span class="vi-bw-meta">JSON · 1,600 est. tok</span>
+          </div>
+          <div class="vi-bw-actions">
+            <span class="vi-bw-inline-status">
+              <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--ok" data-file-dot></span>
+              <span data-file-state>admitted</span>
+            </span>
+            <button type="button" aria-pressed="true" data-file-toggle class="vi-bw-btn h-action-min-default">Included</button>
+          </div>
+        </div>
+        <div class="vi-bw-bar-track" aria-hidden="true">
+          <span class="vi-bw-bar-fill vi-bw-bar-fill--10" data-file-bar></span>
+        </div>
+        <details class="vi-bw-details">
+          <summary class="vi-bw-summary h-action-min-default">
+            <span>Outline keys (JSON)</span>
+            <span class="vi-bw-meta">3 top-level keys · L2-L148</span>
+          </summary>
+          <div class="vi-bw-details-body">
+            <ul class="vi-bw-outline-list">
+              <li>version (L2)</li>
+              <li>repo (L3)</li>
+              <li>entries (L4-L148)</li>
+            </ul>
+          </div>
+        </details>
+      </li>
+
+      <li class="vi-bw-row" data-token-file="assets/fixture-sample.bin" data-file-estimate="0" data-file-unknown="true">
+        <div class="vi-bw-row-top">
+          <div class="vi-bw-row-main">
+            <span class="vi-bw-code">assets/fixture-sample.bin</span>
+            <span class="vi-bw-meta">Binary · unsupported format</span>
+          </div>
+          <div class="vi-bw-actions">
+            <span class="vi-bw-inline-status">
+              <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--muted" data-file-dot></span>
+              <span data-file-state>status: unknown</span>
+            </span>
+            <button type="button" disabled aria-disabled="true" class="vi-bw-btn vi-bw-btn--ghost h-action-min-default">Omitted</button>
+          </div>
+        </div>
+        <div class="vi-bw-bar-track" aria-hidden="true">
+          <span class="vi-bw-bar-fill vi-bw-bar-fill--muted vi-bw-bar-fill--0" data-file-bar></span>
+        </div>
+      </li>
+    </ul>
+
+    <div class="vi-bw-receipt" role="status" aria-live="polite">
+      <span data-token-status>3 admitted under 16,000 estimate budget</span>
+      <span>untrusted: true envelope applied</span>
+    </div>
+  </div>
+</section>

@@ -106,6 +106,15 @@ test('settings-surface.css enforces required --vi-settings-* tokens, container q
   const emitted = emitSettingsSurfaceArtifacts();
   assert.equal(emitted['settings-surface.css'], css);
   assert.equal(emitted['settings-surface.js'], fs.readFileSync(path.join(ROOT, 'lib', 'settings-surface.js'), 'utf-8'));
+
+  const scopeBlock = css.match(/\n\n\.vi-settings-scope\s*\{([\s\S]*?)\}/)[1];
+  const shellBlock = css.match(/\n\.vi-settings-shell\s*\{([\s\S]*?)\}/)[1];
+  const segBlock = css.match(/\n\.vi-settings-segmented\s*\{([\s\S]*?)\}/)[1];
+  assert.match(scopeBlock, /container-type:\s*inline-size;/);
+  assert.match(scopeBlock, /container-name:\s*vi-settings-shell;/);
+  assert.doesNotMatch(shellBlock, /container-(?:name|type):/);
+  assert.match(segBlock, /flex-wrap:\s*wrap;/);
+  assert.equal(fs.readFileSync(path.join(ROOT, 'dist', 'settings-surface.css'), 'utf-8'), css);
 });
 
 test('dark Nocturne and light theme Settings tokens clear >= 4.5:1 text and >= 3.0:1 border contrast on all surfaces including danger zone', () => {

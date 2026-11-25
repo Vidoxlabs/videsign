@@ -1,0 +1,81 @@
+<!--
+  Nocturne Museum: Session setup composer (bloom interface contract)
+  Coding session form and starter composer matching Bloom's ratified interface contract:
+  Head agent name (Lead), Jurisdiction, Model and limits (Model, Model calls, Token limit),
+  Try a sample task starters, and Create coding session validation/preview state.
+  Solid surfaces only, zero inline style attributes.
+-->
+<section class="vi-bw-scope" aria-labelledby="session-setup-title">
+  <div class="vi-bw-card vi-bw-card--wide" data-vi-session-composer>
+    <div class="vi-bw-head">
+      <div class="vi-bw-title-row">
+        <h2 id="session-setup-title" class="vi-bw-title">Coding session</h2>
+        <span class="vi-bw-meta">Blank starts in Scratch</span>
+      </div>
+      <span class="vi-bw-inline-status">
+        <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--info" data-session-dot></span>
+        <span data-session-status>Start a turn in this workspace.</span>
+      </span>
+    </div>
+
+    <form class="vi-bw-form" data-session-form novalidate>
+      <div class="vi-bw-grid-2">
+        <div class="vi-bw-field">
+          <label for="vi-bw-head-name" class="vi-bw-label">Head agent name</label>
+          <input id="vi-bw-head-name" type="text" autocomplete="off" value="Lead" data-session-head-name class="vi-bw-input h-action-min-default" />
+          <p class="vi-bw-hint">Plans the work and creates specialists for it.</p>
+        </div>
+        <div class="vi-bw-field">
+          <label for="vi-bw-jurisdiction" class="vi-bw-label">Jurisdiction</label>
+          <input id="vi-bw-jurisdiction" type="text" autocomplete="off" placeholder="What should this head agent be responsible for?" data-session-jurisdiction class="vi-bw-input h-action-min-default" />
+          <p class="vi-bw-hint">What this agent is responsible for.</p>
+        </div>
+      </div>
+
+      <details open class="vi-bw-details">
+        <summary class="vi-bw-summary h-action-min-default">
+          <span>Model and limits</span>
+          <span class="vi-bw-meta">Calls 1 to 20 · default 6</span>
+        </summary>
+        <div class="vi-bw-details-body">
+          <div class="vi-bw-grid-3">
+            <div class="vi-bw-field">
+              <label for="vi-bw-model" class="vi-bw-label">Model</label>
+              <input id="vi-bw-model" type="text" autocomplete="off" placeholder="Default" data-session-model class="vi-bw-input h-action-min-default" />
+            </div>
+            <div class="vi-bw-field">
+              <label for="vi-bw-calls" class="vi-bw-label">Model calls</label>
+              <input id="vi-bw-calls" type="number" min="1" max="20" value="6" data-session-calls class="vi-bw-input h-action-min-default" />
+            </div>
+            <div class="vi-bw-field">
+              <label for="vi-bw-tokens" class="vi-bw-label">Token limit</label>
+              <input id="vi-bw-tokens" type="number" min="1000" step="1000" placeholder="Optional" data-session-tokens class="vi-bw-input h-action-min-default" />
+            </div>
+          </div>
+          <p class="vi-bw-hint">Stop after this many measured tokens. Leave blank to keep going.</p>
+        </div>
+      </details>
+
+      <div class="vi-bw-field">
+        <label for="vi-bw-task" class="vi-bw-label">Task brief</label>
+        <textarea id="vi-bw-task" rows="2" placeholder="Tell the agent what to work on" data-session-task class="vi-bw-textarea h-action-min-default"></textarea>
+      </div>
+
+      <div class="vi-bw-head">
+        <div role="group" aria-label="Sample task starters" class="vi-bw-actions">
+          <button type="button" data-session-sample="research" class="vi-bw-btn h-action-min-default">Try a sample task</button>
+          <button type="button" data-session-sample="audit" class="vi-bw-btn vi-bw-btn--ghost h-action-min-default">Try a sample task: schema audit</button>
+        </div>
+        <button type="submit" data-session-create class="vi-bw-btn vi-bw-btn--primary h-action-min-default">Create coding session</button>
+      </div>
+    </form>
+
+    <div class="vi-bw-banner" role="status" aria-live="polite" data-session-preview hidden>
+      <span class="vi-bw-inline-status">
+        <span aria-hidden="true" class="vi-bw-dot vi-bw-dot--ok"></span>
+        <span>Session preview</span>
+      </span>
+      <span class="vi-bw-meta" data-session-preview-text>Model: Default, Model calls: 6, Token limit: unbounded</span>
+    </div>
+  </div>
+</section>

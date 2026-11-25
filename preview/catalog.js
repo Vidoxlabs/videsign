@@ -48,6 +48,8 @@
     '../dist/workspace-components.css',
     '../dist/family-contracts.css',
     '../dist/family-surfaces.css',
+    '../dist/harness-runtime.css',
+    '../dist/bloom-workflows.css',
   ];
 
   var ISOLATION_BASE_CSS = [
@@ -380,7 +382,29 @@
         found.add('--vi-fs-border');
         found.add('--vi-fs-accent');
       }
-      if (base.indexOf('vi-viewport-') === 0 || base.indexOf('vi-brief-') === 0 || base.indexOf('vi-data-table') === 0 || base.indexOf('vi-bento-') === 0 || base.indexOf('vi-specimen-') === 0 || base.indexOf('vi-ledger') === 0 || base.indexOf('vi-inline-status') === 0 || base.indexOf('vi-kpi-') === 0 || base.indexOf('vi-hero-') === 0 || base.indexOf('vi-tactile-btn') === 0 || base.indexOf('vi-core-') === 0 || base.indexOf('vi-combo-') === 0 || base.indexOf('vi-cal-') === 0 || base.indexOf('vi-tip-') === 0 || base.indexOf('vi-tree') === 0 || base.indexOf('vi-split-') === 0 || base.indexOf('vi-chart-') === 0 || base.indexOf('vi-trace-') === 0 || base.indexOf('vi-cite-') === 0 || base.indexOf('vi-danger-') === 0 || base.indexOf('vi-err-') === 0 || base.indexOf('vi-ext-') === 0 || base.indexOf('vi-ws-') === 0 || base.indexOf('vi-fc-') === 0 || base.indexOf('vi-fs-') === 0) {
+      if (base.indexOf('vi-hr-') === 0) {
+        found.add('--vi-hr-canvas');
+        found.add('--vi-hr-shell');
+        found.add('--vi-hr-card');
+        found.add('--vi-hr-elevated');
+        found.add('--vi-hr-ink');
+        found.add('--vi-hr-ink-secondary');
+        found.add('--vi-hr-ink-muted');
+        found.add('--vi-hr-border');
+        found.add('--vi-hr-accent');
+      }
+      if (base.indexOf('vi-bw-') === 0) {
+        found.add('--vi-bw-canvas');
+        found.add('--vi-bw-shell');
+        found.add('--vi-bw-card');
+        found.add('--vi-bw-elevated');
+        found.add('--vi-bw-ink');
+        found.add('--vi-bw-ink-secondary');
+        found.add('--vi-bw-ink-muted');
+        found.add('--vi-bw-border');
+        found.add('--vi-bw-accent');
+      }
+      if (base.indexOf('vi-viewport-') === 0 || base.indexOf('vi-brief-') === 0 || base.indexOf('vi-data-table') === 0 || base.indexOf('vi-bento-') === 0 || base.indexOf('vi-specimen-') === 0 || base.indexOf('vi-ledger') === 0 || base.indexOf('vi-inline-status') === 0 || base.indexOf('vi-kpi-') === 0 || base.indexOf('vi-hero-') === 0 || base.indexOf('vi-tactile-btn') === 0 || base.indexOf('vi-core-') === 0 || base.indexOf('vi-combo-') === 0 || base.indexOf('vi-cal-') === 0 || base.indexOf('vi-tip-') === 0 || base.indexOf('vi-tree') === 0 || base.indexOf('vi-split-') === 0 || base.indexOf('vi-chart-') === 0 || base.indexOf('vi-trace-') === 0 || base.indexOf('vi-cite-') === 0 || base.indexOf('vi-danger-') === 0 || base.indexOf('vi-err-') === 0 || base.indexOf('vi-ext-') === 0 || base.indexOf('vi-ws-') === 0 || base.indexOf('vi-fc-') === 0 || base.indexOf('vi-fs-') === 0 || base.indexOf('vi-hr-') === 0 || base.indexOf('vi-bw-') === 0) {
         found.add('--vi-surface-canvas');
         found.add('--vi-surface-card');
         found.add('--vi-surface-elevated');
@@ -739,6 +763,8 @@
         '<script defer src="../dist/workspace-components.js"></scr' + 'ipt>' +
         '<script defer src="../dist/family-contracts.js"></scr' + 'ipt>' +
         '<script defer src="../dist/family-surfaces.js"></scr' + 'ipt>' +
+        '<script defer src="../dist/harness-runtime.js"></scr' + 'ipt>' +
+        '<script defer src="../dist/bloom-workflows.js"></scr' + 'ipt>' +
         '<style>' + IFRAME_BASE_CSS + '</style>' +
         '</head><body>' + html + '</body></html>';
     }
@@ -806,6 +832,12 @@
       }
       if (win.ViFamilySurfaces && typeof win.ViFamilySurfaces.initFamilySurfaces === 'function') {
         register(win.ViFamilySurfaces.initFamilySurfaces(container));
+      }
+      if (win.ViHarnessRuntime && typeof win.ViHarnessRuntime.initHarnessRuntime === 'function') {
+        register(win.ViHarnessRuntime.initHarnessRuntime(container));
+      }
+      if (win.ViBloomWorkflows && typeof win.ViBloomWorkflows.initBloomWorkflows === 'function') {
+        register(win.ViBloomWorkflows.initBloomWorkflows(container));
       }
       Array.prototype.slice.call(container.querySelectorAll('img[data-chibi-fallback]')).forEach(function (img) {
         img.addEventListener('error', function () {
@@ -1104,7 +1136,7 @@
           tdVal.appendChild(sw);
           var tokenL = colorToOklchL(val);
           if (tokenL !== null && surfaceL !== null) {
-            var isSurfaceToken = name.indexOf('surface-canvas') !== -1 || name.indexOf('surface-shell') !== -1 || name.indexOf('surface-card') !== -1 || name.indexOf('surface-elevated') !== -1 || name.indexOf('surface-background') !== -1 || /-(?:ext|ws|fc|fs)-(?:canvas|shell|card|elevated)$/.test(name);
+            var isSurfaceToken = name.indexOf('surface-canvas') !== -1 || name.indexOf('surface-shell') !== -1 || name.indexOf('surface-card') !== -1 || name.indexOf('surface-elevated') !== -1 || name.indexOf('surface-background') !== -1 || /-(?:ext|ws|fc|fs|hr|bw)-(?:canvas|shell|card|elevated)$/.test(name);
             var dl = Math.abs(tokenL - surfaceL);
             var pill = rootDoc.createElement('span');
             pill.className = 'inspector-dl-pill';

@@ -1,0 +1,55 @@
+<!--
+  Nocturne Museum: Sandbox Scope & Closed Shell Command Gate (CAP-17, CAP-04)
+  Workspace containment boundary and allowShell: false default toggle paired with
+  closed node/npm/git allowlist, banned flag checks, and interactive 4-probe evaluator.
+-->
+<section class="vi-hr-scope" aria-labelledby="sandbox-policy-title">
+  <div class="vi-hr-card vi-hr-card--wide" data-vi-sandbox-policy>
+    <div class="vi-hr-head">
+      <div>
+        <h2 id="sandbox-policy-title" class="vi-hr-title">Sandbox scope and shell command gate</h2>
+        <p class="vi-hr-meta">Immutable per-attempt roots (no silent widening)</p>
+      </div>
+      <button type="button" role="switch" aria-checked="false" data-sandbox-shell-toggle class="vi-hr-switch h-action-min-default">
+        <span class="vi-hr-switch-track" aria-hidden="true"><span class="vi-hr-switch-thumb"></span></span>
+        <span data-sandbox-shell-label>allowShell: false</span>
+      </button>
+    </div>
+
+    <dl class="vi-hr-ledger" aria-label="Sandbox containment policy">
+      <div class="vi-hr-ledger-row">
+        <dt>Declared roots</dt>
+        <dd>primary (read-write), docs (read)</dd>
+      </div>
+      <div class="vi-hr-ledger-row">
+        <dt>Shell allowlist</dt>
+        <dd>node, npm, git (sh, bash, cmd, powershell refused)</dd>
+      </div>
+      <div class="vi-hr-ledger-row">
+        <dt>Banned eval and git flags</dt>
+        <dd>node -e/--eval/-p/-r/--import, npm exec/x/--prefix, git -C/--git-dir/--work-tree/-c</dd>
+      </div>
+    </dl>
+
+    <div>
+      <h3 class="vi-hr-section-title">Containment probes</h3>
+      <div class="vi-hr-tabs" role="tablist" aria-label="Sandbox probe scenarios">
+        <button type="button" role="tab" aria-selected="true" tabindex="0" data-sandbox-probe="read-workspace" class="vi-hr-tab h-action-min-default">Read workspace path</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-sandbox-probe="escape-parent" class="vi-hr-tab h-action-min-default">Escape via ../</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-sandbox-probe="git-status" class="vi-hr-tab h-action-min-default">Run git status</button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" data-sandbox-probe="git-push-force" class="vi-hr-tab h-action-min-default">Run git push --force</button>
+      </div>
+    </div>
+
+    <div class="vi-hr-notice vi-hr-notice--ok" data-sandbox-verdict-banner role="status" aria-live="polite">
+      <div class="vi-hr-row-head">
+        <span class="vi-hr-status">
+          <span aria-hidden="true" class="vi-hr-dot vi-hr-dot--ok" data-sandbox-dot></span>
+          <span class="vi-hr-mono" data-sandbox-verdict>Allow</span>
+        </span>
+        <span class="vi-hr-tag" data-sandbox-target>workspace.file.read -> primary/src/index.mjs</span>
+      </div>
+      <p class="vi-hr-copy" data-sandbox-reason>Path normalizes inside declared root primary (read-write); no symlink escape.</p>
+    </div>
+  </div>
+</section>

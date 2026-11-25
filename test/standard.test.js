@@ -387,19 +387,19 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
     'design-studio',
   ]);
   assert.deepEqual(modularComponents.claimLabels, ['implemented', 'specified', 'planned', 'observed']);
-  assert.deepEqual(modularComponents.publicProperNouns, ['seed', 'bloom', 'videsign', 'vitools']);
+  assert.deepEqual(modularComponents.publicProperNouns, ['seed', 'capillary', 'myosotis', 'aestivation', 'drosera', 'bloom', 'trellis', 'docs', 'videsign']);
   assert.deepEqual(modularComponents.planes, ['surfaces', 'harness', 'providers', 'authority stores']);
   assert.deepEqual(modularComponents.runStates, ['draft', 'ready', 'running', 'waiting_for_owner', 'settling', 'complete', 'stopping', 'stopped', 'failed']);
   assert.deepEqual(modularComponents.toolEffects, ['read', 'write', 'destructive', 'credential']);
-  assert.equal(modularComponents.catalog.length, 121);
+  assert.equal(modularComponents.catalog.length, 129);
   assert.deepEqual(modularComponents.catalog, COMPONENT_CATALOG);
   const expectedIds = [
-    'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips', 'question-bar', 'context-attachment-tray', 'session-checkpoint-card', 'voice-capture-bar',
+    'conversation-surface', 'chat-dock', 'group-conversation', 'speaker-marker', 'receipt-ledger-row', 'turn-state-chip', 'starter-chips', 'question-bar', 'context-attachment-tray', 'session-checkpoint-card', 'voice-capture-bar', 'session-setup-composer',
     'owner-approval-gate', 'tool-call-trace-card', 'shared-desktop-catalog', 'artifact-lineage-reader', 'agent-roster-card', 'team-memory-notes', 'cross-team-handoff', 'usage-budget-meter', 'layout-agent-workspace',
     'settings-quick-menu', 'settings-surface', 'layout-settings',
     'skills-library-surface', 'agents-library-surface', 'projects-library-surface',
     'persona-console', 'layout-dashboard', 'layout-graph',
-    'telemetry-chart-card', 'reasoning-trace-block', 'inline-citation-popover', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel', 'model-profile-card', 'trace-replay-panel', 'eval-harness-report',
+    'telemetry-chart-card', 'reasoning-trace-block', 'inline-citation-popover', 'input-request-card', 'run-plan-checklist', 'notification-inbox-panel', 'model-profile-card', 'trace-replay-panel', 'eval-harness-report', 'symbol-outline-token-map', 'seat-fanout-orchestrator', 'research-flow-tracker',
     'claim-maturity-badge', 'run-lifecycle-strip', 'tool-registry-row', 'browser-check-runner',
     'public-repo-card', 'ecosystem-plane-map', 'comparison-matrix', 'site-header-island', 'mobile-navigation-sheet', 'site-footer', 'hero-billboard', 'bento-feature-grid', 'filterable-catalog-grid', 'client-install-switcher', 'persona-companion-stage', 'evidence-exhibit-figure',
     'design-studio-canvas', 'critique-thread-panel', 'viewport-frame-set', 'brief-contract-card', 'guardrail-receipt-panel', 'layout-public-site', 'article-toc-and-meta',
@@ -412,6 +412,7 @@ test('standard carries the ADR-021 modular component catalog and every fragment 
     'instrument', 'statement-proof-row',
     'credential-activity-ledger', 'policy-rule-matrix', 'provider-model-selector', 'locked-panel',
     'context-packet-inspector', 'memory-consent-epoch', 'assembly-gate-card', 'hook-chain-inspector', 'trellis-probe-matrix',
+    'schema-validation-repair', 'sandbox-scope-policy', 'owner-decision-editor', 'step-graph-checkpoint',
   ];
   assert.deepEqual(modularComponents.catalog.map((c) => c.id), expectedIds);
   for (const entry of modularComponents.catalog) {
@@ -586,6 +587,14 @@ test('standard carries ADR-024 base UI, markdown, graphic maps and chibi rules a
     'preview/eval-harness-report.html',
     'preview/capability-ledger-panel.html',
     'preview/family-stack-diagram.html',
+    'preview/schema-validation-repair.html',
+    'preview/sandbox-scope-policy.html',
+    'preview/owner-decision-editor.html',
+    'preview/step-graph-checkpoint.html',
+    'preview/session-setup-composer.html',
+    'preview/symbol-outline-token-map.html',
+    'preview/seat-fanout-orchestrator.html',
+    'preview/research-flow-tracker.html',
   ]) {
     assert.ok(prose.includes(phrase), `DESIGN.md missing: ${phrase}`);
   }
