@@ -1,3 +1,5 @@
+<!-- Managed file. Propose changes by pull request; they are carried into the shared templates. hash: 830b40f7c2504203 -->
+
 # Engineering Governance Layer
 
 This file governs the engineering, operations, and deployment layer for the `videsign` repository
