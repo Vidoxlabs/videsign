@@ -13,6 +13,9 @@
 *.mov
 *.webp
 node_modules/
+# A symlinked node_modules is not a directory to git, so the pattern above
+# misses it. Ignore the bare name too, so a local symlink is never committed.
+node_modules
 .DS_Store
 
 # Generated token artifacts (run `npm run tokens` to regenerate)
