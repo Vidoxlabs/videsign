@@ -1,0 +1,1887 @@
+{
+ "schema": "vidoxlabs.chibi-reference-index/1",
+ "canon_version": "v1",
+ "note": "Reference derivatives kept in step with the local masters in the videsign assets workspace. Generation sidecars stay local; prompt text and external file identifiers are deliberately not reproduced here.",
+ "review_status_summary": "hold",
+ "entries": [
+  {
+   "asset_id": "violet/chibi/alert/v005",
+   "file": "violet_chibi_alert_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "alert",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "7a1edba0d85627ea1886de2e610e052ae939ca55910e64a7fc337fffee9055c1",
+   "bytes": 532953,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_alert_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.63,
+    "underlight": 4.83,
+    "eyes": 4.44,
+    "trim": 2.23,
+    "tail": 0.68,
+    "shirt": 2.58,
+    "blazer": 5.91
+   }
+  },
+  {
+   "asset_id": "violet/chibi/happy/v005",
+   "file": "violet_chibi_happy_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "happy",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "12786eb9e7f3b1de9c70f5952fe387453fec8761ee7e34fd689b262c26abe120",
+   "bytes": 513651,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_happy_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 5.48,
+    "underlight": 1.69,
+    "eyes": 5.03,
+    "trim": 1.74,
+    "tail": 0.93,
+    "shirt": 2.05,
+    "blazer": 8.21
+   }
+  },
+  {
+   "asset_id": "violet/chibi/neutral/v005",
+   "file": "violet_chibi_neutral_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "neutral",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "48bab1b744ea196e60c61514a22f67f787bf9cacc74e47b0dcc59447ef54fa6a",
+   "bytes": 415744,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_neutral_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 3.44,
+    "underlight": 1.65,
+    "eyes": 4.95,
+    "trim": 0.23,
+    "tail": 1.67,
+    "shirt": 2.08,
+    "blazer": 5.93
+   }
+  },
+  {
+   "asset_id": "violet/chibi/sad/v005",
+   "file": "violet_chibi_sad_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "sad",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "0a6640c2290c25da2a0d047b83833a64195fed13471bb6441cbe1bb8e7051968",
+   "bytes": 421816,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_sad_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 6.63,
+    "underlight": 9.38,
+    "eyes": 5.02,
+    "trim": 1.35,
+    "tail": 1.75,
+    "blazer": 6.33
+   }
+  },
+  {
+   "asset_id": "violet/chibi/smug/v005",
+   "file": "violet_chibi_smug_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "smug",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "b2bdb9e4640c972583b49735301f3172b5a20d690986e57ab9e35c351d0eaea4",
+   "bytes": 677095,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_smug_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.88,
+    "underlight": 7.69,
+    "eyes": 6.29,
+    "trim": 2.91,
+    "tail": 0.31,
+    "shirt": 1.3,
+    "blazer": 5.05
+   }
+  },
+  {
+   "asset_id": "violet/chibi/success/v005",
+   "file": "violet_chibi_success_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "success",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "a204e04d234d4b67fb413411cb6ab8ad82c058cb1ba87fe801389daeb317b3bd",
+   "bytes": 467424,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_success_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.89,
+    "underlight": 2.83,
+    "eyes": 4.94,
+    "trim": 2.77,
+    "tail": 1.8,
+    "shirt": 1.51,
+    "blazer": 5.51
+   }
+  },
+  {
+   "asset_id": "violet/chibi/thinking/v005",
+   "file": "violet_chibi_thinking_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "thinking",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "c61dd426ac185eace76cc0b2e771d3136d715eee217ab6cb8093ab5f13681874",
+   "bytes": 502616,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_thinking_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.25,
+    "underlight": 3.14,
+    "eyes": 6.63,
+    "trim": 1.52,
+    "tail": 0.82,
+    "shirt": 0.96,
+    "blazer": 7.21
+   }
+  },
+  {
+   "asset_id": "violet/chibi/viseme-a/v005",
+   "file": "violet_chibi_viseme-a_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "viseme-a",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "7f8a29f0e28916b5c4e1bd042f10e89202a8fd502c81e1f6326365168f3488a9",
+   "bytes": 521565,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_viseme-a_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.46,
+    "underlight": 6.88,
+    "eyes": 5.17,
+    "trim": 3.77,
+    "tail": 2.72,
+    "shirt": 1.25,
+    "blazer": 7.91
+   }
+  },
+  {
+   "asset_id": "violet/chibi/viseme-e/v005",
+   "file": "violet_chibi_viseme-e_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "viseme-e",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "5b58c58277436a49d107858ef541bdb5f7f1a20560da03fafad90437d2dd329a",
+   "bytes": 514985,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_viseme-e_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.36,
+    "underlight": 2.51,
+    "eyes": 5.3,
+    "trim": 0.26,
+    "tail": 1.2,
+    "shirt": 0.77,
+    "blazer": 4.34
+   }
+  },
+  {
+   "asset_id": "violet/chibi/viseme-i/v005",
+   "file": "violet_chibi_viseme-i_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "viseme-i",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "695a5d8d6059dfaae5c0c2ce2506e9e80334b59c631ae6a4ecdfb6f1373f0fce",
+   "bytes": 445718,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_viseme-i_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.56,
+    "underlight": 1.08,
+    "eyes": 4.88,
+    "trim": 1.6,
+    "tail": 0.91,
+    "shirt": 1.35,
+    "blazer": 7.34
+   }
+  },
+  {
+   "asset_id": "violet/chibi/viseme-o/v005",
+   "file": "violet_chibi_viseme-o_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "viseme-o",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "70a60139b0e9a57d628393ecbdcc8f64bf96cc0a106d335a142fe9fde4340b4d",
+   "bytes": 508094,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_viseme-o_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 5.7,
+    "underlight": 2.2,
+    "eyes": 4.4,
+    "trim": 0.94,
+    "tail": 0.76,
+    "shirt": 1.08,
+    "blazer": 9.27
+   }
+  },
+  {
+   "asset_id": "violet/chibi/viseme-u/v005",
+   "file": "violet_chibi_viseme-u_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "viseme-u",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "1dd25ef4d526a248fdc38817c8725179be3ec575054eee4bd5fbd9917ae1f9b4",
+   "bytes": 529712,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_viseme-u_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 6.03,
+    "underlight": 4.54,
+    "eyes": 5.32,
+    "trim": 4.43,
+    "tail": 1.23,
+    "shirt": 1.33,
+    "blazer": 7.64
+   }
+  },
+  {
+   "asset_id": "violet/chibi/wink/v005",
+   "file": "violet_chibi_wink_v005.png",
+   "vi": "violet",
+   "type": "chibi",
+   "slot": "wink",
+   "version": "v005",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "df4279a5abb0ab300ad311c78d6a34d8fb7681e41430db310d7c6f9f01ea4ef8",
+   "bytes": 436857,
+   "review_status": "hold",
+   "supersedes": "violet_chibi_wink_v004.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.64,
+    "underlight": 0.68,
+    "eyes": 5.3,
+    "trim": 2.08,
+    "tail": 1.65,
+    "shirt": 1.98,
+    "blazer": 5.16
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/alert/v003",
+   "file": "wisteria_chibi_alert_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "alert",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "63994acd404cbaecc1b6296f6c58d209345644da21a6265750e6a690b437bdf8",
+   "bytes": 660546,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_alert_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 16.88,
+    "underlight": 11.17,
+    "eyes": 19.03,
+    "trim": 11.24,
+    "tail": 0.38,
+    "shirt": 2.05,
+    "blazer": 4.21
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/happy/v003",
+   "file": "wisteria_chibi_happy_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "happy",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "6f65240ecc9270fd807c1d080f9dbabbf15ecffc94d797b60ec3f9f267ef24f3",
+   "bytes": 560195,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_happy_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 23.93,
+    "underlight": 12.73,
+    "eyes": 11.39,
+    "trim": 0.44,
+    "tail": 0.45,
+    "blazer": 5.62
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/neutral/v003",
+   "file": "wisteria_chibi_neutral_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "neutral",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "a7b7c03fed56a337f83fed5f7689417c491ea7303c7c439899a842082324b940",
+   "bytes": 394167,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_neutral_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 15.48,
+    "underlight": 12.39,
+    "eyes": 11.28,
+    "trim": 0.63,
+    "tail": 1.96,
+    "blazer": 4.2
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/sad/v003",
+   "file": "wisteria_chibi_sad_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "sad",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "959f59b8586b4e6f144d1debdbe3f92b7aaeb8704e4812fc5f926d8ed514b2f8",
+   "bytes": 434594,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_sad_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 23.52,
+    "underlight": 12.68,
+    "eyes": 19.3,
+    "trim": 2.27,
+    "tail": 2.01,
+    "blazer": 6.12
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/smug/v003",
+   "file": "wisteria_chibi_smug_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "smug",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "08ab324fbbfb1bedb4c0b48cb084756d54a2820d6153164980cef16a4b71477a",
+   "bytes": 549656,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_smug_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 19.88,
+    "underlight": 13.25,
+    "eyes": 20.19,
+    "trim": 0.42,
+    "tail": 0.26,
+    "shirt": 14.92,
+    "blazer": 5.78
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/success/v003",
+   "file": "wisteria_chibi_success_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "success",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "ffeea15ee6c0a452b6b122b2e8287b977784cfe25fad65af1e1602a225ce9c6a",
+   "bytes": 620677,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_success_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.39,
+    "underlight": 13.52,
+    "eyes": 21.03,
+    "trim": 4.06,
+    "tail": 0.26,
+    "shirt": 14.91,
+    "blazer": 5.62
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/thinking/v003",
+   "file": "wisteria_chibi_thinking_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "thinking",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "74c8e4a2276a2283e91d664ade8ab19c96a6ec6e48846e40384a7b9bd75f612a",
+   "bytes": 422245,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_thinking_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 25.63,
+    "underlight": 11.69,
+    "eyes": 18.44,
+    "trim": 11.44,
+    "tail": 1.68,
+    "shirt": 14.27,
+    "blazer": 4.92
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/viseme-a/v003",
+   "file": "wisteria_chibi_viseme-a_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "viseme-a",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "26132d9d3f5ff9e8769f527e33212ecec6c4b9b85ac10ba4c42a63790f2430d4",
+   "bytes": 561048,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_viseme-a_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 23.73,
+    "underlight": 12.33,
+    "eyes": 20.18,
+    "trim": 2.37,
+    "tail": 0.73,
+    "shirt": 1.16,
+    "blazer": 5.69
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/viseme-e/v003",
+   "file": "wisteria_chibi_viseme-e_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "viseme-e",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "2a4dc72f755b69249e555245b2873e29e39b59d23b732a3c841a875b1aa17b95",
+   "bytes": 517565,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_viseme-e_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 15.95,
+    "underlight": 13.25,
+    "eyes": 20.47,
+    "trim": 13.16,
+    "tail": 1.3,
+    "shirt": 0.95,
+    "blazer": 5.14
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/viseme-i/v003",
+   "file": "wisteria_chibi_viseme-i_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "viseme-i",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "b422638f3a8377139037d1ebc5f8ac4ee60fb443533f4234a8fae7c304c46922",
+   "bytes": 637129,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_viseme-i_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 19.88,
+    "underlight": 10.49,
+    "eyes": 18.46,
+    "trim": 10.49,
+    "tail": 0.79,
+    "shirt": 1.1,
+    "blazer": 4.52
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/viseme-o/v003",
+   "file": "wisteria_chibi_viseme-o_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "viseme-o",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "6ede2632e00e7f9100b1106b8d259fdecc9cd126dbb603fe9c03083445f61202",
+   "bytes": 482178,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_viseme-o_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 5.44,
+    "underlight": 12.69,
+    "eyes": 12.96,
+    "trim": 0.6,
+    "tail": 1.25,
+    "shirt": 1.1,
+    "blazer": 4.17
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/viseme-u/v003",
+   "file": "wisteria_chibi_viseme-u_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "viseme-u",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "b2d9787e3adb9c87ac9a1ea825e682aa0dac7d9d08edb8817462a85fd8bcb7ac",
+   "bytes": 600400,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_viseme-u_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 25.63,
+    "underlight": 12.35,
+    "eyes": 20.1,
+    "trim": 12.39,
+    "tail": 0.42,
+    "shirt": 1.1,
+    "blazer": 5.92
+   }
+  },
+  {
+   "asset_id": "wisteria/chibi/wink/v003",
+   "file": "wisteria_chibi_wink_v003.png",
+   "vi": "wisteria",
+   "type": "chibi",
+   "slot": "wink",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "842a7c70c5b70dbf0ad2a20bf91c5791a8e0cf438c2fed9b65e28585f4f70c05",
+   "bytes": 576731,
+   "review_status": "hold",
+   "supersedes": "wisteria_chibi_wink_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 21.27,
+    "underlight": 12.93,
+    "eyes": 19.9,
+    "trim": 0.68,
+    "tail": 0.39,
+    "shirt": 1.38,
+    "blazer": 4.51
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/alert/v003",
+   "file": "xylia_chibi_alert_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "alert",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "4530f4a260f3d906e6cf318924682f6f82be3d79dc5d08edf3505aa0b0d10410",
+   "bytes": 505613,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_alert_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 1.65,
+    "underlight": 11.3,
+    "eyes": 11.72,
+    "trim": 2.95,
+    "tail": 1.91,
+    "shirt": 0.99,
+    "blazer": 4.55
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/happy/v003",
+   "file": "xylia_chibi_happy_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "happy",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "87f0cfff2b4184dcb4b8045b04625ad7b1d7d127245dc5224251d61914513773",
+   "bytes": 625275,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_happy_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.06,
+    "underlight": 11.64,
+    "eyes": 8.62,
+    "trim": 6.73,
+    "tail": 7.19,
+    "shirt": 2.05,
+    "blazer": 13.54
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/neutral/v003",
+   "file": "xylia_chibi_neutral_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "neutral",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "3dd3a86b4297138a2919b29184ee69c9c447f79a18837d889842a3b3c79299f7",
+   "bytes": 510905,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_neutral_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.29,
+    "underlight": 14.24,
+    "eyes": 18.5,
+    "trim": 13.02,
+    "tail": 7.03,
+    "shirt": 2.05,
+    "blazer": 5.3
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/sad/v003",
+   "file": "xylia_chibi_sad_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "sad",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "19315812e130995f23a76ca780d5f4e1bea86b1295a8e13848fe0291462ea2a8",
+   "bytes": 464860,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_sad_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 1.65,
+    "underlight": 10.23,
+    "eyes": 12.46,
+    "trim": 4.43,
+    "tail": 4.18,
+    "blazer": 12.72
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/smug/v003",
+   "file": "xylia_chibi_smug_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "smug",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "cec5604284b263991ef8ca9ac93e08c942207474067a2345ef2c8cf8daea0005",
+   "bytes": 506689,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_smug_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 1.6,
+    "underlight": 9.37,
+    "eyes": 9.56,
+    "trim": 8.83,
+    "tail": 7.74,
+    "shirt": 10.67,
+    "blazer": 4.82
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/success/v003",
+   "file": "xylia_chibi_success_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "success",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "b0cf91d4b904b818216f7dc14a00af9ed355f72476240ca517274d48b2dbf3e2",
+   "bytes": 506021,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_success_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 1.56,
+    "underlight": 10.32,
+    "eyes": 10.34,
+    "trim": 12.37,
+    "tail": 2,
+    "shirt": 1.5,
+    "blazer": 6.01
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/thinking/v003",
+   "file": "xylia_chibi_thinking_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "thinking",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "d3aacf11a55c85e887d1c5858b25da7430f5e1c5515b6fa45b0d63dad556f705",
+   "bytes": 505139,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_thinking_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 1.99,
+    "underlight": 13.3,
+    "eyes": 13.38,
+    "trim": 3.17,
+    "tail": 0.59,
+    "shirt": 1.16,
+    "blazer": 3.41
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/viseme-a/v003",
+   "file": "xylia_chibi_viseme-a_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "viseme-a",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "6016c3361cff94594dea26f82a67e7951dfeeb0ce6757e3a1d653aa6609e89bc",
+   "bytes": 620936,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_viseme-a_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.24,
+    "underlight": 11.41,
+    "eyes": 28.05,
+    "trim": 8.35,
+    "tail": 7.78,
+    "shirt": 1.25,
+    "blazer": 7.52
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/viseme-e/v003",
+   "file": "xylia_chibi_viseme-e_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "viseme-e",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "52fe38d698db82d76de48bf8c19444155b13a96ccefedc511efab1a658d4581b",
+   "bytes": 512964,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_viseme-e_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 1.09,
+    "underlight": 12.97,
+    "eyes": 16.06,
+    "trim": 6.61,
+    "tail": 6.51,
+    "shirt": 1.25,
+    "blazer": 2.94
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/viseme-i/v003",
+   "file": "xylia_chibi_viseme-i_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "viseme-i",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "888c4a35a03aa637033570a6fa00544b85f12db1aa9c1a0f48383908be345980",
+   "bytes": 454006,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_viseme-i_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.35,
+    "underlight": 13.58,
+    "eyes": 14.01,
+    "trim": 13.78,
+    "tail": 7.61,
+    "shirt": 2.05,
+    "blazer": 5.58
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/viseme-o/v003",
+   "file": "xylia_chibi_viseme-o_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "viseme-o",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "c06986a707cfd02b41e17ddb8693386a7d9b06734773ef64dbf254b94a677541",
+   "bytes": 521500,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_viseme-o_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.24,
+    "underlight": 12.04,
+    "eyes": 10.62,
+    "trim": 7.44,
+    "tail": 7.49,
+    "shirt": 1.56,
+    "blazer": 4.6
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/viseme-u/v003",
+   "file": "xylia_chibi_viseme-u_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "viseme-u",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "cd6d32b7e424bf8671f2460fedc7b558ace7a9783a5adaa8822c6783d03f9914",
+   "bytes": 585674,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_viseme-u_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 1.65,
+    "underlight": 9.96,
+    "eyes": 11.98,
+    "trim": 10.47,
+    "tail": 1.34,
+    "shirt": 0.85,
+    "blazer": 11.2
+   }
+  },
+  {
+   "asset_id": "xylia/chibi/wink/v003",
+   "file": "xylia_chibi_wink_v003.png",
+   "vi": "xylia",
+   "type": "chibi",
+   "slot": "wink",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "d1f566c48f3b03d3667f4b56a81dffb5ed4c2653b2df6c83f064604153dc5edf",
+   "bytes": 460754,
+   "review_status": "hold",
+   "supersedes": "xylia_chibi_wink_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.1,
+    "underlight": 12.21,
+    "eyes": 17.14,
+    "trim": 4.54,
+    "tail": 4.62,
+    "shirt": 2.05,
+    "blazer": 12.25
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/alert/v003",
+   "file": "yarrow_chibi_alert_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "alert",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "1eec5ffde682727fa7767a28784d875c6dfd2332f8e1055c78921cd66e97cc86",
+   "bytes": 491257,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_alert_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 1.03,
+    "underlight": 7.31,
+    "eyes": 4.44,
+    "trim": 12.05,
+    "tail": 1.83,
+    "shirt": 0.68,
+    "blazer": 4.25
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/happy/v003",
+   "file": "yarrow_chibi_happy_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "happy",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "1d685575b1b3829e833048473b140168d42f8cf114181933e2e18426377d1075",
+   "bytes": 616189,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_happy_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.72,
+    "underlight": 3.05,
+    "eyes": 7.5,
+    "trim": 0.31,
+    "tail": 0.57,
+    "shirt": 1.1,
+    "blazer": 22.93
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/neutral/v003",
+   "file": "yarrow_chibi_neutral_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "neutral",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "97e948490ef7051ca954b8c1d00de3584be3284dc9375a7a6692a8777e68fd87",
+   "bytes": 595179,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_neutral_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.36,
+    "underlight": 2.08,
+    "eyes": 13.2,
+    "trim": 2.28,
+    "tail": 0.2,
+    "shirt": 1.45,
+    "blazer": 6.11
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/sad/v003",
+   "file": "yarrow_chibi_sad_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "sad",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "1359bf32b5cc8b0a22cb833128c47dc38b6ff6c63188adc15bb551162b798127",
+   "bytes": 537456,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_sad_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.16,
+    "underlight": 0.78,
+    "eyes": 4.97,
+    "trim": 2.21,
+    "tail": 0.33,
+    "blazer": 6.66
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/smug/v003",
+   "file": "yarrow_chibi_smug_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "smug",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "1e052f5fe39670204caabccabd06e8898067499bfbe4c946a8017b1aa71cb1ae",
+   "bytes": 561120,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_smug_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 13.43,
+    "underlight": 13.87,
+    "eyes": 13.01,
+    "trim": 12.4,
+    "tail": 0.28,
+    "shirt": 0.65,
+    "blazer": 5.61
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/success/v003",
+   "file": "yarrow_chibi_success_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "success",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "e580a83d248f19a5732975d499c41422f205d50eb9aae93d559ca4e3f529758e",
+   "bytes": 542861,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_success_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.47,
+    "underlight": 2.09,
+    "eyes": 14.06,
+    "trim": 2.23,
+    "tail": 0.88,
+    "shirt": 3.02,
+    "blazer": 4.76
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/thinking/v003",
+   "file": "yarrow_chibi_thinking_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "thinking",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "bb2a3b0bbda8bfa51ce96646d7a7d690f35ce6e1308a48f81c7f01b734e45b19",
+   "bytes": 536509,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_thinking_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 3.5,
+    "underlight": 2.21,
+    "eyes": 13.44,
+    "trim": 4.19,
+    "tail": 0.47,
+    "shirt": 1.72,
+    "blazer": 5.84
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/viseme-a/v003",
+   "file": "yarrow_chibi_viseme-a_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "viseme-a",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "bb38d038aa53a8486f809882cc42c948dc9480e1e0c376bbb05e6a92d674cca6",
+   "bytes": 691978,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_viseme-a_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 1.92,
+    "underlight": 33.44,
+    "eyes": 6.59,
+    "trim": 0.33,
+    "tail": 0.33,
+    "shirt": 0.85,
+    "blazer": 4.07
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/viseme-e/v003",
+   "file": "yarrow_chibi_viseme-e_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "viseme-e",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "9710d055dd31b56f5f2bd20d5895939b903759da7264b1fb670374e226a46945",
+   "bytes": 573076,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_viseme-e_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 3.31,
+    "underlight": 2.54,
+    "eyes": 10.94,
+    "trim": 12.58,
+    "tail": 1.04,
+    "shirt": 0.92,
+    "blazer": 5.76
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/viseme-i/v003",
+   "file": "yarrow_chibi_viseme-i_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "viseme-i",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "b856d39c0f93b19e337eefc899b22f3f127cb56a1ac699363a45a531ab65657a",
+   "bytes": 589917,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_viseme-i_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 11.33,
+    "underlight": 2.92,
+    "eyes": 11.37,
+    "trim": 0.37,
+    "tail": 1.31,
+    "shirt": 1.5,
+    "blazer": 5.68
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/viseme-o/v003",
+   "file": "yarrow_chibi_viseme-o_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "viseme-o",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "84b605f4cfec72f40dda5298c8e4875c3db0cc8619e24e4d185c2d3944bd49a5",
+   "bytes": 626359,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_viseme-o_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 13.03,
+    "underlight": 14.56,
+    "eyes": 12.73,
+    "trim": 2.2,
+    "tail": 0.33,
+    "shirt": 1.1,
+    "blazer": 4.24
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/viseme-u/v003",
+   "file": "yarrow_chibi_viseme-u_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "viseme-u",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "d5955b08783757fa53afd1b3b1e6302d5dfb6f6ae549f640f0b3b8c271b188c4",
+   "bytes": 597447,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_viseme-u_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 2.55,
+    "underlight": 2.6,
+    "eyes": 12.5,
+    "trim": 2.2,
+    "tail": 0.28,
+    "shirt": 2.42,
+    "blazer": 4.12
+   }
+  },
+  {
+   "asset_id": "yarrow/chibi/wink/v003",
+   "file": "yarrow_chibi_wink_v003.png",
+   "vi": "yarrow",
+   "type": "chibi",
+   "slot": "wink",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "c82f3124a4f0e496cc9195a68c58a76fb3f9c3039047efc92e75b8abaa8306b7",
+   "bytes": 619016,
+   "review_status": "hold",
+   "supersedes": "yarrow_chibi_wink_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 10.76,
+    "underlight": 2.4,
+    "eyes": 12.17,
+    "trim": 2.15,
+    "tail": 0.2,
+    "shirt": 1.56,
+    "blazer": 5.69
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/alert/v003",
+   "file": "zinnia_chibi_alert_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "alert",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "b7eba6031c38db936c96d66bd4f2fd061855b04fe002b42d1e5429850a586122",
+   "bytes": 508516,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_alert_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.55,
+    "underlight": 21.26,
+    "eyes": 4.35,
+    "trim": 6.54,
+    "tail": 0.64,
+    "shirt": 14.6,
+    "blazer": 23.43
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/happy/v003",
+   "file": "zinnia_chibi_happy_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "happy",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "b27ec529a9568e0fd93d2a1de7dbe103fb7a3136396eb7953f6d4e47427a270a",
+   "bytes": 549074,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_happy_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 6.91,
+    "underlight": 3.35,
+    "eyes": 2.06,
+    "trim": 3.31,
+    "tail": 0.41,
+    "shirt": 1.5,
+    "blazer": 5.87
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/neutral/v003",
+   "file": "zinnia_chibi_neutral_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "neutral",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "743e2c5c0b8f5e01fbdeee0270c128dcc81d8be54cc9d2d02722c47c87d241e7",
+   "bytes": 597991,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_neutral_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 6.31,
+    "underlight": 3.58,
+    "eyes": 14.22,
+    "trim": 2.23,
+    "tail": 0.66,
+    "shirt": 1.58,
+    "blazer": 5.16
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/sad/v003",
+   "file": "zinnia_chibi_sad_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "sad",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "3466a944d0decc279a43aa3786eee3035239dbc95ba0314e384cf53911058750",
+   "bytes": 600846,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_sad_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 5.21,
+    "underlight": 5.07,
+    "eyes": 3.32,
+    "trim": 3.15,
+    "tail": 0.29,
+    "shirt": 1,
+    "blazer": 18.13
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/smug/v003",
+   "file": "zinnia_chibi_smug_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "smug",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "aa1d78d6040d935c87a8d3a39addaa413d9a04f246839f350ca9e44b98492e9a",
+   "bytes": 549916,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_smug_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 5.59,
+    "underlight": 14.6,
+    "eyes": 2.89,
+    "trim": 6.04,
+    "tail": 0.64,
+    "shirt": 14.47,
+    "blazer": 4.23
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/success/v003",
+   "file": "zinnia_chibi_success_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "success",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "284818a200a7817f5cc3d1ad9d91d7d8efa735f3786f147308df20716da4c6ab",
+   "bytes": 515868,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_success_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.62,
+    "underlight": 4.72,
+    "eyes": 19.46,
+    "trim": 4.07,
+    "tail": 0.33,
+    "shirt": 15.68,
+    "blazer": 4.55
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/thinking/v003",
+   "file": "zinnia_chibi_thinking_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "thinking",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "4bbcf00c6f868dd70a5d23d3e2ac73368232cb79e7dc3aa712414b8ac06dc293",
+   "bytes": 446950,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_thinking_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 6.79,
+    "underlight": 1.67,
+    "eyes": 1.93,
+    "trim": 0.63,
+    "tail": 1.03,
+    "shirt": 1.56,
+    "blazer": 2.49
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/viseme-a/v003",
+   "file": "zinnia_chibi_viseme-a_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "viseme-a",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "2766a1f5d0155191e5943c195193ca35c36883f0cfa2985bd2216dc1a3ff2291",
+   "bytes": 571383,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_viseme-a_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 4.96,
+    "underlight": 4.8,
+    "eyes": 5.35,
+    "trim": 2.92,
+    "tail": 0.61,
+    "shirt": 2.05,
+    "blazer": 6.01
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/viseme-e/v003",
+   "file": "zinnia_chibi_viseme-e_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "viseme-e",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "15e4975171bb960a02ea4f46d11819588b2e5b18b96dc0e778576f9ab48d28d9",
+   "bytes": 573976,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_viseme-e_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 6.39,
+    "underlight": 0.22,
+    "eyes": 3.62,
+    "trim": 4.29,
+    "tail": 0.38,
+    "shirt": 1.56,
+    "blazer": 4.47
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/viseme-i/v003",
+   "file": "zinnia_chibi_viseme-i_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "viseme-i",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "90f7844d39829409ac3eb79298a258b82577113f6dbd6eb0ba641c332d5ff284",
+   "bytes": 608689,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_viseme-i_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 6.31,
+    "underlight": 26.66,
+    "eyes": 12.28,
+    "trim": 4.23,
+    "tail": 0.43,
+    "shirt": 1.11,
+    "blazer": 5.69
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/viseme-o/v003",
+   "file": "zinnia_chibi_viseme-o_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "viseme-o",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "87795b5492701c8376dbe39c7a4105b9729b0e5fb05094ee13653683c323dca3",
+   "bytes": 527813,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_viseme-o_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 7.23,
+    "underlight": 3.87,
+    "eyes": 14.39,
+    "trim": 0.8,
+    "tail": 0.87,
+    "shirt": 2.05,
+    "blazer": 4.34
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/viseme-u/v003",
+   "file": "zinnia_chibi_viseme-u_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "viseme-u",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "d7bd43d0b2c35ecf83bbceb6f6e6fb4417a2151ccbef58a63a7f2b0c3c09a185",
+   "bytes": 430041,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_viseme-u_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 5.79,
+    "underlight": 6.74,
+    "eyes": 1.88,
+    "trim": 5.14,
+    "tail": 3.11,
+    "shirt": 1.16,
+    "blazer": 16.4
+   }
+  },
+  {
+   "asset_id": "zinnia/chibi/wink/v003",
+   "file": "zinnia_chibi_wink_v003.png",
+   "vi": "zinnia",
+   "type": "chibi",
+   "slot": "wink",
+   "version": "v003",
+   "width": 926,
+   "height": 1596,
+   "mode": "RGBA",
+   "sha256": "62bda2cf3dffb898db429f552e201b25841ac9d6cc72c9b1a1dc6cdee9596f29",
+   "bytes": 520437,
+   "review_status": "hold",
+   "supersedes": "zinnia_chibi_wink_v002.png",
+   "source_run": "run_20261103-snap",
+   "canon_check": {
+    "verdict": "FAIL",
+    "checks": {}
+   },
+   "sampled_delta_e": {
+    "hair": 5.33,
+    "underlight": 13.56,
+    "eyes": 1.87,
+    "trim": 0.44,
+    "tail": 0.67,
+    "shirt": 1.15,
+    "blazer": 24.89
+   }
+  }
+ ]
+}

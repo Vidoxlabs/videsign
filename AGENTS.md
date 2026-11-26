@@ -59,8 +59,10 @@ design system — the shared visual language for all Vidoxlabs products and appl
   `scaffold_page` (assemble multi-slot Nocturne page scaffolds with required stylesheets and framework notes).
 - **assets/**: Local-only design images (gitignored). See `assets/README.md` for the
   naming convention. Raster binaries are not committed. Text-only SVG under `brand/`
-  is a proposed exception (ADR-011, awaiting ratification).
-- **canon/vwxyz/**: Persona character canon. Never invent character colors. Images will be served from the asset service (planned, ADR-010).
+  is a proposed exception (ADR-011, awaiting ratification). Two folders carry committed
+  rasters, each by its own decision: `brand/repo-banners/` (ADR-026) and
+  `canon/vwxyz/chibi/` (ADR-028, reference candidates only).
+- **canon/vwxyz/**: Persona character canon. Never invent character colors. Published images will be served from the asset service (planned, ADR-010); `canon/vwxyz/chibi/` holds committed chibi reference candidates (ADR-028).
 - **dist/**: Generated artifacts (gitignored). Produced by `npm run tokens`. Consuming
   repos import `dist/tailwind.config.js` together with `dist/tokens.css`. Colour
   utilities are `color-mix()` of `var(--vi-colors-<key>, <hex>)`: `tokens.css`

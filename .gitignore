@@ -1,6 +1,9 @@
 # Assets and Media
 *.png
 !brand/repo-banners/**/*.png
+# Chibi reference set (ADR-028): committed at the canon chibi canvas so agents
+# can read a correct target. Masters and generation sidecars stay local.
+!canon/vwxyz/chibi/**/*.png
 *.jpg
 *.jpeg
 *.gif
@@ -10,6 +13,9 @@
 *.mov
 *.webp
 node_modules/
+# A symlinked node_modules is not a directory to git, so the pattern above
+# misses it. Ignore the bare name too, so a local symlink is never committed.
+node_modules
 .DS_Store
 
 # Generated token artifacts (run `npm run tokens` to regenerate)

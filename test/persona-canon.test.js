@@ -577,13 +577,27 @@ test('every canon id in the palette, schema examples and docs is a vocabulary sl
 
 test('canon files pass the public-safety scan', () => {
   const files = walk(CANON).map((file) => path.relative(CANON, file)).sort();
-  assert.deepEqual(files, [
+  const chibiDir = path.join('vwxyz', 'chibi');
+  const chibi = files.filter((file) => file.startsWith(chibiDir + path.sep));
+  assert.deepEqual(files.filter((file) => !chibi.includes(file)), [
     path.join('vwxyz', 'README.md'),
     path.join('vwxyz', 'asset-manifest.schema.json'),
     path.join('vwxyz', 'palette.json'),
     path.join('vwxyz', 'reviewer-checklist.md'),
     path.join('vwxyz', 'vocabulary.json'),
   ]);
+
+  // ADR-028: the chibi reference folder holds one PNG per INDEX entry, plus the
+  // index and its README. Checking parity here catches a file added without an
+  // index entry, or an entry whose file was removed.
+  const index = readJson(path.join('chibi', 'INDEX.json'));
+  assert.equal(index.entries.length, 65);
+  const expectedChibi = [
+    path.join(chibiDir, 'INDEX.json'),
+    path.join(chibiDir, 'README.md'),
+    ...index.entries.map((entry) => path.join(chibiDir, entry.file)),
+  ].sort();
+  assert.deepEqual(chibi, expectedChibi);
 
   const result = scanPaths(['canon'], ROOT);
   assert.deepEqual(result.hits, []);

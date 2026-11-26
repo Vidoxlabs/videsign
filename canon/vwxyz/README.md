@@ -181,7 +181,7 @@ Character color and UI accent color are different layers, and as of **2026-10-27
 
 `palette.json` is the source for character art and stays byte-authoritative on hexes; `DESIGN.md` persona accent tokens drive UI dots, rings and badges and are asserted equal per test. Do not paint character art with any retired UI teal or rose variant (`#2DD4BF`/`#F43F5E` remain status/dataviz-style artifacts only; the status tokens keep those exact hexes).
 
-Persona images follow ADR-002. They are never committed to this repository. No binary masters, sheets or boards belong here. The public path will be `{ASSET_BASE}/vi/{vi}/{type}/{file}` (planned, ADR-010). Consumers resolve `{ASSET_BASE}` in their own build.
+Persona images follow ADR-002, with the single exception recorded in ADR-028. Masters, sheets and boards are not committed. The one folder that holds persona PNGs is `chibi/`, and it holds reference candidates only, never published assets; `chibi/INDEX.json` records each file's version, digest and review status. Everything else is served from the asset service. The public path will be `{ASSET_BASE}/vi/{vi}/{type}/{file}` (planned, ADR-010). Consumers resolve `{ASSET_BASE}` in their own build.
 
 Every persona image needs alt text that names the persona and the expression or pose, for example `alt="Violet, confused"`.
 
