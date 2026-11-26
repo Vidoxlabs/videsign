@@ -121,7 +121,7 @@ test('accepted status is limited to ratified items and Adopted/Proposed statuses
     if (line.startsWith('**Status**:') && current) statuses.push({ id: current, status: line.slice('**Status**:'.length).trim() });
   }
   const adoptedIds = ['ADR-013', 'ADR-016', 'ADR-017', 'ADR-018', 'ADR-019'];
-  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022', 'ADR-023', 'ADR-024', 'ADR-025'];
+  const proposedIds = ['ADR-006', 'ADR-007', 'ADR-008', 'ADR-009', 'ADR-014', 'ADR-015', 'ADR-020', 'ADR-021', 'ADR-022', 'ADR-023', 'ADR-024', 'ADR-025', 'ADR-028'];
   const byId = new Map(statuses.map((adr) => [adr.id, adr.status]));
   for (const id of ['ADR-010', 'ADR-011', 'ADR-012', 'ADR-026', ...adoptedIds, ...proposedIds]) {
     assert.ok(byId.has(id), `missing **Status**: line for ${id}`);

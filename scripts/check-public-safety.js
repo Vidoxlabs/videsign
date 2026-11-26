@@ -186,6 +186,11 @@ function isUnderRepoBanners(display) {
   return normalized === 'brand/repo-banners' || normalized.startsWith('brand/repo-banners/');
 }
 
+function isUnderChibiReference(display) {
+  const normalized = String(display).split(path.sep).join('/');
+  return normalized === 'canon/vwxyz/chibi' || normalized.startsWith('canon/vwxyz/chibi/');
+}
+
 function isExactSha256Hex(token) {
   return /^[0-9a-f]{64}$/.test(token);
 }
@@ -343,6 +348,9 @@ function scanPaths(targets, root = process.cwd()) {
         // bytes. Still require a non-empty file. Text files in the same
         // folder keep the ordinary scan.
         if (isUnderRepoBanners(display) && file.endsWith('.png')) continue;
+        // ADR-028: the chibi reference PNGs are binary art for the same
+        // reason. INDEX.json and the folder README are still scanned.
+        if (isUnderChibiReference(display) && file.endsWith('.png')) continue;
         text = fs.readFileSync(file, 'utf8');
       } catch (err) {
         hits.push(`unreadable ${display}`);

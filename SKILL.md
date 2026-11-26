@@ -466,3 +466,19 @@ Light glass uses the canonical solid light surface and rim, with blur disabled. 
 3. Nothing else under `brand/` changes. The eleven brand masters stay pinned to `brand/MANIFEST.json` and the existing allow-list. Rasters outside `brand/repo-banners/` stay banned and gitignored.
 
 **Consequences**: Family README and social exports live in `brand/repo-banners/` with their generator, typeface license, spec, and digest list. The brand SVG checker and the eleven-file master pin skip that folder. Public-safety scanning allowlists exact 64-hex digests there only.
+
+## ADR-028: Chibi reference set under canon/vwxyz/chibi/
+
+**Status**: Proposed (awaiting owner ratification). Amends ADR-002, for this folder only. Numbering note: ADR-027 is reserved by unpublished work, so this decision takes the next free number.
+
+**Context**: ADR-002 bans rasters, and ADR-010 item 3 says persona images are never committed, so every candidate chibi lived only in a gitignored local workspace. An agent asked to draw a new expression, pose or runtime state therefore had no committed target to look at and no way to check what a correct one looks like. The five personas' first-wave chibi sets were also hard to share outside the workspace because the files were reachable only from one machine. ADR-026 already set the pattern for a narrow, folder-scoped raster exception.
+
+**Decision**:
+
+1. `canon/vwxyz/chibi/` is a narrow exception to the ADR-002 raster ban and to ADR-010 item 3, for persona chibi reference PNGs only. Files are held at the canon chibi canvas (`926x1596`, `RGBA`) and named per canon (`{vi}_chibi_{slot}_v{NNN}.png`), so a committed file can be compared with a fresh candidate directly and no second naming scheme is introduced.
+2. Only the current candidate of each slot is committed: one file per persona per slot. Burned waves and superseded versions stay out of the repository.
+3. Committed files are reference candidates, never published assets. `INDEX.json` records the asset id, slot, version, SHA-256, sampled colour deltas and the recorded check verdict. Generation sidecars stay beside the local masters, because canon section 9 does not publish prompt text and the sidecars also carry external file identifiers.
+4. Status is committed honestly. The first wave fails C8 on all 65 files. Committing the set records that result; it is not a promotion and it does not move any file off `hold`.
+5. Rasters outside `canon/vwxyz/chibi/` and `brand/repo-banners/` stay banned and gitignored. This decision does not license rasters anywhere else, and it does not change the asset service, the canon palette or any published path.
+
+**Consequences**: An agent can read a correct target before drawing, and `node scripts/canon-tool.js check canon/vwxyz/chibi/*.png` gives the same reproducible verdict to anyone. The repository grows by about 35 MB, so a future wave should weigh a downscale or an object store before adding more. `canon/vwxyz/README.md`, `AGENTS.md` and `assets/README.md` are updated so they no longer claim persona images are never committed. Any change of a file's review status still needs ViCanon review and owner approval, and re-running the check on the new files.

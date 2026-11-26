@@ -1,6 +1,9 @@
 # Assets and Media
 *.png
 !brand/repo-banners/**/*.png
+# Chibi reference set (ADR-028): committed at the canon chibi canvas so agents
+# can read a correct target. Masters and generation sidecars stay local.
+!canon/vwxyz/chibi/**/*.png
 *.jpg
 *.jpeg
 *.gif

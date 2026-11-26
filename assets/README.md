@@ -3,6 +3,11 @@
 Local working images for the Nocturne Museum design system. These files are
 gitignored — they are never committed to the repository.
 
+Two things are deliberately outside this folder and are committed: the brand
+banners under `brand/repo-banners/` (ADR-026) and the chibi reference candidates
+under `canon/vwxyz/chibi/` (ADR-028). See `canon/vwxyz/chibi/README.md` for what
+that set is and is not.
+
 ## Naming convention
 
 ```
@@ -38,7 +43,7 @@ reference only.
 
 ## Persona and character images
 
-Persona/character images do not use this convention or folder. See `canon/vwxyz/README.md` (naming `{vi}_{type}_{slot}_v{NNN}.png`; images will be served via `{ASSET_BASE}/vi/…`, planned, ADR-010).
+Persona/character images do not use this convention or folder. See `canon/vwxyz/README.md` (naming `{vi}_{type}_{slot}_v{NNN}.png`; images will be served via `{ASSET_BASE}/vi/…`, planned, ADR-010). Chibi reference candidates live in `canon/vwxyz/chibi/` (ADR-028); the local masters and their generation sidecars stay beside this file.
 
 
 ## Archived / superseded assets (2026-11-03)
