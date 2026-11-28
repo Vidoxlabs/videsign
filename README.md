@@ -13,8 +13,7 @@ videsign/
 ├── DESIGN.md        Semantic token matrix (category-role-variant-state) + negative boundaries
 ├── SKILL.md         Architectural Decision Records (ADRs) and agent guardrails
 ├── AGENTS.md        Engineering governance and agent initialization protocol
-├── canon/
-│   └── vwxyz/       VWXYZ character canon v1: palette, vocabulary, schema, checklist
+├── canon/           Character canon v1: palette, vocabulary, schema, checklist
 ├── lib/
 │   ├── contrast.js       WCAG contrast and alpha compositing, shared by tests, primitives and MCP
 │   ├── dialects.js       Persona dialect token definitions and stylesheet builder (ADR-015)
@@ -36,7 +35,7 @@ videsign/
 │   ├── lint-preview.js           Static checks for preview/ fragments
 │   ├── check-brand-svg.js        Brand master checks
 │   ├── check-public-safety.js    Fail-closed public-safety scan (CI)
-│   └── canon-tool.js             VWXYZ candidate validator and sidecar generator
+│   └── canon-tool.js             Character canon candidate validator and sidecar generator
 ├── test/            node --test contracts: tokens, themes, preview, standard, brand, canon, MCP
 ├── mcp-server.js    Read-only MCP server: docs, canon, standard, style pack, manifest, fragments; tools resolve_token, style_pack, check_contrast, memory_field, stage_backdrop, component_catalog, design_brief, scaffold_page
 ├── assets/          Local-only design images (gitignored, never committed)
@@ -45,7 +44,7 @@ videsign/
 └── package.json
 ```
 
-Character colors, slugs and the asset contract live in `canon/vwxyz/`. UI accent
+Character colors, slugs and the asset contract live in the character canon directory under `canon/`. UI accent
 tokens stay in `DESIGN.md`. Persona images will be served from `{ASSET_BASE}/vi/…`
 (planned, ADR-010) and are never committed (ADR-002).
 
